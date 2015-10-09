@@ -1,6 +1,6 @@
 package org.modelcatalogue.builder.spreadsheet.api;
 
-public enum PureBorderSide implements BorderSide{
-    TOP,
-    BOTTOM
+public enum PureBorderSide implements BorderSide {
+    LEFT,
+    RIGHT
 }

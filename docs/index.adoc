@@ -1,4 +1,750 @@
-# Spreadsheet Builder
+= Groovy Spreadsheet Builder
 
 Spreadsheet builder provides convenient way how to create MS Excel OfficeOpenXML
 Documents (XSLX).
+
+== Getting Started
+
+Following example creates the basic spreadsheet with two rows and three columns.
+
+[source,groovy,subs='attributes']
+----
+@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
+// fixes bugs on Groovy 2.4.x
+@Grab(group='commons-codec', module='commons-codec', version='1.10')
+@GrabExclude('org.codehaus.groovy:groovy-all')
+
+import org.modelcatalogue.builder.spreadsheet.poi.PoiSpreadsheetBuilder
+
+def builder = new PoiSpreadsheetBuilder() //<1>
+
+File file = new File('spreadsheet.xlsx')
+
+file.withOutputStream { out ->
+    builder.build(out) {                  //<2>
+        sheet('Sample') {                 //<3>
+            row {                         //<4>
+                cell 'A'                  //<5>
+                cell 'B'
+                cell 'C'
+            }
+            row {
+                cell 1
+                cell 2
+                cell 3
+            }
+        }
+    }
+}
+----
+<1> Create new spreadsheet builder based on Apache POI (currently the only implementation provided)
+<2> Build new spreadsheet and write it to the output stream
+<3> Create new sheet with the name `Sample`
+<4> Create new row
+<5> Create new cell
+
+_Result_
+
+image::basic_sample.png[]
+
+== Sheets and Rows
+Each sheet needs to have a name provided. Rows are defined inside the sheets.
+
+You can specify the row number when creating a row. Another rows created without the number specified will be placed
+after this row. The row number is the same as in the spreadsheet e.g. the index of the rows is *starting with number 1*.
+To skip a single row, just use `row()` without any parameters.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row 5, { cell 'Line 5' }
+    row()
+    row { cell 'Line 7' }
+}
+----
+
+_Result_
+
+image:specific_row.png[]
+
+=== Outlines
+Rows and columns can be optionally grouped into expanded or collapsed groups for better readability.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell 'Heading 1'
+        group {
+            cell 'Heading 2'
+            cell 'Heading 3'
+            cell 'Heading 4'
+
+            collapse {
+                cell 'Heading 5'
+                cell 'Heading 6'
+            }
+            cell 'Heading 7'
+        }
+    }
+
+    // expanded group
+    group {
+        row { cell 'Heading 2' }
+        row { cell 'Heading 3' }
+        row { cell 'Heading 4' }
+
+        // collapsed group
+        collapse {
+            row { cell 'Heading 5' }
+            row { cell 'Heading 6' }
+        }
+        row { cell 'Heading 7' }
+    }
+}
+----
+
+_Result_
+
+image:outline_for_rows.png[]
+
+=== Freezing columns and rows
+
+You can freeze some rows and or columns to prevent scrolling them.
+
+[source,groovy]
+----
+sheet('Sample') {
+    freeze 1, 1
+
+    row {
+        cell '-'
+        cell 'A'
+        cell 'B'
+        cell 'C'
+        cell 'D'
+        cell 'E'
+        cell 'F'
+    }
+    10.times { int i ->
+        row {
+            cell "Row ${i + 1}"
+            6.times { int j ->
+                cell (10 * i + j)
+            }
+        }
+    }
+}
+----
+
+_Result_
+
+
+image:frozen_cells.gif[]
+
+=== Protection
+You can either lock the sheet or you can protect it with password. Then the users won't be able to edit any cells
+or view any formulas. This can emphasize that user changes are not desired.
+
+[source,groovy]
+----
+sheet('Sample') {
+    locked
+    row {
+        cell {
+            value 'Locked'
+        }
+    }
+
+}
+sheet('Password Protected') {
+    password 'p4$$w0rd'
+    row {
+        cell 'Protected by Password'
+    }
+}
+----
+
+_Result_
+
+image:locked.png[]
+
+
+== Cells
+
+Cells are defined within rows. The simples example to create a cell is providing its value as a method call argument.
+Additionally you can customize more details when you pass a closure with the cell definition. Then you can either
+set the value of the cell using the `value` method or the formula using the `formula` method.
+
+[TIP]
+====
+You can substitute the `A1` references in formulas with <<Names,name references>>. Use `\#{Name}` syntax inside
+the formula definition if you don't want to compute the `A1` references yourself e.g. `SUM(#{Cell1},#{Cell2})`. The
+name must be already assigned.
+====
+
+You can either specify the column for the cell as number *starting from `1`* or alphabetically as it will appear
+in the generated spreadsheet e.g. `C`. Otherwise the cells will be generated one after another. To create empty cell
+call the `cell` method without any parameters.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell 'First'
+        cell()
+        cell 'Third'
+        cell(5) {
+            value 'Fifth'
+        }
+        cell('G') {
+            formula 'YEAR(TODAY())'
+        }
+    }
+}
+----
+
+
+_Result_
+
+image:basic_cells.png[]
+
+=== Type handling
+
+Any cell values which are not instances of `Number`, `Boolean`, `Date` or `Calendar` are handled as `String` using a `toString()`
+method. For any instance of `Number`, `Date` or `Calendar` the type of cell is set to `NUMERIC`.
+For `Boolean` the type of the cell is set automatically to `BOOLEAN`.
+
+[WARNING]
+====
+`Date` and `Calendar` values needs to have <<Data Formats, data format>> assigned otherwise they will appear in the generated spreadsheet as plain numbers.
+====
+
+=== Merging cells
+
+You can set `rowspan` and/or `colspan` of any cell to merge multiple cells together.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            value "Columns"
+            colspan 2
+        }
+    }
+    row {
+        cell {
+            value 'Rows'
+            rowspan 3
+        }
+        cell 'Value 1'
+    }
+    row {
+        cell ('B') { value 'Value 2' }
+    }
+    row {
+        cell ('B') { value 'Value 3' }
+    }
+}
+----
+
+
+_Result_
+
+image:spans.png[]
+
+=== Comments
+You can set comment of any cell using the `comment` method. Use the variant accepting closure If you want to specify
+the author of the comment as well. The author only appears in the status bar of the application.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            value "Commented 1"
+            comment "This is a comment 1"
+        }
+    }
+    row {
+        cell {
+            value "Commented 2"
+            comment {
+                author "musketyr"
+                text "This is a comment 2"
+            }
+        }
+    }
+}
+----
+
+
+_Result_
+
+image:comments.png[]
+
+=== Names
+
+Naming cells helps you to refer them with links or you can use them to expand the formula definitions. To declare name
+of the cell simply call the `name` method inside the cell definition. See <<Links>> how to use names to create link
+to the particular cell.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell 'A'
+        cell 'B'
+        cell 'A + B'
+    }
+    row {
+        cell {
+            value 10
+            name 'CellA'
+        }
+        cell {
+            value 20
+            name 'CellB'
+        }
+        cell {
+            formula 'SUM(#{CellA},#{CellB})'
+        }
+    }
+}
+----
+
+
+_Result_
+
+image:names.png[]
+
+=== Links
+
+You can create for types of links
+
+ * `link to name 'A Name'` will create link other parts of the document using cell name `A Name`
+ * `link to url 'http://www.example.com'` will create link to open URL `http://www.example.com`
+ * `link to email 'musketyr@example.com'` will create link to send mail to `musketyr@example.com`
+ * `link to file 'README.txt'` will create link to open file `README.txt`
+
+
+[NOTE]
+====
+Links does not appear blue and underline by default You need to <<Styles,style>> them appropriately yourself.
+====
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            value 'Hello World'
+            name 'Salutation'
+        }
+    }
+}
+sheet('Links') {
+    row {
+        cell {
+            value 'Document'
+            link to name 'Salutation'
+            width auto
+        }
+        cell {
+            value 'File'
+            link to file 'text.txt'
+        }
+        cell {
+            value 'URL'
+            link to url 'https://www.example.com'
+        }
+        cell {
+            value 'Mail (plain)'
+            link to email 'musketyr@example.com'
+        }
+        cell {
+            value 'Mail (with subject)'
+            link to email 'musketyr@example.com',
+                cc: 'tester@example.com'
+                subject: 'Testing Excel Builder',
+                body: 'It is really great tools'
+        }
+    }
+}
+----
+
+[TIP]
+====
+You can add arbitrary attributes to the email link such as `cc`, `body` or `subject`.
+====
+
+=== Dimensions
+
+You can set the width of the cells as the multiple of standard character width. You can also set the column to accommodate
+the width automatically using the `auto` keyword but it may slow down the generation. The width is defined inside cells
+(usually header cells) but applies to the whole column.
+
+You can set the height of the cell in points. The height applies to whole row.
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            value 'No.'
+            width 5
+        }
+        cell {
+            value 'Name'
+            width 30
+        }
+        cell {
+            value 'Description'
+            width auto
+        }
+    }
+    row {
+        cell 1
+        cell {
+            value "Groovy Spreadsheet Builder"
+            height 30
+        }
+        cell "Helps building nice spreadsheet reports"
+    }
+}
+----
+
+_Result_
+
+image:widths.png[]
+
+
+== Styles
+Cell styles are defined either for a whole row or a particular cell. You can define a named style on the top level along
+with sheets and than refer to it from cell or row.
+
+[source,groovy]
+----
+style ('headers') {
+    border(bottom) {
+        style thick
+        color black
+    }
+    font {
+        bold
+    }
+    background whiteSmoke
+}
+sheet('Sample') {
+    row {
+        style 'headers'
+        cell {
+            value 'No.'
+            width 5
+        }
+        cell {
+            value 'Name'
+            width 30
+        }
+        cell {
+            value 'Description'
+            width auto
+        }
+    }
+    row {
+        cell 1
+        cell {
+            value "Groovy Spreadsheet Builder"
+            style {
+                font {
+                    bold
+                }
+            }
+        }
+        cell "Helps building nice spreadsheet reports"
+    }
+}
+
+----
+
+_Result_
+
+image:styles.png[]
+
+=== Alignments
+Use `align` method to align the cells horizontally or vertically. You place the vertical alignment first and then
+the horizontal. Use default value `bottom` if you dont want to change the vertical alignment but you want to change
+the horizontal one.
+
+Horizontal alignment options are: `center`, `centerSelection`, `distributed`, `fill`, `justify`, `left` and `right`.
+See link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/HorizontalAlignment.html[HorizontalAlignment] for
+full description of horizontal alignment options.
+
+Vertical alignment options are: `bottom`, `center`, `distributed`, `justified` and `top`.
+See link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/VerticalAlignment.html[VerticalAlignment] for
+full description of vertical alignment options.
+
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            value 'Top Left'
+            style {
+                align top left
+            }
+            width 20
+            height 50
+        }
+        cell {
+            value 'Top Center'
+            style {
+                align top center
+            }
+            width 20
+        }
+        cell {
+            value 'Top Right'
+            style {
+                align top right
+            }
+            width 20
+        }
+    }
+    // rest skipped
+ }
+----
+
+_Result_
+
+image:alignment.png[]
+
+
+=== Fills
+You can set the background color or combination of foreground color, background color and fill to customize cells'
+appearance. Color can be set as hexadecimal string starting with `#` or you can use one of predefined colors
+which are exactly the same as HTML predefined colors.
+
+[source,groovy]
+----
+cell {
+    style {
+        background '#FF8C00' // darkOrange
+        foreground brown
+        fill square
+    }
+}
+----
+
+==== Available predefined colors
+
+image:colors.png[]
+
+==== Available fill values
+
+image:fills.png[]
+
+=== Borders
+You can define a color and style of the cell border. To address which color to change, use `top`, `bottom`, `left`
+and/or `right` keywords when calling the `border` method. See <<Available predefined colors>>.
+Colors can be defined as hexadecimal string as well.
+
+[source,groovy]
+----
+cell {
+    style {
+        border top, bottom, {
+            style solid
+            color gray
+        }
+    }
+}
+----
+
+==== Available border styles
+
+image:borders.png[]
+
+=== Fonts
+
+You can customize the font size and color of the text in the cell. You also can make it `bold`, `italic`, `underline` or
+`strikeout`. See <<Available predefined colors>>.
+
+[source,groovy]
+----
+row {
+    cell {
+        width auto
+        value 'Bold Red 22'
+        style {
+            font {
+                bold
+                color red
+                size 22
+            }
+        }
+    }
+    cell {
+        width auto
+        value 'Underline'
+        style {
+            font {
+                underline
+            }
+        }
+    }
+    cell {
+        width auto
+        value 'Italic'
+        style {
+            font {
+                italic
+            }
+        }
+    }
+    cell {
+        width auto
+        value 'Strikeout'
+        style {
+            font {
+                strikeout
+            }
+        }
+    }
+}
+----
+
+_Result_
+
+image:fonts.png[]
+
+
+=== Data formats
+You can assing a data format using the `format` method. Detailed guide how the format works can be found in
+link:https://support.microsoft.com/en-us/kb/298368[How to control and understand settings in the Excel for Format Cells
+dialog box]. link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html[Apache POI Builtin Formats]
+are great way how to find some of the most common formats.
+
+Following example will print current date as e.g. `31.12.15`.
+
+[source,groovy]
+----
+
+cell {
+    style {
+        value new Date()
+        format 'dd/mm/yy'
+    }
+}
+----
+=== Indentations
+
+You can set the indentation in number of characters from the beginning of the cell.
+
+[source,groovy]
+----
+sheet('Sample') {
+    7.times { int i ->
+        row {
+            cell {
+                value 'x'
+                style {
+                    indent i
+                }
+            }
+        }
+    }
+}
+----
+
+_Result_
+
+image:indent.png[]
+
+=== Rotation
+
+You can rotate the text in the cell using the `rotation` method. It accepts number from `0` to `180`.
+Numbers lower from `1` to `90` will produces text going _uphill_ and from `91` to `180` text going _downhill_
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            height 150
+            width 20
+            value 'From bottom to top (90)'
+            style { rotation 90 }
+        }
+
+        cell {
+            width 20
+            value 'From bottom to top (45)'
+            style { rotation 45 }
+        }
+
+        cell {
+            width 20
+            value 'Normal (0)'
+        }
+
+        cell {
+            width 20
+            value 'From top to bottom (135)'
+            style { rotation 135 }
+        }
+
+        cell {
+            width 20
+            value 'From top to bottom (180)'
+            style { rotation 180 }
+        }
+    }
+}
+----
+
+_Result_
+
+image:rotation.png[]
+
+=== Text wrap
+
+By default the text is not wrapped. This mean that the new lines characters present in the string are ignored.
+You can update this by writing `wrap text` line in the style definition closure.
+
+
+[source,groovy]
+----
+sheet('Sample') {
+    row {
+        cell {
+            height 100
+            width auto
+            value '''
+            This text will be wrapped.
+            To the next line.
+
+            And another as well.
+            '''
+            style {
+                wrap text
+            }
+        }
+        cell {
+            width auto
+            value '''
+            This text will not be wrapped.
+            Not even to to the next line.
+
+            Even another one.
+            '''
+        }
+    }
+}
+----
+
+_Result_
+
+image:wrap.png[]

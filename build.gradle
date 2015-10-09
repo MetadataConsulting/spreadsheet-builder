@@ -12,6 +12,10 @@ plugins {
     id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
 }
 
+String currentVersion = '0.1.2'
+
+version = currentVersion
+
 subprojects {
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
@@ -31,7 +35,7 @@ subprojects {
     }
 
     // don't forget to update version in CaseReportFormSerializer
-    version = '0.1.0'
+    version = currentVersion
 
     jar {
         manifest.attributes provider: 'gradle'
@@ -95,43 +99,46 @@ subprojects {
         archives sourcesJar, javadocJar
     }
 
-
-    // asciidoctor publishing
-    asciidoctor {
-        sourceDir = file('docs')
-
-        resources {
-            from(sourceDir) {
-                include 'css/**', 'images/**'
-            }
-        }
-
-        attributes 'source-highlighter': 'prettify',
-                'docinfo1': ['version': project.version],
-                'imagesdir': 'images',
-                'stylesdir': 'css',
-                icons: 'font',
-                'toc': 'left',
-                version: project.version,
-                'projectUrl': 'https://github.com/MetadataRegistry/excel-builder'
-    }
-
-    githubPages {
-        repoUri = 'https://github.com/MetadataRegistry/excel-builder.git'
-
-        credentials {
-            username = getPropertyOrUseDefault('githubToken', '')
-            password = ''
-        }
-
-        pages {
-            from file(asciidoctor.outputDir.path + '/html5')
-        }
-    }
-
-    publishGhPages.dependsOn asciidoctor
-
 }
+
+// asciidoctor publishing
+asciidoctor {
+
+    sourceDir = file('docs')
+
+    resources {
+        from(sourceDir) {
+            include 'css/**', 'images/**'
+        }
+    }
+
+    attributes 'docinfo1': ['version': currentVersion],
+            'imagesdir': 'images',
+            'source-highlighter': 'highlight.js',
+            'stylesdir': 'css',
+            icons: 'font',
+            'toc': 'left',
+            version: project.version,
+            'projectUrl': 'https://github.com/MetadataRegistry/excel-builder'
+}
+
+githubPages {
+    repoUri = 'https://github.com/MetadataRegistry/excel-builder.git'
+
+    credentials {
+        username = getPropertyOrUseDefault('githubToken', '')
+        password = ''
+    }
+
+    pages {
+        from file(asciidoctor.outputDir.path + '/html5')
+    }
+}
+
+publishGhPages.dependsOn asciidoctor
+
+
+
 
 String getPropertyOrUseDefault(String propertyName, String defaultValue) {
     hasProperty(propertyName) ? getProperty(propertyName) : defaultValue

@@ -22,22 +22,13 @@ public interface CellStyle extends ProvidesHTMLColors {
     void indent(int indent);
 
     /**
-     * Sets the cell to be locked.
+     * Enables word wrapping
      *
+     * @param text keyword
      */
-    Object getLocked();
+    void wrap(TextKeyword text);
 
-    /**
-     * Sets the cell to wrap the words.
-     *
-     */
-    Object getWrapped();
-
-    /**
-     * Sets the cell to be hidden.
-     *
-     */
-    Object getHidden();
+    TextKeyword getText();
 
     /**
      * Sets the rotation from 0 to 180 (flipped).
@@ -47,7 +38,7 @@ public interface CellStyle extends ProvidesHTMLColors {
 
     void format(String format);
 
-    VerticalAlignmentConfigurer align(HorizontalAlignment alignment);
+    HorizontalAlignmentConfigurer align(VerticalAlignment alignment);
 
     /**
      * Configures all the borders of the cell.
@@ -82,18 +73,17 @@ public interface CellStyle extends ProvidesHTMLColors {
 
 
     // keywords
+    PureBorderSide getLeft();
+    PureBorderSide getRight();
 
-    BorderSideAndHorizontalAlignment getLeft();
-    BorderSideAndHorizontalAlignment getRight();
+    BorderSideAndVerticalAlignment getTop();
+    BorderSideAndVerticalAlignment getBottom();
 
-    BorderSide getTop();
-    BorderSide getBottom();
 
-    PureHorizontalAlignment getGeneral();
-    PureHorizontalAlignment getCenter();
-    PureHorizontalAlignment getFill();
-    PureHorizontalAlignment getJustify();
-    PureHorizontalAlignment getCenterSelection();
+    PureVerticalAlignment getCenter();
+    PureVerticalAlignment getJustify();
+    PureVerticalAlignment getDistributed();
+
 
     ForegroundFill getNoFill();
     ForegroundFill getSolidForeground();
@@ -102,14 +92,14 @@ public interface CellStyle extends ProvidesHTMLColors {
     ForegroundFill getSparseDots();
     ForegroundFill getThickHorizontalBands();
     ForegroundFill getThickVerticalBands();
-    ForegroundFill getThickBackwardDiagonal();
-    ForegroundFill getThickForwardDiagonal();
+    ForegroundFill getThickBackwardDiagonals();
+    ForegroundFill getThickForwardDiagonals();
     ForegroundFill getBigSpots();
     ForegroundFill getBricks();
     ForegroundFill getThinHorizontalBands();
     ForegroundFill getThinVerticalBands();
-    ForegroundFill getThinBackwardDiagonal();
-    ForegroundFill getThinForwardDiagonal();
+    ForegroundFill getThinBackwardDiagonals();
+    ForegroundFill getThinForwardDiagonals();
     ForegroundFill getSquares();
     ForegroundFill getDiamonds();
 

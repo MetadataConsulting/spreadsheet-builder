@@ -27,13 +27,13 @@ import org.modelcatalogue.builder.spreadsheet.api.Comment
         this.text = text
     }
 
-    @Override
+
     void width(int widthInCells) {
         assert widthInCells > 0
         this.width = widthInCells
     }
 
-    @Override
+
     void height(int heightInCells) {
         assert heightInCells > 0
         this.height = heightInCells

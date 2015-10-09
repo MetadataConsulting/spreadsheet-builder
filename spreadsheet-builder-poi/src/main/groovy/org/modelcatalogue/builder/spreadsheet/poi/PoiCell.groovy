@@ -1,9 +1,12 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFName
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.AbstractCell
 import org.modelcatalogue.builder.spreadsheet.api.AutoKeyword
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
@@ -61,6 +64,10 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
             return
         }
 
+        if (value instanceof String) {
+            value = value.stripIndent().trim()
+        }
+
         xssfCell.setCellType(Cell.CELL_TYPE_STRING)
         xssfCell.setCellValue(value.toString())
     }
@@ -76,6 +83,12 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
         comment {
             text commentText
         }
+    }
+
+    @Override
+    void formula(String formula) {
+        xssfCell.setCellFormula(expandNames(formula))
+        xssfCell.cellType = Cell.CELL_TYPE_FORMULA
     }
 
     @Override
@@ -97,7 +110,10 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
     @Override
     void style(String name) {
-        xssfCell.cellStyle = row.sheet.workbook.getStyle(name)
+        if (xssfCell.cellStyle == (row.sheet.sheet.workbook as XSSFWorkbook).stylesSource.getStyleAt(0)) {
+            xssfCell.cellStyle = row.sheet.sheet.workbook.createCellStyle()
+        }
+        xssfCell.cellStyle.cloneStyleFrom(row.sheet.workbook.getStyle(name))
     }
 
     @Override
@@ -118,6 +134,11 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
     }
 
     @Override
+    void height(double height) {
+        row.row.setHeightInPoints(height.floatValue());
+    }
+
+    @Override
     void width(AutoKeyword auto) {
         row.sheet.addAutoColumn(xssfCell.columnIndex)
     }
@@ -128,5 +149,16 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
     protected int getRowspan() {
         return rowspan
+    }
+
+    @CompileDynamic
+    protected String expandNames(String withNames) {
+        withNames.replaceAll(/\#\{(.+?)\}/) { List<String> found ->
+            XSSFName nameFound = xssfCell.sheet.workbook.getName(found[1])
+            if (!found) {
+                throw new IllegalArgumentException("Named cell '${found[1]}' cannot be found!")
+            }
+            nameFound.refersToFormula
+        }
     }
 }

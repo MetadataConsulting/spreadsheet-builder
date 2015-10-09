@@ -34,6 +34,9 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
         XSSFCell xssfCell = xssfRow.createCell(nextColNumber++)
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
+        if (styleName) {
+            poiCell.style styleName
+        }
         poiCell.style styleDefinition
         poiCell.value value
     }
@@ -43,6 +46,9 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
         XSSFCell xssfCell = xssfRow.createCell(nextColNumber++)
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
+        if (styleName) {
+            poiCell.style styleName
+        }
         poiCell.style styleDefinition
         poiCell.with cellDefinition
 
@@ -53,16 +59,18 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
         if (poiCell.colspan > 1 || poiCell.rowspan > 1) {
             xssfRow.sheet.addMergedRegion(new CellRangeAddress(
                     xssfCell.rowIndex,
-                    xssfCell.rowIndex + poiCell.rowspan,
+                    xssfCell.rowIndex + poiCell.rowspan - 1,
                     xssfCell.columnIndex,
-                    xssfCell.columnIndex + poiCell.colspan
+                    xssfCell.columnIndex + poiCell.colspan - 1
             ));
         }
     }
 
     @Override
     void cell(int column, @DelegatesTo(Cell.class) Closure cellDefinition) {
-        XSSFCell xssfCell = xssfRow.createCell(column)
+        XSSFCell xssfCell = xssfRow.createCell(column - 1)
+
+        nextColNumber = column
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
         if (styleName) {
@@ -70,6 +78,13 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
         }
         poiCell.style styleDefinition
         poiCell.with cellDefinition
+
+        handleSpans(xssfCell, poiCell)
+    }
+
+    @Override
+    void cell(String column, @DelegatesTo(Cell.class) Closure cellDefinition) {
+        cell parseColumn(column), cellDefinition
     }
 
     @Override
@@ -84,6 +99,10 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
 
     protected PoiSheet getSheet() {
         return sheet
+    }
+
+    protected XSSFRow getRow() {
+        return xssfRow
     }
 
     @Override
@@ -110,5 +129,19 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
             }
         }
 
+    }
+
+    protected static int parseColumn(String column) {
+        char a = 'A'
+        char[] chars = column.toUpperCase().toCharArray().toList().reverse()
+        int acc = 0
+        for (int i = chars.size() ; i-- ; i > 0) {
+            if (i == 0) {
+                acc += ((int) chars[i].charValue() - (int) a.charValue() + 1)
+            } else {
+                acc += 26 * i * ((int) chars[i].charValue() - (int) a.charValue() + 1)
+            }
+        }
+        return acc
     }
 }

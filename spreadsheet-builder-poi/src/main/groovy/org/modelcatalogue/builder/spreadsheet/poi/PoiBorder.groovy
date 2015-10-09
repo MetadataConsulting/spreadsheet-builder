@@ -5,7 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.modelcatalogue.builder.spreadsheet.api.AbstractBorder
 import org.modelcatalogue.builder.spreadsheet.api.BorderSide
-import org.modelcatalogue.builder.spreadsheet.api.BorderSideAndHorizontalAlignment
+import org.modelcatalogue.builder.spreadsheet.api.BorderSideAndVerticalAlignment
 import org.modelcatalogue.builder.spreadsheet.api.BorderStyle
 import org.modelcatalogue.builder.spreadsheet.api.Color
 import org.modelcatalogue.builder.spreadsheet.api.PureBorderSide
@@ -54,7 +54,7 @@ import org.modelcatalogue.builder.spreadsheet.api.PureBorderSide
                     xssfCellStyle.setTopBorderColor(color)
                 }
                 break
-            case BorderSideAndHorizontalAlignment.LEFT:
+            case BorderSideAndVerticalAlignment.LEFT:
                 if (borderStyle) {
                     xssfCellStyle.setBorderLeft(poiBorderStyle)
                 }
@@ -62,7 +62,7 @@ import org.modelcatalogue.builder.spreadsheet.api.PureBorderSide
                     xssfCellStyle.setLeftBorderColor(color)
                 }
                 break
-            case BorderSideAndHorizontalAlignment.RIGHT:
+            case BorderSideAndVerticalAlignment.RIGHT:
                 if (borderStyle) {
                     xssfCellStyle.setBorderRight(poiBorderStyle)
                 }

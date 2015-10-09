@@ -5,7 +5,7 @@ import groovy.lang.DelegatesTo;
 
 import java.io.OutputStream;
 
-public interface ExcelBuilder {
+public interface SpreadsheetBuilder {
 
     void build(OutputStream outputStream, @DelegatesTo(Workbook.class) Closure workbookDefinition);
 

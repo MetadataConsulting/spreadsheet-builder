@@ -7,8 +7,5 @@ public interface Comment {
 
     void author(String author);
     void text(String text);
-    void width(int widthInCells);
-    void height(int heightInCells);
-
 
 }

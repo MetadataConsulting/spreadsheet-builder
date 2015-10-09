@@ -35,9 +35,10 @@ import org.modelcatalogue.builder.spreadsheet.api.Sheet
 
     @Override
     void row(int row, @DelegatesTo(Row.class) Closure rowDefinition) {
-        XSSFRow xssfRow = xssfSheet.createRow(row)
+        assert row > 0
+        XSSFRow xssfRow = xssfSheet.createRow(row - 1)
 
-        nextRowNumber = row + 1
+        nextRowNumber = row
 
         PoiRow poiRow = new PoiRow(this, xssfRow)
         poiRow.with rowDefinition
@@ -53,6 +54,11 @@ import org.modelcatalogue.builder.spreadsheet.api.Sheet
     }
 
     @Override
+    void freeze(String column, int row) {
+        freeze PoiRow.parseColumn(column), row
+    }
+
+    @Override
     void collapse(@DelegatesTo(Sheet.class) Closure insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
@@ -60,6 +66,17 @@ import org.modelcatalogue.builder.spreadsheet.api.Sheet
     @Override
     void group(@DelegatesTo(Sheet.class) Closure insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
+    }
+
+    @Override
+    Object getLocked() {
+        sheet.enableLocking()
+        return null
+    }
+
+    @Override
+    void password(String password) {
+        sheet.protectSheet(password)
     }
 
     private void createGroup(boolean collapsed, @DelegatesTo(Sheet.class) Closure insideGroupDefinition) {

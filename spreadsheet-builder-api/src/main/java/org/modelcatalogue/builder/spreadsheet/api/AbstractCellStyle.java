@@ -38,12 +38,12 @@ public abstract class AbstractCellStyle implements CellStyle {
     }
 
     @Override
-    public ForegroundFill getThickBackwardDiagonal() {
+    public ForegroundFill getThickBackwardDiagonals() {
         return ForegroundFill.THICK_BACKWARD_DIAG;
     }
 
     @Override
-    public ForegroundFill getThickForwardDiagonal() {
+    public ForegroundFill getThickForwardDiagonals() {
         return ForegroundFill.THICK_FORWARD_DIAG;
     }
 
@@ -68,12 +68,12 @@ public abstract class AbstractCellStyle implements CellStyle {
     }
 
     @Override
-    public ForegroundFill getThinBackwardDiagonal() {
+    public ForegroundFill getThinBackwardDiagonals() {
         return ForegroundFill.THIN_BACKWARD_DIAG;
     }
 
     @Override
-    public ForegroundFill getThinForwardDiagonal() {
+    public ForegroundFill getThinForwardDiagonals() {
         return ForegroundFill.THICK_FORWARD_DIAG;
     }
 
@@ -88,48 +88,38 @@ public abstract class AbstractCellStyle implements CellStyle {
     }
 
     @Override
-    public PureHorizontalAlignment getCenterSelection() {
-        return PureHorizontalAlignment.CENTER_SELECTION;
+    public PureBorderSide getLeft() {
+        return PureBorderSide.LEFT;
     }
 
     @Override
-    public BorderSideAndHorizontalAlignment getLeft() {
-        return BorderSideAndHorizontalAlignment.LEFT;
+    public PureBorderSide getRight() {
+        return PureBorderSide.RIGHT;
     }
 
     @Override
-    public BorderSideAndHorizontalAlignment getRight() {
-        return BorderSideAndHorizontalAlignment.RIGHT;
+    public BorderSideAndVerticalAlignment getTop() {
+        return BorderSideAndVerticalAlignment.TOP;
     }
 
     @Override
-    public BorderSide getTop() {
-        return PureBorderSide.TOP;
+    public BorderSideAndVerticalAlignment getBottom() {
+        return BorderSideAndVerticalAlignment.BOTTOM;
     }
 
     @Override
-    public BorderSide getBottom() {
-        return PureBorderSide.BOTTOM;
+    public PureVerticalAlignment getCenter() {
+        return PureVerticalAlignment.CENTER;
     }
 
     @Override
-    public PureHorizontalAlignment getGeneral() {
-        return PureHorizontalAlignment.GENERAL;
+    public PureVerticalAlignment getJustify() {
+        return PureVerticalAlignment.JUSTIFY;
     }
 
     @Override
-    public PureHorizontalAlignment getCenter() {
-        return PureHorizontalAlignment.CENTER;
-    }
-
-    @Override
-    public PureHorizontalAlignment getFill() {
-        return PureHorizontalAlignment.FILL;
-    }
-
-    @Override
-    public PureHorizontalAlignment getJustify() {
-        return PureHorizontalAlignment.JUSTIFY;
+    public PureVerticalAlignment getDistributed() {
+        return PureVerticalAlignment.DISTRIBUTED;
     }
 
     // HTML colors
@@ -695,5 +685,10 @@ public abstract class AbstractCellStyle implements CellStyle {
 
     public Color getYellowGreen() {
         return new Color("#9ACD32");
+    }
+
+    @Override
+    public TextKeyword getText() {
+        return TextKeyword.WRAP;
     }
 }

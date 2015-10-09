@@ -1,4 +1,35 @@
-# Spreadsheet Builder
+= Groovy Spreadsheet Builder
 
 Spreadsheet builder provides convenient way how to create MS Excel OfficeOpenXML
 Documents (XSLX).
+
+== Introduction
+
+=== Getting Started
+[source,groovy,subs='attributes']
+----
+@Grab(group='com.craigburke.document', module='pdf', version='{version}')
+@Grab(group='com.craigburke.document', module='word', version='{version}')
+
+import com.craigburke.document.builder.PdfDocumentBuilder
+import com.craigburke.document.builder.WordDocumentBuilder
+
+def wordBuilder = new WordDocumentBuilder(new File('example.docx'))
+def pdfBuilder = new PdfDocumentBuilder(new File('example.pdf'))
+
+wordBuilder.create {
+    document {
+        paragraph 'Hello World (Word)'
+    }
+}
+
+pdfBuilder.create {
+    document {
+        paragraph 'Hello World (PDF)'
+    }
+}
+----
+
+
+== Acknowledgement
+This project is inspired by http://www.craigburke.com/document-builder/[Groovy Document Builder]

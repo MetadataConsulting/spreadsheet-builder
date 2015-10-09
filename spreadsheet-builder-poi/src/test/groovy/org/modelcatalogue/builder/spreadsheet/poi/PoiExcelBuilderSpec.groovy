@@ -1,9 +1,8 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import org.modelcatalogue.builder.spreadsheet.api.ExcelBuilder
+import org.modelcatalogue.builder.spreadsheet.api.SpreadsheetBuilder
 import org.modelcatalogue.builder.spreadsheet.api.ForegroundFill
 import spock.lang.Specification
 
@@ -18,19 +17,54 @@ class PoiExcelBuilderSpec extends Specification {
         when:
         File tmpFile = tmp.newFile("sample${System.currentTimeMillis()}.xlsx")
 
-        ExcelBuilder builder = new PoiExcelBuilder()
+        SpreadsheetBuilder builder = new PoiSpreadsheetBuilder()
 
         tmpFile.withOutputStream { OutputStream out ->
             builder.build(out) {
                 style('zebra') {
                     font {
                         bold
+                        underline
                         size 12
-                        color '#dddddd'
+                        color black
                     }
                     background yellow
                     foreground '#654321'
-                    fill thinBackwardDiagonal
+                    fill thinBackwardDiagonals
+                    border top, bottom, {
+                        style thick
+                        color green
+                    }
+                }
+                sheet('Sample') {
+                    row {
+                        cell 'Heading 1'
+                        group {
+                            cell 'Heading 2'
+                            cell 'Heading 3'
+                            cell 'Heading 4'
+
+                            collapse {
+                                cell 'Heading 5'
+                                cell 'Heading 6'
+                            }
+                            cell 'Heading 7'
+                        }
+                    }
+
+                    // expanded group
+                    group {
+                        row { cell 'Heading 2' }
+                        row { cell 'Heading 3' }
+                        row { cell 'Heading 4' }
+
+                        // collapsed group
+                        collapse {
+                            row { cell 'Heading 5' }
+                            row { cell 'Heading 6' }
+                        }
+                        row { cell 'Heading 7' }
+                    }
                 }
                 sheet('One') {
                     freeze 1,1
@@ -38,11 +72,18 @@ class PoiExcelBuilderSpec extends Specification {
                         cell 'First Row'
                     }
 
-                    row()
+                    row {
+                        cell 'AC', {
+                            value 'AC'
+                        }
+                        cell 'BE', {
+                            value 'BE'
+                        }
+                    }
 
                     row {
                         style {
-                            align left center
+                            align center left
                             border {
                                 color '#abcdef'
                                 style dashDotDot
@@ -145,12 +186,29 @@ class PoiExcelBuilderSpec extends Specification {
                             cell {
                                 width auto
                                 value foregroundFill.name()
+                            }
+                            cell {
                                 style {
-                                    background magenta
-                                    foreground cyan
+                                    background '#FF8C00' // darkOrange
+                                    foreground brown
                                     fill foregroundFill
                                 }
                             }
+                        }
+                    }
+                }
+                sheet('Formula') {
+                    row {
+                        cell {
+                            value 10
+                            name 'Cell10'
+                        }
+                        cell {
+                            value 20
+                            name 'Cell20'
+                        }
+                        cell {
+                            formula 'SUM(#{Cell10}:#{Cell20})'
                         }
                     }
                 }

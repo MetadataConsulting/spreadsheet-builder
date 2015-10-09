@@ -2,7 +2,9 @@ package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.usermodel.CellStyle
-import org.apache.poi.ss.usermodel.VerticalAlignment
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.HorizontalAlignment
+import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
@@ -11,13 +13,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.AbstractCellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Border
 import org.modelcatalogue.builder.spreadsheet.api.BorderSide
-import org.modelcatalogue.builder.spreadsheet.api.BorderSideAndHorizontalAlignment
+import org.modelcatalogue.builder.spreadsheet.api.BorderSideAndVerticalAlignment
 import org.modelcatalogue.builder.spreadsheet.api.Color
 import org.modelcatalogue.builder.spreadsheet.api.Font
 import org.modelcatalogue.builder.spreadsheet.api.ForegroundFill
-import org.modelcatalogue.builder.spreadsheet.api.HorizontalAlignment
-import org.modelcatalogue.builder.spreadsheet.api.PureHorizontalAlignment
-import org.modelcatalogue.builder.spreadsheet.api.VerticalAlignmentConfigurer
+import org.modelcatalogue.builder.spreadsheet.api.VerticalAlignment
+import org.modelcatalogue.builder.spreadsheet.api.PureVerticalAlignment
+import org.modelcatalogue.builder.spreadsheet.api.HorizontalAlignmentConfigurer
+import org.modelcatalogue.builder.spreadsheet.api.TextKeyword
 
 import java.util.regex.Matcher
 
@@ -27,9 +30,13 @@ import java.util.regex.Matcher
     private final XSSFWorkbook workbook
 
     PoiCellStyle(XSSFCell xssfCell) {
-        style = xssfCell.row.sheet.workbook.createCellStyle() as XSSFCellStyle
-        xssfCell.cellStyle = style
         workbook = xssfCell.row.sheet.workbook as XSSFWorkbook
+        if (xssfCell.cellStyle == workbook.stylesSource.getStyleAt(0)) {
+            style = workbook.createCellStyle() as XSSFCellStyle
+            xssfCell.cellStyle = style
+        } else {
+            style = xssfCell.cellStyle as XSSFCellStyle
+        }
     }
 
     PoiCellStyle(XSSFWorkbook workbook, XSSFCellStyle style) {
@@ -39,7 +46,11 @@ import java.util.regex.Matcher
 
     @Override
     void background(String hexColor) {
-        style.setFillBackgroundColor(parseColor(hexColor))
+        if (style.fillForegroundColor == IndexedColors.AUTOMATIC.index) {
+            foreground hexColor
+        } else {
+            style.setFillBackgroundColor(parseColor(hexColor))
+        }
     }
 
     @Override
@@ -49,7 +60,14 @@ import java.util.regex.Matcher
 
     @Override
     void foreground(String hexColor) {
+        if (style.fillForegroundColor != IndexedColors.AUTOMATIC.index) {
+            // already set as background color
+            style.setFillBackgroundColor(style.getFillForegroundXSSFColor())
+        }
         style.setFillForegroundColor(parseColor(hexColor))
+        if (style.fillPatternEnum == FillPatternType.NO_FILL) {
+            fill solidForeground
+        }
     }
 
     @Override
@@ -125,17 +143,15 @@ import java.util.regex.Matcher
         style.indention = (short) indent
     }
 
-    @Override
     Object getLocked() {
         style.locked = true
     }
 
     @Override
-    Object getWrapped() {
+    void wrap(TextKeyword text) {
         style.wrapText = true
     }
 
-    @Override
     Object getHidden() {
         style.hidden = true
     }
@@ -152,33 +168,27 @@ import java.util.regex.Matcher
     }
 
     @Override
-    VerticalAlignmentConfigurer align(HorizontalAlignment alignment) {
+    HorizontalAlignmentConfigurer align(VerticalAlignment alignment) {
         switch (alignment) {
-            case PureHorizontalAlignment.GENERAL:
-                style.alignment = CellStyle.ALIGN_GENERAL
+            case PureVerticalAlignment.CENTER:
+                style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.CENTER)
                 break
-            case BorderSideAndHorizontalAlignment.LEFT:
-                style.alignment = CellStyle.ALIGN_LEFT
+            case PureVerticalAlignment.DISTRIBUTED:
+                style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.DISTRIBUTED)
                 break
-            case PureHorizontalAlignment.CENTER:
-                style.alignment = CellStyle.ALIGN_CENTER
+            case PureVerticalAlignment.JUSTIFY:
+                style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.JUSTIFY)
                 break
-            case BorderSideAndHorizontalAlignment.RIGHT:
-                style.alignment = CellStyle.ALIGN_RIGHT
+            case BorderSideAndVerticalAlignment.TOP:
+                style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.TOP)
                 break
-            case PureHorizontalAlignment.FILL:
-                style.alignment = CellStyle.ALIGN_FILL
-                break
-            case PureHorizontalAlignment.JUSTIFY:
-                style.alignment = CellStyle.ALIGN_JUSTIFY
-                break
-            case PureHorizontalAlignment.CENTER_SELECTION:
-                style.alignment = CellStyle.ALIGN_CENTER_SELECTION
+            case BorderSideAndVerticalAlignment.BOTTOM:
+                style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.BOTTOM)
                 break
             default:
                 throw new IllegalArgumentException("$alignment is not supported!")
         }
-        return new PoiVerticalAlignmentConfigurer(this)
+        return new PoiHorizontalAlignmentConfigurer(this)
     }
 
     @Override
@@ -221,8 +231,12 @@ import java.util.regex.Matcher
     }
 
 
-    protected setVerticalAlignment(VerticalAlignment alignment) {
+    protected setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment alignment) {
         style.setVerticalAlignment(alignment)
+    }
+
+    protected setHorizontalAlignment(HorizontalAlignment alignment) {
+        style.setAlignment(alignment)
     }
 
     static XSSFColor parseColor(String hex) {
