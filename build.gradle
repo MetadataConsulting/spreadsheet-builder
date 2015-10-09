@@ -12,7 +12,7 @@ plugins {
     id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
 }
 
-String currentVersion = '0.1.2'
+String currentVersion = '0.1.3'
 
 version = currentVersion
 
@@ -71,9 +71,9 @@ subprojects {
         def projectDescription = project.description
 
         pkg {
-            websiteUrl = 'https://github.com/MetadataRegistry/excel-builder'
-            issueTrackerUrl = 'https://github.com/MetadataRegistry/excel-builder/issues'
-            vcsUrl = 'https://github.com/MetadataRegistry/excel-builder.git'
+            websiteUrl = 'http://metadataregistry.github.io/spreadsheet-builder/'
+            issueTrackerUrl = 'https://github.com/MetadataRegistry/spreadsheet-builder/issues'
+            vcsUrl = 'https://github.com/MetadataRegistry/spreadsheet-builder.git'
 
             repo = 'model-catalogue' // or your repo name
             userOrg = 'metadata'
@@ -119,11 +119,11 @@ asciidoctor {
             icons: 'font',
             'toc': 'left',
             version: project.version,
-            'projectUrl': 'https://github.com/MetadataRegistry/excel-builder'
+            'projectUrl': 'http://metadataregistry.github.io/spreadsheet-builder/'
 }
 
 githubPages {
-    repoUri = 'https://github.com/MetadataRegistry/excel-builder.git'
+    repoUri = 'https://github.com/MetadataRegistry/spreadsheet-builder.git'
 
     credentials {
         username = getPropertyOrUseDefault('githubToken', '')

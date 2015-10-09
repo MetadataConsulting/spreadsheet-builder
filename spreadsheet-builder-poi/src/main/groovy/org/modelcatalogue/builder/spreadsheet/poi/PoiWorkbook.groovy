@@ -12,7 +12,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Workbook
 @CompileStatic class PoiWorkbook implements Workbook {
 
     private final XSSFWorkbook workbook
-    private final Map<String, XSSFCellStyle> namedStyles = [:]
+    private final Map<String, Closure> namedStyles = [:]
 
     PoiWorkbook(XSSFWorkbook workbook) {
         this.workbook = workbook
@@ -30,14 +30,11 @@ import org.modelcatalogue.builder.spreadsheet.api.Workbook
 
     @Override
     void style(String name, @DelegatesTo(CellStyle.class) Closure styleDefinition) {
-        XSSFCellStyle style = workbook.createCellStyle()
-        PoiCellStyle poiCellStyle = new PoiCellStyle(workbook, style)
-        poiCellStyle.with styleDefinition
-        namedStyles[name] = style
+        namedStyles[name] = styleDefinition
     }
 
-    protected XSSFCellStyle getStyle(String name) {
-        XSSFCellStyle style = namedStyles[name]
+    protected Closure getStyle(String name) {
+        Closure style = namedStyles[name]
         if (!style) {
             throw new IllegalArgumentException("Style '$name' not defined")
         }

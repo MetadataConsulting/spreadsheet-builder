@@ -4,9 +4,7 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFName
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.AbstractCell
 import org.modelcatalogue.builder.spreadsheet.api.AutoKeyword
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
@@ -21,6 +19,8 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
     private int colspan = 1
     private int rowspan = 1
+
+    private PoiCellStyle poiCellStyle
 
     PoiCell(PoiRow row, XSSFCell xssfCell) {
         this.xssfCell = xssfCell
@@ -74,7 +74,9 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
     @Override
     void style(@DelegatesTo(CellStyle.class) Closure styleDefinition) {
-        PoiCellStyle poiCellStyle = new PoiCellStyle(xssfCell)
+        if (!poiCellStyle) {
+            poiCellStyle = new PoiCellStyle(xssfCell)
+        }
         poiCellStyle.with styleDefinition
     }
 
@@ -110,10 +112,7 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
     @Override
     void style(String name) {
-        if (xssfCell.cellStyle == (row.sheet.sheet.workbook as XSSFWorkbook).stylesSource.getStyleAt(0)) {
-            xssfCell.cellStyle = row.sheet.sheet.workbook.createCellStyle()
-        }
-        xssfCell.cellStyle.cloneStyleFrom(row.sheet.workbook.getStyle(name))
+        style row.sheet.workbook.getStyle(name)
     }
 
     @Override

@@ -21,49 +21,30 @@ class PoiExcelBuilderSpec extends Specification {
 
         tmpFile.withOutputStream { OutputStream out ->
             builder.build(out) {
-                style('zebra') {
+                style 'red', {
                     font {
-                        bold
-                        underline
-                        size 12
-                        color black
-                    }
-                    background yellow
-                    foreground '#654321'
-                    fill thinBackwardDiagonals
-                    border top, bottom, {
-                        style thick
-                        color green
+                        color red
                     }
                 }
+                style 'bold', {
+                    font {
+                        bold
+                    }
+                }
+
                 sheet('Sample') {
                     row {
-                        cell 'Heading 1'
-                        group {
-                            cell 'Heading 2'
-                            cell 'Heading 3'
-                            cell 'Heading 4'
-
-                            collapse {
-                                cell 'Heading 5'
-                                cell 'Heading 6'
+                        cell {
+                            value 'Bold Red 22'
+                            style 'bold'
+                            style 'red'
+                            style {
+                                font {
+                                    size 22
+                                }
                             }
-                            cell 'Heading 7'
-                        }
-                    }
 
-                    // expanded group
-                    group {
-                        row { cell 'Heading 2' }
-                        row { cell 'Heading 3' }
-                        row { cell 'Heading 4' }
-
-                        // collapsed group
-                        collapse {
-                            row { cell 'Heading 5' }
-                            row { cell 'Heading 6' }
                         }
-                        row { cell 'Heading 7' }
                     }
                 }
                 sheet('One') {

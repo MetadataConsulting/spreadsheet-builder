@@ -29,6 +29,9 @@ import java.util.regex.Matcher
     private final XSSFCellStyle style
     private final XSSFWorkbook workbook
 
+    private PoiFont poiFont
+    private PoiBorder poiBorder
+
     PoiCellStyle(XSSFCell xssfCell) {
         workbook = xssfCell.row.sheet.workbook as XSSFWorkbook
         if (xssfCell.cellStyle == workbook.stylesSource.getStyleAt(0)) {
@@ -37,11 +40,6 @@ import java.util.regex.Matcher
         } else {
             style = xssfCell.cellStyle as XSSFCellStyle
         }
-    }
-
-    PoiCellStyle(XSSFWorkbook workbook, XSSFCellStyle style) {
-        this.style = style
-        this.workbook = workbook
     }
 
     @Override
@@ -134,7 +132,9 @@ import java.util.regex.Matcher
 
     @Override
     void font(@DelegatesTo(Font.class) Closure fontConfiguration) {
-        PoiFont poiFont = new PoiFont(workbook, style)
+        if (!poiFont) {
+            poiFont = new PoiFont(workbook, style)
+        }
         poiFont.with fontConfiguration
     }
 
@@ -193,7 +193,7 @@ import java.util.regex.Matcher
 
     @Override
     void border(@DelegatesTo(Border.class) Closure borderConfiguration) {
-        PoiBorder poiBorder = new PoiBorder(style)
+        PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
 
         BorderSide.BORDER_SIDES.each { BorderSide side ->
@@ -203,7 +203,7 @@ import java.util.regex.Matcher
 
     @Override
     void border(BorderSide location, @DelegatesTo(Border.class) Closure borderConfiguration) {
-        PoiBorder poiBorder = new PoiBorder(style)
+        PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(location)
     }
@@ -212,7 +212,7 @@ import java.util.regex.Matcher
     void border(BorderSide first, BorderSide second,
                 @DelegatesTo(Border.class) Closure borderConfiguration) {
 
-        PoiBorder poiBorder = new PoiBorder(style)
+        PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
@@ -223,11 +223,18 @@ import java.util.regex.Matcher
     void border(BorderSide first, BorderSide second, BorderSide third,
                 @DelegatesTo(Border.class) Closure borderConfiguration) {
 
-        PoiBorder poiBorder = new PoiBorder(style)
+        PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
         poiBorder.applyTo(third)
+    }
+
+    private PoiBorder findOrCreateBorder() {
+        if (!poiBorder) {
+            poiBorder = new PoiBorder(style)
+        }
+        poiBorder
     }
 
 
