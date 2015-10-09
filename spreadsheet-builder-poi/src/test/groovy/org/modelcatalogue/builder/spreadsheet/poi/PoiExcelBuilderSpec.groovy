@@ -79,7 +79,7 @@ class PoiExcelBuilderSpec extends Specification {
                             width auto
                         }
                         cell {
-                            style 'zebra'
+                            style 'bold'
                             value 'World'
                             comment {
                                 text 'This cell has some fancy fg/bg'
