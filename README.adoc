@@ -5,32 +5,45 @@ Documents (XSLX) focus not only on content side but also on easy styling.
 
 See the link:http://metadataregistry.github.io/spreadsheet-builder/[Full Documentation]
 
-== Introduction
+== Getting Started
 
-=== Getting Started
+Following example creates the basic spreadsheet with two rows and three columns.
+
 [source,groovy,subs='attributes']
 ----
-@Grab(group='com.craigburke.document', module='pdf', version='{version}')
-@Grab(group='com.craigburke.document', module='word', version='{version}')
+@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
+// fixes bugs on Groovy 2.4.x
+@Grab(group='commons-codec', module='commons-codec', version='1.10')
+@GrabExclude('org.codehaus.groovy:groovy-all')
 
-import com.craigburke.document.builder.PdfDocumentBuilder
-import com.craigburke.document.builder.WordDocumentBuilder
+import org.modelcatalogue.builder.spreadsheet.poi.PoiSpreadsheetBuilder
 
-def wordBuilder = new WordDocumentBuilder(new File('example.docx'))
-def pdfBuilder = new PdfDocumentBuilder(new File('example.pdf'))
+def builder = new PoiSpreadsheetBuilder() //<1>
 
-wordBuilder.create {
-    document {
-        paragraph 'Hello World (Word)'
-    }
-}
+File file = new File('spreadsheet.xlsx')
 
-pdfBuilder.create {
-    document {
-        paragraph 'Hello World (PDF)'
+file.withOutputStream { out ->
+    builder.build(out) {                  //<2>
+        sheet('Sample') {                 //<3>
+            row {                         //<4>
+                cell 'A'                  //<5>
+                cell 'B'
+                cell 'C'
+            }
+            row {
+                cell 1
+                cell 2
+                cell 3
+            }
+        }
     }
 }
 ----
+<1> Create new spreadsheet builder based on Apache POI (currently the only implementation provided)
+<2> Build new spreadsheet and write it to the output stream
+<3> Create new sheet with the name `Sample`
+<4> Create new row
+<5> Create new cell
 
 
 == Acknowledgement
