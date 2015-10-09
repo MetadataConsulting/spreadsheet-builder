@@ -119,7 +119,7 @@ asciidoctor {
             icons: 'font',
             'toc': 'left',
             version: project.version,
-            'projectUrl': 'http://metadataregistry.github.io/spreadsheet-builder/'
+            'projectUrl': 'https://github.com/MetadataRegistry/spreadsheet-builder'
 }
 
 githubPages {

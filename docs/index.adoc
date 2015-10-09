@@ -1,5 +1,8 @@
 = Groovy Spreadsheet Builder
 
+[.ribbon]
+image::ribbon.png[link={projectUrl}]
+
 Spreadsheet builder provides convenient way how to create MS Excel OfficeOpenXML
 Documents (XSLX) focus not only on content side but also on easy styling.
 
@@ -217,7 +220,7 @@ For `Boolean` the type of the cell is set automatically to `BOOLEAN`.
 
 [WARNING]
 ====
-`Date` and `Calendar` values needs to have <<Data Formats, data format>> assigned otherwise they will appear in the generated spreadsheet as plain numbers.
+`Date` and `Calendar` values needs to have <<Data formats, data format>> assigned otherwise they will appear in the generated spreadsheet as plain numbers.
 ====
 
 === Merging cells
