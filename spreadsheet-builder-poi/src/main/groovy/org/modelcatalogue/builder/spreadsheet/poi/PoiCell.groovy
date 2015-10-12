@@ -7,6 +7,7 @@ import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFName
+import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.modelcatalogue.builder.spreadsheet.api.AbstractCell
 import org.modelcatalogue.builder.spreadsheet.api.AutoKeyword
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
@@ -66,8 +67,8 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
             return
         }
 
-        if (value instanceof String) {
-            value = value.stripIndent().trim()
+        if (value instanceof CharSequence) {
+            value = StringGroovyMethods.stripIndent(value as CharSequence).trim()
         }
 
         xssfCell.setCellType(Cell.CELL_TYPE_STRING)
