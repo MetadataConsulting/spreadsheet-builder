@@ -63,11 +63,6 @@ file.withOutputStream { out ->
     }
 }
 ----
-<1> Create new spreadsheet builder based on Apache POI (currently the only implementation provided)
-<2> Build new spreadsheet and write it to the output stream
-<3> Create new sheet with the name `Sample`
-<4> Create new row
-<5> Create new cell
 
 _Result_
 
