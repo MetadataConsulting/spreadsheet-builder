@@ -19,23 +19,46 @@ Following example creates the basic spreadsheet with two rows and three columns.
 
 import org.modelcatalogue.builder.spreadsheet.poi.PoiSpreadsheetBuilder
 
-def builder = new PoiSpreadsheetBuilder() //<1>
+def builder = new PoiSpreadsheetBuilder()
 
 File file = new File('spreadsheet.xlsx')
 
 file.withOutputStream { out ->
-    builder.build(out) {                  //<2>
-        sheet('Sample') {                 //<3>
-            row {                         //<4>
-                cell 'A'                  //<5>
-                cell 'B'
-                cell 'C'
-            }
+    builder.build(out) {
+        sheet('Sample') {
             row {
-                cell 1
-                cell 2
-                cell 3
-            }
+               style {
+                   background whiteSmoke
+                   border top, bottom {
+                       style thin
+                       color black
+                   }
+               }
+               cell {
+                   value 'A'
+                   style {
+                       border left, {
+                           style thin
+                           color black
+                       }
+                   }
+               }
+               cell 'B'
+               cell {
+                   value 'C'
+                   style {
+                       border right, {
+                           style thin
+                           color black
+                       }
+                   }
+               }
+           }
+           row {
+               cell 1
+               cell 2
+               cell 3
+           }
         }
     }
 }

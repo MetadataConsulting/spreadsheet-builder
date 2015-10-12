@@ -33,18 +33,38 @@ class PoiExcelBuilderSpec extends Specification {
                 }
 
                 sheet('Sample') {
-                    row {
-                        cell {
-                            value 'Bold Red 22'
-                            style 'bold'
-                            style 'red'
+                    row(2) {
+                        style {
+                            background whiteSmoke
+                            border top, bottom, {
+                                style thin
+                                color black
+                            }
+                        }
+                        cell('B') {
+                            value 'A'
                             style {
-                                font {
-                                    size 22
+                                border left, {
+                                    style thin
+                                    color black
                                 }
                             }
-
                         }
+                        cell 'B'
+                        cell {
+                            value 'C'
+                            style {
+                                border right, {
+                                    style thin
+                                    color black
+                                }
+                            }
+                        }
+                    }
+                    row {
+                        cell('B') { value 1 }
+                        cell 2
+                        cell 3
                     }
                 }
                 sheet('One') {
