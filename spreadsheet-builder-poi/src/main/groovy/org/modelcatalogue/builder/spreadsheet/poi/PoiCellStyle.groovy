@@ -1,6 +1,8 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
@@ -131,7 +133,7 @@ import java.util.regex.Matcher
     }
 
     @Override
-    void font(@DelegatesTo(Font.class) Closure fontConfiguration) {
+    void font(@DelegatesTo(Font.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration) {
         if (!poiFont) {
             poiFont = new PoiFont(workbook, style)
         }
@@ -192,7 +194,7 @@ import java.util.regex.Matcher
     }
 
     @Override
-    void border(@DelegatesTo(Border.class) Closure borderConfiguration) {
+    void border(@DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
 
@@ -202,7 +204,7 @@ import java.util.regex.Matcher
     }
 
     @Override
-    void border(BorderSide location, @DelegatesTo(Border.class) Closure borderConfiguration) {
+    void border(BorderSide location, @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(location)
@@ -210,7 +212,7 @@ import java.util.regex.Matcher
 
     @Override
     void border(BorderSide first, BorderSide second,
-                @DelegatesTo(Border.class) Closure borderConfiguration) {
+                @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
 
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
@@ -221,7 +223,7 @@ import java.util.regex.Matcher
 
     @Override
     void border(BorderSide first, BorderSide second, BorderSide third,
-                @DelegatesTo(Border.class) Closure borderConfiguration) {
+                @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
 
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
@@ -235,11 +237,6 @@ import java.util.regex.Matcher
             poiBorder = new PoiBorder(style)
         }
         poiBorder
-    }
-
-
-    protected setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment alignment) {
-        style.setVerticalAlignment(alignment)
     }
 
     protected setHorizontalAlignment(HorizontalAlignment alignment) {

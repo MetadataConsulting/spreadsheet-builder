@@ -1,6 +1,8 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.modelcatalogue.builder.spreadsheet.api.Row
@@ -26,7 +28,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Sheet
     }
 
     @Override
-    void row(@DelegatesTo(Row.class) Closure rowDefinition) {
+    void row(@DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure rowDefinition) {
         XSSFRow xssfRow = xssfSheet.createRow(nextRowNumber++)
 
         PoiRow row = new PoiRow(this, xssfRow)
@@ -34,7 +36,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Sheet
     }
 
     @Override
-    void row(int row, @DelegatesTo(Row.class) Closure rowDefinition) {
+    void row(int row, @DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure rowDefinition) {
         assert row > 0
         XSSFRow xssfRow = xssfSheet.createRow(row - 1)
 
@@ -59,12 +61,12 @@ import org.modelcatalogue.builder.spreadsheet.api.Sheet
     }
 
     @Override
-    void collapse(@DelegatesTo(Sheet.class) Closure insideGroupDefinition) {
+    void collapse(@DelegatesTo(Sheet.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Sheet") Closure insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
 
     @Override
-    void group(@DelegatesTo(Sheet.class) Closure insideGroupDefinition) {
+    void group(@DelegatesTo(Sheet.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Sheet") Closure insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
     }
 

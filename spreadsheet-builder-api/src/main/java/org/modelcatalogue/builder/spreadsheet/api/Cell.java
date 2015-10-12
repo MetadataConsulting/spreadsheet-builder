@@ -2,6 +2,8 @@ package org.modelcatalogue.builder.spreadsheet.api;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.FromString;
 
 public interface Cell extends HasStyle {
 
@@ -9,7 +11,7 @@ public interface Cell extends HasStyle {
     void name(String name);
     void formula(String formula);
     void comment(String comment);
-    void comment(@DelegatesTo(Comment.class) Closure commentDefinition);
+    void comment(@DelegatesTo(Comment.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Comment") Closure commentDefinition);
 
     LinkDefinition link(ToKeyword to);
 

@@ -2,6 +2,8 @@ package org.modelcatalogue.builder.spreadsheet.api;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.FromString;
 
 public interface CellStyle extends ProvidesHTMLColors {
 
@@ -13,7 +15,7 @@ public interface CellStyle extends ProvidesHTMLColors {
 
     void fill(ForegroundFill fill);
 
-    void font(@DelegatesTo(Font.class) Closure fontConfiguration);
+    void font(@DelegatesTo(Font.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration);
 
     /**
      * Sets the indent of the cell in spaces.
@@ -44,14 +46,14 @@ public interface CellStyle extends ProvidesHTMLColors {
      * Configures all the borders of the cell.
      * @param borderConfiguration border configuration closure
      */
-    void border(@DelegatesTo(Border.class) Closure borderConfiguration);
+    void border(@DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration);
 
     /**
      * Configures one border of the cell.
      * @param location border to be configured
      * @param borderConfiguration border configuration closure
      */
-    void border(BorderSide location, @DelegatesTo(Border.class) Closure borderConfiguration);
+    void border(BorderSide location, @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration);
 
     /**
      * Configures two borders of the cell.
@@ -59,7 +61,7 @@ public interface CellStyle extends ProvidesHTMLColors {
      * @param second second border to be configured
      * @param borderConfiguration border configuration closure
      */
-    void border(BorderSide first, BorderSide second, @DelegatesTo(Border.class) Closure borderConfiguration);
+    void border(BorderSide first, BorderSide second, @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration);
 
     /**
      * Configures three borders of the cell.
@@ -68,7 +70,7 @@ public interface CellStyle extends ProvidesHTMLColors {
      * @param third third border to be configured
      * @param borderConfiguration border configuration closure
      */
-    void border(BorderSide first, BorderSide second, BorderSide third, @DelegatesTo(Border.class) Closure borderConfiguration);
+    void border(BorderSide first, BorderSide second, BorderSide third, @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration);
 
 
 

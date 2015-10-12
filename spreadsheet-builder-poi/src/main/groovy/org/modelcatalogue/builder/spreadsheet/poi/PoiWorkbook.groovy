@@ -1,6 +1,8 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -19,7 +21,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Workbook
     }
 
     @Override
-    void sheet(String name, @DelegatesTo(Sheet.class) Closure sheetDefinition) {
+    void sheet(String name, @DelegatesTo(Sheet.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Sheet") Closure sheetDefinition) {
         XSSFSheet xssfSheet = workbook.getSheet(name) ?: workbook.createSheet(name)
 
         PoiSheet sheet = new PoiSheet(this, xssfSheet)
@@ -29,7 +31,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Workbook
     }
 
     @Override
-    void style(String name, @DelegatesTo(CellStyle.class) Closure styleDefinition) {
+    void style(String name, @DelegatesTo(CellStyle.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
         namedStyles[name] = styleDefinition
     }
 

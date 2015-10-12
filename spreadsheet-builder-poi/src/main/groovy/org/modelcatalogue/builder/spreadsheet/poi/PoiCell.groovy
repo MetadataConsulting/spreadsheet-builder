@@ -2,6 +2,8 @@ package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFName
@@ -73,7 +75,7 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
     }
 
     @Override
-    void style(@DelegatesTo(CellStyle.class) Closure styleDefinition) {
+    void style(@DelegatesTo(CellStyle.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
         if (!poiCellStyle) {
             poiCellStyle = new PoiCellStyle(xssfCell)
         }

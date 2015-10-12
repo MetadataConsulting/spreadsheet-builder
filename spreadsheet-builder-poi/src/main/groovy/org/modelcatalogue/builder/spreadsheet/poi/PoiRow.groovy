@@ -1,6 +1,8 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
@@ -42,7 +44,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
     }
 
     @Override
-    void cell(@DelegatesTo(Cell.class) Closure cellDefinition) {
+    void cell(@DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition) {
         XSSFCell xssfCell = xssfRow.createCell(nextColNumber++)
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
@@ -67,7 +69,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
     }
 
     @Override
-    void cell(int column, @DelegatesTo(Cell.class) Closure cellDefinition) {
+    void cell(int column, @DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition) {
         XSSFCell xssfCell = xssfRow.createCell(column - 1)
 
         nextColNumber = column
@@ -83,12 +85,12 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
     }
 
     @Override
-    void cell(String column, @DelegatesTo(Cell.class) Closure cellDefinition) {
+    void cell(String column, @DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition) {
         cell parseColumn(column), cellDefinition
     }
 
     @Override
-    void style(@DelegatesTo(CellStyle.class) Closure styleDefinition) {
+    void style(@DelegatesTo(CellStyle.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
         this.styleDefinition = styleDefinition
     }
 
@@ -106,16 +108,16 @@ import org.modelcatalogue.builder.spreadsheet.api.Row
     }
 
     @Override
-    void group(@DelegatesTo(Row.class) Closure insideGroupDefinition) {
+    void group(@DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
     }
 
     @Override
-    void collapse(@DelegatesTo(Row.class) Closure insideGroupDefinition) {
+    void collapse(@DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
 
-    private void createGroup(boolean collapsed, @DelegatesTo(Row.class) Closure insideGroupDefinition) {
+    private void createGroup(boolean collapsed, @DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure insideGroupDefinition) {
         startPositions.push nextColNumber
         with insideGroupDefinition
 
