@@ -489,7 +489,7 @@ File file = new File('spreadsheet.xlsx')
 file.withOutputStream { out ->
     builder.build(out) {
         sheet('Sample') {
-            row {
+            row(2) {
                style {
                    background whiteSmoke
                    border top, bottom {
@@ -497,7 +497,7 @@ file.withOutputStream { out ->
                        color black
                    }
                }
-               cell {
+               cell('B') {
                    value 'A'
                    style {
                        border left, {
@@ -518,7 +518,7 @@ file.withOutputStream { out ->
                }
            }
            row {
-               cell 1
+               cell('B') { value 1 }
                cell 2
                cell 3
            }
@@ -1373,7 +1373,7 @@ You can update this by writing <code>wrap text</code> line in the style definiti
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-12 08:55:47 CEST
+Last updated 2015-10-12 10:43:56 CEST
 </div>
 </div>
 </body>
