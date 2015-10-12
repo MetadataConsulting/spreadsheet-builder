@@ -26,7 +26,7 @@ File file = new File('spreadsheet.xlsx')
 file.withOutputStream { out ->
     builder.build(out) {
         sheet('Sample') {
-            row {
+            row(2) {
                style {
                    background whiteSmoke
                    border top, bottom {
@@ -34,7 +34,7 @@ file.withOutputStream { out ->
                        color black
                    }
                }
-               cell {
+               cell('B') {
                    value 'A'
                    style {
                        border left, {
@@ -55,7 +55,7 @@ file.withOutputStream { out ->
                }
            }
            row {
-               cell 1
+               cell('B') { value 1 }
                cell 2
                cell 3
            }
