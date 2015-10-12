@@ -421,6 +421,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_getting_started">Getting Started</a></li>
+<li><a href="#_sheets_and_rows">Sheets and Rows</a>
+<ul class="sectlevel2">
+<li><a href="#_outlines">Outlines</a></li>
+<li><a href="#_freezing_columns_and_rows">Freezing columns and rows</a></li>
+<li><a href="#_protection">Protection</a></li>
+</ul>
+</li>
+<li><a href="#_cells">Cells</a>
+<ul class="sectlevel2">
+<li><a href="#_type_handling">Type handling</a></li>
+<li><a href="#_merging_cells">Merging cells</a></li>
+<li><a href="#_comments">Comments</a></li>
+<li><a href="#_names">Names</a></li>
+<li><a href="#_links">Links</a></li>
+<li><a href="#_dimensions">Dimensions</a></li>
+</ul>
+</li>
+<li><a href="#_styles">Styles</a>
+<ul class="sectlevel2">
+<li><a href="#_alignments">Alignments</a></li>
+<li><a href="#_fills">Fills</a></li>
+<li><a href="#_borders">Borders</a></li>
+<li><a href="#_fonts">Fonts</a></li>
+<li><a href="#_data_formats">Data formats</a></li>
+<li><a href="#_indentations">Indentations</a></li>
+<li><a href="#_rotation">Rotation</a></li>
+<li><a href="#_text_wrap">Text wrap</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -495,102 +524,102 @@ file.withOutputStream { out ->
            }
         }
     }
-}
-
-_Result_
-
-image::basic_sample.png[]
-
-== Sheets and Rows
-Each sheet needs to have a name provided. Rows are defined inside the sheets.
-
-You can specify the row number when creating a row. Another rows created without the number specified will be placed
-after this row. The row number is the same as in the spreadsheet e.g. the index of the rows is *starting with number 1*.
-To skip a single row, just use `row()` without any parameters.
-
-[source,groovy]</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
-    row 5, { cell 'Line 5' }
-    row()
-    row { cell 'Line 7' }
-}</p>
+<p><em>Result</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/basic_sample.png" alt="basic sample">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sheets_and_rows">Sheets and Rows</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each sheet needs to have a name provided. Rows are defined inside the sheets.</p>
+</div>
+<div class="paragraph">
+<p>You can specify the row number when creating a row. Another rows created without the number specified will be placed
+after this row. The row number is the same as in the spreadsheet e.g. the index of the rows is <strong>starting with number 1</strong>.
+To skip a single row, just use <code>row()</code> without any parameters.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>_Result_
-
-image:specific_row.png[]
-
-=== Outlines
-Rows and columns can be optionally grouped into expanded or collapsed groups for better readability.
-
-[source,groovy]</pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+    row 5, { cell 'Line 5' }
+    row()
+    row { cell 'Line 7' }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/specific_row.png" alt="specific_row"></span></p>
+</div>
+<div class="sect2">
+<h3 id="_outlines">Outlines</h3>
+<div class="paragraph">
+<p>Rows and columns can be optionally grouped into expanded or collapsed groups for better readability.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell 'Heading 1'
         group {
             cell 'Heading 2'
             cell 'Heading 3'
-            cell 'Heading 4'</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>        collapse {
-            cell 'Heading 5'
-            cell 'Heading 6'
+            cell 'Heading 4'
+
+            collapse {
+                cell 'Heading 5'
+                cell 'Heading 6'
+            }
+            cell 'Heading 7'
         }
-        cell 'Heading 7'
     }
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>// expanded group
-group {
-    row { cell 'Heading 2' }
-    row { cell 'Heading 3' }
-    row { cell 'Heading 4' }</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>        // collapsed group
+
+    // expanded group
+    group {
+        row { cell 'Heading 2' }
+        row { cell 'Heading 3' }
+        row { cell 'Heading 4' }
+
+        // collapsed group
         collapse {
             row { cell 'Heading 5' }
             row { cell 'Heading 6' }
         }
         row { cell 'Heading 7' }
     }
-}</pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:outline_for_rows.png[]
-
-=== Freezing columns and rows
-
-You can freeze some rows and or columns to prevent scrolling them.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
-    freeze 1, 1</p>
+<p><em>Result</em></p>
 </div>
-<div class="literalblock">
+<div class="paragraph">
+<p><span class="image"><img src="images/outline_for_rows.png" alt="outline_for_rows"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_freezing_columns_and_rows">Freezing columns and rows</h3>
+<div class="paragraph">
+<p>You can freeze some rows and or columns to prevent scrolling them.</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre>    row {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+    freeze 1, 1
+
+    row {
         cell '-'
         cell 'A'
         cell 'B'
@@ -607,70 +636,82 @@ You can freeze some rows and or columns to prevent scrolling them.
             }
         }
     }
-}</pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-
-image:frozen_cells.gif[]
-
-=== Protection
-You can either lock the sheet or you can protect it with password. Then the users won't be able to edit any cells
-or view any formulas. This can emphasize that user changes are not desired.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/frozen_cells.gif" alt="frozen_cells"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_protection">Protection</h3>
+<div class="paragraph">
+<p>You can either lock the sheet or you can protect it with password. Then the users won&#8217;t be able to edit any cells
+or view any formulas. This can emphasize that user changes are not desired.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     locked
     row {
         cell {
             value 'Locked'
         }
-    }</p>
-</div>
-<div class="paragraph">
-<p>}
+    }
+
+}
 sheet('Password Protected') {
     password 'p4$$w0rd'
     row {
         cell 'Protected by Password'
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:locked.png[]
-
-
-== Cells
-
-Cells are defined within rows. The simples example to create a cell is providing its value as a method call argument.
-Additionally you can customize more details when you pass a closure with the cell definition. Then you can either
-set the value of the cell using the `value` method or the formula using the `formula` method.
-
-[TIP]
-====
-You can substitute the `A1` references in formulas with &lt;&lt;Names,name references&gt;&gt;. Use `\#{Name}` syntax inside
-the formula definition if you don't want to compute the `A1` references yourself e.g. `SUM(#{Cell1},#{Cell2})`. The
-name must be already assigned.
-====
-
-You can either specify the column for the cell as number *starting from `1`* or alphabetically as it will appear
-in the generated spreadsheet e.g. `C`. Otherwise the cells will be generated one after another. To create empty cell
-call the `cell` method without any parameters.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/locked.png" alt="locked"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cells">Cells</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cells are defined within rows. The simples example to create a cell is providing its value as a method call argument.
+Additionally you can customize more details when you pass a closure with the cell definition. Then you can either
+set the value of the cell using the <code>value</code> method or the formula using the <code>formula</code> method.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can substitute the <code>A1</code> references in formulas with <a href="#_names">name references</a>. Use <code>#{Name}</code> syntax inside
+the formula definition if you don&#8217;t want to compute the <code>A1</code> references yourself e.g. <code>SUM(#{Cell1},#{Cell2})</code>. The
+name must be already assigned.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can either specify the column for the cell as number <strong>starting from <code>1</code></strong> or alphabetically as it will appear
+in the generated spreadsheet e.g. <code>C</code>. Otherwise the cells will be generated one after another. To create empty cell
+call the <code>cell</code> method without any parameters.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell 'First'
         cell()
@@ -682,34 +723,45 @@ call the `cell` method without any parameters.
             formula 'YEAR(TODAY())'
         }
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:basic_cells.png[]
-
-=== Type handling
-
-Any cell values which are not instances of `Number`, `Boolean`, `Date` or `Calendar` are handled as `String` using a `toString()`
-method. For any instance of `Number`, `Date` or `Calendar` the type of cell is set to `NUMERIC`.
-For `Boolean` the type of the cell is set automatically to `BOOLEAN`.
-
-[WARNING]
-====
-`Date` and `Calendar` values needs to have &lt;&lt;Data formats, data format&gt;&gt; assigned otherwise they will appear in the generated spreadsheet as plain numbers.
-====
-
-=== Merging cells
-
-You can set `rowspan` and/or `colspan` of any cell to merge multiple cells together.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/basic_cells.png" alt="basic_cells"></span></p>
+</div>
+<div class="sect2">
+<h3 id="_type_handling">Type handling</h3>
+<div class="paragraph">
+<p>Any cell values which are not instances of <code>Number</code>, <code>Boolean</code>, <code>Date</code> or <code>Calendar</code> are handled as <code>String</code> using a <code>toString()</code>
+method. For any instance of <code>Number</code>, <code>Date</code> or <code>Calendar</code> the type of cell is set to <code>NUMERIC</code>.
+For <code>Boolean</code> the type of the cell is set automatically to <code>BOOLEAN</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>Date</code> and <code>Calendar</code> values needs to have <a href="#_data_formats">data format</a> assigned otherwise they will appear in the generated spreadsheet as plain numbers.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_merging_cells">Merging cells</h3>
+<div class="paragraph">
+<p>You can set <code>rowspan</code> and/or <code>colspan</code> of any cell to merge multiple cells together.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             value "Columns"
@@ -729,23 +781,25 @@ You can set `rowspan` and/or `colspan` of any cell to merge multiple cells toget
     row {
         cell ('B') { value 'Value 3' }
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:spans.png[]
-
-=== Comments
-You can set comment of any cell using the `comment` method. Use the variant accepting closure If you want to specify
-the author of the comment as well. The author only appears in the status bar of the application.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/spans.png" alt="spans"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_comments">Comments</h3>
+<div class="paragraph">
+<p>You can set comment of any cell using the <code>comment</code> method. Use the variant accepting closure If you want to specify
+the author of the comment as well. The author only appears in the status bar of the application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             value "Commented 1"
@@ -761,25 +815,26 @@ the author of the comment as well. The author only appears in the status bar of 
             }
         }
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:comments.png[]
-
-=== Names
-
-Naming cells helps you to refer them with links or you can use them to expand the formula definitions. To declare name
-of the cell simply call the `name` method inside the cell definition. See &lt;&lt;Links&gt;&gt; how to use names to create link
-to the particular cell.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/comments.png" alt="comments"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_names">Names</h3>
+<div class="paragraph">
+<p>Naming cells helps you to refer them with links or you can use them to expand the formula definitions. To declare name
+of the cell simply call the <code>name</code> method inside the cell definition. See <a href="#_links">Links</a> how to use names to create link
+to the particular cell.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell 'A'
         cell 'B'
@@ -795,37 +850,57 @@ to the particular cell.
             name 'CellB'
         }
         cell {
-            formula 'SUM(<mark>{CellA},</mark>{CellB})'
+            formula 'SUM(#{CellA},#{CellB})'
         }
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:names.png[]
-
-=== Links
-
-You can create for types of links
-
- * `link to name 'A Name'` will create link other parts of the document using cell name `A Name`
- * `link to url 'http://www.example.com'` will create link to open URL `http://www.example.com`
- * `link to email 'musketyr@example.com'` will create link to send mail to `musketyr@example.com`
- * `link to file 'README.txt'` will create link to open file `README.txt`
-
-
-[NOTE]
-====
-Links does not appear blue and underline by default You need to &lt;&lt;Styles,style&gt;&gt; them appropriately yourself.
-====
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/names.png" alt="names"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_links">Links</h3>
+<div class="paragraph">
+<p>You can create for types of links</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>link to name 'A Name'</code> will create link other parts of the document using cell name <code>A Name</code></p>
+</li>
+<li>
+<p><code>link to url 'http://www.example.com'</code> will create link to open URL <code><a href="http://www.example.com" class="bare">http://www.example.com</a></code></p>
+</li>
+<li>
+<p><code>link to email '<a href="mailto:musketyr@example.com">musketyr@example.com</a>'</code> will create link to send mail to <code>musketyr@example.com</code></p>
+</li>
+<li>
+<p><code>link to file 'README.txt'</code> will create link to open file <code>README.txt</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Links does not appear blue and underline by default You need to <a href="#_styles">style</a> them appropriately yourself.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             value 'Hello World'
@@ -850,38 +925,47 @@ sheet('Links') {
         }
         cell {
             value 'Mail (plain)'
-            link to email '<a href="mailto:musketyr@example.com">musketyr@example.com</a>'
+            link to email 'musketyr@example.com'
         }
         cell {
             value 'Mail (with subject)'
-            link to email '<a href="mailto:musketyr@example.com">musketyr@example.com</a>',
-                cc: '<a href="mailto:tester@example.com">tester@example.com</a>'
+            link to email 'musketyr@example.com',
+                cc: 'tester@example.com'
                 subject: 'Testing Excel Builder',
                 body: 'It is really great tools'
         }
     }
-}</p>
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can add arbitrary attributes to the email link such as <code>cc</code>, <code>body</code> or <code>subject</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dimensions">Dimensions</h3>
+<div class="paragraph">
+<p>You can set the width of the cells as the multiple of standard character width. You can also set the column to accommodate
+the width automatically using the <code>auto</code> keyword but it may slow down the generation. The width is defined inside cells
+(usually header cells) but applies to the whole column.</p>
+</div>
+<div class="paragraph">
+<p>You can set the height of the cell in points. The height applies to whole row.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>[TIP]
-====
-You can add arbitrary attributes to the email link such as `cc`, `body` or `subject`.
-====
-
-=== Dimensions
-
-You can set the width of the cells as the multiple of standard character width. You can also set the column to accommodate
-the width automatically using the `auto` keyword but it may slow down the generation. The width is defined inside cells
-(usually header cells) but applies to the whole column.
-
-You can set the height of the cell in points. The height applies to whole row.
-
-[source,groovy]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>sheet('Sample') {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             value 'No.'
@@ -904,24 +988,28 @@ You can set the height of the cell in points. The height applies to whole row.
         }
         cell "Helps building nice spreadsheet reports"
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:widths.png[]
-
-
-== Styles
-Cell styles are defined either for a whole row or a particular cell. You can define a named style on the top level along
-with sheets and than refer to it from cell or row.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>style ('headers') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/widths.png" alt="widths"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_styles">Styles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cell styles are defined either for a whole row or a particular cell. You can define a named style on the top level along
+with sheets and than refer to it from cell or row.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">style ('headers') {
     border(bottom) {
         style thick
         color black
@@ -959,33 +1047,35 @@ sheet('Sample') {
         }
         cell "Helps building nice spreadsheet reports"
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:styles.png[]
-
-=== Alignments
-Use `align` method to align the cells horizontally or vertically. You place the vertical alignment first and then
-the horizontal. Use default value `bottom` if you dont want to change the vertical alignment but you want to change
-the horizontal one.
-
-Horizontal alignment options are: `center`, `centerSelection`, `distributed`, `fill`, `justify`, `left` and `right`.
-See link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/HorizontalAlignment.html[HorizontalAlignment] for
-full description of horizontal alignment options.
-
-Vertical alignment options are: `bottom`, `center`, `distributed`, `justified` and `top`.
-See link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/VerticalAlignment.html[VerticalAlignment] for
-full description of vertical alignment options.
-
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/styles.png" alt="styles"></span></p>
+</div>
+<div class="sect2">
+<h3 id="_alignments">Alignments</h3>
+<div class="paragraph">
+<p>Use <code>align</code> method to align the cells horizontally or vertically. You place the vertical alignment first and then
+the horizontal. Use default value <code>bottom</code> if you dont want to change the vertical alignment but you want to change
+the horizontal one.</p>
+</div>
+<div class="paragraph">
+<p>Horizontal alignment options are: <code>center</code>, <code>centerSelection</code>, <code>distributed</code>, <code>fill</code>, <code>justify</code>, <code>left</code> and <code>right</code>.
+See <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/HorizontalAlignment.html">HorizontalAlignment</a> for
+full description of horizontal alignment options.</p>
+</div>
+<div class="paragraph">
+<p>Vertical alignment options are: <code>bottom</code>, <code>center</code>, <code>distributed</code>, <code>justified</code> and <code>top</code>.
+See <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/VerticalAlignment.html">VerticalAlignment</a> for
+full description of vertical alignment options.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             value 'Top Left'
@@ -1011,76 +1101,82 @@ full description of vertical alignment options.
         }
     }
     // rest skipped
- }</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:alignment.png[]
-
-
-=== Fills
-You can set the background color or combination of foreground color, background color and fill to customize cells'
-appearance. Color can be set as hexadecimal string starting with `#` or you can use one of predefined colors
-which are exactly the same as HTML predefined colors.
-
-[source,groovy]</pre>
+ }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>cell {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/alignment.png" alt="alignment"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fills">Fills</h3>
+<div class="paragraph">
+<p>You can set the background color or combination of foreground color, background color and fill to customize cells'
+appearance. Color can be set as hexadecimal string starting with <code>#</code> or you can use one of predefined colors
+which are exactly the same as HTML predefined colors.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
     style {
         background '#FF8C00' // darkOrange
         foreground brown
         fill square
     }
-}</p>
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_available_predefined_colors">Available predefined colors</h4>
+<div class="paragraph">
+<p><span class="image"><img src="images/colors.png" alt="colors"></span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_available_fill_values">Available fill values</h4>
+<div class="paragraph">
+<p><span class="image"><img src="images/fills.png" alt="fills"></span></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_borders">Borders</h3>
+<div class="paragraph">
+<p>You can define a color and style of the cell border. To address which color to change, use <code>top</code>, <code>bottom</code>, <code>left</code>
+and/or <code>right</code> keywords when calling the <code>border</code> method. See <a href="#_available_predefined_colors">Available predefined colors</a>.
+Colors can be defined as hexadecimal string as well.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>==== Available predefined colors
-
-image:colors.png[]
-
-==== Available fill values
-
-image:fills.png[]
-
-=== Borders
-You can define a color and style of the cell border. To address which color to change, use `top`, `bottom`, `left`
-and/or `right` keywords when calling the `border` method. See &lt;&lt;Available predefined colors&gt;&gt;.
-Colors can be defined as hexadecimal string as well.
-
-[source,groovy]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>cell {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
     style {
         border top, bottom, {
             style solid
             color gray
         }
     }
-}</p>
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_available_border_styles">Available border styles</h4>
+<div class="paragraph">
+<p><span class="image"><img src="images/borders.png" alt="borders"></span></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fonts">Fonts</h3>
+<div class="paragraph">
+<p>You can customize the font size and color of the text in the cell. You also can make it <code>bold</code>, <code>italic</code>, <code>underline</code> or
+<code>strikeout</code>. See <a href="#_available_predefined_colors">Available predefined colors</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>==== Available border styles
-
-image:borders.png[]
-
-=== Fonts
-
-You can customize the font size and color of the text in the cell. You also can make it `bold`, `italic`, `underline` or
-`strikeout`. See &lt;&lt;Available predefined colors&gt;&gt;.
-
-[source,groovy]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>row {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">row {
     cell {
         width auto
         value 'Bold Red 22'
@@ -1119,46 +1215,47 @@ You can customize the font size and color of the text in the cell. You also can 
             }
         }
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:fonts.png[]
-
-
-=== Data formats
-You can assing a data format using the `format` method. Detailed guide how the format works can be found in
-link:https://support.microsoft.com/en-us/kb/298368[How to control and understand settings in the Excel for Format Cells
-dialog box]. link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html[Apache POI Builtin Formats]
-are great way how to find some of the most common formats.
-
-Following example will print current date as e.g. `31.12.15`.
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>cell {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/fonts.png" alt="fonts"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_formats">Data formats</h3>
+<div class="paragraph">
+<p>You can assing a data format using the <code>format</code> method. Detailed guide how the format works can be found in
+<a href="https://support.microsoft.com/en-us/kb/298368">How to control and understand settings in the Excel for Format Cells
+dialog box</a>. <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html">Apache POI Builtin Formats</a>
+are great way how to find some of the most common formats.</p>
+</div>
+<div class="paragraph">
+<p>Following example will print current date as e.g. <code>31.12.15</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
     style {
         value new Date()
         format 'dd/mm/yy'
     }
-}</p>
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_indentations">Indentations</h3>
+<div class="paragraph">
+<p>You can set the indentation in number of characters from the beginning of the cell.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>=== Indentations
-
-You can set the indentation in number of characters from the beginning of the cell.
-
-[source,groovy]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>sheet('Sample') {
-    7.times { int i &#8594;
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+    7.times { int i -&gt;
         row {
             cell {
                 value 'x'
@@ -1168,123 +1265,107 @@ You can set the indentation in number of characters from the beginning of the ce
             }
         }
     }
-}</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:indent.png[]
-
-=== Rotation
-
-You can rotate the text in the cell using the `rotation` method. It accepts number from `0` to `180`.
-Numbers lower from `1` to `90` will produces text going _uphill_ and from `91` to `180` text going _downhill_
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/indent.png" alt="indent"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rotation">Rotation</h3>
+<div class="paragraph">
+<p>You can rotate the text in the cell using the <code>rotation</code> method. It accepts number from <code>0</code> to <code>180</code>.
+Numbers lower from <code>1</code> to <code>90</code> will produces text going <em>uphill</em> and from <code>91</code> to <code>180</code> text going <em>downhill</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             height 150
             width 20
             value 'From bottom to top (90)'
             style { rotation 90 }
-        }</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cell {
-    width 20
-    value 'From bottom to top (45)'
-    style { rotation 45 }
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cell {
-    width 20
-    value 'Normal (0)'
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cell {
-    width 20
-    value 'From top to bottom (135)'
-    style { rotation 135 }
-}</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>        cell {
+        }
+
+        cell {
+            width 20
+            value 'From bottom to top (45)'
+            style { rotation 45 }
+        }
+
+        cell {
+            width 20
+            value 'Normal (0)'
+        }
+
+        cell {
+            width 20
+            value 'From top to bottom (135)'
+            style { rotation 135 }
+        }
+
+        cell {
             width 20
             value 'From top to bottom (180)'
             style { rotation 180 }
         }
     }
-}</pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:rotation.png[]
-
-=== Text wrap
-
-By default the text is not wrapped. This mean that the new lines characters present in the string are ignored.
-You can update this by writing `wrap text` line in the style definition closure.
-
-
-[source,groovy]</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>sheet('Sample') {
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/rotation.png" alt="rotation"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_text_wrap">Text wrap</h3>
+<div class="paragraph">
+<p>By default the text is not wrapped. This mean that the new lines characters present in the string are ignored.
+You can update this by writing <code>wrap text</code> line in the style definition closure.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
     row {
         cell {
             height 100
             width auto
             value '''
             This text will be wrapped.
-            To the next line.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>    And another as well.
-    '''
-    style {
-        wrap text
-    }
-}
-cell {
-    width auto
-    value '''
-    This text will not be wrapped.
-    Not even to to the next line.</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>            Even another one.
+            To the next line.
+
+            And another as well.
+            '''
+            style {
+                wrap text
+            }
+        }
+        cell {
+            width auto
+            value '''
+            This text will not be wrapped.
+            Not even to to the next line.
+
+            Even another one.
             '''
         }
     }
-}</pre>
+}</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre>_Result_
-
-image:wrap.png[]</pre>
+<div class="paragraph">
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/wrap.png" alt="wrap"></span></p>
 </div>
 </div>
 </div>
@@ -1292,7 +1373,7 @@ image:wrap.png[]</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-12 08:53:30 CEST
+Last updated 2015-10-12 08:55:47 CEST
 </div>
 </div>
 </body>
