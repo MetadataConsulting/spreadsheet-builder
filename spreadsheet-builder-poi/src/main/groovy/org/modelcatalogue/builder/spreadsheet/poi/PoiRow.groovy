@@ -44,7 +44,7 @@ class PoiRow implements Row {
 
     @Override
     void cell(@DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition) {
-        XSSFCell xssfCell = xssfRow.createCell(nextColNumber++)
+        XSSFCell xssfCell = xssfRow.createCell(nextColNumber)
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
         if (styleName) {
@@ -52,6 +52,8 @@ class PoiRow implements Row {
         }
         poiCell.style styleDefinition
         poiCell.with cellDefinition
+
+        nextColNumber += poiCell.colspan
 
         handleSpans(xssfCell, poiCell)
     }
