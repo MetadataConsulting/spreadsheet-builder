@@ -2,6 +2,7 @@ package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
+import org.apache.poi.ss.util.WorkbookUtil
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -22,7 +23,7 @@ class PoiWorkbook implements Workbook {
 
     @Override
     void sheet(String name, @DelegatesTo(Sheet.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Sheet") Closure sheetDefinition) {
-        XSSFSheet xssfSheet = workbook.getSheet(name) ?: workbook.createSheet(name)
+        XSSFSheet xssfSheet = workbook.getSheet(WorkbookUtil.createSafeSheetName(name)) ?: workbook.createSheet(WorkbookUtil.createSafeSheetName(name))
 
         PoiSheet sheet = new PoiSheet(this, xssfSheet)
         sheet.with sheetDefinition
