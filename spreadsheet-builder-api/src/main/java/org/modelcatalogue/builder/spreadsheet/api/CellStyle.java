@@ -7,6 +7,8 @@ import groovy.transform.stc.FromString;
 
 public interface CellStyle extends ProvidesHTMLColors {
 
+    void base(String stylename);
+
     void background(String hexColor);
     void background(Color color);
 

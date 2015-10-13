@@ -32,41 +32,55 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
+                apply MyStyles // or apply(new MyStyles())
                 sheet('Sample') {
-                    row(2) {
-                        style {
-                            background whiteSmoke
-                            border top, bottom, {
-                                style thin
-                                color black
-                            }
-                        }
-                        cell('B') {
-                            value 'A'
-                            style {
-                                border left, {
-                                    style thin
-                                    color black
-                                }
-                            }
-                        }
-                        cell 'B'
-                        cell {
-                            value 'C'
-                            style {
-                                border right, {
-                                    style thin
-                                    color black
-                                }
-                            }
-                        }
-                    }
                     row {
-                        cell('B') { value 1 }
-                        cell 2
-                        cell 3
+                        cell {
+                            value 'Hello'
+                            style 'h1'
+                        }
+                        cell {
+                            value 'World'
+                            style 'h2'
+                        }
                     }
                 }
+
+//                sheet('Sample') {
+//                    row(2) {
+//                        style {
+//                            background whiteSmoke
+//                            border top, bottom, {
+//                                style thin
+//                                color black
+//                            }
+//                        }
+//                        cell('B') {
+//                            value 'A'
+//                            style {
+//                                border left, {
+//                                    style thin
+//                                    color black
+//                                }
+//                            }
+//                        }
+//                        cell 'B'
+//                        cell {
+//                            value 'C'
+//                            style {
+//                                border right, {
+//                                    style thin
+//                                    color black
+//                                }
+//                            }
+//                        }
+//                    }
+//                    row {
+//                        cell('B') { value 1 }
+//                        cell 2
+//                        cell 3
+//                    }
+//                }
                 sheet('One') {
                     freeze 1,1
                     row {

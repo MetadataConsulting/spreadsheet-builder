@@ -6,11 +6,9 @@ import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.IndexedColors
-import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFDataFormat
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.AbstractCellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Border
 import org.modelcatalogue.builder.spreadsheet.api.BorderSide
@@ -28,19 +26,24 @@ import java.util.regex.Matcher
 class PoiCellStyle extends AbstractCellStyle {
 
     private final XSSFCellStyle style
-    private final XSSFWorkbook workbook
+    private final PoiCell cell
 
     private PoiFont poiFont
     private PoiBorder poiBorder
 
-    PoiCellStyle(XSSFCell xssfCell) {
-        workbook = xssfCell.row.sheet.workbook as XSSFWorkbook
-        if (xssfCell.cellStyle == workbook.stylesSource.getStyleAt(0)) {
-            style = workbook.createCellStyle() as XSSFCellStyle
-            xssfCell.cellStyle = style
+    PoiCellStyle(PoiCell cell) {
+        this.cell = cell
+        if (cell.cell.cellStyle == cell.cell.sheet.workbook.stylesSource.getStyleAt(0)) {
+            style = cell.cell.sheet.workbook.createCellStyle() as XSSFCellStyle
+            cell.cell.cellStyle = style
         } else {
-            style = xssfCell.cellStyle as XSSFCellStyle
+            style = cell.cell.cellStyle as XSSFCellStyle
         }
+    }
+
+    @Override
+    void base(String stylename) {
+        with cell.row.sheet.workbook.getStyle(stylename)
     }
 
     @Override
@@ -134,7 +137,7 @@ class PoiCellStyle extends AbstractCellStyle {
     @Override
     void font(@DelegatesTo(Font.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration) {
         if (!poiFont) {
-            poiFont = new PoiFont(workbook, style)
+            poiFont = new PoiFont(cell.row.sheet.sheet.workbook, style)
         }
         poiFont.with fontConfiguration
     }
@@ -164,7 +167,7 @@ class PoiCellStyle extends AbstractCellStyle {
 
     @Override
     void format(String format) {
-        XSSFDataFormat dataFormat = workbook.createDataFormat()
+        XSSFDataFormat dataFormat = cell.row.sheet.sheet.workbook.createDataFormat()
         style.dataFormat = dataFormat.getFormat(format)
     }
 

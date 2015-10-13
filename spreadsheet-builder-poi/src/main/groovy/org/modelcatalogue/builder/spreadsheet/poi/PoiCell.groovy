@@ -76,7 +76,7 @@ class PoiCell extends AbstractCell {
     @Override
     void style(@DelegatesTo(CellStyle.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
         if (!poiCellStyle) {
-            poiCellStyle = new PoiCellStyle(xssfCell)
+            poiCellStyle = new PoiCellStyle(this)
         }
         poiCellStyle.with styleDefinition
     }
@@ -160,5 +160,13 @@ class PoiCell extends AbstractCell {
 
     protected int getRowspan() {
         return rowspan
+    }
+
+    protected XSSFCell getCell() {
+        return xssfCell
+    }
+
+    protected PoiRow getRow() {
+        return row
     }
 }

@@ -771,21 +771,27 @@ _Result_
 image:wrap.png[]
 
 
-=== Stylesheets
+=== Reusing Styles
 
 You can externalize your styles configuration into class implementing `org.modelcatalogue.builder.spreadsheet.api.Stylesheet`
-interface to prevent repeating yourself.
+interface to maximize code reuse or report customization.
 
 [source,groovy]
 ----
-class MyStyles implements Spreadsheet {
+class MyStyles implements Stylesheet {
 
     void declareStyles(CanDefineStyle stylable) {
-        stylable.style('header') {
+        stylable.style('h1') {
             foreground whiteSmoke
             fill solidForeground
             font {
                 size 22
+            }
+        }
+        stylable.style('h2') {
+            base 'h1'
+            font {
+                size 16
             }
         }
     }
@@ -796,10 +802,18 @@ builder.build(out) {
     sheet('Sample') {
         row {
             cell {
-                value 'Hello World'
-                style 'header'
+                value 'Hello'
+                style 'h1'
+            }
+            cell {
+                value 'World'
+                style 'h2'
             }
         }
     }
 }
 ----
+
+_Result_
+
+image:stylesheets.png[]
