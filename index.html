@@ -412,7 +412,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.1.7" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.1.8" />
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-68778580-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -448,7 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_indentations">Indentations</a></li>
 <li><a href="#_rotation">Rotation</a></li>
 <li><a href="#_text_wrap">Text wrap</a></li>
-<li><a href="#_stylesheets">Stylesheets</a></li>
+<li><a href="#_reusing_styles">Reusing Styles</a></li>
 </ul>
 </li>
 </ul>
@@ -476,7 +486,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.1.7')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.1.8')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -699,7 +709,7 @@ set the value of the cell using the <code>value</code> method or the formula usi
 <div class="paragraph">
 <p>You can substitute the <code>A1</code> references in formulas with <a href="#_names">name references</a>. Use <code>#{Name}</code> syntax inside
 the formula definition if you don&#8217;t want to compute the <code>A1</code> references yourself e.g. <code>SUM(#{Cell1},#{Cell2})</code>. The
-name must be already assigned.</p>
+name can be assigned later.</p>
 </div>
 </td>
 </tr>
@@ -1370,21 +1380,27 @@ You can update this by writing <code>wrap text</code> line in the style definiti
 </div>
 </div>
 <div class="sect2">
-<h3 id="_stylesheets">Stylesheets</h3>
+<h3 id="_reusing_styles">Reusing Styles</h3>
 <div class="paragraph">
 <p>You can externalize your styles configuration into class implementing <code>org.modelcatalogue.builder.spreadsheet.api.Stylesheet</code>
-interface to prevent repeating yourself.</p>
+interface to maximize code reuse or report customization.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyStyles implements Spreadsheet {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyStyles implements Stylesheet {
 
     void declareStyles(CanDefineStyle stylable) {
-        stylable.style('header') {
+        stylable.style('h1') {
             foreground whiteSmoke
             fill solidForeground
             font {
                 size 22
+            }
+        }
+        stylable.style('h2') {
+            base 'h1'
+            font {
+                size 16
             }
         }
     }
@@ -1395,13 +1411,23 @@ builder.build(out) {
     sheet('Sample') {
         row {
             cell {
-                value 'Hello World'
-                style 'header'
+                value 'Hello'
+                style 'h1'
+            }
+            cell {
+                value 'World'
+                style 'h2'
             }
         }
     }
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/stylesheets.png" alt="stylesheets"></span></p>
 </div>
 </div>
 </div>
@@ -1409,7 +1435,7 @@ builder.build(out) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-12 18:49:29 CEST
+Last updated 2015-10-13 16:39:16 CEST
 </div>
 </div>
 </body>
