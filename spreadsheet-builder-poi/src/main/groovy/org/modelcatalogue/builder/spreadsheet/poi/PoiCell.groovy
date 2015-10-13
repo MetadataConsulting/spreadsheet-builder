@@ -1,6 +1,5 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileDynamic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
@@ -91,8 +90,7 @@ class PoiCell extends AbstractCell {
 
     @Override
     void formula(String formula) {
-        xssfCell.setCellFormula(expandNames(formula))
-        xssfCell.cellType = Cell.CELL_TYPE_FORMULA
+        row.sheet.workbook.addPendingFormula(formula, xssfCell)
     }
 
     @Override
@@ -120,8 +118,20 @@ class PoiCell extends AbstractCell {
     @Override
     void name(String name) {
         XSSFName theName = xssfCell.row.sheet.workbook.createName() as XSSFName
-        theName.setNameName(name)
-        theName.setRefersToFormula("${xssfCell.sheet.sheetName}!${xssfCell.reference}")
+        theName.setNameName(fixName(name))
+        theName.setRefersToFormula("'${xssfCell.sheet.sheetName.replaceAll(/'/, /\'/)}'!${xssfCell.reference}")
+    }
+
+    protected static String fixName(String name) {
+        if (!name) { throw new IllegalArgumentException("Name cannot be null or empty!") }
+        if (name in ['c', 'C', 'r', 'R']) {
+            return "_$name"
+        }
+        name = name.replaceAll(/[^\.0-9a-zA-Z_]/, '_')
+        if (!(name =~ /^[abd-qs-zABD-QS-Z_]/)) {
+            return fixName("_$name")
+        }
+        return name
     }
 
     @Override
@@ -150,16 +160,5 @@ class PoiCell extends AbstractCell {
 
     protected int getRowspan() {
         return rowspan
-    }
-
-    @CompileDynamic
-    protected String expandNames(String withNames) {
-        withNames.replaceAll(/\#\{(.+?)\}/) { List<String> found ->
-            XSSFName nameFound = xssfCell.sheet.workbook.getName(found[1])
-            if (!found) {
-                throw new IllegalArgumentException("Named cell '${found[1]}' cannot be found!")
-            }
-            nameFound.refersToFormula
-        }
     }
 }

@@ -13,7 +13,7 @@ class PoiSpreadsheetBuilder implements SpreadsheetBuilder {
 
         PoiWorkbook poiWorkbook = new PoiWorkbook(workbook)
         poiWorkbook.with workbookDefinition
-        poiWorkbook.resolvePendingLinks()
+        poiWorkbook.resolve()
 
         workbook.write(outputStream)
     }

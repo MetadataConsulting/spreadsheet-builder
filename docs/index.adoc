@@ -201,7 +201,7 @@ set the value of the cell using the `value` method or the formula using the `for
 ====
 You can substitute the `A1` references in formulas with <<Names,name references>>. Use `\#{Name}` syntax inside
 the formula definition if you don't want to compute the `A1` references yourself e.g. `SUM(#{Cell1},#{Cell2})`. The
-name must be already assigned.
+name can be assigned later.
 ====
 
 You can either specify the column for the cell as number *starting from `1`* or alphabetically as it will appear

@@ -14,7 +14,7 @@ class PoiWorkbook implements Workbook {
 
     private final XSSFWorkbook workbook
     private final Map<String, Closure> namedStyles = [:]
-    private final List<PendingLink> pendingLinks = []
+    private final List<Resolvable> toBeResolved = []
 
     PoiWorkbook(XSSFWorkbook workbook) {
         this.workbook = workbook
@@ -53,13 +53,17 @@ class PoiWorkbook implements Workbook {
         return style
     }
 
-    protected void addPendingLink(String ref, XSSFCell cell) {
-        pendingLinks << new PendingLink(cell, ref)
+    protected void addPendingFormula(String formula, XSSFCell cell) {
+        toBeResolved << new PendingFormula(cell, formula)
     }
 
-    protected void resolvePendingLinks() {
-        for (PendingLink link in pendingLinks) {
-            link.resolve()
+    protected void addPendingLink(String ref, XSSFCell cell) {
+        toBeResolved << new PendingLink(cell, ref)
+    }
+
+    protected void resolve() {
+        for (Resolvable resolvable in toBeResolved) {
+            resolvable.resolve()
         }
     }
 }
