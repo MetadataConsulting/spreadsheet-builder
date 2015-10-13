@@ -1,6 +1,5 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.CellStyle
@@ -26,7 +25,7 @@ import org.modelcatalogue.builder.spreadsheet.api.TextKeyword
 
 import java.util.regex.Matcher
 
-@CompileStatic class PoiCellStyle extends AbstractCellStyle {
+class PoiCellStyle extends AbstractCellStyle {
 
     private final XSSFCellStyle style
     private final XSSFWorkbook workbook

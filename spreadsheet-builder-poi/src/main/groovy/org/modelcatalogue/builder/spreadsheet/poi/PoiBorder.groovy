@@ -1,6 +1,5 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.modelcatalogue.builder.spreadsheet.api.AbstractBorder
@@ -10,7 +9,7 @@ import org.modelcatalogue.builder.spreadsheet.api.BorderStyle
 import org.modelcatalogue.builder.spreadsheet.api.Color
 import org.modelcatalogue.builder.spreadsheet.api.PureBorderSide
 
-@CompileStatic class PoiBorder extends AbstractBorder {
+class PoiBorder extends AbstractBorder {
 
     private final XSSFCellStyle xssfCellStyle
 

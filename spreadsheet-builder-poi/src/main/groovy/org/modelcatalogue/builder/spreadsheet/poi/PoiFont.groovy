@@ -1,6 +1,5 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import org.apache.poi.ss.usermodel.FontUnderline
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
@@ -8,7 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.Color
 import org.modelcatalogue.builder.spreadsheet.api.Font
 
-@CompileStatic class PoiFont implements Font {
+class PoiFont implements Font {
 
     private final XSSFFont font
 

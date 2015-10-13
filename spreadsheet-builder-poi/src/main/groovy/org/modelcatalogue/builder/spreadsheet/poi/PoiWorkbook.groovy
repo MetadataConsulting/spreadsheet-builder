@@ -1,20 +1,20 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
-import org.apache.poi.xssf.usermodel.XSSFCellStyle
+import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Sheet
+import org.modelcatalogue.builder.spreadsheet.api.Stylesheet
 import org.modelcatalogue.builder.spreadsheet.api.Workbook
 
-
-@CompileStatic class PoiWorkbook implements Workbook {
+class PoiWorkbook implements Workbook {
 
     private final XSSFWorkbook workbook
     private final Map<String, Closure> namedStyles = [:]
+    private final List<PendingLink> pendingLinks = []
 
     PoiWorkbook(XSSFWorkbook workbook) {
         this.workbook = workbook
@@ -35,11 +35,31 @@ import org.modelcatalogue.builder.spreadsheet.api.Workbook
         namedStyles[name] = styleDefinition
     }
 
+    @Override
+    void apply(Class<Stylesheet> stylesheet) {
+        apply stylesheet.newInstance()
+    }
+
+    @Override
+    void apply(Stylesheet stylesheet) {
+        stylesheet.declareStyles(this)
+    }
+
     protected Closure getStyle(String name) {
         Closure style = namedStyles[name]
         if (!style) {
             throw new IllegalArgumentException("Style '$name' not defined")
         }
         return style
+    }
+
+    protected void addPendingLink(String ref, XSSFCell cell) {
+        pendingLinks << new PendingLink(cell, ref)
+    }
+
+    protected void resolvePendingLinks() {
+        for (PendingLink link in pendingLinks) {
+            link.resolve()
+        }
     }
 }

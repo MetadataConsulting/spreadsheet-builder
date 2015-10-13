@@ -769,3 +769,37 @@ sheet('Sample') {
 _Result_
 
 image:wrap.png[]
+
+
+=== Stylesheets
+
+You can externalize your styles configuration into class implementing `org.modelcatalogue.builder.spreadsheet.api.Stylesheet`
+interface to prevent repeating yourself.
+
+[source,groovy]
+----
+class MyStyles implements Spreadsheet {
+
+    void declareStyles(CanDefineStyle stylable) {
+        stylable.style('header') {
+            foreground whiteSmoke
+            fill solidForeground
+            font {
+                size 22
+            }
+        }
+    }
+}
+// usage
+builder.build(out) {
+    apply MyStyles // or apply(new MyStyles())
+    sheet('Sample') {
+        row {
+            cell {
+                value 'Hello World'
+                style 'header'
+            }
+        }
+    }
+}
+----

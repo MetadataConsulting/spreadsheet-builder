@@ -1,6 +1,5 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.xssf.usermodel.XSSFRow
@@ -8,7 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.modelcatalogue.builder.spreadsheet.api.Row
 import org.modelcatalogue.builder.spreadsheet.api.Sheet
 
-@CompileStatic class PoiSheet implements Sheet {
+class PoiSheet implements Sheet {
 
     private final XSSFSheet xssfSheet
     private final PoiWorkbook workbook

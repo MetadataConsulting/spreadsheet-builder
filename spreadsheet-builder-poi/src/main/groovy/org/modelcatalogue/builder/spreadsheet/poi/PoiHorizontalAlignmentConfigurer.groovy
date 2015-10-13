@@ -1,11 +1,10 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.modelcatalogue.builder.spreadsheet.api.HorizontalAlignmentConfigurer
 
-@CompileStatic class PoiHorizontalAlignmentConfigurer implements HorizontalAlignmentConfigurer {
+class PoiHorizontalAlignmentConfigurer implements HorizontalAlignmentConfigurer {
 
     final PoiCellStyle style
 

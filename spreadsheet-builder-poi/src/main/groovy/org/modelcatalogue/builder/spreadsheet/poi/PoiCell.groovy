@@ -1,7 +1,6 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.CompileDynamic
-import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
@@ -15,7 +14,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Comment
 import org.modelcatalogue.builder.spreadsheet.api.LinkDefinition
 import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
-@CompileStatic class PoiCell extends AbstractCell {
+class PoiCell extends AbstractCell {
 
     private final PoiRow row
     private final XSSFCell xssfCell
@@ -127,7 +126,7 @@ import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
     @Override
     LinkDefinition link(ToKeyword to) {
-        return new PoiLinkDefinition(xssfCell)
+        return new PoiLinkDefinition(row.sheet.workbook, xssfCell)
     }
 
     @Override

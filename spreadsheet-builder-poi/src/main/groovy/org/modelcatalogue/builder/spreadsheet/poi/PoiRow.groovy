@@ -1,6 +1,5 @@
 package org.modelcatalogue.builder.spreadsheet.poi
 
-import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.util.CellRangeAddress
@@ -10,7 +9,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Cell
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Row
 
-@CompileStatic class PoiRow implements Row {
+class PoiRow implements Row {
 
     private final XSSFRow xssfRow
     private final PoiSheet sheet
