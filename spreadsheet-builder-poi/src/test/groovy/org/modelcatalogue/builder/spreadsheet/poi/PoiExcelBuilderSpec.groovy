@@ -46,41 +46,65 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
-//                sheet('Sample') {
-//                    row(2) {
-//                        style {
-//                            background whiteSmoke
-//                            border top, bottom, {
-//                                style thin
-//                                color black
-//                            }
-//                        }
-//                        cell('B') {
-//                            value 'A'
-//                            style {
-//                                border left, {
-//                                    style thin
-//                                    color black
-//                                }
-//                            }
-//                        }
-//                        cell 'B'
-//                        cell {
-//                            value 'C'
-//                            style {
-//                                border right, {
-//                                    style thin
-//                                    color black
-//                                }
-//                            }
-//                        }
-//                    }
-//                    row {
-//                        cell('B') { value 1 }
-//                        cell 2
-//                        cell 3
-//                    }
-//                }
+                sheet('Rich Text') {
+                    row {
+                        cell {
+                            text 'Little'
+                            text ' '
+                            text 'Red', {
+                                color red
+                                size 22
+                            }
+                            text ' '
+                            text 'Riding', {
+                                italic
+                                size 18
+                            }
+                            text ' '
+                            text 'Hood', {
+                                bold
+                                size 22
+                            }
+
+                        }
+                    }
+                }
+
+                sheet('Cell Adressing') {
+                    row(2) {
+                        style {
+                            background whiteSmoke
+                            border top, bottom, {
+                                style thin
+                                color black
+                            }
+                        }
+                        cell('B') {
+                            value 'A'
+                            style {
+                                border left, {
+                                    style thin
+                                    color black
+                                }
+                            }
+                        }
+                        cell 'B'
+                        cell {
+                            value 'C'
+                            style {
+                                border right, {
+                                    style thin
+                                    color black
+                                }
+                            }
+                        }
+                    }
+                    row {
+                        cell('B') { value 1 }
+                        cell 2
+                        cell 3
+                    }
+                }
                 sheet('One') {
                     freeze 1,1
                     row {

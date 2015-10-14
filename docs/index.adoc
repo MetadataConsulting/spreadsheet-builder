@@ -641,6 +641,38 @@ _Result_
 
 image:fonts.png[]
 
+=== Rich Texts
+
+Apart from setting the font for the whole cell you can create a rich text cell content as well. Instead of `value`
+use multiple calls to `text` method which takes optional closure to define the font for the current text run. The font
+definition is the same as <<Fonts,above>>.
+
+[source,groovy]
+----
+cell {
+    text 'Little'
+    text ' '
+    text 'Red', {
+        color red
+        size 22
+    }
+    text ' '
+    text 'Riding', {
+        italic
+        size 18
+    }
+    text ' '
+    text 'Hood', {
+        bold
+        size 22
+    }
+
+}
+----
+
+_Result_
+
+image:rich_text.png[]
 
 === Data formats
 You can assing a data format using the `format` method. Detailed guide how the format works can be found in

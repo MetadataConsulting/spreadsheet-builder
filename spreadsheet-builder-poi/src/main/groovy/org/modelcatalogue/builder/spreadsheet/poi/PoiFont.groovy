@@ -4,12 +4,17 @@ import org.apache.poi.ss.usermodel.FontUnderline
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.modelcatalogue.builder.spreadsheet.api.AbstractHTMLColorProvider
 import org.modelcatalogue.builder.spreadsheet.api.Color
 import org.modelcatalogue.builder.spreadsheet.api.Font
 
-class PoiFont implements Font {
+class PoiFont extends AbstractHTMLColorProvider implements Font {
 
     private final XSSFFont font
+
+    PoiFont(XSSFWorkbook workbook) {
+        font = workbook.createFont()
+    }
 
     PoiFont(XSSFWorkbook workbook, XSSFCellStyle style) {
         font = workbook.createFont()
@@ -51,5 +56,9 @@ class PoiFont implements Font {
         // TODO: support all variants
         font.setUnderline(FontUnderline.SINGLE)
         return null
+    }
+
+    protected XSSFFont getFont() {
+        return font
     }
 }

@@ -1,6 +1,6 @@
 package org.modelcatalogue.builder.spreadsheet.api;
 
-public interface Font {
+public interface Font extends ProvidesHTMLColors {
 
     void color(String hexColor);
     void color(Color color);

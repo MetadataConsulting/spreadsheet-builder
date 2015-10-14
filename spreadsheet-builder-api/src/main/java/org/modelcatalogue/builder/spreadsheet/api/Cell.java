@@ -7,6 +7,10 @@ import groovy.transform.stc.FromString;
 
 public interface Cell extends HasStyle {
 
+    /**
+     * Sets the value.
+     * @param value new value
+     */
     void value(Object value);
     void name(String name);
     void formula(String formula);
@@ -44,6 +48,28 @@ public interface Cell extends HasStyle {
 
     AutoKeyword getAuto();
     ToKeyword getTo();
+
+    /**
+     * Add a new text run to the cell.
+     *
+     * This method can be called multiple times. The value of the cell will be result of appending all the text
+     * values supplied.
+     *
+     * @param text new text run
+     */
+    void text(String text);
+
+    /**
+     * Add a new text run to the cell.
+     *
+     * This method can be called multiple times. The value of the cell will be result of appending all the text
+     * values supplied.
+     *
+     * @param text new text run
+     */
+    void text(String text, @DelegatesTo(Font.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration);
+
+
 
 
 }

@@ -40,6 +40,8 @@ class PoiRow implements Row {
         }
         poiCell.style styleDefinition
         poiCell.value value
+
+        poiCell.resolve()
     }
 
     @Override
@@ -56,6 +58,8 @@ class PoiRow implements Row {
         nextColNumber += poiCell.colspan
 
         handleSpans(xssfCell, poiCell)
+
+        poiCell.resolve()
     }
 
     private void handleSpans(XSSFCell xssfCell, PoiCell poiCell) {
@@ -83,6 +87,8 @@ class PoiRow implements Row {
         poiCell.with cellDefinition
 
         handleSpans(xssfCell, poiCell)
+
+        poiCell.resolve()
     }
 
     @Override

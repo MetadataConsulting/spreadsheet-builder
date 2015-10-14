@@ -5,15 +5,17 @@ import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFName
+import org.apache.poi.xssf.usermodel.XSSFRichTextString
 import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.modelcatalogue.builder.spreadsheet.api.AbstractCell
 import org.modelcatalogue.builder.spreadsheet.api.AutoKeyword
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Comment
+import org.modelcatalogue.builder.spreadsheet.api.Font
 import org.modelcatalogue.builder.spreadsheet.api.LinkDefinition
 import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
-class PoiCell extends AbstractCell {
+class PoiCell extends AbstractCell implements  Resolvable {
 
     private final PoiRow row
     private final XSSFCell xssfCell
@@ -22,6 +24,8 @@ class PoiCell extends AbstractCell {
     private int rowspan = 1
 
     private PoiCellStyle poiCellStyle
+
+    private List<RichTextPart> richTextParts = []
 
     PoiCell(PoiRow row, XSSFCell xssfCell) {
         this.xssfCell = xssfCell
@@ -154,6 +158,30 @@ class PoiCell extends AbstractCell {
         row.sheet.addAutoColumn(xssfCell.columnIndex)
     }
 
+    @Override
+    void text(String run) {
+        text(run, null)
+    }
+
+    @Override
+    void text(String run, @DelegatesTo(Font.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration) {
+        int start = 0
+        if (richTextParts) {
+            start = richTextParts.last().end
+        }
+        int end = start + run.length()
+
+        if (!fontConfiguration) {
+            richTextParts << new RichTextPart(run, null, start, end)
+            return
+        }
+
+        PoiFont font = new PoiFont(xssfCell.row.sheet.workbook)
+        font.with fontConfiguration
+
+        richTextParts << new RichTextPart(run, font, start, end)
+    }
+
     protected int getColspan() {
         return colspan
     }
@@ -168,5 +196,22 @@ class PoiCell extends AbstractCell {
 
     protected PoiRow getRow() {
         return row
+    }
+
+    @Override
+    void resolve() {
+        if (richTextParts) {
+            XSSFRichTextString text = xssfCell.richStringCellValue
+
+            text.string = richTextParts.collect { it.text }.join('')
+
+            for (RichTextPart richTextPart in richTextParts) {
+                if (richTextPart.text && richTextPart.font) {
+                    text.applyFont(richTextPart.start, richTextPart.end, richTextPart.font.font)
+                }
+            }
+
+            xssfCell.setCellValue(text)
+        }
     }
 }
