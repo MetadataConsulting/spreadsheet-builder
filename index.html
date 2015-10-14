@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.1.8" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.1.9" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -454,6 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_fills">Fills</a></li>
 <li><a href="#_borders">Borders</a></li>
 <li><a href="#_fonts">Fonts</a></li>
+<li><a href="#_rich_texts">Rich Texts</a></li>
 <li><a href="#_data_formats">Data formats</a></li>
 <li><a href="#_indentations">Indentations</a></li>
 <li><a href="#_rotation">Rotation</a></li>
@@ -486,7 +487,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.1.8')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.1.9')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -1237,6 +1238,43 @@ Colors can be defined as hexadecimal string as well.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_rich_texts">Rich Texts</h3>
+<div class="paragraph">
+<p>Apart from setting the font for the whole cell you can create a rich text cell content as well. Instead of <code>value</code>
+use multiple calls to <code>text</code> method which takes optional closure to define the font for the current text run. The font
+definition is the same as <a href="#_fonts">above</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
+    text 'Little'
+    text ' '
+    text 'Red', {
+        color red
+        size 22
+    }
+    text ' '
+    text 'Riding', {
+        italic
+        size 18
+    }
+    text ' '
+    text 'Hood', {
+        bold
+        size 22
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/rich_text.png" alt="rich_text"></span></p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_data_formats">Data formats</h3>
 <div class="paragraph">
 <p>You can assing a data format using the <code>format</code> method. Detailed guide how the format works can be found in
@@ -1435,7 +1473,7 @@ builder.build(out) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-13 16:39:16 CEST
+Last updated 2015-10-14 11:41:22 CEST
 </div>
 </div>
 </body>
