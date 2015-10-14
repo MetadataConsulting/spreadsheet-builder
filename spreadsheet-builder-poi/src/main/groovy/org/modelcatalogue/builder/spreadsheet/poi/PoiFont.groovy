@@ -33,7 +33,7 @@ class PoiFont extends AbstractHTMLColorProvider implements Font {
 
     @Override
     void size(int size) {
-        font.fontHeightInPoints = (short) size
+        font.setFontHeightInPoints(size.shortValue())
     }
 
     @Override

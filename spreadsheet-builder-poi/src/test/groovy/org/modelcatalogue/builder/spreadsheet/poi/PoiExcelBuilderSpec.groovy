@@ -68,6 +68,59 @@ class PoiExcelBuilderSpec extends Specification {
 
                         }
                     }
+                    row {
+                        cell {
+                            style {
+                                wrap text
+                            }
+                            text 'First Line'
+                            text '\n'
+                            text 'Second Line', {
+                                bold
+                                size 12
+                            }
+                            text '\n'
+                            for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '':'nothing']) {
+                                text entry.key, {
+                                    bold
+                                }
+                                text ': '
+                                text  entry.value
+                                text '\n'
+                            }
+                            text '\n\n'
+                            text 'Next line after two spaces'
+                            text '\n'
+                            text 'Last line', {
+                                italic
+                            }
+                            text '\n'
+                        }
+                    }
+
+                    row {
+                        cell {
+                            text 'Genomics England Consent Withdrawal Options'
+                            text '\n\n'
+                            text 'Enumerations', {
+                                size 12
+                                bold
+                            }
+                            text '\n'
+
+                            for (Map.Entry<String, String> entry in [
+                                    FULL_WITHDRAWAL: 'OPTION 2: FULL WITHDRAWAL: No further use',
+                                    PARTIAL_WITHDRAWAL: 'OPTION 1: PARTIAL WITHDRAWAL: No further contact'
+                            ]) {
+                                text entry.key, {
+                                    bold
+                                }
+                                text ': '
+                                text  entry.value
+                                text '\n'
+                            }
+                        }
+                    }
                 }
 
                 sheet('Cell Adressing') {

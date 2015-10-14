@@ -674,6 +674,12 @@ _Result_
 
 image:rich_text.png[]
 
+[WARNING]
+====
+Some older versions that 3.13 of Apache POI does not handle rich texts well. Please, make sure
+you are using at least version 3.13.
+====
+
 === Data formats
 You can assing a data format using the `format` method. Detailed guide how the format works can be found in
 link:https://support.microsoft.com/en-us/kb/298368[How to control and understand settings in the Excel for Format Cells

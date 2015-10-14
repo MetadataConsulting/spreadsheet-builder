@@ -165,6 +165,9 @@ class PoiCell extends AbstractCell implements  Resolvable {
 
     @Override
     void text(String run, @DelegatesTo(Font.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration) {
+        if (!run) {
+            return
+        }
         int start = 0
         if (richTextParts) {
             start = richTextParts.last().end
