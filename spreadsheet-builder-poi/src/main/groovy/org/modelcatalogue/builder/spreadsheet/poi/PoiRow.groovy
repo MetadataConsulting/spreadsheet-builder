@@ -27,7 +27,7 @@ class PoiRow implements Row {
 
     @Override
     void cell() {
-        xssfRow.createCell(nextColNumber++, org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK)
+        cell null
     }
 
     @Override
