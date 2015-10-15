@@ -590,7 +590,7 @@ image:borders.png[]
 
 === Fonts
 
-You can customize the font size and color of the text in the cell. You also can make it `bold`, `italic`, `underline` or
+You can customize the font size, name and color of the text in the cell. You also can make it `bold`, `italic`, `underline` or
 `strikeout`. See <<Available predefined colors>>.
 
 [source,groovy]
@@ -609,10 +609,11 @@ row {
     }
     cell {
         width auto
-        value 'Underline'
+        value 'Underline Courier New'
         style {
             font {
                 underline
+                name 'Courier New'
             }
         }
     }

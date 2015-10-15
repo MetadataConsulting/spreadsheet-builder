@@ -37,6 +37,11 @@ class PoiFont extends AbstractHTMLColorProvider implements Font {
     }
 
     @Override
+    void name(String name) {
+        font.setFontName(name)
+    }
+
+    @Override
     Object getItalic() {
         font.italic = true
     }

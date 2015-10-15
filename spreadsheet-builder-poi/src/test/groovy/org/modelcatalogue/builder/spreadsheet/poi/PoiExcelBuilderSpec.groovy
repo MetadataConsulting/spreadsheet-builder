@@ -46,6 +46,50 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
+                sheet('Fonts') {
+                    row {
+                        cell {
+                            width auto
+                            value 'Bold Red 22'
+                            style {
+                                font {
+                                    bold
+                                    color red
+                                    size 22
+                                }
+                            }
+                        }
+                        cell {
+                            width auto
+                            value 'Underline Courier New'
+                            style {
+                                font {
+                                    underline
+                                    name 'Courier New'
+                                }
+                            }
+                        }
+                        cell {
+                            width auto
+                            value 'Italic'
+                            style {
+                                font {
+                                    italic
+                                }
+                            }
+                        }
+                        cell {
+                            width auto
+                            value 'Strikeout'
+                            style {
+                                font {
+                                    strikeout
+                                }
+                            }
+                        }
+                    }
+                }
+
                 sheet('Rich Text') {
                     row {
                         cell {
@@ -54,6 +98,7 @@ class PoiExcelBuilderSpec extends Specification {
                             text 'Red', {
                                 color red
                                 size 22
+                                name "Times New Roman"
                             }
                             text ' '
                             text 'Riding', {
@@ -123,7 +168,7 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
-                sheet('Cell Adressing') {
+                sheet('Cell Addressing') {
                     row(2) {
                         style {
                             background whiteSmoke

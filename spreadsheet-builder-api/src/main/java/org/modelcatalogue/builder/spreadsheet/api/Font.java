@@ -6,6 +6,7 @@ public interface Font extends ProvidesHTMLColors {
     void color(Color color);
     
     void size(int size);
+    void name(String name);
 
     Object getItalic();
     Object getBold();
