@@ -90,6 +90,14 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
+                sheet('Image') {
+                    row (3) {
+                        cell ('C') {
+                            png image from 'https://goo.gl/UcL1wy'
+                        }
+                    }
+                }
+
                 sheet('Rich Text') {
                     row {
                         cell {

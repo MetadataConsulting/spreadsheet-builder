@@ -3,6 +3,7 @@ package org.modelcatalogue.builder.spreadsheet.poi
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFName
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
@@ -12,6 +13,8 @@ import org.modelcatalogue.builder.spreadsheet.api.AutoKeyword
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Comment
 import org.modelcatalogue.builder.spreadsheet.api.Font
+import org.modelcatalogue.builder.spreadsheet.api.ImageCreator
+import org.modelcatalogue.builder.spreadsheet.api.ImageKeyword
 import org.modelcatalogue.builder.spreadsheet.api.LinkDefinition
 import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
@@ -183,6 +186,40 @@ class PoiCell extends AbstractCell implements  Resolvable {
         font.with fontConfiguration
 
         richTextParts << new RichTextPart(run, font, start, end)
+    }
+
+    @Override
+    ImageCreator png(ImageKeyword image) {
+        return createImageConfigurer(Workbook.PICTURE_TYPE_PNG)
+    }
+
+    @Override
+    ImageCreator jpeg(ImageKeyword image) {
+        return createImageConfigurer(Workbook.PICTURE_TYPE_JPEG)
+    }
+
+    @Override
+    ImageCreator pict(ImageKeyword image) {
+        return createImageConfigurer(Workbook.PICTURE_TYPE_JPEG)
+    }
+
+    @Override
+    ImageCreator emf(ImageKeyword image) {
+        return createImageConfigurer(Workbook.PICTURE_TYPE_EMF)
+    }
+
+    @Override
+    ImageCreator wmf(ImageKeyword image) {
+        return createImageConfigurer(Workbook.PICTURE_TYPE_WMF)
+    }
+
+    @Override
+    ImageCreator dib(ImageKeyword image) {
+        return createImageConfigurer(Workbook.PICTURE_TYPE_DIB)
+    }
+
+    protected ImageCreator createImageConfigurer(int fileType) {
+        return new PoiImageCreator(this, fileType)
     }
 
     protected int getColspan() {

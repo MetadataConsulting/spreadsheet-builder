@@ -275,6 +275,30 @@ _Result_
 
 image:spans.png[]
 
+=== Images
+You can insert an image calling one of `png`, `jpeg`, `emf`, `wmf`, `pict`, `dib` method inside the cell definition.
+
+[source,groovy]
+----
+cell ('C') {
+    png image from 'https://goo.gl/UcL1wy'
+}
+----
+
+_Result_
+
+image:image.png[]
+
+The source of the image can be String which either translates to URL if it starts with `https://` or `http://` or
+a file path otherwise. For advanced usage it can be also byte array or any `InputStream`.
+
+[WARNING]
+====
+Resizing images with API is not reliable so you need to resize your image properly before inserting into the spreadsheet.
+====
+
+
+
 === Comments
 You can set comment of any cell using the `comment` method. Use the variant accepting closure If you want to specify
 the author of the comment as well. The author only appears in the status bar of the application.

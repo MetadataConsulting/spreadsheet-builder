@@ -69,7 +69,13 @@ public interface Cell extends HasStyle {
      */
     void text(String text, @DelegatesTo(Font.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration);
 
+    ImageCreator png(ImageKeyword image);
+    ImageCreator jpeg(ImageKeyword image);
+    ImageCreator pict(ImageKeyword image);
+    ImageCreator emf(ImageKeyword image);
+    ImageCreator wmf(ImageKeyword image);
+    ImageCreator dib(ImageKeyword image);
 
-
+    ImageKeyword getImage();
 
 }

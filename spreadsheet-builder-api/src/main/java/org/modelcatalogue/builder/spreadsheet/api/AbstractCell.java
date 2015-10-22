@@ -11,4 +11,8 @@ public abstract class AbstractCell implements Cell {
         return ToKeyword.TO;
     }
 
+    public ImageKeyword getImage() {
+        return ImageKeyword.IMAGE;
+    }
+
 }
