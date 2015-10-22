@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.1.10" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.1.11" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -442,6 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_type_handling">Type handling</a></li>
 <li><a href="#_merging_cells">Merging cells</a></li>
+<li><a href="#_images">Images</a></li>
 <li><a href="#_comments">Comments</a></li>
 <li><a href="#_names">Names</a></li>
 <li><a href="#_links">Links</a></li>
@@ -487,7 +488,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.1.10')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.1.11')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -801,6 +802,43 @@ For <code>Boolean</code> the type of the cell is set automatically to <code>BOOL
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/spans.png" alt="spans"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_images">Images</h3>
+<div class="paragraph">
+<p>You can insert an image calling one of <code>png</code>, <code>jpeg</code>, <code>emf</code>, <code>wmf</code>, <code>pict</code>, <code>dib</code> method inside the cell definition.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell ('C') {
+    png image from 'https://goo.gl/UcL1wy'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/image.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>The source of the image can be String which either translates to URL if it starts with <code>https://</code> or <code>http://</code> or
+a file path otherwise. For advanced usage it can be also byte array or any <code>InputStream</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Resizing images with API is not reliable so you need to resize your image properly before inserting into the spreadsheet.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1489,7 +1527,7 @@ builder.build(out) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-15 10:02:01 CEST
+Last updated 2015-10-22 14:28:17 CEST
 </div>
 </div>
 </body>
