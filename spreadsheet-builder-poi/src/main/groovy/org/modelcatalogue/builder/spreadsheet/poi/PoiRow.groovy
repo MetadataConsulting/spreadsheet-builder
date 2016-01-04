@@ -15,7 +15,7 @@ class PoiRow implements Row {
     private final PoiSheet sheet
 
     private String styleName
-    private Closure styleDefinition = { return null }
+    private Closure styleDefinition
 
     private final List<Integer> startPositions = []
     private int nextColNumber = 0
@@ -36,9 +36,15 @@ class PoiRow implements Row {
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
         if (styleName) {
-            poiCell.style styleName
+            if (styleDefinition) {
+                poiCell.style styleName, styleDefinition
+            } else {
+                poiCell.style styleName
+            }
+        } else if(styleDefinition) {
+            poiCell.style styleDefinition
         }
-        poiCell.style styleDefinition
+
         poiCell.value value
 
         poiCell.resolve()
@@ -49,10 +55,17 @@ class PoiRow implements Row {
         XSSFCell xssfCell = xssfRow.createCell(nextColNumber)
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
+
         if (styleName) {
-            poiCell.style styleName
+            if (styleDefinition) {
+                poiCell.style styleName, styleDefinition
+            } else {
+                poiCell.style styleName
+            }
+        } else if (styleDefinition) {
+            poiCell.style styleDefinition
         }
-        poiCell.style styleDefinition
+
         poiCell.with cellDefinition
 
         nextColNumber += poiCell.colspan
@@ -80,10 +93,17 @@ class PoiRow implements Row {
         nextColNumber = column
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
+
         if (styleName) {
-            poiCell.style styleName
+            if (styleDefinition) {
+                poiCell.style styleName, styleDefinition
+            } else {
+                poiCell.style styleName
+            }
+        } else if(styleDefinition) {
+            poiCell.style styleDefinition
         }
-        poiCell.style styleDefinition
+
         poiCell.with cellDefinition
 
         handleSpans(xssfCell, poiCell)
@@ -104,6 +124,12 @@ class PoiRow implements Row {
     @Override
     void style(String name) {
         this.styleName = name
+    }
+
+    @Override
+    void style(String name, @DelegatesTo(CellStyle.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
+        style name
+        style styleDefinition
     }
 
     protected PoiSheet getSheet() {

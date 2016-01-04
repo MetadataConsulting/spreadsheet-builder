@@ -32,7 +32,43 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
+                style 'h1', {
+                    font {
+                        bold
+                    }
+                }
+
+                style 'h2', {
+                    font {
+                        bold
+                    }
+                }
+
                 apply MyStyles // or apply(new MyStyles())
+
+                sheet("many rows"){
+                    20000.times{
+                        row {
+                            cell {
+                                value '1'
+                                style 'h1'
+                            }
+                            cell {
+                                value '2'
+                                style 'h2'
+                            }
+                            cell {
+                                value '3'
+                                style 'h1'
+                            }
+                            cell {
+                                value '4'
+                                style 'h2'
+                            }
+                        }
+                    }
+                }
+
                 sheet('Sample') {
                     row {
                         cell {

@@ -26,28 +26,43 @@ import java.util.regex.Matcher
 class PoiCellStyle extends AbstractCellStyle {
 
     private final XSSFCellStyle style
-    private final PoiCell cell
+    private final PoiWorkbook workbook
 
     private PoiFont poiFont
     private PoiBorder poiBorder
 
+    private boolean sealed
+
     PoiCellStyle(PoiCell cell) {
-        this.cell = cell
         if (cell.cell.cellStyle == cell.cell.sheet.workbook.stylesSource.getStyleAt(0)) {
             style = cell.cell.sheet.workbook.createCellStyle() as XSSFCellStyle
             cell.cell.cellStyle = style
         } else {
             style = cell.cell.cellStyle as XSSFCellStyle
         }
+        workbook = cell.row.sheet.workbook
+    }
+
+    PoiCellStyle(PoiWorkbook workbook) {
+        this.style = workbook.workbook.createCellStyle() as XSSFCellStyle
+        this.workbook = workbook
     }
 
     @Override
     void base(String stylename) {
-        with cell.row.sheet.workbook.getStyle(stylename)
+        checkSealed()
+        with workbook.getStyleDefinition(stylename)
+    }
+
+    void checkSealed() {
+        if (sealed) {
+            throw new IllegalStateException("The cell style is already sealed! You need to create new style.")
+        }
     }
 
     @Override
     void background(String hexColor) {
+        checkSealed()
         if (style.fillForegroundColor == IndexedColors.AUTOMATIC.index) {
             foreground hexColor
         } else {
@@ -57,11 +72,13 @@ class PoiCellStyle extends AbstractCellStyle {
 
     @Override
     void background(Color colorPreset) {
+        checkSealed()
         background colorPreset.hex
     }
 
     @Override
     void foreground(String hexColor) {
+        checkSealed()
         if (style.fillForegroundColor != IndexedColors.AUTOMATIC.index) {
             // already set as background color
             style.setFillBackgroundColor(style.getFillForegroundXSSFColor())
@@ -74,11 +91,13 @@ class PoiCellStyle extends AbstractCellStyle {
 
     @Override
     void foreground(Color colorPreset) {
+        checkSealed()
         foreground colorPreset.hex
     }
 
     @Override
     void fill(ForegroundFill fill) {
+        checkSealed()
         switch (fill) {
             case ForegroundFill.NO_FILL:
                 style.fillPattern = CellStyle.NO_FILL
@@ -136,43 +155,50 @@ class PoiCellStyle extends AbstractCellStyle {
 
     @Override
     void font(@DelegatesTo(Font.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Font") Closure fontConfiguration) {
+        checkSealed()
         if (!poiFont) {
-            poiFont = new PoiFont(cell.row.sheet.sheet.workbook, style)
+            poiFont = new PoiFont(workbook.workbook, style)
         }
         poiFont.with fontConfiguration
     }
 
     @Override
     void indent(int indent) {
+        checkSealed()
         style.indention = (short) indent
     }
 
     Object getLocked() {
+        checkSealed()
         style.locked = true
     }
 
     @Override
     void wrap(TextKeyword text) {
+        checkSealed()
         style.wrapText = true
     }
 
     Object getHidden() {
+        checkSealed()
         style.hidden = true
     }
 
     @Override
     void rotation(int rotation) {
+        checkSealed()
         style.rotation = (short) rotation
     }
 
     @Override
     void format(String format) {
-        XSSFDataFormat dataFormat = cell.row.sheet.sheet.workbook.createDataFormat()
+        XSSFDataFormat dataFormat = workbook.workbook.createDataFormat()
         style.dataFormat = dataFormat.getFormat(format)
     }
 
     @Override
     HorizontalAlignmentConfigurer align(VerticalAlignment alignment) {
+        checkSealed()
         switch (alignment) {
             case PureVerticalAlignment.CENTER:
                 style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.CENTER)
@@ -197,6 +223,7 @@ class PoiCellStyle extends AbstractCellStyle {
 
     @Override
     void border(@DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
+        checkSealed()
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
 
@@ -207,6 +234,7 @@ class PoiCellStyle extends AbstractCellStyle {
 
     @Override
     void border(BorderSide location, @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
+        checkSealed()
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(location)
@@ -215,7 +243,7 @@ class PoiCellStyle extends AbstractCellStyle {
     @Override
     void border(BorderSide first, BorderSide second,
                 @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
-
+        checkSealed()
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(first)
@@ -226,7 +254,7 @@ class PoiCellStyle extends AbstractCellStyle {
     @Override
     void border(BorderSide first, BorderSide second, BorderSide third,
                 @DelegatesTo(Border.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Border") Closure borderConfiguration) {
-
+        checkSealed()
         PoiBorder poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
         poiBorder.applyTo(first)
@@ -261,5 +289,9 @@ class PoiCellStyle extends AbstractCellStyle {
         byte blue = Integer.parseInt(match.group(3), 16) as byte
 
         new XSSFColor([red, green, blue] as byte[])
+    }
+
+    void seal() {
+        this.sealed = true
     }
 }

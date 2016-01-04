@@ -4,6 +4,7 @@ import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.util.WorkbookUtil
 import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFDataFormat
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
@@ -14,7 +15,9 @@ import org.modelcatalogue.builder.spreadsheet.api.Workbook
 class PoiWorkbook implements Workbook {
 
     private final XSSFWorkbook workbook
-    private final Map<String, Closure> namedStyles = [:]
+    private final Map<String, Closure> namedStylesDefinition = [:]
+    private final Map<String, PoiCellStyle> namedStyles = [:]
+    private final Map<String, XSSFDataFormat> formats = [:]
     private final List<Resolvable> toBeResolved = []
 
     PoiWorkbook(XSSFWorkbook workbook) {
@@ -33,7 +36,7 @@ class PoiWorkbook implements Workbook {
 
     @Override
     void style(String name, @DelegatesTo(CellStyle.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
-        namedStyles[name] = styleDefinition
+        namedStylesDefinition[name] = styleDefinition
     }
 
     @Override
@@ -46,8 +49,28 @@ class PoiWorkbook implements Workbook {
         stylesheet.declareStyles(this)
     }
 
-    protected Closure getStyle(String name) {
-        Closure style = namedStyles[name]
+    XSSFWorkbook getWorkbook() {
+        return workbook
+    }
+
+    protected PoiCellStyle getStyle(String name) {
+        PoiCellStyle style = namedStyles[name]
+
+        if (style) {
+            return style
+        }
+
+        style = new PoiCellStyle(this)
+        style.with getStyleDefinition(name)
+        style.seal()
+
+        namedStyles[name] = style
+
+        return style
+    }
+
+    protected Closure getStyleDefinition(String name) {
+        Closure style = namedStylesDefinition[name]
         if (!style) {
             throw new IllegalArgumentException("Style '$name' not defined")
         }
