@@ -294,4 +294,9 @@ class PoiCellStyle extends AbstractCellStyle {
     void seal() {
         this.sealed = true
     }
+
+
+    void assignTo(PoiCell cell) {
+        cell.cell.cellStyle = style
+    }
 }

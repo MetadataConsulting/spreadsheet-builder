@@ -121,6 +121,7 @@ class PoiCell extends AbstractCell implements  Resolvable {
     void style(String name) {
         if (!poiCellStyle) {
             poiCellStyle = row.sheet.workbook.getStyle(name)
+            poiCellStyle.assignTo(this)
             return
         }
         poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
