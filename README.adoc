@@ -13,7 +13,7 @@ Following example creates the basic spreadsheet with two rows and three columns.
 ----
 @Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
 // fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.14')
+@Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
 
 import org.modelcatalogue.builder.spreadsheet.poi.PoiSpreadsheetBuilder
