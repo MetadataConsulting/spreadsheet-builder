@@ -69,6 +69,26 @@ class PoiWorkbook implements Workbook {
         return style
     }
 
+    protected PoiCellStyle getStyles(String... names) {
+        String name = names.sort().join('.')
+
+        PoiCellStyle style = namedStyles[name]
+
+        if (style) {
+            return style
+        }
+
+        style = new PoiCellStyle(this)
+        for (String n in names) {
+            style.with getStyleDefinition(n)
+        }
+        style.seal()
+
+        namedStyles[name] = style
+
+        return style
+    }
+
     protected Closure getStyleDefinition(String name) {
         Closure style = namedStylesDefinition[name]
         if (!style) {

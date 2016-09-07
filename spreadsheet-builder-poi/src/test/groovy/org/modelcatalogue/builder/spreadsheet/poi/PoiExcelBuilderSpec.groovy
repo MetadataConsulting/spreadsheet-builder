@@ -51,7 +51,7 @@ class PoiExcelBuilderSpec extends Specification {
                         row {
                             cell {
                                 value '1'
-                                style 'h1'
+                                styles 'h1', 'red'
                             }
                             cell {
                                 value '2'

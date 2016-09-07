@@ -85,6 +85,7 @@ class PoiCell extends AbstractCell implements  Resolvable {
         if (!poiCellStyle) {
             poiCellStyle = new PoiCellStyle(this)
         }
+        poiCellStyle.checkSealed()
         poiCellStyle.with styleDefinition
     }
 
@@ -124,7 +125,21 @@ class PoiCell extends AbstractCell implements  Resolvable {
             poiCellStyle.assignTo(this)
             return
         }
+        poiCellStyle.checkSealed()
         poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
+    }
+
+    @Override
+    void styles(String... names) {
+        if (!poiCellStyle) {
+            poiCellStyle = row.sheet.workbook.getStyles(names)
+            poiCellStyle.assignTo(this)
+            return
+        }
+        poiCellStyle.checkSealed()
+        for (String name in names) {
+            poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
+        }
     }
 
     @Override

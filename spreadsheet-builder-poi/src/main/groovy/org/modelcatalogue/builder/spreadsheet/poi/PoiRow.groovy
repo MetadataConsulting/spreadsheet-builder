@@ -15,6 +15,7 @@ class PoiRow implements Row {
     private final PoiSheet sheet
 
     private String styleName
+    private String[] styleNames
     private Closure styleDefinition
 
     private final List<Integer> startPositions = []
@@ -35,6 +36,9 @@ class PoiRow implements Row {
         XSSFCell xssfCell = xssfRow.createCell(nextColNumber++)
 
         PoiCell poiCell = new PoiCell(this, xssfCell)
+        if (styleNames) {
+            poiCell.styles styleNames
+        }
         if (styleName) {
             if (styleDefinition) {
                 poiCell.style styleName, styleDefinition
@@ -130,6 +134,11 @@ class PoiRow implements Row {
     void style(String name, @DelegatesTo(CellStyle.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
         style name
         style styleDefinition
+    }
+
+    @Override
+    void styles(String... names) {
+        this.styleNames = names
     }
 
     protected PoiSheet getSheet() {

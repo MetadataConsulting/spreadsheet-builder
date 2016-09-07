@@ -56,8 +56,12 @@ class PoiCellStyle extends AbstractCellStyle {
 
     void checkSealed() {
         if (sealed) {
-            throw new IllegalStateException("The cell style is already sealed! You need to create new style.")
+            throw new IllegalStateException("The cell style is already sealed! You need to create new style. Use 'styles' method to combine multiple named styles! Create new named style if you're trying to update existing style with closure definition.")
         }
+    }
+
+    boolean isSealed() {
+        return sealed
     }
 
     @Override

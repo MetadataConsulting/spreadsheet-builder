@@ -22,11 +22,20 @@ public interface HasStyle {
     void style(@DelegatesTo(CellStyle.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition);
 
     /**
-     * Applies the names style to the current element.
+     * Applies the named style to the current element.
      *
      * The style can be changed no longer.
      *
      * @param name the name of the style
      */
     void style(String name);
+
+    /**
+     * Applies the named style to the current element.
+     *
+     * The style can be changed no longer.
+     *
+     * @param names style names to be applied
+     */
+    void styles(String... names);
 }
