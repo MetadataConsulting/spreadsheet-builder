@@ -17,7 +17,7 @@ class PoiWorkbook implements Workbook {
     private final XSSFWorkbook workbook
     private final Map<String, Closure> namedStylesDefinition = [:]
     private final Map<String, PoiCellStyle> namedStyles = [:]
-    private final Map<String, XSSFDataFormat> formats = [:]
+    private final Map<String, PoiSheet> sheets = [:]
     private final List<Resolvable> toBeResolved = []
 
     PoiWorkbook(XSSFWorkbook workbook) {
@@ -26,9 +26,14 @@ class PoiWorkbook implements Workbook {
 
     @Override
     void sheet(String name, @DelegatesTo(Sheet.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Sheet") Closure sheetDefinition) {
-        XSSFSheet xssfSheet = workbook.getSheet(WorkbookUtil.createSafeSheetName(name)) ?: workbook.createSheet(WorkbookUtil.createSafeSheetName(name))
+        PoiSheet sheet = sheets[name]
 
-        PoiSheet sheet = new PoiSheet(this, xssfSheet)
+        if (!sheet) {
+            XSSFSheet xssfSheet = workbook.getSheet(WorkbookUtil.createSafeSheetName(name)) ?: workbook.createSheet(WorkbookUtil.createSafeSheetName(name))
+            sheet = new PoiSheet(this, xssfSheet)
+            sheets[name] = sheet
+        }
+
         sheet.with sheetDefinition
 
         sheet.processAutoColumns()

@@ -6,6 +6,8 @@ import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFDataFormat
@@ -29,7 +31,7 @@ class PoiCellStyle extends AbstractCellStyle {
     private final PoiWorkbook workbook
 
     private PoiFont poiFont
-    private PoiBorder poiBorder
+    protected PoiBorder poiBorder
 
     private boolean sealed
 
@@ -302,5 +304,16 @@ class PoiCellStyle extends AbstractCellStyle {
 
     void assignTo(PoiCell cell) {
         cell.cell.cellStyle = style
+    }
+
+    void setBorderTo(CellRangeAddress address, PoiSheet sheet) {
+        RegionUtil.setBorderBottom(style.borderBottom, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setBorderLeft(style.borderLeft, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setBorderRight(style.borderRight, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setBorderTop(style.borderTop, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setBottomBorderColor(style.bottomBorderColor, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setLeftBorderColor(style.leftBorderColor, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setRightBorderColor(style.rightBorderColor, address, sheet.sheet, sheet.sheet.workbook)
+        RegionUtil.setTopBorderColor(style.topBorderColor, address, sheet.sheet, sheet.sheet.workbook)
     }
 }

@@ -20,10 +20,27 @@ class PoiRow implements Row {
 
     private final List<Integer> startPositions = []
     private int nextColNumber = 0
+    private final Map<Integer, PoiCell> cells = [:]
 
     PoiRow(PoiSheet sheet, XSSFRow xssfRow) {
         this.sheet = sheet
         this.xssfRow = xssfRow
+    }
+
+    private PoiCell findOrCreateCell(int zeroBasedCellNumber) {
+        PoiCell cell = cells[zeroBasedCellNumber + 1]
+
+        if (cell) {
+            return cell
+        }
+
+        XSSFCell xssfCell = xssfRow.createCell(zeroBasedCellNumber)
+
+        cell = new PoiCell(this, xssfCell)
+
+        cells[zeroBasedCellNumber + 1] = cell
+
+        return cell
     }
 
     @Override
@@ -33,9 +50,8 @@ class PoiRow implements Row {
 
     @Override
     void cell(Object value) {
-        XSSFCell xssfCell = xssfRow.createCell(nextColNumber++)
+        PoiCell poiCell = findOrCreateCell nextColNumber++
 
-        PoiCell poiCell = new PoiCell(this, xssfCell)
         if (styleNames) {
             poiCell.styles styleNames
         }
@@ -56,9 +72,7 @@ class PoiRow implements Row {
 
     @Override
     void cell(@DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition) {
-        XSSFCell xssfCell = xssfRow.createCell(nextColNumber)
-
-        PoiCell poiCell = new PoiCell(this, xssfCell)
+        PoiCell poiCell = findOrCreateCell nextColNumber
 
         if (styleName) {
             if (styleDefinition) {
@@ -74,29 +88,22 @@ class PoiRow implements Row {
 
         nextColNumber += poiCell.colspan
 
-        handleSpans(xssfCell, poiCell)
+        handleSpans(poiCell)
 
         poiCell.resolve()
     }
 
-    private void handleSpans(XSSFCell xssfCell, PoiCell poiCell) {
+    private void handleSpans(PoiCell poiCell) {
         if (poiCell.colspan > 1 || poiCell.rowspan > 1) {
-            xssfRow.sheet.addMergedRegion(new CellRangeAddress(
-                    xssfCell.rowIndex,
-                    xssfCell.rowIndex + poiCell.rowspan - 1,
-                    xssfCell.columnIndex,
-                    xssfCell.columnIndex + poiCell.colspan - 1
-            ));
+            xssfRow.sheet.addMergedRegion(poiCell.cellRangeAddress);
         }
     }
 
     @Override
     void cell(int column, @DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition) {
-        XSSFCell xssfCell = xssfRow.createCell(column - 1)
-
         nextColNumber = column
 
-        PoiCell poiCell = new PoiCell(this, xssfCell)
+        PoiCell poiCell = findOrCreateCell column - 1
 
         if (styleName) {
             if (styleDefinition) {
@@ -110,7 +117,7 @@ class PoiRow implements Row {
 
         poiCell.with cellDefinition
 
-        handleSpans(xssfCell, poiCell)
+        handleSpans(poiCell)
 
         poiCell.resolve()
     }

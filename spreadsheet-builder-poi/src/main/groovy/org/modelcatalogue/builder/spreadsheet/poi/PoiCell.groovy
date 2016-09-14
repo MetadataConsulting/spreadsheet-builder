@@ -2,8 +2,10 @@ package org.modelcatalogue.builder.spreadsheet.poi
 
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
+import org.apache.poi.hssf.util.HSSFRegionUtil
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFName
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
@@ -279,5 +281,17 @@ class PoiCell extends AbstractCell implements  Resolvable {
 
             xssfCell.setCellValue(text)
         }
+        if ((colspan > 1 || rowspan > 1) && poiCellStyle) {
+            poiCellStyle.setBorderTo(cellRangeAddress, row.sheet)
+        }
+    }
+
+    CellRangeAddress getCellRangeAddress() {
+        new CellRangeAddress(
+                xssfCell.rowIndex,
+                xssfCell.rowIndex + rowspan - 1,
+                xssfCell.columnIndex,
+                xssfCell.columnIndex + colspan - 1
+        )
     }
 }

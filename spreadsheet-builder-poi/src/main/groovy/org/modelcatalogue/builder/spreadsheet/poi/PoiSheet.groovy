@@ -15,6 +15,7 @@ class PoiSheet implements Sheet {
     private final List<Integer> startPositions = []
     private int nextRowNumber = 0
     private final Set<Integer> autoColumns = new HashSet<Integer>()
+    private final Map<Integer, PoiRow> rows = [:]
 
     PoiSheet(PoiWorkbook workbook, XSSFSheet xssfSheet) {
         this.workbook = workbook
@@ -23,25 +24,37 @@ class PoiSheet implements Sheet {
 
     @Override
     void row() {
-        xssfSheet.createRow(nextRowNumber++)
+        findOrCreateRow nextRowNumber++
+    }
+
+    private PoiRow findOrCreateRow(int zeroBasedRowNumber) {
+        PoiRow row = rows[zeroBasedRowNumber + 1]
+
+        if (row) {
+            return row
+        }
+
+        XSSFRow xssfRow = xssfSheet.createRow(zeroBasedRowNumber)
+
+        row = new PoiRow(this, xssfRow)
+
+        rows[zeroBasedRowNumber + 1] = row
+
+        return row
     }
 
     @Override
     void row(@DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure rowDefinition) {
-        XSSFRow xssfRow = xssfSheet.createRow(nextRowNumber++)
-
-        PoiRow row = new PoiRow(this, xssfRow)
+        PoiRow row = findOrCreateRow nextRowNumber++
         row.with rowDefinition
     }
 
     @Override
-    void row(int row, @DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure rowDefinition) {
-        assert row > 0
-        XSSFRow xssfRow = xssfSheet.createRow(row - 1)
+    void row(int oneBasedRowNumber, @DelegatesTo(Row.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Row") Closure rowDefinition) {
+        assert oneBasedRowNumber > 0
+        nextRowNumber = oneBasedRowNumber
 
-        nextRowNumber = row
-
-        PoiRow poiRow = new PoiRow(this, xssfRow)
+        PoiRow poiRow = findOrCreateRow oneBasedRowNumber - 1
         poiRow.with rowDefinition
     }
 

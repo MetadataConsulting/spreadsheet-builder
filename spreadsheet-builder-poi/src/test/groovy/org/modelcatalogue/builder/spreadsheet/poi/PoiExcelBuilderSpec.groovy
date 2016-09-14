@@ -44,6 +44,17 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
 
+                style "borders", {
+                    font {
+                        color red
+                    }
+                    border {
+                        style thin
+                        color black
+                    }
+                }
+
+
                 apply MyStyles // or apply(new MyStyles())
 
                 sheet("many rows"){
@@ -393,7 +404,47 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
+                // create sheet with same name, it should match the
+                sheet('Formula') {
+                    row {
+                        cell {
+                            value 30
+                            name 'Cell30'
+                        }
+                        cell {
+                            value 40
+                            name 'Cell40'
+                        }
+                        cell {
+                            formula 'SUM(#{Cell30}:#{Cell40})'
+                        }
+                    }
+                }
+                sheet('Border') {
+                    row {
+                        style "borders"
+                        cell {
+                            value 1
+                            colspan(2)
+                        }
+                        cell {
+                            value 2
+                        }
+                    }
+                    row {
+                        style "borders"
+                        cell {
+                            value 1
+                            colspan(2)
+                        }
+                        cell {
+                            value 2
+                        }
+
+                    }
+                }
             }
+
         }
 
         open tmpFile
