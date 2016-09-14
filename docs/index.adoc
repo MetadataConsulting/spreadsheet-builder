@@ -857,6 +857,11 @@ class MyStyles implements Stylesheet {
                 size 16
             }
         }
+        stylable.style('red') {
+            font {
+                color red
+            }
+        }
     }
 }
 // usage
@@ -871,6 +876,10 @@ builder.build(out) {
             cell {
                 value 'World'
                 style 'h2'
+            }
+            cell {
+                value '!!!'
+                styles 'h2', 'red'
             }
         }
     }
