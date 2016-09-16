@@ -148,6 +148,11 @@ class PoiRow implements Row {
         this.styleNames = names
     }
 
+    @Override
+    void styles(Iterable<String> names) {
+        styles(names.toList().toArray(new String[names.size()]))
+    }
+
     protected PoiSheet getSheet() {
         return sheet
     }

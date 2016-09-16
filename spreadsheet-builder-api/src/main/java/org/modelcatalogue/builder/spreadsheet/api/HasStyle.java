@@ -38,4 +38,12 @@ public interface HasStyle {
      * @param names style names to be applied
      */
     void styles(String... names);
+    /**
+     * Applies the named style to the current element.
+     *
+     * The style can be changed no longer.
+     *
+     * @param names style names to be applied
+     */
+    void styles(Iterable<String> names);
 }

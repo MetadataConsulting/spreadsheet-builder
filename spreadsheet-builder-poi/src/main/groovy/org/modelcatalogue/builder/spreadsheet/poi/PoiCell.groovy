@@ -145,6 +145,11 @@ class PoiCell extends AbstractCell implements  Resolvable {
     }
 
     @Override
+    void styles(Iterable<String> names) {
+        styles(names.toList().toArray(new String[names.size()]))
+    }
+
+    @Override
     void style(String name, @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyle") Closure styleDefinition) {
         style row.sheet.workbook.getStyleDefinition(name)
         style styleDefinition
