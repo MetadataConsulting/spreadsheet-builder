@@ -75,7 +75,7 @@ class PoiWorkbook implements Workbook {
     }
 
     protected PoiCellStyle getStyles(String... names) {
-        String name = names.sort().join('.')
+        String name = names.join('.')
 
         PoiCellStyle style = namedStyles[name]
 
