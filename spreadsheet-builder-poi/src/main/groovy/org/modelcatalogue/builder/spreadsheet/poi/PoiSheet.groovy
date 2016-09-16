@@ -6,20 +6,33 @@ import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.modelcatalogue.builder.spreadsheet.api.Row
 import org.modelcatalogue.builder.spreadsheet.api.Sheet
+import org.modelcatalogue.builder.spreadsheet.api.Workbook
 
 class PoiSheet implements Sheet {
 
     private final XSSFSheet xssfSheet
     private final PoiWorkbook workbook
+    private final String originalName
 
     private final List<Integer> startPositions = []
     private int nextRowNumber = 0
     private final Set<Integer> autoColumns = new HashSet<Integer>()
     private final Map<Integer, PoiRow> rows = [:]
 
-    PoiSheet(PoiWorkbook workbook, XSSFSheet xssfSheet) {
+    PoiSheet(PoiWorkbook workbook, XSSFSheet xssfSheet, String originalName) {
         this.workbook = workbook
         this.xssfSheet = xssfSheet
+        this.originalName = originalName
+    }
+
+    @Override
+    Workbook workbook() {
+        return workbook
+    }
+
+    @Override
+    String name() {
+        return originalName
     }
 
     @Override

@@ -8,6 +8,16 @@ import groovy.transform.stc.FromString;
 
 public interface Row extends HasStyle {
 
+    /**
+     * @return parent sheet
+     */
+    Sheet sheet();
+
+    /**
+     * @return row number starting with one
+     */
+    int number();
+
     void cell();
     void cell(Object value);
     void cell(@DelegatesTo(Cell.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Cell") Closure cellDefinition);

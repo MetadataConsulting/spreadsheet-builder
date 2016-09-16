@@ -8,6 +8,17 @@ import groovy.transform.stc.FromString;
 
 public interface Sheet {
 
+
+    /**
+     * @return the parent workbook of the sheet
+     */
+    Workbook workbook();
+
+    /**
+     * @return the name of the sheet
+     */
+    String name();
+
     /**
      * Crates new empty row.
      */

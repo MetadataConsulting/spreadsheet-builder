@@ -7,6 +7,10 @@ import groovy.transform.stc.FromString;
 
 public interface Cell extends HasStyle {
 
+
+    int column();
+    Row row();
+
     /**
      * Sets the value.
      * @param value new value

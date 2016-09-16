@@ -4,7 +4,6 @@ import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.util.WorkbookUtil
 import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.xssf.usermodel.XSSFDataFormat
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
@@ -30,7 +29,7 @@ class PoiWorkbook implements Workbook {
 
         if (!sheet) {
             XSSFSheet xssfSheet = workbook.getSheet(WorkbookUtil.createSafeSheetName(name)) ?: workbook.createSheet(WorkbookUtil.createSafeSheetName(name))
-            sheet = new PoiSheet(this, xssfSheet)
+            sheet = new PoiSheet(this, xssfSheet, name)
             sheets[name] = sheet
         }
 

@@ -18,6 +18,7 @@ import org.modelcatalogue.builder.spreadsheet.api.Font
 import org.modelcatalogue.builder.spreadsheet.api.ImageCreator
 import org.modelcatalogue.builder.spreadsheet.api.ImageKeyword
 import org.modelcatalogue.builder.spreadsheet.api.LinkDefinition
+import org.modelcatalogue.builder.spreadsheet.api.Row
 import org.modelcatalogue.builder.spreadsheet.api.ToKeyword
 
 class PoiCell extends AbstractCell implements  Resolvable {
@@ -35,6 +36,16 @@ class PoiCell extends AbstractCell implements  Resolvable {
     PoiCell(PoiRow row, XSSFCell xssfCell) {
         this.xssfCell = xssfCell
         this.row = row
+    }
+
+    @Override
+    int column() {
+        return xssfCell.columnIndex + 1
+    }
+
+    @Override
+    Row row() {
+        return row
     }
 
     @Override

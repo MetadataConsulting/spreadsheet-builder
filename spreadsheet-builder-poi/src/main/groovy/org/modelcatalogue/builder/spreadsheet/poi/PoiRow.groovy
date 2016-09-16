@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow
 import org.modelcatalogue.builder.spreadsheet.api.Cell
 import org.modelcatalogue.builder.spreadsheet.api.CellStyle
 import org.modelcatalogue.builder.spreadsheet.api.Row
+import org.modelcatalogue.builder.spreadsheet.api.Sheet
 
 class PoiRow implements Row {
 
@@ -46,6 +47,16 @@ class PoiRow implements Row {
     @Override
     void cell() {
         cell null
+    }
+
+    @Override
+    Sheet sheet() {
+        return sheet
+    }
+
+    @Override
+    int number() {
+        return xssfRow.rowNum + 1
     }
 
     @Override
