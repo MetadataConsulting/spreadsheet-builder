@@ -226,8 +226,6 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             for (String reference in possibleReferences) {
                 if (n.sheetIndex == -1 || n.sheetIndex == wb.getSheetIndex(xssfCell.sheet)) {
                     if (n.refersToFormula == reference) {
-                        // Found it!
-                        println "ref: $reference, n.ref: ${n.refersToFormula}, name: ${n.nameName}"
                         return n.nameName;
                     }
                 }
