@@ -8,6 +8,7 @@ import static org.codehaus.groovy.runtime.DefaultGroovyMethods.toList;
 public interface Cell {
 
     int getColumn();
+    Object getValue();
     String getColumnAsString();
     <T> T read(Class<T> type);
     Row getRow();
@@ -17,6 +18,7 @@ public interface Cell {
 
     String getName();
     Comment getComment();
+    CellStyle getStyle();
 
 //    Cell above();
 //    Cell bellow();

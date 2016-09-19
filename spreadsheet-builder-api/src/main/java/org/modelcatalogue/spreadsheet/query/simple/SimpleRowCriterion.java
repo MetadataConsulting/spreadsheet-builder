@@ -6,7 +6,6 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.query.api.AbstractCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Condition;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;

@@ -350,7 +350,7 @@ class PoiExcelBuilderSpec extends Specification {
                             cell {
                                 value "Headline 2"
                                 style {
-                                    foreground magenta
+                                    foreground aquamarine
                                     fill solidForeground
                                 }
                             }
@@ -521,6 +521,51 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             namedCells
             namedCells.size() == 1
+        when:
+            Collection<Cell> dateCells = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                format 'd.m.y'
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            dateCells
+            dateCells.size() == 1
+        when:
+            Collection<Cell> filledCells = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                fill fineDots
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            filledCells
+            filledCells.size() == 1
+        when:
+            Collection<Cell> magentaCells = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                foreground aquamarine
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            magentaCells
+            magentaCells.size() == 1
 
         when:
             open tmpFile

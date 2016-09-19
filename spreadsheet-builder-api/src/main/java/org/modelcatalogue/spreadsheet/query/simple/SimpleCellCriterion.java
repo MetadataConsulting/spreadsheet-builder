@@ -1,8 +1,13 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.FromString;
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.query.api.AbstractCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
+import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Condition;
 
 import java.util.Calendar;
@@ -89,6 +94,13 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
         addValueCondition(value, Boolean.class);
     }
 
+
+    @Override
+    public void style(@DelegatesTo(CellStyleCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion") Closure styleCriterion) {
+        SimpleCellStyleCriterion criterion = new SimpleCellStyleCriterion(this);
+        DefaultGroovyMethods.with(criterion, styleCriterion);
+        // no need to add criteria, they are added by the style criterion itself
+    }
 
     private <T> void addValueCondition(final T value, final Class<T> type) {
         addCondition(new Condition<Cell>() {

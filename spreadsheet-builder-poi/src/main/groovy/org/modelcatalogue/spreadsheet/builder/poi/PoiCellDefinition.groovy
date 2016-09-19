@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString
 import org.codehaus.groovy.runtime.StringGroovyMethods
 
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
+import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Comment
 import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
 
@@ -53,7 +54,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    def <T> T read(Class<T> type) {
+    <T> T read(Class<T> type) {
         if (CharSequence.isAssignableFrom(type)) {
             return xssfCell.stringCellValue as T
         }
@@ -75,6 +76,19 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         }
 
         throw new IllegalArgumentException("Cannot read value ${xssfCell.rawValue} of cell as $type")
+    }
+
+    @Override
+    Object getValue() {
+        switch (xssfCell.cellType) {
+            case Cell.CELL_TYPE_BLANK: return '';
+            case Cell.CELL_TYPE_BOOLEAN: return xssfCell.getBooleanCellValue();
+            case Cell.CELL_TYPE_ERROR: return xssfCell.getErrorCellString();
+            case Cell.CELL_TYPE_FORMULA: return xssfCell.getCellFormula();
+            case Cell.CELL_TYPE_NUMERIC: return xssfCell.getNumericCellValue();
+            case Cell.CELL_TYPE_STRING: return xssfCell.getStringCellValue();
+        }
+        return xssfCell.getRawValue()
     }
 
     @Override
@@ -157,6 +171,11 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return new PoiCommentDefinition()
         }
         return new PoiCommentDefinition(author: comment.author, text: comment.string.string)
+    }
+
+    @Override
+    CellStyle getStyle() {
+        return xssfCell.cellStyle ? new PoiCellStyle(xssfCell.cellStyle) : null
     }
 
     @Override
@@ -372,4 +391,6 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
                 xssfCell.columnIndex + colspan - 1
         )
     }
+
+
 }

@@ -1,4 +1,6 @@
-package org.modelcatalogue.spreadsheet.query.api;
+package org.modelcatalogue.spreadsheet.query.simple;
+
+import org.modelcatalogue.spreadsheet.query.api.Condition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,7 @@ public abstract class AbstractCriterion<C> {
 
     private final List<Condition<C>> conditions = new ArrayList<Condition<C>>();
 
-    protected void addCondition(Condition<C> condition) {
+    void addCondition(Condition<C> condition) {
         conditions.add(condition);
     }
 

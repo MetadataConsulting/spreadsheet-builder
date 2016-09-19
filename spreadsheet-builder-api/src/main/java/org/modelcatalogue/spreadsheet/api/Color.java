@@ -1,11 +1,23 @@
 package org.modelcatalogue.spreadsheet.api;
 
+import java.util.Arrays;
+
 public final class Color {
 
     private final String hex;
 
     public Color(String hex) {
-        this.hex = hex;
+        if (!hex.matches("#[\\dA-Fa-f]{6}")) {
+            throw new IllegalArgumentException("Wrong format for color: " + hex);
+        }
+        this.hex = hex.toUpperCase();
+    }
+
+    public Color(byte[] rgb) {
+        if (rgb.length != 3) {
+            throw new IllegalArgumentException("Wrong number of parts in: " + Arrays.toString(rgb));
+        }
+        this.hex = String.format("#%02X%02X%02X", rgb[0], rgb[1], rgb[2]);
     }
 
     @Override
@@ -30,5 +42,10 @@ public final class Color {
 
     public String getHex() {
         return hex;
+    }
+
+    @Override
+    public String toString() {
+        return "Color[" + getHex() + "]";
     }
 }

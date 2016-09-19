@@ -6,7 +6,7 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.modelcatalogue.spreadsheet.api.*;
 
-public interface CellStyleDefinition extends HTMLColors {
+public interface CellStyleDefinition extends HTMLColors, ForegroundFills {
 
     void base(String stylename);
 
@@ -88,29 +88,6 @@ public interface CellStyleDefinition extends HTMLColors {
     Keywords.PureVerticalAlignment getCenter();
     Keywords.PureVerticalAlignment getJustify();
     Keywords.PureVerticalAlignment getDistributed();
-
-
-    ForegroundFill getNoFill();
-    ForegroundFill getSolidForeground();
-    ForegroundFill getFineDots();
-    ForegroundFill getAltBars();
-    ForegroundFill getSparseDots();
-    ForegroundFill getThickHorizontalBands();
-    ForegroundFill getThickVerticalBands();
-    ForegroundFill getThickBackwardDiagonals();
-    ForegroundFill getThickForwardDiagonals();
-    ForegroundFill getBigSpots();
-    ForegroundFill getBricks();
-    ForegroundFill getThinHorizontalBands();
-    ForegroundFill getThinVerticalBands();
-    ForegroundFill getThinBackwardDiagonals();
-    ForegroundFill getThinForwardDiagonals();
-    ForegroundFill getSquares();
-    ForegroundFill getDiamonds();
-
-
-
-
 
 
 }
