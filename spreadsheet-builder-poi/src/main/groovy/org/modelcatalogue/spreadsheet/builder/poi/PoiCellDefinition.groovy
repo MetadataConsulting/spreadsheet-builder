@@ -3,15 +3,18 @@ package org.modelcatalogue.spreadsheet.builder.poi
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.Name
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.util.CellReference
 import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFComment
 import org.apache.poi.xssf.usermodel.XSSFName
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
 import org.codehaus.groovy.runtime.StringGroovyMethods
 
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
-
+import org.modelcatalogue.spreadsheet.api.Comment
 import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
 
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
@@ -148,6 +151,15 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
+    Comment getComment() {
+        XSSFComment comment = xssfCell.getCellComment()
+        if (!comment) {
+            return new PoiCommentDefinition()
+        }
+        return new PoiCommentDefinition(author: comment.author, text: comment.string.string)
+    }
+
+    @Override
     void colspan(int span) {
         this.colspan = span
     }
@@ -196,7 +208,32 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     void name(String name) {
         XSSFName theName = xssfCell.row.sheet.workbook.createName() as XSSFName
         theName.setNameName(fixName(name))
-        theName.setRefersToFormula("'${xssfCell.sheet.sheetName.replaceAll(/'/, /\'/)}'!${xssfCell.reference}")
+        theName.setRefersToFormula(generateRefersToFormula())
+    }
+
+    private String generateRefersToFormula() {
+        "'${xssfCell.sheet.sheetName.replaceAll(/'/, /\'/)}'!${xssfCell.reference}"
+    }
+
+    @Override
+    String getName() {
+        Workbook wb = xssfCell.sheet.workbook
+
+        new CellReference(xssfCell).formatAsString()
+        List<String> possibleReferences = [new CellReference(xssfCell).formatAsString(), generateRefersToFormula()]
+        for (int nn=0; nn< wb.getNumberOfNames(); nn++) {
+            Name n = wb.getNameAt(nn);
+            for (String reference in possibleReferences) {
+                if (n.sheetIndex == -1 || n.sheetIndex == wb.getSheetIndex(xssfCell.sheet)) {
+                    if (n.refersToFormula == reference) {
+                        // Found it!
+                        println "ref: $reference, n.ref: ${n.refersToFormula}, name: ${n.nameName}"
+                        return n.nameName;
+                    }
+                }
+            }
+        }
+        return null
     }
 
     protected static String fixName(String name) {

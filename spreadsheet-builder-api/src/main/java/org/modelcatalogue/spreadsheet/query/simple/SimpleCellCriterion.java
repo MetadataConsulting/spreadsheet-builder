@@ -65,6 +65,26 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
     }
 
     @Override
+    public void name(final String name) {
+        addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return name.equals(o.getName());
+            }
+        });
+    }
+
+    @Override
+    public void comment(final String comment) {
+        addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return comment.equals(o.getComment().getText());
+            }
+        });
+    }
+
+    @Override
     public void bool(Boolean value) {
         addValueCondition(value, Boolean.class);
     }

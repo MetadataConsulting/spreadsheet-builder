@@ -6,9 +6,10 @@ import org.apache.poi.xssf.usermodel.XSSFComment
 import org.apache.poi.xssf.usermodel.XSSFCreationHelper
 import org.apache.poi.xssf.usermodel.XSSFDrawing
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.modelcatalogue.spreadsheet.api.Comment
 import org.modelcatalogue.spreadsheet.builder.api.CommentDefinition
 
-class PoiCommentDefinition implements CommentDefinition {
+class PoiCommentDefinition implements CommentDefinition, Comment{
 
     private String author
     private String text
@@ -64,5 +65,15 @@ class PoiCommentDefinition implements CommentDefinition {
         cell.setCellComment(comment)
 
 
+    }
+
+    @Override
+    String getAuthor() {
+        return author
+    }
+
+    @Override
+    String getText() {
+        return text
     }
 }

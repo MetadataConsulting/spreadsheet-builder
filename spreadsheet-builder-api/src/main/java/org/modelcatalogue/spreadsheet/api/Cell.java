@@ -14,8 +14,9 @@ public interface Cell {
 
 //    int getRowspan();
 //    int getColspan();
-//    String getName();
-//    Comment getComment();
+
+    String getName();
+    Comment getComment();
 
 //    Cell above();
 //    Cell bellow();

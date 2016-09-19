@@ -18,8 +18,8 @@ public interface CellCriterion {
 
 //    void rowspan(int span);
 //    void colspan(int span);
-//    void name(String name);
-//    void comment(String comment);
+    void name(String name);
+    void comment(String comment);
 //    void style(StyleCriterion comment);
 
 }

@@ -3,7 +3,6 @@ package org.modelcatalogue.spreadsheet.builder.poi
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.modelcatalogue.spreadsheet.api.Cell
-import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
@@ -11,6 +10,8 @@ import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
 import spock.lang.Specification
 
 import java.awt.Desktop
+
+import static org.modelcatalogue.spreadsheet.builder.poi.PoiCellDefinition.fixName
 
 
 class PoiExcelBuilderSpec extends Specification {
@@ -492,6 +493,34 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             someCells
             someCells.size() == 1
+
+        when:
+            Collection<Cell> commentedCells = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            comment 'This is a date!'
+                        }
+                    }
+                }
+            }
+        then:
+            commentedCells
+            commentedCells.size() == 1
+
+        when:
+            Collection<Cell> namedCells = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            name fixName("Cell10")
+                        }
+                    }
+                }
+            }
+        then:
+            namedCells
+            namedCells.size() == 1
 
         when:
             open tmpFile
