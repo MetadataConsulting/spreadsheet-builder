@@ -19,4 +19,8 @@ public interface CellStyleCriterion extends HTMLColors, ForegroundFills {
     void rotation(int rotation);
     void format(String format);
 
+
+    // void border()
+    // void font()
+
 }
