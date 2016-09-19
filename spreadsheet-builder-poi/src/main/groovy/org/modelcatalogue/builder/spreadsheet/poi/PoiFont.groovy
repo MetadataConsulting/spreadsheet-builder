@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.builder.spreadsheet.api.AbstractHTMLColorProvider
 import org.modelcatalogue.builder.spreadsheet.api.Color
 import org.modelcatalogue.builder.spreadsheet.api.Font
+import org.modelcatalogue.builder.spreadsheet.api.FontStyle
 
 class PoiFont extends AbstractHTMLColorProvider implements Font {
 
@@ -42,25 +43,43 @@ class PoiFont extends AbstractHTMLColorProvider implements Font {
     }
 
     @Override
-    Object getItalic() {
-        font.italic = true
+    FontStyle getItalic() {
+        FontStyle.ITALIC
     }
 
     @Override
-    Object getBold() {
-        font.bold = true
+    FontStyle getBold() {
+        FontStyle.BOLD
     }
 
     @Override
-    Object getStrikeout() {
-        font.strikeout = true
+    FontStyle getStrikeout() {
+        FontStyle.STRIKEOUT
     }
 
     @Override
-    Object getUnderline() {
-        // TODO: support all variants
-        font.setUnderline(FontUnderline.SINGLE)
-        return null
+    FontStyle getUnderline() {
+        FontStyle.UNDERLINE
+    }
+
+    @Override
+    void make(FontStyle first, FontStyle... other) {
+        EnumSet enumSet = EnumSet.of(first, other)
+        if (FontStyle.ITALIC in enumSet) {
+            font.italic = true
+        }
+
+        if (FontStyle.BOLD in enumSet) {
+            font.bold = true
+        }
+
+        if (FontStyle.STRIKEOUT in enumSet) {
+            font.strikeout = true
+        }
+
+        if (FontStyle.UNDERLINE in enumSet) {
+            font.setUnderline(FontUnderline.SINGLE)
+        }
     }
 
     protected XSSFFont getFont() {

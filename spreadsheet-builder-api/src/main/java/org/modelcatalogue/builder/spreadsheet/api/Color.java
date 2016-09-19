@@ -1,6 +1,6 @@
 package org.modelcatalogue.builder.spreadsheet.api;
 
-public class Color {
+public final class Color {
 
     private final String hex;
 

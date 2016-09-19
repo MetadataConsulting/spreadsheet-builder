@@ -28,19 +28,19 @@ class PoiExcelBuilderSpec extends Specification {
                 }
                 style 'bold', {
                     font {
-                        bold
+                        make bold
                     }
                 }
 
                 style 'h1', {
                     font {
-                        bold
+                        make bold
                     }
                 }
 
                 style 'h2', {
                     font {
-                        bold
+                        make bold
                     }
                 }
 
@@ -100,7 +100,7 @@ class PoiExcelBuilderSpec extends Specification {
                             value 'Bold Red 22'
                             style {
                                 font {
-                                    bold
+                                    make bold
                                     color red
                                     size 22
                                 }
@@ -111,7 +111,7 @@ class PoiExcelBuilderSpec extends Specification {
                             value 'Underline Courier New'
                             style {
                                 font {
-                                    underline
+                                    make underline
                                     name 'Courier New'
                                 }
                             }
@@ -121,7 +121,7 @@ class PoiExcelBuilderSpec extends Specification {
                             value 'Italic'
                             style {
                                 font {
-                                    italic
+                                    make italic
                                 }
                             }
                         }
@@ -130,7 +130,7 @@ class PoiExcelBuilderSpec extends Specification {
                             value 'Strikeout'
                             style {
                                 font {
-                                    strikeout
+                                    make strikeout
                                 }
                             }
                         }
@@ -157,12 +157,12 @@ class PoiExcelBuilderSpec extends Specification {
                             }
                             text ' '
                             text 'Riding', {
-                                italic
+                                make italic
                                 size 18
                             }
                             text ' '
                             text 'Hood', {
-                                bold
+                                make bold
                                 size 22
                             }
 
@@ -176,13 +176,13 @@ class PoiExcelBuilderSpec extends Specification {
                             text 'First Line'
                             text '\n'
                             text 'Second Line', {
-                                bold
+                                make bold
                                 size 12
                             }
                             text '\n'
                             for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '':'nothing']) {
                                 text entry.key, {
-                                    bold
+                                    make bold
                                 }
                                 text ': '
                                 text  entry.value
@@ -192,7 +192,7 @@ class PoiExcelBuilderSpec extends Specification {
                             text 'Next line after two spaces'
                             text '\n'
                             text 'Last line', {
-                                italic
+                                make italic
                             }
                             text '\n'
                         }
@@ -204,7 +204,7 @@ class PoiExcelBuilderSpec extends Specification {
                             text '\n\n'
                             text 'Enumerations', {
                                 size 12
-                                bold
+                                make bold
                             }
                             text '\n'
 
@@ -213,7 +213,7 @@ class PoiExcelBuilderSpec extends Specification {
                                     PARTIAL_WITHDRAWAL: 'OPTION 1: PARTIAL WITHDRAWAL: No further contact'
                             ]) {
                                 text entry.key, {
-                                    bold
+                                    make bold
                                 }
                                 text ': '
                                 text  entry.value

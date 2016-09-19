@@ -45,6 +45,27 @@ file.withOutputStream { out ->
 <4> Create new row
 <5> Create new cell
 
+== Changelog
+
+=== 0.2.1
+
+==== Breaking Changes
+
+No more single word mutating DSL statements such as `locked` or `bold` as they conflicts with newly introduced getters.
+Keywords which are already getters such as `black` for color of same name remain unaffected.
+----
+sheet {
+    lock it // instead of "locked"
+}
+
+font {
+    make italic          // instead of "italic"
+    make bold, underline // you can supply more than one style
+}
+----
+
+=== 0.2.0
+Introduced getters for parent such as `workbook` for `sheet` etc.
 
 == Acknowledgement
 This project is inspired by http://www.craigburke.com/document-builder/[Groovy Document Builder]

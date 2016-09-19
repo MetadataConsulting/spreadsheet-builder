@@ -170,7 +170,7 @@ or view any formulas. This can emphasize that user changes are not desired.
 [source,groovy]
 ----
 sheet('Sample') {
-    locked
+    lock it // 'it' represents the first argument of the closure
     row {
         cell {
             value 'Locked'
@@ -625,7 +625,7 @@ row {
         value 'Bold Red 22'
         style {
             font {
-                bold
+                make bold
                 color red
                 size 22
             }
@@ -636,7 +636,7 @@ row {
         value 'Underline Courier New'
         style {
             font {
-                underline
+                make underline
                 name 'Courier New'
             }
         }
@@ -646,7 +646,7 @@ row {
         value 'Italic'
         style {
             font {
-                italic
+                make italic
             }
         }
     }
@@ -655,7 +655,7 @@ row {
         value 'Strikeout'
         style {
             font {
-                strikeout
+                make strikeout
             }
         }
     }
@@ -683,12 +683,12 @@ cell {
     }
     text ' '
     text 'Riding', {
-        italic
+        make italic
         size 18
     }
     text ' '
     text 'Hood', {
-        bold
+        make bold
         size 22
     }
 
@@ -889,3 +889,26 @@ builder.build(out) {
 _Result_
 
 image:stylesheets.png[]
+
+
+== Changelog
+
+=== 0.2.1
+
+==== Breaking Changes
+
+No more single word mutating DSL statements such as `locked` or `bold` as they conflicts with newly introduced getters.
+Keywords which are already getters such as `black` for color of same name remain unaffected.
+----
+sheet {
+    lock it // instead of "locked"
+}
+
+font {
+    make italic          // instead of "italic"
+    make bold, underline // you can supply more than one style
+}
+----
+
+=== 0.2.0
+Introduced getters for parent such as `workbook` for `sheet` etc.
