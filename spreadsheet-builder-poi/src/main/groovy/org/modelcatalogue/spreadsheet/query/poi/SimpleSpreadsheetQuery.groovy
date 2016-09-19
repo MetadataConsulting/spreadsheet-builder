@@ -2,25 +2,23 @@ package org.modelcatalogue.spreadsheet.query.poi
 
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.api.Sheet
 import org.modelcatalogue.spreadsheet.api.Workbook
-import org.modelcatalogue.spreadsheet.builder.poi.PoiWorkbookDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
 import org.modelcatalogue.spreadsheet.query.simple.SimpleCellCriterion
 import org.modelcatalogue.spreadsheet.query.simple.SimpleRowCriterion
 import org.modelcatalogue.spreadsheet.query.simple.SimpleSheetCriterion
 import org.modelcatalogue.spreadsheet.query.simple.SimpleWorkbookCriterion
-import org.modelcatalogue.spreadsheet.query.simple.WorkbookLoader
+import org.modelcatalogue.spreadsheet.query.simple.WorkbookSupplier
 
 public final class SimpleSpreadsheetQuery implements SpreadsheetQuery {
 
-    private final WorkbookLoader loader;
+    private final WorkbookSupplier loader;
 
-    SimpleSpreadsheetQuery(WorkbookLoader loader) {
+    SimpleSpreadsheetQuery(WorkbookSupplier loader) {
         this.loader = loader
     }
 

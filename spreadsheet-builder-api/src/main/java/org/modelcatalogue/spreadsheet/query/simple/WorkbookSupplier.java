@@ -4,7 +4,7 @@ import org.modelcatalogue.spreadsheet.api.Workbook;
 
 import java.io.InputStream;
 
-public interface WorkbookLoader {
+public interface WorkbookSupplier {
 
     Workbook load(InputStream stream);
 
