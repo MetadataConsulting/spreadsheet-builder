@@ -10,6 +10,8 @@ public interface SheetCriterion {
 
     Condition<Row> number(int row);
 
+    // TODO: range condition
+
     void row (@DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowCriterion") Closure rowCriterion);
     void row (int row);
     void row (int row, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowCriterion") Closure rowCriterion);

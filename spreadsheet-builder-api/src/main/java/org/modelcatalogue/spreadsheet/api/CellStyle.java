@@ -8,5 +8,6 @@ public interface CellStyle {
     int getIndent();
     int getRotation();
     String getFormat();
+    Font getFont();
 
 }

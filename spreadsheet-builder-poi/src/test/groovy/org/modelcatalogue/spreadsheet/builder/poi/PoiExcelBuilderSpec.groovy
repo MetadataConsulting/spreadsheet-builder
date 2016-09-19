@@ -566,7 +566,59 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             magentaCells
             magentaCells.size() == 1
+        when:
+            Collection<Cell> redOnes = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                font {
+                                    color red
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            redOnes
+            redOnes.size() == 20005
 
+        when:
+            Collection<Cell> boldOnes = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                font {
+                                    make bold
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            boldOnes
+            boldOnes.size() == 2
+
+        when:
+            Collection<Cell> bigOnes = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                font {
+                                    size 22
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            bigOnes
+            bigOnes.size() == 40002
         when:
             open tmpFile
         then:

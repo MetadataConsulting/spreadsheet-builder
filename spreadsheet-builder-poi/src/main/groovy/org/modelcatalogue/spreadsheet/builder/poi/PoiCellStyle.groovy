@@ -3,6 +3,7 @@ package org.modelcatalogue.spreadsheet.builder.poi
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Color
+import org.modelcatalogue.spreadsheet.api.Font
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 
 class PoiCellStyle implements CellStyle {
@@ -60,5 +61,10 @@ class PoiCellStyle implements CellStyle {
     @Override
     String getFormat() {
         return style.dataFormatString
+    }
+
+    @Override
+    Font getFont() {
+        return style.getFont() ? new PoiFont(style.getFont()) : null
     }
 }
