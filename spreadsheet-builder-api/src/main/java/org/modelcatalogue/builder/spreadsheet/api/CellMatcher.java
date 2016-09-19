@@ -1,0 +1,23 @@
+package org.modelcatalogue.builder.spreadsheet.api;
+
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.FromString;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.Collection;
+
+
+/**
+ * Cell matcher uses the builder like syntax to find cells within the workbook.
+ * Not all the constructs are be supported at the moment.
+ * Check the documentation for the list of all supported features.
+ */
+public interface CellMatcher {
+
+    Collection<Cell> match(File spreadsheet, @DelegatesTo(Workbook.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Workbook") Closure workbookDefinition);
+    Collection<Cell> match(InputStream inputStream, @DelegatesTo(Workbook.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.Workbook") Closure workbookDefinition);
+
+}

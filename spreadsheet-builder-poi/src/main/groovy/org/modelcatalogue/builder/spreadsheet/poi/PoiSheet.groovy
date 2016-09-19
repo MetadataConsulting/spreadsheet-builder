@@ -31,6 +31,11 @@ class PoiSheet implements Sheet {
         return originalName
     }
 
+    List<PoiRow> getRows() {
+        // TODO: reuse existing rows
+        xssfSheet.collect { new PoiRow(this, it as XSSFRow) }
+    }
+
     @Override
     void row() {
         findOrCreateRow nextRowNumber++

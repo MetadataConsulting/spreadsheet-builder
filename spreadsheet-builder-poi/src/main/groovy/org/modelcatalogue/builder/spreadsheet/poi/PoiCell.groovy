@@ -44,6 +44,31 @@ class PoiCell extends AbstractCell implements  Resolvable {
     }
 
     @Override
+    def <T> T read(Class<T> type) {
+        if (CharSequence.isAssignableFrom(type)) {
+            return xssfCell.stringCellValue as T
+        }
+
+        if (Date.isAssignableFrom(type)) {
+            return xssfCell.dateCellValue as T
+        }
+
+        if (Boolean.isAssignableFrom(type)) {
+            return xssfCell.booleanCellValue as T
+        }
+
+        if (Number.isAssignableFrom(type)) {
+            Double val = xssfCell.getNumericCellValue()
+            if (val == null) {
+                return null
+            }
+            return val.asType(type)
+        }
+
+        throw new IllegalArgumentException("Cannot read value ${xssfCell.rawValue} of cell as $type")
+    }
+
+    @Override
     void value(Object value) {
         if (!value) {
             xssfCell.setCellType(Cell.CELL_TYPE_BLANK)

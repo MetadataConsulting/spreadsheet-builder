@@ -28,6 +28,11 @@ class PoiRow implements Row {
         this.xssfRow = xssfRow
     }
 
+    List<PoiCell> getCells() {
+        // TODO: reuse existing cells
+        xssfRow.collect { new PoiCell(this, it as XSSFCell) }
+    }
+
     private PoiCell findOrCreateCell(int zeroBasedCellNumber) {
         PoiCell cell = cells[zeroBasedCellNumber + 1]
 

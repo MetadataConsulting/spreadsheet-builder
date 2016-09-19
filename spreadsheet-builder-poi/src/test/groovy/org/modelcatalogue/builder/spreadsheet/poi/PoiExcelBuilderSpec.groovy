@@ -2,6 +2,8 @@ package org.modelcatalogue.builder.spreadsheet.poi
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import org.modelcatalogue.builder.spreadsheet.api.Cell
+import org.modelcatalogue.builder.spreadsheet.api.CellMatcher
 import org.modelcatalogue.builder.spreadsheet.api.SpreadsheetBuilder
 import org.modelcatalogue.builder.spreadsheet.api.ForegroundFill
 import spock.lang.Specification
@@ -447,10 +449,31 @@ class PoiExcelBuilderSpec extends Specification {
 
         }
 
-        open tmpFile
+            CellMatcher matcher =  new PoiCellMatcher()
+
+            Collection<Cell> allCells = matcher.match(tmpFile) {
+
+            }
 
         then:
-        noExceptionThrown()
+            allCells
+            allCells.size() == 80092
+
+//        when:
+//            Collection<Cell> sampleCells = matcher.match(tmpFile) {
+//                sheet('Sample') {
+//
+//                }
+//            }
+//        then:
+//            sampleCells
+//            sampleCells.size() == 2
+
+        when:
+            open tmpFile
+        then:
+            noExceptionThrown()
+
     }
 
     /**

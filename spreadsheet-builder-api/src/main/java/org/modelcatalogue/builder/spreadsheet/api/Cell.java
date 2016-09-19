@@ -11,6 +11,8 @@ public interface Cell extends HasStyle {
     int getColumn();
     Row getRow();
 
+    <T> T read(Class<T> type);
+
     /**
      * Sets the value.
      * @param value new value

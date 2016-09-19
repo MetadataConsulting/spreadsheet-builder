@@ -114,4 +114,9 @@ class PoiWorkbook implements Workbook {
             resolvable.resolve()
         }
     }
+
+    List<PoiSheet> getSheets() {
+        // TODO: reuse existing sheets
+        workbook.collect { new PoiSheet(this, it as XSSFSheet, it.sheetName) }
+    }
 }
