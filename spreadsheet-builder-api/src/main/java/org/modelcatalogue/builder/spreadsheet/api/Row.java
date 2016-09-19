@@ -11,12 +11,12 @@ public interface Row extends HasStyle {
     /**
      * @return parent sheet
      */
-    Sheet sheet();
+    Sheet getSheet();
 
     /**
      * @return row number starting with one
      */
-    int number();
+    int getNumber();
 
     void cell();
     void cell(Object value);

@@ -50,12 +50,7 @@ class PoiRow implements Row {
     }
 
     @Override
-    Sheet sheet() {
-        return sheet
-    }
-
-    @Override
-    int number() {
+    int getNumber() {
         return xssfRow.rowNum + 1
     }
 
@@ -164,7 +159,8 @@ class PoiRow implements Row {
         styles(names.toList().toArray(new String[names.size()]))
     }
 
-    protected PoiSheet getSheet() {
+    @Override
+    PoiSheet getSheet() {
         return sheet
     }
 

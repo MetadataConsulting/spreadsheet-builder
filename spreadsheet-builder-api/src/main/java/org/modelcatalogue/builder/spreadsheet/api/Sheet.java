@@ -12,12 +12,12 @@ public interface Sheet {
     /**
      * @return the parent workbook of the sheet
      */
-    Workbook workbook();
+    Workbook getWorkbook();
 
     /**
      * @return the name of the sheet
      */
-    String name();
+    String getName();
 
     /**
      * Crates new empty row.

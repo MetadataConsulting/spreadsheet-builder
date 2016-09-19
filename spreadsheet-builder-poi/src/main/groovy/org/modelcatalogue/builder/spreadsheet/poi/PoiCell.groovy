@@ -39,13 +39,8 @@ class PoiCell extends AbstractCell implements  Resolvable {
     }
 
     @Override
-    int column() {
+    int getColumn() {
         return xssfCell.columnIndex + 1
-    }
-
-    @Override
-    Row row() {
-        return row
     }
 
     @Override
@@ -278,7 +273,8 @@ class PoiCell extends AbstractCell implements  Resolvable {
         return xssfCell
     }
 
-    protected PoiRow getRow() {
+    @Override
+    PoiRow getRow() {
         return row
     }
 

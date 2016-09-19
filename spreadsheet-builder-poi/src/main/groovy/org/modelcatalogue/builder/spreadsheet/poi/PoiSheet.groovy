@@ -25,13 +25,9 @@ class PoiSheet implements Sheet {
         this.originalName = originalName
     }
 
-    @Override
-    Workbook workbook() {
-        return workbook
-    }
 
     @Override
-    String name() {
+    String getName() {
         return originalName
     }
 
@@ -71,7 +67,8 @@ class PoiSheet implements Sheet {
         poiRow.with rowDefinition
     }
 
-    protected PoiWorkbook getWorkbook() {
+    @Override
+    PoiWorkbook getWorkbook() {
         return workbook
     }
 
