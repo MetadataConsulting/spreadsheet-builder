@@ -1,14 +1,15 @@
-package org.modelcatalogue.spreadsheet.builder.poi
+package org.modelcatalogue.spreadsheet.api
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class PoiRowSpec extends Specification {
+class CellUtilSpec extends Specification {
 
     @Unroll
     def "parse column #column to number #index"() {
         expect:
-        PoiRowDefinition.parseColumn(column) == index
+        Cell.Util.parseColumn(column) == index
+        Cell.Util.toColumn(index) == column
         where:
         column  | index
         'A'     | 1

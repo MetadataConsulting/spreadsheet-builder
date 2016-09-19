@@ -4,6 +4,7 @@ import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
+import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
@@ -134,7 +135,7 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     @Override
     void cell(String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellDefinition") Closure cellDefinition) {
-        cell parseColumn(column), cellDefinition
+        cell Cell.Util.parseColumn(column), cellDefinition
     }
 
     @Override
@@ -198,17 +199,4 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     }
 
-    protected static int parseColumn(String column) {
-        char a = 'A'
-        char[] chars = column.toUpperCase().toCharArray().toList().reverse()
-        int acc = 0
-        for (int i = chars.size() ; i-- ; i > 0) {
-            if (i == 0) {
-                acc += ((int) chars[i].charValue() - (int) a.charValue() + 1)
-            } else {
-                acc += 26 * i * ((int) chars[i].charValue() - (int) a.charValue() + 1)
-            }
-        }
-        return acc
-    }
 }

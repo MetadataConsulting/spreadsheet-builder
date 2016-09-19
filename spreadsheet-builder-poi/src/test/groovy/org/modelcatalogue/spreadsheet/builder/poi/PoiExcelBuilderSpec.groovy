@@ -2,10 +2,12 @@ package org.modelcatalogue.spreadsheet.builder.poi
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
-import org.modelcatalogue.spreadsheet.builder.api.CellMatcher
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
 import spock.lang.Specification
 
 import java.awt.Desktop
@@ -20,6 +22,8 @@ class PoiExcelBuilderSpec extends Specification {
         File tmpFile = tmp.newFile("sample${System.currentTimeMillis()}.xlsx")
 
         SpreadsheetBuilder builder = new PoiSpreadsheetBuilder()
+
+        Date today = new Date()
 
         tmpFile.withOutputStream { OutputStream out ->
             builder.build(out) {
@@ -305,7 +309,7 @@ class PoiExcelBuilderSpec extends Specification {
                                 format 'd.m.y'
                                 align center center
                             }
-                            value new Date()
+                            value today
                             comment 'This is a date!'
                             colspan 5
                             rowspan 2
@@ -406,7 +410,7 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-                // create sheet with same name, it should match the
+                // create sheet with same name, it should query the
                 sheet('Formula') {
                     row {
                         cell {
@@ -449,25 +453,45 @@ class PoiExcelBuilderSpec extends Specification {
 
         }
 
-            CellMatcher matcher =  new PoiCellMatcher()
+            SpreadsheetQuery matcher =  new PoiSpreadsheetQuery()
 
-            Collection<CellDefinition> allCells = matcher.match(tmpFile) {
-
-            }
+            Collection<Cell> allCells = matcher.query(tmpFile)
 
         then:
             allCells
             allCells.size() == 80092
 
-//        when:
-//            Collection<Cell> sampleCells = matcher.match(tmpFile) {
-//                sheet('Sample') {
-//
-//                }
-//            }
-//        then:
-//            sampleCells
-//            sampleCells.size() == 2
+        when:
+            Collection<Cell> sampleCells = matcher.query(tmpFile) {
+                sheet('Sample')
+            }
+        then:
+            sampleCells
+            sampleCells.size() == 2
+
+        when:
+            Collection<Cell> rowCells = matcher.query(tmpFile) {
+                sheet("many rows"){
+                    row(1)
+                }
+            }
+        then:
+            rowCells
+            rowCells.size() == 4
+
+        when:
+            Collection<Cell> someCells = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            date today
+                        }
+                    }
+                }
+            }
+        then:
+            someCells
+            someCells.size() == 1
 
         when:
             open tmpFile

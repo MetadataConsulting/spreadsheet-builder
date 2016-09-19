@@ -45,6 +45,11 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
+    String getColumnAsString() {
+        return SpreadsheetCell.Util.toColumn(getColumn())
+    }
+
+    @Override
     def <T> T read(Class<T> type) {
         if (CharSequence.isAssignableFrom(type)) {
             return xssfCell.stringCellValue as T

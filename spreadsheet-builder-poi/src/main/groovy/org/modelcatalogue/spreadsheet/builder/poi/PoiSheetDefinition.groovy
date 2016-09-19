@@ -4,6 +4,7 @@ import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Sheet
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
@@ -82,7 +83,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
 
     @Override
     void freeze(String column, int row) {
-        freeze PoiRowDefinition.parseColumn(column), row
+        freeze Cell.Util.parseColumn(column), row
     }
 
     @Override

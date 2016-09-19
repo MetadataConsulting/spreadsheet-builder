@@ -5,4 +5,7 @@ public interface Sheet {
     String getName();
     Workbook getWorkbook();
 
+//    Sheet left();
+//    Sheet right();
+
 }
