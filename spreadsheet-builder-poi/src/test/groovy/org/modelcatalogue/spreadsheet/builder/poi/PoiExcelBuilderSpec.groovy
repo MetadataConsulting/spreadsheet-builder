@@ -453,7 +453,7 @@ class PoiExcelBuilderSpec extends Specification {
 
         }
 
-            SpreadsheetQuery matcher =  new PoiSpreadsheetQuery()
+            SpreadsheetQuery matcher =  PoiSpreadsheetQuery.create()
 
             Collection<Cell> allCells = matcher.query(tmpFile)
 
