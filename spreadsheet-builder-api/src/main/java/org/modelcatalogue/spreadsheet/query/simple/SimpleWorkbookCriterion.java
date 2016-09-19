@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements WorkbookCriterion {
+public final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements WorkbookCriterion {
 
     private final Collection<SimpleSheetCriterion> criteria = new ArrayList<SimpleSheetCriterion>();
 

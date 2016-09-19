@@ -8,7 +8,7 @@ import org.modelcatalogue.spreadsheet.query.api.Condition;
 import java.util.Calendar;
 import java.util.Date;
 
-public class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
+public final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
 
     @Override
     public void date(final Date value) {

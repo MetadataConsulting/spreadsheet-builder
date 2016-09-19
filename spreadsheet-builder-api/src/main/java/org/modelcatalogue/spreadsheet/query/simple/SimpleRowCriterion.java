@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCriterion {
+public final class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCriterion {
 
     private final Collection<SimpleCellCriterion> criteria = new ArrayList<SimpleCellCriterion>();
 
