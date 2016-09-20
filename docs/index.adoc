@@ -17,51 +17,65 @@ Following example creates the basic spreadsheet with two rows and three columns.
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
 
+import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
 
-def builder = new PoiSpreadsheetBuilder()
+PoiSpreadsheetBuilder builder = new PoiSpreadsheetBuilder()
 
 File file = new File('spreadsheet.xlsx')
 
-file.withOutputStream { out ->
-    builder.build(out) {
-        sheet('Sample') {
-            row(2) {
+builder.build(file) {
+    sheet('Sample') {
+        row(2) {
+           style {
+               background whiteSmoke
+               border top, bottom {
+                   style thin
+                   color black
+               }
+           }
+           cell('B') {
+               value 'A'
                style {
-                   background whiteSmoke
-                   border top, bottom {
+                   border left, {
                        style thin
                        color black
                    }
                }
-               cell('B') {
-                   value 'A'
-                   style {
-                       border left, {
-                           style thin
-                           color black
-                       }
-                   }
-               }
-               cell 'B'
-               cell {
-                   value 'C'
-                   style {
-                       border right, {
-                           style thin
-                           color black
-                       }
+           }
+           cell 'B'
+           cell {
+               value 'C'
+               style {
+                   border right, {
+                       style thin
+                       color black
                    }
                }
            }
-           row {
-               cell('B') { value 1 }
-               cell 2
-               cell 3
-           }
+       }
+       row {
+           cell('B') { value 1 }
+           cell 2
+           cell 3
+       }
+    }
+}
+
+SpreadsheetQuery query = PoiSpreadsheetQuery.create()
+
+Collection<Cell>  = query.query(file) {
+    sheet {
+        row {
+            cell {
+                string 'B'
+            }
         }
     }
 }
+
 ----
 
 _Result_
