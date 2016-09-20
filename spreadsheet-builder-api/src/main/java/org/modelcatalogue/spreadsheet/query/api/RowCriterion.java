@@ -16,5 +16,6 @@ public interface RowCriterion {
     void cell(@DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
     void cell(int column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
     void cell(String column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
+    void cell(Condition<Cell> condition, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
 
 }

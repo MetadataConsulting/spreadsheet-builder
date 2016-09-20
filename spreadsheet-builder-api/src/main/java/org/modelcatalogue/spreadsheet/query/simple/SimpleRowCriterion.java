@@ -62,6 +62,12 @@ public final class SimpleRowCriterion extends AbstractCriterion<Cell> implements
         cell(cellCriterion);
     }
 
+    @Override
+    public void cell(Condition<Cell> condition, @DelegatesTo(CellCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion) {
+        addCondition(condition);
+        cell(cellCriterion);
+    }
+
     public Collection<SimpleCellCriterion> getCriteria() {
         return Collections.unmodifiableCollection(criteria);
     }

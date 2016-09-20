@@ -35,6 +35,21 @@ class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
+    public void color(final Condition<Color> conition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Font font = style.getFont();
+                return font != null && conition.evaluate(font.getColor());
+            }
+        });
+    }
+
+    @Override
     public void size(final int size) {
         parent.addCondition(new Condition<Cell>() {
             @Override
@@ -50,6 +65,21 @@ class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
+    public void size(final Condition<Integer> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Font font = style.getFont();
+                return font != null && condition.evaluate(font.getSize());
+            }
+        });
+    }
+
+    @Override
     public void name(final String name) {
         parent.addCondition(new Condition<Cell>() {
             @Override
@@ -60,6 +90,21 @@ class SimpleFontCriterion implements FontCriterion {
                 }
                 Font font = style.getFont();
                 return font != null && name.equals(font.getName());
+            }
+        });
+    }
+
+    @Override
+    public void name(final Condition<String> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Font font = style.getFont();
+                return font != null && condition.evaluate(font.getName());
             }
         });
     }
@@ -88,6 +133,21 @@ class SimpleFontCriterion implements FontCriterion {
                 }
 
                 return true;
+            }
+        });
+    }
+
+    @Override
+    public void make(final Condition<EnumSet<FontStyle>> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Font font = style.getFont();
+                return font != null && condition.evaluate(font.getStyles());
             }
         });
     }

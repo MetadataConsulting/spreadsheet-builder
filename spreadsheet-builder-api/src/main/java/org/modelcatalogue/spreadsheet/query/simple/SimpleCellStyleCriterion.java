@@ -41,6 +41,16 @@ class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
+    public void background(final Condition<Color> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return o.getStyle() != null && condition.evaluate(o.getStyle().getBackground());
+            }
+        });
+    }
+
+    @Override
     public void foreground(final String hexColor) {
         parent.addCondition(new Condition<Cell>() {
             @Override
@@ -61,11 +71,31 @@ class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
+    public void foreground(final Condition<Color> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return o.getStyle() != null && condition.evaluate(o.getStyle().getForeground());
+            }
+        });
+    }
+
+    @Override
     public void fill(final ForegroundFill fill) {
         parent.addCondition(new Condition<Cell>() {
             @Override
             public boolean evaluate(Cell o) {
                 return o.getStyle() != null && fill.equals(o.getStyle().getFill());
+            }
+        });
+    }
+
+    @Override
+    public void fill(final Condition<ForegroundFill> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return o.getStyle() != null && condition.evaluate(o.getStyle().getFill());
             }
         });
     }
@@ -81,6 +111,16 @@ class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
+    public void indent(final Condition<Integer> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return o.getStyle() != null && condition.evaluate(o.getStyle().getIndent());
+            }
+        });
+    }
+
+    @Override
     public void rotation(final int rotation) {
         parent.addCondition(new Condition<Cell>() {
             @Override
@@ -91,11 +131,31 @@ class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
+    public void rotation(final Condition<Integer> condition) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return o.getStyle() != null && condition.evaluate(o.getStyle().getRotation());
+            }
+        });
+    }
+
+    @Override
     public void format(final String format) {
         parent.addCondition(new Condition<Cell>() {
             @Override
             public boolean evaluate(Cell o) {
                 return o.getStyle() != null && format.equals(o.getStyle().getFormat());
+            }
+        });
+    }
+
+    @Override
+    public void format(final Condition<String> format) {
+        parent.addCondition(new Condition<Cell>() {
+            @Override
+            public boolean evaluate(Cell o) {
+                return o.getStyle() != null && format.evaluate(o.getStyle().getFormat());
             }
         });
     }

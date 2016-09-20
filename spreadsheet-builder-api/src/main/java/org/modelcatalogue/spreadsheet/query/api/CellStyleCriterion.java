@@ -11,20 +11,25 @@ import org.modelcatalogue.spreadsheet.api.HTMLColors;
 
 public interface CellStyleCriterion extends HTMLColors, ForegroundFills {
 
-    // TODO: methods with conditions
-
     void background(String hexColor);
     void background(Color color);
+    void background(Condition<Color> condition);
 
     void foreground(String hexColor);
     void foreground(Color color);
+    void foreground(Condition<Color> condition);
 
     void fill(ForegroundFill fill);
+    void fill(Condition<ForegroundFill> condition);
 
     void indent(int indent);
-    void rotation(int rotation);
-    void format(String format);
+    void indent(Condition<Integer> condition);
 
+    void rotation(int rotation);
+    void rotation(Condition<Integer> condition);
+
+    void format(String format);
+    void format(Condition<String> format);
 
     // void border()
 
