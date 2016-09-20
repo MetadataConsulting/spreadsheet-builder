@@ -4,6 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Keywords;
 
 public interface CellDefinition extends HasStyle {
 

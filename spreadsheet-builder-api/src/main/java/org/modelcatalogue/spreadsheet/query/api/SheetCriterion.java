@@ -9,8 +9,7 @@ import org.modelcatalogue.spreadsheet.api.Row;
 public interface SheetCriterion {
 
     Predicate<Row> number(int row);
-
-    // TODO: range condition
+    Predicate<Row> range(int from, int to);
 
     void row (@DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowCriterion") Closure rowCriterion);
     void row (int row);

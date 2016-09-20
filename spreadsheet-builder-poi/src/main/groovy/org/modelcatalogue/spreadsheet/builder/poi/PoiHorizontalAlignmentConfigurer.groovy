@@ -1,7 +1,7 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment
-import org.modelcatalogue.spreadsheet.builder.api.HorizontalAlignmentConfigurer
+import org.modelcatalogue.spreadsheet.api.HorizontalAlignmentConfigurer
 
 class PoiHorizontalAlignmentConfigurer implements HorizontalAlignmentConfigurer {
 

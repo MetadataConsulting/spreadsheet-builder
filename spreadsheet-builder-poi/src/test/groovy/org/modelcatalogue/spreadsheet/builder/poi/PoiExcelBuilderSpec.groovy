@@ -619,6 +619,26 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             bigOnes
             bigOnes.size() == 40002
+
+
+        when:
+            Collection<Cell> bordered = matcher.query(tmpFile) {
+                sheet {
+                    row {
+                        cell {
+                            style {
+                                border (top) {
+                                    style thin
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        then:
+            bordered
+            bordered.size() == 9
+
         when:
             open tmpFile
         then:

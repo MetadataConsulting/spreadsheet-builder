@@ -1,6 +1,8 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
 
+import org.modelcatalogue.spreadsheet.api.Keywords;
+
 public abstract class AbstractCellDefinition implements CellDefinition {
 
     public Keywords.Auto getAuto() {

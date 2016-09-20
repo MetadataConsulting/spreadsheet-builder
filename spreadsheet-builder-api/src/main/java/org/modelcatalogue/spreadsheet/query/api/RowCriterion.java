@@ -10,6 +10,8 @@ public interface RowCriterion {
 
     Predicate<Cell> column(int number);
     Predicate<Cell> columnAsString(String name);
+    Predicate<Cell> range(int from, int to);
+    Predicate<Cell> range(String from, String to);
 
     void cell(Predicate<Cell> predicate);
 

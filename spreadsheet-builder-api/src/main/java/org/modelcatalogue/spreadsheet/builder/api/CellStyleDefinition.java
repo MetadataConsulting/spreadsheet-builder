@@ -6,7 +6,7 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.modelcatalogue.spreadsheet.api.*;
 
-public interface CellStyleDefinition extends HTMLColors, ForegroundFills {
+public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillProvider {
 
     void base(String stylename);
 
@@ -75,7 +75,9 @@ public interface CellStyleDefinition extends HTMLColors, ForegroundFills {
      */
     void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.BorderDefinition") Closure borderConfiguration);
 
-
+    Keywords.PureVerticalAlignment getCenter();
+    Keywords.PureVerticalAlignment getJustify();
+    Keywords.PureVerticalAlignment getDistributed();
 
     // keywords
     Keywords.PureBorderSide getLeft();
@@ -83,11 +85,4 @@ public interface CellStyleDefinition extends HTMLColors, ForegroundFills {
 
     Keywords.BorderSideAndVerticalAlignment getTop();
     Keywords.BorderSideAndVerticalAlignment getBottom();
-
-
-    Keywords.PureVerticalAlignment getCenter();
-    Keywords.PureVerticalAlignment getJustify();
-    Keywords.PureVerticalAlignment getDistributed();
-
-
 }

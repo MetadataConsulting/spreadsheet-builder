@@ -9,5 +9,5 @@ public interface CellStyle {
     int getRotation();
     String getFormat();
     Font getFont();
-
+    Border getBorder(Keywords.BorderSide borderSide);
 }

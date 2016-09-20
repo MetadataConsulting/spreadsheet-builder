@@ -1,8 +1,8 @@
-package org.modelcatalogue.spreadsheet.builder.api;
+package org.modelcatalogue.spreadsheet.api;
 
-import org.modelcatalogue.spreadsheet.api.BorderStyle;
+import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition;
 
-public abstract class AbstractBorderDefinition implements BorderDefinition {
+public abstract class AbstractBorderProvider implements BorderDefinition {
 
     @Override
     public BorderStyle getNone() {

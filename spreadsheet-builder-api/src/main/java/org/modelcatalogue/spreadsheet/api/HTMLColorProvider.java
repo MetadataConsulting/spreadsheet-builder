@@ -1,6 +1,6 @@
 package org.modelcatalogue.spreadsheet.api;
 
-public interface HTMLColors {
+public interface HTMLColorProvider {
 
     Color aliceBlue = new Color("#F0F8FF");
     Color antiqueWhite = new Color("#FAEBD7");

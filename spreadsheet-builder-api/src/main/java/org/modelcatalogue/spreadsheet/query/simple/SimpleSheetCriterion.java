@@ -29,6 +29,16 @@ public final class SimpleSheetCriterion extends AbstractCriterion<Row> implement
     }
 
     @Override
+    public Predicate<Row> range(final int from, final int to) {
+        return new Predicate<Row>() {
+            @Override
+            public boolean test(Row o) {
+                return o.getNumber() >= from && o.getNumber() <= to;
+            }
+        };
+    }
+
+    @Override
     public void row(@DelegatesTo(RowCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowCriterion") Closure rowCriterion) {
         SimpleRowCriterion criterion = new SimpleRowCriterion();
         DefaultGroovyMethods.with(criterion, rowCriterion);

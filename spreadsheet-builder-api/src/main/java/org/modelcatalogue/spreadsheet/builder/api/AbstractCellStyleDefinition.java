@@ -2,7 +2,7 @@ package org.modelcatalogue.spreadsheet.builder.api;
 
 import org.modelcatalogue.spreadsheet.api.*;
 
-public abstract class AbstractCellStyleDefinition implements CellStyleDefinition, HTMLColors {
+public abstract class AbstractCellStyleDefinition implements CellStyleDefinition, HTMLColorProvider {
 
     @Override
     public ForegroundFill getNoFill() {

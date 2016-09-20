@@ -4,12 +4,12 @@ import org.apache.poi.ss.usermodel.FontUnderline
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.modelcatalogue.spreadsheet.api.HTMLColors
+import org.modelcatalogue.spreadsheet.api.HTMLColorProvider
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.FontStyle
 
-class PoiFontDefinition implements FontDefinition, HTMLColors {
+class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
 
     private final XSSFFont font
 

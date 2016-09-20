@@ -12,20 +12,20 @@ import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFDataFormat
-import org.modelcatalogue.spreadsheet.api.HTMLColors
+import org.modelcatalogue.spreadsheet.api.HTMLColorProvider
 import org.modelcatalogue.spreadsheet.builder.api.AbstractCellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
-import org.modelcatalogue.spreadsheet.builder.api.Keywords
+import org.modelcatalogue.spreadsheet.api.Keywords
 
-import org.modelcatalogue.spreadsheet.builder.api.HorizontalAlignmentConfigurer
+import org.modelcatalogue.spreadsheet.api.HorizontalAlignmentConfigurer
 
 import java.util.regex.Matcher
 
-class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTMLColors {
+class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTMLColorProvider {
 
     private final XSSFCellStyle style
     private final PoiWorkbookDefinition workbook

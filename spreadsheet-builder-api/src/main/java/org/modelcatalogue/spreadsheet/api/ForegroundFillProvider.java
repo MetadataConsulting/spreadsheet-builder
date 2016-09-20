@@ -1,6 +1,6 @@
 package org.modelcatalogue.spreadsheet.api;
 
-public interface ForegroundFills {
+public interface ForegroundFillProvider {
     ForegroundFill getNoFill();
 
     ForegroundFill getSolidForeground();

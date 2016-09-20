@@ -8,6 +8,8 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Color;
 import org.modelcatalogue.spreadsheet.api.ForegroundFill;
+import org.modelcatalogue.spreadsheet.api.Keywords;
+import org.modelcatalogue.spreadsheet.query.api.BorderCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.FontCriterion;
@@ -167,6 +169,33 @@ class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
+    public void border(@DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+        border(Keywords.BorderSide.BORDER_SIDES, borderConfiguration);
+    }
+
+    @Override
+    public void border(Keywords.BorderSide location, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+        border(new Keywords.BorderSide[] { location }, borderConfiguration);
+    }
+
+    @Override
+    public void border(Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+        border(new Keywords.BorderSide[] { first, second }, borderConfiguration);
+    }
+
+    @Override
+    public void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+        border(new Keywords.BorderSide[] { first, second, third }, borderConfiguration);
+    }
+
+    private void border(Keywords.BorderSide[] sides, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+        for (Keywords.BorderSide side : sides) {
+            SimpleBorderCriterion criterion = new SimpleBorderCriterion(parent, side);
+            DefaultGroovyMethods.with(criterion, borderConfiguration);
+        }
+    }
+
+    @Override
     public ForegroundFill getNoFill() {
         return ForegroundFill.NO_FILL;
     }
@@ -249,6 +278,26 @@ class SimpleCellStyleCriterion implements CellStyleCriterion {
     @Override
     public ForegroundFill getDiamonds() {
         return ForegroundFill.DIAMONDS;
+    }
+
+    @Override
+    public Keywords.PureBorderSide getLeft() {
+        return Keywords.PureBorderSide.LEFT;
+    }
+
+    @Override
+    public Keywords.PureBorderSide getRight() {
+        return Keywords.PureBorderSide.RIGHT;
+    }
+
+    @Override
+    public Keywords.BorderSideAndVerticalAlignment getTop() {
+        return Keywords.BorderSideAndVerticalAlignment.TOP;
+    }
+
+    @Override
+    public Keywords.BorderSideAndVerticalAlignment getBottom() {
+        return Keywords.BorderSideAndVerticalAlignment.BOTTOM;
     }
 
 }

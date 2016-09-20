@@ -2,7 +2,7 @@ package org.modelcatalogue.spreadsheet.query.api;
 
 import org.modelcatalogue.spreadsheet.api.Color;
 import org.modelcatalogue.spreadsheet.api.FontStyle;
-import org.modelcatalogue.spreadsheet.builder.api.FontStylesProvider;
+import org.modelcatalogue.spreadsheet.api.FontStylesProvider;
 
 import java.util.EnumSet;
 

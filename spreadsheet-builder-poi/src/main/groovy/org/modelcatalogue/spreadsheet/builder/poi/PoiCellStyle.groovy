@@ -1,10 +1,13 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
+import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder
+import org.modelcatalogue.spreadsheet.api.Border
 import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.api.Font
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
+import org.modelcatalogue.spreadsheet.api.Keywords
 
 class PoiCellStyle implements CellStyle {
 
@@ -66,5 +69,16 @@ class PoiCellStyle implements CellStyle {
     @Override
     Font getFont() {
         return style.getFont() ? new PoiFont(style.getFont()) : null
+    }
+
+    @Override
+    Border getBorder(Keywords.BorderSide borderSide) {
+        switch(borderSide) {
+            case Keywords.BorderSide.TOP: return new PoiBorder(style.getBorderColor(XSSFCellBorder.BorderSide.TOP), style.getBorderTopEnum())
+            case Keywords.BorderSide.BOTTOM: return new PoiBorder(style.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM), style.getBorderBottomEnum())
+            case Keywords.BorderSide.LEFT: return new PoiBorder(style.getBorderColor(XSSFCellBorder.BorderSide.LEFT), style.getBorderLeftEnum())
+            case Keywords.BorderSide.RIGHT: return new PoiBorder(style.getBorderColor(XSSFCellBorder.BorderSide.RIGHT), style.getBorderRightEnum())
+        }
+        return new PoiBorder(null, null)
     }
 }

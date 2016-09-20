@@ -39,6 +39,21 @@ public final class SimpleRowCriterion extends AbstractCriterion<Cell> implements
     }
 
     @Override
+    public Predicate<Cell> range(final int from, final int to) {
+        return new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return o.getColumn() >= from && o.getColumn() <= to;
+            }
+        };
+    }
+
+    @Override
+    public Predicate<Cell> range(String from, String to) {
+        return range(Cell.Util.parseColumn(from), Cell.Util.parseColumn(to));
+    }
+
+    @Override
     public void cell(Predicate<Cell> predicate) {
         addCondition(predicate);
     }

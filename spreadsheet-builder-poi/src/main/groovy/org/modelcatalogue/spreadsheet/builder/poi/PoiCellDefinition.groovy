@@ -23,7 +23,7 @@ import org.modelcatalogue.spreadsheet.builder.api.CommentDefinition
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 
-import org.modelcatalogue.spreadsheet.builder.api.Keywords
+import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
 
 class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, SpreadsheetCell {

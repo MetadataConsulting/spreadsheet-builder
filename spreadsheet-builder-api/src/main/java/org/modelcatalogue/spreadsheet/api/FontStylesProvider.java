@@ -1,4 +1,4 @@
-package org.modelcatalogue.spreadsheet.builder.api;
+package org.modelcatalogue.spreadsheet.api;
 
 import org.modelcatalogue.spreadsheet.api.FontStyle;
 
