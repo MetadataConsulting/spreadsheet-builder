@@ -13,8 +13,8 @@ public interface Cell {
     <T> T read(Class<T> type);
     Row getRow();
 
-//    int getRowspan();
-//    int getColspan();
+    int getRowspan();
+    int getColspan();
 
     String getName();
     Comment getComment();

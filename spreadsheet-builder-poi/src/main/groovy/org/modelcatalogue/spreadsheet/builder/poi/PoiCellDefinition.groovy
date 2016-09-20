@@ -11,12 +11,12 @@ import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFComment
 import org.apache.poi.xssf.usermodel.XSSFName
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
+import org.apache.poi.xssf.usermodel.XSSFRow
 import org.codehaus.groovy.runtime.StringGroovyMethods
 
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
 import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Comment
-import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
 
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
@@ -32,16 +32,23 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     private final PoiRowDefinition row
     private final XSSFCell xssfCell
 
-    private int colspan = 1
-    private int rowspan = 1
+    private int colspan = 0
+    private int rowspan = 0
 
     private PoiCellStyleDefinition poiCellStyle
 
     private List<RichTextPart> richTextParts = []
 
     PoiCellDefinition(PoiRowDefinition row, XSSFCell xssfCell) {
-        this.xssfCell = xssfCell
-        this.row = row
+        this.xssfCell = checkNotNull(xssfCell, 'Cell')
+        this.row = checkNotNull(row, 'Row')
+    }
+
+    private static <T> T checkNotNull(T o, String what) {
+        if (o == null) {
+            throw new IllegalArgumentException("$what cannot be null")
+        }
+        return o
     }
 
     @Override
@@ -347,12 +354,48 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         return new PoiImageCreator(this, fileType)
     }
 
-    protected int getColspan() {
-        return colspan
+    int getColspan() {
+        if (colspan >= 1) {
+            return colspan
+        }
+
+
+
+        if (row.sheet.sheet.numMergedRegions == 0) {
+            return colspan = 1
+        }
+
+        CellRangeAddress address = row.sheet.sheet.mergedRegions.find {
+            it.isInRange(cell.rowIndex, cell.columnIndex)
+        }
+
+        if (address) {
+            rowspan = address.lastRow - address.firstRow + 1
+            colspan = address.lastColumn - address.firstColumn + 1
+            return colspan
+        }
+        return colspan = 1
     }
 
-    protected int getRowspan() {
-        return rowspan
+    int getRowspan() {
+        if (rowspan >= 1) {
+            return rowspan
+        }
+
+        if (row.sheet.sheet.numMergedRegions == 0) {
+            return rowspan = 1
+        }
+
+        CellRangeAddress address = row.sheet.sheet.mergedRegions.find {
+            it.isInRange(cell.rowIndex, cell.columnIndex)
+        }
+
+        if (address) {
+            rowspan = address.lastRow - address.firstRow + 1
+            colspan = address.lastColumn - address.firstColumn + 1
+            return rowspan
+        }
+        return rowspan = 1
     }
 
     protected XSSFCell getCell() {
@@ -387,9 +430,9 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     CellRangeAddress getCellRangeAddress() {
         new CellRangeAddress(
                 xssfCell.rowIndex,
-                xssfCell.rowIndex + rowspan - 1,
+                xssfCell.rowIndex + getRowspan() - 1,
                 xssfCell.columnIndex,
-                xssfCell.columnIndex + colspan - 1
+                xssfCell.columnIndex + getColspan() - 1
         )
     }
 
@@ -405,12 +448,12 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column - 1))
+        return createCellIfExists(getCell(row.row, column - 1))
     }
 
     @Override
     org.modelcatalogue.spreadsheet.api.Cell bellow() {
-        PoiRowDefinition row = this.row.bellow()
+        PoiRowDefinition row = this.row.bellow(getRowspan())
         if (!row) {
             return null
         }
@@ -420,7 +463,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column - 1))
+        return createCellIfExists(getCell(row.row, column - 1))
     }
 
     @Override
@@ -434,21 +477,21 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column - 2))
+        return createCellIfExists(getCell(row.row, column - 2))
     }
 
     @Override
     org.modelcatalogue.spreadsheet.api.Cell right() {
-        if (column == row.row.lastCellNum) {
+        if (column + getColspan() > row.row.lastCellNum) {
             return null
         }
-        PoiCellDefinition existing = row.getCellByNumber(column + 1)
+        PoiCellDefinition existing = row.getCellByNumber(column + getColspan())
 
         if (existing) {
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column))
+        return createCellIfExists(getCell(row.row, column + getColspan() - 1))
     }
 
     @Override
@@ -466,7 +509,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column - 2))
+        return createCellIfExists(getCell(row.row, column - 2))
     }
 
     @Override
@@ -484,7 +527,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column))
+        return createCellIfExists(getCell(row.row, column))
     }
 
     @Override
@@ -502,7 +545,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column - 2))
+        return createCellIfExists(getCell(row.row, column - 2))
     }
 
     @Override
@@ -520,6 +563,28 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             return existing
         }
 
-        return new PoiCellDefinition(row, row.row.getCell(column))
+        return createCellIfExists(getCell(row.row, column))
+    }
+
+
+    protected static XSSFCell getCell(XSSFRow row, int column) {
+        XSSFCell cell = row.getCell(column);
+        if (cell) {
+            return cell
+        }
+        if (row.sheet.numMergedRegions == 0) {
+            return null
+        }
+        CellRangeAddress address = row.sheet.mergedRegions.find {
+            it.isInRange(row.rowNum, column)
+        }
+        return row.sheet.getRow(address.firstRow).getCell(address.firstColumn)
+    }
+
+    protected PoiCellDefinition createCellIfExists(XSSFCell cell) {
+        if (cell) {
+            return new PoiCellDefinition(row.sheet.getRowByNumber(cell.rowIndex + 1) ?: row.sheet.createRowWrapper(cell.rowIndex + 1), cell)
+        }
+        return null
     }
 }

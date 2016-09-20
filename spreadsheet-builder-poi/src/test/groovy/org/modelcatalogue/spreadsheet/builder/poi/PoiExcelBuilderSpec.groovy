@@ -437,16 +437,22 @@ class PoiExcelBuilderSpec extends Specification {
                         cell 'D'
                         cell {
                             value 'E'
-                            // colspan 2
+                            colspan 2
                         }
                         cell 'F'
                     }
                     row {
                         cell 'G'
-                        cell 'H'
+                        cell {
+                            value 'H'
+                            rowspan(2)
+                        }
                         cell 'I'
                     }
-                }
+                    row(5) {
+                        cell('B') {
+                            value 'J'
+                }   }   }
                 sheet('Border') {
                     row {
                         style "borders"
@@ -480,7 +486,7 @@ class PoiExcelBuilderSpec extends Specification {
 
         then:
             allCells
-            allCells.size() == 80101
+            allCells.size() == 80102
 
         when:
             Collection<Cell> sampleCells = matcher.query(tmpFile) {
@@ -683,6 +689,7 @@ class PoiExcelBuilderSpec extends Specification {
             cellE.row.above().number == 1
             cellE.row.bellow()
             cellE.row.bellow().number == 3
+            cellE.colspan == 2
             cellE.aboveLeft()
             cellE.aboveLeft().value == 'A'
             cellE.above()
@@ -695,10 +702,11 @@ class PoiExcelBuilderSpec extends Specification {
             cellE.right().value == 'F'
             cellE.bellowLeft()
             cellE.bellowLeft().value == 'G'
-            cellE.bellow()
-            cellE.bellow().value == 'H'
             cellE.bellowRight()
             cellE.bellowRight().value == 'I'
+            cellE.bellow()
+            cellE.bellow().value == 'H'
+            cellE.bellow().bellow().value == 'J'
 
         when:
             open tmpFile

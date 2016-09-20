@@ -36,8 +36,13 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     List<PoiRowDefinition> getRows() {
-        // TODO: reuse existing rows
-        xssfSheet.collect { new PoiRowDefinition(this, it as XSSFRow) }
+        xssfSheet.collect {
+            PoiRowDefinition row = getRowByNumber(it.rowNum + 1)
+            if (row) {
+                return row
+            }
+            return createRowWrapper(it.rowNum + 1)
+        }
     }
 
     PoiRowDefinition getRowByNumber(int rowNumberStartingOne) {
@@ -169,5 +174,9 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
         for (int index in autoColumns) {
             xssfSheet.autoSizeColumn(index)
         }
+    }
+
+    PoiRowDefinition createRowWrapper(int oneBasedRowNumber) {
+        rows[oneBasedRowNumber] = new PoiRowDefinition(this, sheet.getRow(oneBasedRowNumber - 1))
     }
 }

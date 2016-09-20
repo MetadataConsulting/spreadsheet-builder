@@ -184,28 +184,34 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    PoiRowDefinition above() {
-        if (xssfRow.rowNum == 0) {
-            return null
-        }
+    PoiRowDefinition above(int howMany) {
+        aboveOrBellow(-howMany)
+    }
 
-        PoiRowDefinition existing = sheet.getRowByNumber(number - 1)
-        if (existing) {
-            return existing
-        }
-        return new PoiRowDefinition(sheet, sheet.sheet.getRow(number - 2))
+    @Override
+    PoiRowDefinition above() {
+        return above(1)
+    }
+
+    @Override
+    PoiRowDefinition bellow(int howMany) {
+        aboveOrBellow(howMany)
     }
 
     @Override
     PoiRowDefinition bellow() {
-        if (xssfRow.rowNum == xssfRow.sheet.lastRowNum) {
+        return bellow(1)
+    }
+
+    private PoiRowDefinition aboveOrBellow(int howMany) {
+        if (xssfRow.rowNum + howMany < 0 || xssfRow.rowNum + howMany >  xssfRow.sheet.lastRowNum) {
             return null
         }
-        PoiRowDefinition existing = sheet.getRowByNumber(number + 1)
+        PoiRowDefinition existing = sheet.getRowByNumber(number + howMany)
         if (existing) {
             return existing
         }
-        return new PoiRowDefinition(sheet, sheet.sheet.getRow(number))
+        return sheet.createRowWrapper(number + howMany)
     }
 
     private void createGroup(boolean collapsed, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure insideGroupDefinition) {

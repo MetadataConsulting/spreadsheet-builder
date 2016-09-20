@@ -6,6 +6,7 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
+import org.modelcatalogue.spreadsheet.api.Comment;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
@@ -100,6 +101,66 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
         SimpleCellStyleCriterion criterion = new SimpleCellStyleCriterion(this);
         DefaultGroovyMethods.with(criterion, styleCriterion);
         // no need to add criteria, they are added by the style criterion itself
+    }
+
+    @Override
+    public void rowspan(final int span) {
+        addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return span == o.getRowspan();
+            }
+        });
+    }
+
+    @Override
+    public void rowspan(final Predicate<Integer> predicate) {
+        addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return predicate.test(o.getRowspan());
+            }
+        });
+    }
+
+    @Override
+    public void colspan(final int span) {
+        addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return span == o.getColspan();
+            }
+        });
+    }
+
+    @Override
+    public void colspan(final Predicate<Integer> predicate) {
+        addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return predicate.test(o.getColspan());
+            }
+        });
+    }
+
+    @Override
+    public void name(final Predicate<String> predicate) {
+        addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return predicate.test(o.getName());
+            }
+        });
+    }
+
+    @Override
+    public void comment(final Predicate<Comment> predicate) {
+        addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return predicate.test(o.getComment());
+            }
+        });
     }
 
     private <T> void addValueCondition(final T value, final Class<T> type) {
