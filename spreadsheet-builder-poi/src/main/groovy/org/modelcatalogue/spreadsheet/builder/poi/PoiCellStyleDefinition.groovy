@@ -160,7 +160,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void font(@DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.FontDefinition") Closure fontConfiguration) {
+    void font(@DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
         checkSealed()
         if (!poiFont) {
             poiFont = new PoiFontDefinition(workbook.workbook, style)
@@ -228,7 +228,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void border(@DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.BorderDefinition") Closure borderConfiguration) {
+    void border(@DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
@@ -239,7 +239,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void border(Keywords.BorderSide location, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.BorderDefinition") Closure borderConfiguration) {
+    void border(Keywords.BorderSide location, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
@@ -248,7 +248,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
 
     @Override
     void border(Keywords.BorderSide first, Keywords.BorderSide second,
-                @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.BorderDefinition") Closure borderConfiguration) {
+                @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration
@@ -259,7 +259,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
 
     @Override
     void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third,
-                @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.BorderDefinition") Closure borderConfiguration) {
+                @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         poiBorder.with borderConfiguration

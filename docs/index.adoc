@@ -850,7 +850,7 @@ image:wrap.png[]
 
 === Reusing Styles
 
-You can externalize your styles configuration into class implementing `org.modelcatalogue.builder.spreadsheet.api.Stylesheet`
+You can externalize your styles configuration into class implementing `org.modelcatalogue.spreadsheet.builder.api.Stylesheet`
 interface to maximize code reuse or report customization.
 
 [source,groovy]

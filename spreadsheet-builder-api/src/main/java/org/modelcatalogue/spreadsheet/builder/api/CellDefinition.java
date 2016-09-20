@@ -16,7 +16,7 @@ public interface CellDefinition extends HasStyle {
     void name(String name);
     void formula(String formula);
     void comment(String comment);
-    void comment(@DelegatesTo(CommentDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CommentDefinition") Closure commentDefinition);
+    void comment(@DelegatesTo(CommentDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CommentDefinition") Closure commentDefinition);
 
     LinkDefinition link(Keywords.To to);
 
@@ -68,7 +68,7 @@ public interface CellDefinition extends HasStyle {
      *
      * @param text new text run
      */
-    void text(String text, @DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.FontDefinition") Closure fontConfiguration);
+    void text(String text, @DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration);
 
     ImageCreator png(Keywords.Image image);
     ImageCreator jpeg(Keywords.Image image);

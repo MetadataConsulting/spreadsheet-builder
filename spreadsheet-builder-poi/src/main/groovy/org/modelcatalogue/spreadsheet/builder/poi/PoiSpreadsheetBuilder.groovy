@@ -21,7 +21,7 @@ class PoiSpreadsheetBuilder implements SpreadsheetBuilder {
     }
 
     @Override
-    void build(File file, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.WorkbookDefinition") Closure workbookDefinition) {
+    void build(File file, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
         file.withOutputStream {
             build it, workbookDefinition
         }

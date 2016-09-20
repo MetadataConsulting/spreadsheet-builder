@@ -7,6 +7,6 @@ import groovy.transform.stc.FromString;
 
 public interface WorkbookDefinition extends CanDefineStyle {
 
-    void sheet(String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetDefinition") Closure sheetDefinition);
+    void sheet(String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure sheetDefinition);
 
 }

@@ -82,7 +82,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(@DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellDefinition") Closure cellDefinition) {
+    void cell(@DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         PoiCellDefinition poiCell = findOrCreateCell nextColNumber
 
         if (styleName) {
@@ -111,7 +111,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(int column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellDefinition") Closure cellDefinition) {
+    void cell(int column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         nextColNumber = column
 
         PoiCellDefinition poiCell = findOrCreateCell column - 1
@@ -134,12 +134,12 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellDefinition") Closure cellDefinition) {
+    void cell(String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         cell Cell.Util.parseColumn(column), cellDefinition
     }
 
     @Override
-    void style(@DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyleDefinition") Closure styleDefinition) {
+    void style(@DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         this.styleDefinition = styleDefinition
     }
 
@@ -149,7 +149,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyleDefinition") Closure styleDefinition) {
+    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         style name
         style styleDefinition
     }
@@ -174,12 +174,12 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void group(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure insideGroupDefinition) {
+    void group(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
     }
 
     @Override
-    void collapse(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure insideGroupDefinition) {
+    void collapse(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
 
@@ -214,7 +214,7 @@ class PoiRowDefinition implements RowDefinition, Row {
         return sheet.createRowWrapper(number + howMany)
     }
 
-    private void createGroup(boolean collapsed, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure insideGroupDefinition) {
+    private void createGroup(boolean collapsed, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
         startPositions.push nextColNumber
         with insideGroupDefinition
 

@@ -11,7 +11,7 @@ public interface CanDefineStyle {
      * @param name name of the style
      * @param styleDefinition definition of the style
      */
-    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyleDefinition") Closure styleDefinition);
+    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
 
     void apply(Class<Stylesheet> stylesheet);
     void apply(Stylesheet stylesheet);

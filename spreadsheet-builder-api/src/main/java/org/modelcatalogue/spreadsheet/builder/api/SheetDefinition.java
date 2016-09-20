@@ -17,14 +17,14 @@ public interface SheetDefinition {
      * Creates new row in the spreadsheet.
      * @param rowDefinition closure defining the content of the row
      */
-    void row (@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure rowDefinition);
+    void row (@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
 
     /**
      * Creates new row in the spreadsheet.
      * @param row row number (1 based - the same as is shown in the file)
      * @param rowDefinition closure defining the content of the row
      */
-    void row (int row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure rowDefinition);
+    void row (int row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
 
     /**
      * Freeze some column or row or both.
@@ -40,8 +40,8 @@ public interface SheetDefinition {
      */
     void freeze(String column, int row);
 
-    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetDefinition") Closure insideGroupDefinition);
-    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetDefinition") Closure insideGroupDefinition);
+    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition);
+    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition);
 
     Object getLocked();
 

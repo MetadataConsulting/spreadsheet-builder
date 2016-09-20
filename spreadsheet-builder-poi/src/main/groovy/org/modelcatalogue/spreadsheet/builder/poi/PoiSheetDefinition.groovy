@@ -101,13 +101,13 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void row(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure rowDefinition) {
+    void row(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
         PoiRowDefinition row = findOrCreateRow nextRowNumber++
         row.with rowDefinition
     }
 
     @Override
-    void row(int oneBasedRowNumber, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure rowDefinition) {
+    void row(int oneBasedRowNumber, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
         assert oneBasedRowNumber > 0
         nextRowNumber = oneBasedRowNumber
 
@@ -126,12 +126,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetDefinition") Closure insideGroupDefinition) {
+    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
 
     @Override
-    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetDefinition") Closure insideGroupDefinition) {
+    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
     }
 

@@ -4,6 +4,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.spreadsheet.api.Workbook
 import org.modelcatalogue.spreadsheet.builder.poi.PoiWorkbookDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
+import org.modelcatalogue.spreadsheet.query.simple.SimpleSpreadsheetQuery
 import org.modelcatalogue.spreadsheet.query.simple.WorkbookSupplier
 
 class PoiSpreadsheetQuery {

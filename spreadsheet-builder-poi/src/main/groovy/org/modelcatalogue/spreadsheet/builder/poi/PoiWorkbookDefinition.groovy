@@ -25,7 +25,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook {
     }
 
     @Override
-    void sheet(String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetDefinition") Closure sheetDefinition) {
+    void sheet(String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure sheetDefinition) {
         PoiSheetDefinition sheet = sheets[name]
 
         if (!sheet) {
@@ -40,7 +40,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook {
     }
 
     @Override
-    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellStyleDefinition") Closure styleDefinition) {
+    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         namedStylesDefinition[name] = styleDefinition
     }
 

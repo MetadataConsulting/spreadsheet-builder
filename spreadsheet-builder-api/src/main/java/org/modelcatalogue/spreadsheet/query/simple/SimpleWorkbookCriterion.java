@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements WorkbookCriterion {
+final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements WorkbookCriterion {
 
     private final Collection<SimpleSheetCriterion> criteria = new ArrayList<SimpleSheetCriterion>();
 
@@ -44,7 +44,7 @@ public final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> impl
     }
 
     @Override
-    public void sheet(String name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(String name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         sheet(name(name));
         sheet(sheetCriterion);
     }
@@ -55,19 +55,19 @@ public final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> impl
     }
 
     @Override
-    public void sheet(Predicate<Sheet> name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(Predicate<Sheet> name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         sheet(name);
         sheet(sheetCriterion);
     }
 
     @Override
-    public void sheet(@DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(@DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         SimpleSheetCriterion sheet = new SimpleSheetCriterion();
         DefaultGroovyMethods.with(sheet, sheetCriterion);
         criteria.add(sheet);
     }
 
-    public Collection<SimpleSheetCriterion> getCriteria() {
+    Collection<SimpleSheetCriterion> getCriteria() {
         return Collections.unmodifiableCollection(criteria);
     }
 }
