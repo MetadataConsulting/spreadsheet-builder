@@ -16,6 +16,7 @@ import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
 import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Comment
+import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
 
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
@@ -392,5 +393,133 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         )
     }
 
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell above() {
+        PoiRowDefinition row = this.row.above()
+        if (!row) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column)
 
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column - 1))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell bellow() {
+        PoiRowDefinition row = this.row.bellow()
+        if (!row) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column - 1))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell left() {
+        if (column == 1) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column - 1)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column - 2))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell right() {
+        if (column == row.row.lastCellNum) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column + 1)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell aboveLeft() {
+        PoiRowDefinition row = this.row.above()
+        if (!row) {
+            return null
+        }
+        if (column == 1) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column - 1)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column - 2))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell aboveRight() {
+        PoiRowDefinition row = this.row.above()
+        if (!row) {
+            return null
+        }
+        if (column == row.row.lastCellNum) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column + 1)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell bellowLeft() {
+        PoiRowDefinition row = this.row.bellow()
+        if (!row) {
+            return null
+        }
+        if (column == 1) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column - 1)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column - 2))
+    }
+
+    @Override
+    org.modelcatalogue.spreadsheet.api.Cell bellowRight() {
+        PoiRowDefinition row = this.row.bellow()
+        if (!row) {
+            return null
+        }
+        if (column == row.row.lastCellNum) {
+            return null
+        }
+        PoiCellDefinition existing = row.getCellByNumber(column + 1)
+
+        if (existing) {
+            return existing
+        }
+
+        return new PoiCellDefinition(row, row.row.getCell(column))
+    }
 }

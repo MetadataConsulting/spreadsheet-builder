@@ -427,6 +427,26 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
+                sheet('Traversal') {
+                    row {
+                        cell 'A'
+                        cell 'B'
+                        cell 'C'
+                    }
+                    row {
+                        cell 'D'
+                        cell {
+                            value 'E'
+                            // colspan 2
+                        }
+                        cell 'F'
+                    }
+                    row {
+                        cell 'G'
+                        cell 'H'
+                        cell 'I'
+                    }
+                }
                 sheet('Border') {
                     row {
                         style "borders"
@@ -460,7 +480,7 @@ class PoiExcelBuilderSpec extends Specification {
 
         then:
             allCells
-            allCells.size() == 80092
+            allCells.size() == 80101
 
         when:
             Collection<Cell> sampleCells = matcher.query(tmpFile) {
@@ -638,6 +658,47 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             bordered
             bordered.size() == 9
+
+        when:
+            Collection<Cell> traversal = matcher.query(tmpFile) {
+                sheet('Traversal') {
+                    row {
+                        cell {
+                            value 'E'
+            }   }   }   }
+        then:
+            traversal
+            traversal.size() == 1
+
+        when:
+            Cell cellE = traversal.first()
+        then:
+            cellE.row.sheet.name == 'Traversal'
+            cellE.row.sheet.previous()
+            cellE.row.sheet.previous().name == 'Formula'
+            cellE.row.sheet.next()
+            cellE.row.sheet.next().name == 'Border'
+            cellE.row.number == 2
+            cellE.row.above()
+            cellE.row.above().number == 1
+            cellE.row.bellow()
+            cellE.row.bellow().number == 3
+            cellE.aboveLeft()
+            cellE.aboveLeft().value == 'A'
+            cellE.above()
+            cellE.above().value == 'B'
+            cellE.aboveRight()
+            cellE.aboveRight().value == 'C'
+            cellE.left()
+            cellE.left().value == 'D'
+            cellE.right()
+            cellE.right().value == 'F'
+            cellE.bellowLeft()
+            cellE.bellowLeft().value == 'G'
+            cellE.bellow()
+            cellE.bellow().value == 'H'
+            cellE.bellowRight()
+            cellE.bellowRight().value == 'I'
 
         when:
             open tmpFile

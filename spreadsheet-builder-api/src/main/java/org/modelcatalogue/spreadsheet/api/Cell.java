@@ -20,14 +20,14 @@ public interface Cell {
     Comment getComment();
     CellStyle getStyle();
 
-//    Cell above();
-//    Cell bellow();
-//    Cell left();
-//    Cell right();
-//    Cell topLeft();
-//    Cell topRight();
-//    Cell bottomLeft();
-//    Cell bottomRight();
+    Cell above();
+    Cell bellow();
+    Cell left();
+    Cell right();
+    Cell aboveLeft();
+    Cell aboveRight();
+    Cell bellowLeft();
+    Cell bellowRight();
 
     class Util {
 

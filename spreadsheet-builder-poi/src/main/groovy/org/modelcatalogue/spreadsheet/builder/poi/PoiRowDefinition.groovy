@@ -183,6 +183,31 @@ class PoiRowDefinition implements RowDefinition, Row {
         createGroup(true, insideGroupDefinition)
     }
 
+    @Override
+    PoiRowDefinition above() {
+        if (xssfRow.rowNum == 0) {
+            return null
+        }
+
+        PoiRowDefinition existing = sheet.getRowByNumber(number - 1)
+        if (existing) {
+            return existing
+        }
+        return new PoiRowDefinition(sheet, sheet.sheet.getRow(number - 2))
+    }
+
+    @Override
+    PoiRowDefinition bellow() {
+        if (xssfRow.rowNum == xssfRow.sheet.lastRowNum) {
+            return null
+        }
+        PoiRowDefinition existing = sheet.getRowByNumber(number + 1)
+        if (existing) {
+            return existing
+        }
+        return new PoiRowDefinition(sheet, sheet.sheet.getRow(number))
+    }
+
     private void createGroup(boolean collapsed, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowDefinition") Closure insideGroupDefinition) {
         startPositions.push nextColNumber
         with insideGroupDefinition
@@ -199,4 +224,7 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     }
 
+    PoiCellDefinition getCellByNumber(int oneBasedColumnNumber) {
+        cells[oneBasedColumnNumber]
+    }
 }

@@ -40,9 +40,43 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
         xssfSheet.collect { new PoiRowDefinition(this, it as XSSFRow) }
     }
 
+    PoiRowDefinition getRowByNumber(int rowNumberStartingOne) {
+        rows[rowNumberStartingOne]
+    }
+
     @Override
     void row() {
         findOrCreateRow nextRowNumber++
+    }
+
+    @Override
+    Sheet next() {
+        int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
+
+        if (current == workbook.workbook.getNumberOfSheets() - 1) {
+            return null
+        }
+        XSSFSheet next = workbook.workbook.getSheetAt(current + 1);
+        Sheet nextPoiSheet = workbook.sheets.find { it.sheet.sheetName == next.sheetName }
+        if (nextPoiSheet) {
+            return nextPoiSheet
+        }
+        return new PoiSheetDefinition(workbook, next)
+    }
+
+    @Override
+    Sheet previous() {
+        int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
+
+        if (current == 0) {
+            return null
+        }
+        XSSFSheet next = workbook.workbook.getSheetAt(current - 1);
+        Sheet nextPoiSheet = workbook.sheets.find { it.sheet.sheetName == next.sheetName }
+        if (nextPoiSheet) {
+            return nextPoiSheet
+        }
+        return new PoiSheetDefinition(workbook, next)
     }
 
     private PoiRowDefinition findOrCreateRow(int zeroBasedRowNumber) {

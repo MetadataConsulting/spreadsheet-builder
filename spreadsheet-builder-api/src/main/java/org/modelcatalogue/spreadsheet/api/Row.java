@@ -9,7 +9,7 @@ public interface Row {
 
     Collection<? extends Cell> getCells();
 
-//    Row above();
-//    Row bellow();
+    Row above();
+    Row bellow();
 
 }
