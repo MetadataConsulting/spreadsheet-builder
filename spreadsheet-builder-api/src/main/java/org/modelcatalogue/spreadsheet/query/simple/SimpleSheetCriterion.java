@@ -6,7 +6,7 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Row;
-import org.modelcatalogue.spreadsheet.query.api.Condition;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
 import org.modelcatalogue.spreadsheet.query.api.SheetCriterion;
 
@@ -19,10 +19,10 @@ public final class SimpleSheetCriterion extends AbstractCriterion<Row> implement
     private final Collection<SimpleRowCriterion> criteria = new ArrayList<SimpleRowCriterion>();
 
     @Override
-    public Condition<Row> number(final int row) {
-        return new Condition<Row>() {
+    public Predicate<Row> number(final int row) {
+        return new Predicate<Row>() {
             @Override
-            public boolean evaluate(Row o) {
+            public boolean test(Row o) {
                 return o.getNumber() == row;
             }
         };
@@ -42,14 +42,14 @@ public final class SimpleSheetCriterion extends AbstractCriterion<Row> implement
     }
 
     @Override
-    public void row(Condition<Row> condition, @DelegatesTo(RowCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowCriterion") Closure rowCriterion) {
-        row(condition);
+    public void row(Predicate<Row> predicate, @DelegatesTo(RowCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.RowCriterion") Closure rowCriterion) {
+        row(predicate);
         row(rowCriterion);
     }
 
     @Override
-    public void row(Condition<Row> condition) {
-        addCondition(condition);
+    public void row(Predicate<Row> predicate) {
+        addCondition(predicate);
     }
 
     @Override

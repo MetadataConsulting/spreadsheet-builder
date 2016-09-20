@@ -13,23 +13,23 @@ public interface CellStyleCriterion extends HTMLColors, ForegroundFills {
 
     void background(String hexColor);
     void background(Color color);
-    void background(Condition<Color> condition);
+    void background(Predicate<Color> predicate);
 
     void foreground(String hexColor);
     void foreground(Color color);
-    void foreground(Condition<Color> condition);
+    void foreground(Predicate<Color> predicate);
 
     void fill(ForegroundFill fill);
-    void fill(Condition<ForegroundFill> condition);
+    void fill(Predicate<ForegroundFill> predicate);
 
     void indent(int indent);
-    void indent(Condition<Integer> condition);
+    void indent(Predicate<Integer> predicate);
 
     void rotation(int rotation);
-    void rotation(Condition<Integer> condition);
+    void rotation(Predicate<Integer> predicate);
 
     void format(String format);
-    void format(Condition<String> format);
+    void format(Predicate<String> format);
 
     // void border()
 

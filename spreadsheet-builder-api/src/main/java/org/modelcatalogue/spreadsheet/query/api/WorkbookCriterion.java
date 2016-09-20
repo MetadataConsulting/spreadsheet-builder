@@ -8,14 +8,14 @@ import org.modelcatalogue.spreadsheet.api.Sheet;
 
 public interface WorkbookCriterion {
 
-    Condition<Sheet> name(String name);
-    Condition<Sheet> name(Condition<String> nameCondition);
+    Predicate<Sheet> name(String name);
+    Predicate<Sheet> name(Predicate<String> namePredicate);
 
     void sheet(String name);
     void sheet(String name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion);
 
-    void sheet(Condition<Sheet> condition);
-    void sheet(Condition<Sheet> condition, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion);
+    void sheet(Predicate<Sheet> predicate);
+    void sheet(Predicate<Sheet> predicate, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion);
 
     void sheet(@DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion);
 

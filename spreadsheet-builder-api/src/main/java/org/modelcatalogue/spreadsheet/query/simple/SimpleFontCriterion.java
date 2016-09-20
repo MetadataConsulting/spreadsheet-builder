@@ -1,7 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
 import org.modelcatalogue.spreadsheet.api.*;
-import org.modelcatalogue.spreadsheet.query.api.Condition;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.FontCriterion;
 
 import java.util.EnumSet;
@@ -21,9 +21,9 @@ class SimpleFontCriterion implements FontCriterion {
 
     @Override
     public void color(final Color color) {
-        parent.addCondition(new Condition<Cell>() {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
@@ -35,25 +35,25 @@ class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public void color(final Condition<Color> conition) {
-        parent.addCondition(new Condition<Cell>() {
+    public void color(final Predicate<Color> conition) {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
                 }
                 Font font = style.getFont();
-                return font != null && conition.evaluate(font.getColor());
+                return font != null && conition.test(font.getColor());
             }
         });
     }
 
     @Override
     public void size(final int size) {
-        parent.addCondition(new Condition<Cell>() {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
@@ -65,25 +65,25 @@ class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public void size(final Condition<Integer> condition) {
-        parent.addCondition(new Condition<Cell>() {
+    public void size(final Predicate<Integer> predicate) {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
                 }
                 Font font = style.getFont();
-                return font != null && condition.evaluate(font.getSize());
+                return font != null && predicate.test(font.getSize());
             }
         });
     }
 
     @Override
     public void name(final String name) {
-        parent.addCondition(new Condition<Cell>() {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
@@ -95,25 +95,25 @@ class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public void name(final Condition<String> condition) {
-        parent.addCondition(new Condition<Cell>() {
+    public void name(final Predicate<String> predicate) {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
                 }
                 Font font = style.getFont();
-                return font != null && condition.evaluate(font.getName());
+                return font != null && predicate.test(font.getName());
             }
         });
     }
 
     @Override
     public void make(final FontStyle first, final FontStyle... other) {
-        parent.addCondition(new Condition<Cell>() {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
@@ -138,16 +138,16 @@ class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public void make(final Condition<EnumSet<FontStyle>> condition) {
-        parent.addCondition(new Condition<Cell>() {
+    public void make(final Predicate<EnumSet<FontStyle>> predicate) {
+        parent.addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 CellStyle style = o.getStyle();
                 if (style == null) {
                     return false;
                 }
                 Font font = style.getFont();
-                return font != null && condition.evaluate(font.getStyles());
+                return font != null && predicate.test(font.getStyles());
             }
         });
     }

@@ -10,13 +10,13 @@ import java.util.Date;
 public interface CellCriterion {
 
     void date(Date value);
-    void date(Condition<Date> condition);
+    void date(Predicate<Date> predicate);
 
     void number(Double value);
-    void number(Condition<Double> condition);
+    void number(Predicate<Double> predicate);
 
     void string(String value);
-    void string(Condition<String> condition);
+    void string(Predicate<String> predicate);
 
     void value(Object value);
     void bool(Boolean value);

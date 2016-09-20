@@ -1,24 +1,24 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import org.modelcatalogue.spreadsheet.query.api.Condition;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractCriterion<C> {
 
-    private final List<Condition<C>> conditions = new ArrayList<Condition<C>>();
+    private final List<Predicate<C>> predicates = new ArrayList<Predicate<C>>();
 
-    void addCondition(Condition<C> condition) {
-        conditions.add(condition);
+    void addCondition(Predicate<C> predicate) {
+        predicates.add(predicate);
     }
 
     public boolean passesAnyCondition(C object) {
-        if (conditions.isEmpty()) {
+        if (predicates.isEmpty()) {
             return true;
         }
-        for (Condition<C> condition : conditions) {
-            if (condition.evaluate(object)) {
+        for (Predicate<C> predicate : predicates) {
+            if (predicate.test(object)) {
                 return true;
             }
         }

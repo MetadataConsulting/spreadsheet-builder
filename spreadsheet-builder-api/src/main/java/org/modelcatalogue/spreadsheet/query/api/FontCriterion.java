@@ -10,14 +10,14 @@ public interface FontCriterion extends FontStylesProvider {
 
     void color(String hexColor);
     void color(Color color);
-    void color(Condition<Color> condition);
+    void color(Predicate<Color> predicate);
 
     void size(int size);
-    void size(Condition<Integer> condition);
+    void size(Predicate<Integer> predicate);
 
     void name(String name);
-    void name(Condition<String> condition);
+    void name(Predicate<String> predicate);
 
     void make(FontStyle first, FontStyle... other);
-    void make(Condition<EnumSet<FontStyle>> condition);
+    void make(Predicate<EnumSet<FontStyle>> predicate);
 }

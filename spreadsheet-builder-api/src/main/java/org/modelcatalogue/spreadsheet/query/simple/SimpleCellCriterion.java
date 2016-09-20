@@ -8,7 +8,7 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
-import org.modelcatalogue.spreadsheet.query.api.Condition;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,8 +21,8 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
     }
 
     @Override
-    public void date(final Condition<Date> condition) {
-        addValueCondition(condition, Date.class);
+    public void date(final Predicate<Date> predicate) {
+        addValueCondition(predicate, Date.class);
     }
 
     @Override
@@ -31,8 +31,8 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
     }
 
     @Override
-    public void number(Condition<Double> condition) {
-        addValueCondition(condition, Double.class);
+    public void number(Predicate<Double> predicate) {
+        addValueCondition(predicate, Double.class);
     }
 
     @Override
@@ -41,8 +41,8 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
     }
 
     @Override
-    public void string(Condition<String> condition) {
-        addValueCondition(condition, String.class);
+    public void string(Predicate<String> predicate) {
+        addValueCondition(predicate, String.class);
     }
 
     @Override
@@ -71,9 +71,9 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
 
     @Override
     public void name(final String name) {
-        addCondition(new Condition<Cell>() {
+        addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 return name.equals(o.getName());
             }
         });
@@ -81,9 +81,9 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
 
     @Override
     public void comment(final String comment) {
-        addCondition(new Condition<Cell>() {
+        addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 return comment.equals(o.getComment().getText());
             }
         });
@@ -103,9 +103,9 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
     }
 
     private <T> void addValueCondition(final T value, final Class<T> type) {
-        addCondition(new Condition<Cell>() {
+        addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 try {
                     return value.equals(o.read(type));
                 } catch (Exception e) {
@@ -115,12 +115,12 @@ public final class SimpleCellCriterion extends AbstractCriterion<Cell> implement
         });
     }
 
-    private <T> void addValueCondition(final Condition<T> condition, final Class<T> type) {
-        addCondition(new Condition<Cell>() {
+    private <T> void addValueCondition(final Predicate<T> predicate, final Class<T> type) {
+        addCondition(new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 try {
-                    return condition.evaluate(o.read(type));
+                    return predicate.test(o.read(type));
                 } catch (Exception e) {
                     return false;
                 }

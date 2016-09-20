@@ -1,14 +1,14 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
-public interface Condition<T> {
+public interface Predicate<T> {
 
     /**
      * @param o object to be evaluated
      * @return <code>true</code> if the object passes the condition
      */
-    boolean evaluate(T o);
+    boolean test(T o);
 
-    class EqualsTo<T> implements Condition<T> {
+    class EqualsTo<T> implements Predicate<T> {
         private final Object other;
 
         public EqualsTo(Object other) {
@@ -16,25 +16,25 @@ public interface Condition<T> {
         }
 
         @Override
-        public boolean evaluate(T o) {
+        public boolean test(T o) {
             return other.equals(o);
         }
     }
 
-    class Negation<T> implements Condition<T> {
-        private final Condition<T> otherCondition;
+    class Negation<T> implements Predicate<T> {
+        private final Predicate<T> otherPredicate;
 
-        public Negation(Condition<T> otherCondition) {
-            this.otherCondition = otherCondition;
+        public Negation(Predicate<T> otherPredicate) {
+            this.otherPredicate = otherPredicate;
         }
 
         @Override
-        public boolean evaluate(T o) {
-            return !otherCondition.evaluate(o);
+        public boolean test(T o) {
+            return !otherPredicate.test(o);
         }
     }
 
-    class Match implements Condition<String> {
+    class Match implements Predicate<String> {
         private final String regexp;
 
         public Match(String regexp) {
@@ -42,7 +42,7 @@ public interface Condition<T> {
         }
 
         @Override
-        public boolean evaluate(String o) {
+        public boolean test(String o) {
             return o.matches(regexp);
         }
     }

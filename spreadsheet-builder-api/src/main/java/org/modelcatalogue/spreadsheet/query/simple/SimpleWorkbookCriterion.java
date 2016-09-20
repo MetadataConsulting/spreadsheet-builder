@@ -6,7 +6,7 @@ import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Sheet;
-import org.modelcatalogue.spreadsheet.query.api.Condition;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.SheetCriterion;
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion;
 
@@ -19,21 +19,21 @@ public final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> impl
     private final Collection<SimpleSheetCriterion> criteria = new ArrayList<SimpleSheetCriterion>();
 
     @Override
-    public Condition<Sheet> name(final String name) {
-        return new Condition<Sheet>() {
+    public Predicate<Sheet> name(final String name) {
+        return new Predicate<Sheet>() {
             @Override
-            public boolean evaluate(Sheet o) {
+            public boolean test(Sheet o) {
                 return o.getName().equals(name);
             }
         };
     }
 
     @Override
-    public Condition<Sheet> name(final Condition<String> nameCondition) {
-        return new Condition<Sheet>() {
+    public Predicate<Sheet> name(final Predicate<String> namePredicate) {
+        return new Predicate<Sheet>() {
             @Override
-            public boolean evaluate(Sheet o) {
-                return nameCondition.evaluate(o.getName());
+            public boolean test(Sheet o) {
+                return namePredicate.test(o.getName());
             }
         };
     }
@@ -50,12 +50,12 @@ public final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> impl
     }
 
     @Override
-    public void sheet(Condition<Sheet> name) {
+    public void sheet(Predicate<Sheet> name) {
         addCondition(name);
     }
 
     @Override
-    public void sheet(Condition<Sheet> name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(Predicate<Sheet> name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.SheetCriterion") Closure sheetCriterion) {
         sheet(name);
         sheet(sheetCriterion);
     }

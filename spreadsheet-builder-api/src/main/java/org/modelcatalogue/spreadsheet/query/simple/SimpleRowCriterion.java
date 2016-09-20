@@ -7,7 +7,7 @@ import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
-import org.modelcatalogue.spreadsheet.query.api.Condition;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
 
 import java.util.ArrayList;
@@ -19,28 +19,28 @@ public final class SimpleRowCriterion extends AbstractCriterion<Cell> implements
     private final Collection<SimpleCellCriterion> criteria = new ArrayList<SimpleCellCriterion>();
 
     @Override
-    public Condition<Cell> column(final int number) {
-        return new Condition<Cell>() {
+    public Predicate<Cell> column(final int number) {
+        return new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 return number == o.getColumn();
             }
         };
     }
 
     @Override
-    public Condition<Cell> columnAsString(final String name) {
-        return new Condition<Cell>() {
+    public Predicate<Cell> columnAsString(final String name) {
+        return new Predicate<Cell>() {
             @Override
-            public boolean evaluate(Cell o) {
+            public boolean test(Cell o) {
                 return name.equals(o.getColumnAsString());
             }
         };
     }
 
     @Override
-    public void cell(Condition<Cell> condition) {
-        addCondition(condition);
+    public void cell(Predicate<Cell> predicate) {
+        addCondition(predicate);
     }
 
     @Override
@@ -63,8 +63,8 @@ public final class SimpleRowCriterion extends AbstractCriterion<Cell> implements
     }
 
     @Override
-    public void cell(Condition<Cell> condition, @DelegatesTo(CellCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion) {
-        addCondition(condition);
+    public void cell(Predicate<Cell> predicate, @DelegatesTo(CellCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion) {
+        addCondition(predicate);
         cell(cellCriterion);
     }
 

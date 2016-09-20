@@ -8,14 +8,14 @@ import org.modelcatalogue.spreadsheet.api.Cell;
 
 public interface RowCriterion {
 
-    Condition<Cell> column(int number);
-    Condition<Cell> columnAsString(String name);
+    Predicate<Cell> column(int number);
+    Predicate<Cell> columnAsString(String name);
 
-    void cell(Condition<Cell> condition);
+    void cell(Predicate<Cell> predicate);
 
     void cell(@DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
     void cell(int column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
     void cell(String column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
-    void cell(Condition<Cell> condition, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
+    void cell(Predicate<Cell> predicate, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.builder.spreadsheet.api.CellCriterion") Closure cellCriterion);
 
 }
