@@ -14,7 +14,7 @@ import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import java.util.Calendar;
 import java.util.Date;
 
-public final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
+final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
 
     @Override
     public void date(final Date value) {

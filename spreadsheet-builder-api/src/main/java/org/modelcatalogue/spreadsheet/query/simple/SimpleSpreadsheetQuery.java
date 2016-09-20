@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SimpleSpreadsheetQuery implements SpreadsheetQuery {
+public final class SimpleSpreadsheetQuery implements SpreadsheetQuery {
 
     private final WorkbookSupplier loader;
 
@@ -60,11 +60,12 @@ public class SimpleSpreadsheetQuery implements SpreadsheetQuery {
                                                     }
                                                 } else {
                                                     for (SimpleCellCriterion cellCriterion : rowCriterion.getCriteria()) {
-                                                        if (cellCriterion.passesAnyCondition(cell)) {
-                                                            cells.add(cell);
-                                                            if (cells.size() >= max) {
-                                                                return cells;
-                                                            }
+                                                        if (!cellCriterion.passesAllConditions(cell)) {
+                                                            continue;
+                                                        }
+                                                        cells.add(cell);
+                                                        if (cells.size() >= max) {
+                                                            return cells;
                                                         }
                                                     }
                                                 }
@@ -118,12 +119,12 @@ public class SimpleSpreadsheetQuery implements SpreadsheetQuery {
     }
 
     @Override
-    public boolean exist(File spreadsheet, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    public boolean exists(File spreadsheet, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
         return find(spreadsheet, workbookCriterion) != null;
     }
 
     @Override
-    public boolean exist(InputStream inputStream, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) {
+    public boolean exists(InputStream inputStream, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) {
         return find(inputStream, workbookCriterion) != null;
     }
 }

@@ -5,7 +5,7 @@ import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCriterion<C> {
+abstract class AbstractCriterion<C> {
 
     private final List<Predicate<C>> predicates = new ArrayList<Predicate<C>>();
 
@@ -13,7 +13,7 @@ public abstract class AbstractCriterion<C> {
         predicates.add(predicate);
     }
 
-    public boolean passesAnyCondition(C object) {
+    boolean passesAnyCondition(C object) {
         if (predicates.isEmpty()) {
             return true;
         }
@@ -23,6 +23,18 @@ public abstract class AbstractCriterion<C> {
             }
         }
         return false;
+    }
+
+    boolean passesAllConditions(C object) {
+        if (predicates.isEmpty()) {
+            return true;
+        }
+        for (Predicate<C> predicate : predicates) {
+            if (!predicate.test(object)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

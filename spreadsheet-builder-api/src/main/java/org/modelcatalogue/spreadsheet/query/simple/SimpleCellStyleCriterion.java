@@ -14,7 +14,7 @@ import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.FontCriterion;
 
-class SimpleCellStyleCriterion implements CellStyleCriterion {
+final class SimpleCellStyleCriterion implements CellStyleCriterion {
 
     private final SimpleCellCriterion parent;
 

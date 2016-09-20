@@ -6,7 +6,7 @@ import org.modelcatalogue.spreadsheet.query.api.FontCriterion;
 
 import java.util.EnumSet;
 
-class SimpleFontCriterion implements FontCriterion {
+final class SimpleFontCriterion implements FontCriterion {
 
     private final SimpleCellCriterion parent;
 
