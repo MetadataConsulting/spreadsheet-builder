@@ -18,6 +18,12 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
 
     private final Collection<SimpleRowCriterion> criteria = new ArrayList<SimpleRowCriterion>();
 
+    SimpleSheetCriterion() {}
+
+    private SimpleSheetCriterion(boolean disjoint) {
+        super(disjoint);
+    }
+
     @Override
     public Predicate<Row> number(final int row) {
         return new Predicate<Row>() {
@@ -69,5 +75,10 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
 
     Collection<SimpleRowCriterion> getCriteria() {
         return Collections.unmodifiableCollection(criteria);
+    }
+
+    @Override
+    Predicate<Row> newDisjointCriterionInstance() {
+        return new SimpleSheetCriterion(true);
     }
 }

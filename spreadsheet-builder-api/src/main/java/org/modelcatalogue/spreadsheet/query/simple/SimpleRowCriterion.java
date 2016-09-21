@@ -16,7 +16,11 @@ import java.util.Collections;
 
 final class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCriterion {
 
-    private final Collection<SimpleCellCriterion> criteria = new ArrayList<SimpleCellCriterion>();
+    SimpleRowCriterion() {}
+
+    private SimpleRowCriterion(boolean disjoint) {
+        super(disjoint);
+    }
 
     @Override
     public Predicate<Cell> column(final int number) {
@@ -62,7 +66,7 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCri
     public void cell(@DelegatesTo(CellCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         SimpleCellCriterion criterion = new SimpleCellCriterion();
         DefaultGroovyMethods.with(criterion, cellCriterion);
-        criteria.add(criterion);
+        addCondition(criterion);
     }
 
     @Override
@@ -83,7 +87,8 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCri
         cell(cellCriterion);
     }
 
-    Collection<SimpleCellCriterion> getCriteria() {
-        return Collections.unmodifiableCollection(criteria);
+    @Override
+    Predicate<Cell> newDisjointCriterionInstance() {
+        return new SimpleRowCriterion(true);
     }
 }

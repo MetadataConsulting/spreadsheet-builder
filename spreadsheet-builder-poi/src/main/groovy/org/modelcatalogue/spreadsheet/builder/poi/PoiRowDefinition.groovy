@@ -233,4 +233,9 @@ class PoiRowDefinition implements RowDefinition, Row {
     PoiCellDefinition getCellByNumber(int oneBasedColumnNumber) {
         cells[oneBasedColumnNumber]
     }
+
+    @Override
+    String toString() {
+        return "Row[${sheet.name}!${number}]"
+    }
 }

@@ -179,4 +179,9 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     PoiRowDefinition createRowWrapper(int oneBasedRowNumber) {
         rows[oneBasedRowNumber] = new PoiRowDefinition(this, sheet.getRow(oneBasedRowNumber - 1))
     }
+
+    @Override
+    String toString() {
+        return "Sheet[${name}]"
+    }
 }

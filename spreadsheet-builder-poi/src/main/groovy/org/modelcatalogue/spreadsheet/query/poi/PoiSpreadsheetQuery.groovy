@@ -1,21 +1,23 @@
 package org.modelcatalogue.spreadsheet.query.poi
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.modelcatalogue.spreadsheet.api.Workbook
 import org.modelcatalogue.spreadsheet.builder.poi.PoiWorkbookDefinition
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
-import org.modelcatalogue.spreadsheet.query.simple.SimpleSpreadsheetQuery
-import org.modelcatalogue.spreadsheet.query.simple.WorkbookSupplier
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaFactory
+import org.modelcatalogue.spreadsheet.query.simple.SimpleSpreadsheetCriteria
 
-class PoiSpreadsheetQuery {
+enum PoiSpreadsheetQuery implements SpreadsheetCriteriaFactory {
 
-    static  SpreadsheetQuery create() {
-        new SimpleSpreadsheetQuery(new WorkbookSupplier() {
-            @Override
-            Workbook load(InputStream stream) {
-                return new PoiWorkbookDefinition(new XSSFWorkbook(stream))
-            }
-        })
+    FACTORY;
+
+    @Override
+    SpreadsheetCriteria forFile(File spreadsheet) throws FileNotFoundException {
+        return forStream(new FileInputStream(spreadsheet));
+    }
+
+    @Override
+    SpreadsheetCriteria forStream(InputStream stream) {
+        return SimpleSpreadsheetCriteria.forWorkbook(new PoiWorkbookDefinition(new XSSFWorkbook(stream)))
     }
 
 }

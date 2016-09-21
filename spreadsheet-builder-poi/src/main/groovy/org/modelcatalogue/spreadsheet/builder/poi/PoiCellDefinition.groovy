@@ -587,4 +587,9 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         }
         return null
     }
+
+    @Override
+    String toString() {
+        return "Cell[${row.sheet.name}!${columnAsString}${row.number}]=${value}"
+    }
 }

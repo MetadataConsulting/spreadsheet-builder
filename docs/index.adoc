@@ -19,7 +19,7 @@ Following example creates the basic spreadsheet with two rows and three columns.
 
 import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
 
 PoiSpreadsheetBuilder builder = new PoiSpreadsheetBuilder()
@@ -64,9 +64,9 @@ builder.build(file) {
     }
 }
 
-SpreadsheetQuery query = PoiSpreadsheetQuery.create()
+SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)
 
-Collection<Cell>  = query.query(file) {
+Collection<Cell>  = query.query {
     sheet {
         row {
             cell {

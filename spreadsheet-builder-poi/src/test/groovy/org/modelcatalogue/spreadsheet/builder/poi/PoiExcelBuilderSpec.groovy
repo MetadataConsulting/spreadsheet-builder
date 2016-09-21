@@ -3,7 +3,7 @@ package org.modelcatalogue.spreadsheet.builder.poi
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.modelcatalogue.spreadsheet.api.Cell
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetQuery
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
@@ -480,34 +480,34 @@ class PoiExcelBuilderSpec extends Specification {
 
         }
 
-            SpreadsheetQuery matcher =  PoiSpreadsheetQuery.create()
+            SpreadsheetCriteria matcher =  PoiSpreadsheetQuery.FACTORY.forFile(tmpFile)
 
-            Collection<Cell> allCells = matcher.query(tmpFile)
+            Collection<Cell> allCells = matcher.all()
 
         then:
             allCells
             allCells.size() == 80102
 
         when:
-            Collection<Cell> sampleCells = matcher.query(tmpFile) {
+            Collection<Cell> sampleCells = matcher.query({
                 sheet('Sample')
-            }
+            })
         then:
             sampleCells
             sampleCells.size() == 2
 
         when:
-            Collection<Cell> rowCells = matcher.query(tmpFile) {
-                sheet("many rows"){
+            Collection<Cell> rowCells = matcher.query({
+                sheet("many rows") {
                     row(1)
                 }
-            }
+            })
         then:
             rowCells
             rowCells.size() == 4
 
         when:
-            Collection<Cell> someCells = matcher.query(tmpFile) {
+            Collection<Cell> someCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -515,13 +515,13 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             someCells
             someCells.size() == 1
 
         when:
-            Collection<Cell> commentedCells = matcher.query(tmpFile) {
+            Collection<Cell> commentedCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -529,13 +529,13 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             commentedCells
             commentedCells.size() == 1
 
         when:
-            Collection<Cell> namedCells = matcher.query(tmpFile) {
+            Collection<Cell> namedCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -543,12 +543,12 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             namedCells
             namedCells.size() == 1
         when:
-            Collection<Cell> dateCells = matcher.query(tmpFile) {
+            Collection<Cell> dateCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -558,12 +558,12 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             dateCells
             dateCells.size() == 1
         when:
-            Collection<Cell> filledCells = matcher.query(tmpFile) {
+            Collection<Cell> filledCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -573,12 +573,12 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             filledCells
             filledCells.size() == 1
         when:
-            Collection<Cell> magentaCells = matcher.query(tmpFile) {
+            Collection<Cell> magentaCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -588,12 +588,12 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             magentaCells
             magentaCells.size() == 1
         when:
-            Collection<Cell> redOnes = matcher.query(tmpFile) {
+            Collection<Cell> redOnes = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -605,13 +605,13 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             redOnes
             redOnes.size() == 20005
 
         when:
-            Collection<Cell> boldOnes = matcher.query(tmpFile) {
+            Collection<Cell> boldOnes = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -623,13 +623,13 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             boldOnes
             boldOnes.size() == 2
 
         when:
-            Collection<Cell> bigOnes = matcher.query(tmpFile) {
+            Collection<Cell> bigOnes = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -641,37 +641,75 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-            }
+            })
         then:
             bigOnes
             bigOnes.size() == 40002
 
 
         when:
-            Collection<Cell> bordered = matcher.query(tmpFile) {
+            Collection<Cell> bordered = matcher.query({
                 sheet {
                     row {
                         cell {
                             style {
-                                border (top) {
+                                border(top) {
                                     style thin
                                 }
                             }
                         }
                     }
                 }
-            }
+            })
         then:
             bordered
             bordered.size() == 9
+        when:
+            Collection<Cell> combined = matcher.query({
+                sheet {
+                    row {
+                        cell {
+                            value 'Bold Red 22'
+                            style {
+                                font {
+                                    color red
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        then:
+            combined
+            combined.size() == 1
+
 
         when:
-            Collection<Cell> traversal = matcher.query(tmpFile) {
+            Collection<Cell> conjunction = matcher.query({
+                sheet {
+                    row {
+                        or {
+                            cell {
+                                value 'Bold Red 22'
+                            }
+                            cell {
+                                value 'A'
+                            }
+                        }
+                    }
+                }
+            })
+        then:
+            conjunction
+            conjunction.size() == 3
+
+        when:
+            Collection<Cell> traversal = matcher.query({
                 sheet('Traversal') {
                     row {
                         cell {
                             value 'E'
-            }   }   }   }
+            }   }   }   })
         then:
             traversal
             traversal.size() == 1

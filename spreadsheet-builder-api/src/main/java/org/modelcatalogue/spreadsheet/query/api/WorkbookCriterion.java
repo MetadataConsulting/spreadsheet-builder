@@ -19,4 +19,6 @@ public interface WorkbookCriterion {
 
     void sheet(@DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion);
 
+    void or(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion);
+
 }

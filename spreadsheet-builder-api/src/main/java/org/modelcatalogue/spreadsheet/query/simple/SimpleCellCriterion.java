@@ -16,6 +16,13 @@ import java.util.Date;
 
 final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
 
+    SimpleCellCriterion() {
+    }
+
+    private SimpleCellCriterion(boolean disjoint) {
+        super(disjoint);
+    }
+
     @Override
     public void date(final Date value) {
         addValueCondition(value, Date.class);
@@ -189,4 +196,8 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellC
         });
     }
 
+    @Override
+    Predicate<Cell> newDisjointCriterionInstance() {
+        return new SimpleCellCriterion(true);
+    }
 }

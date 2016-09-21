@@ -36,4 +36,6 @@ public interface CellCriterion {
     void comment(String comment);
     void comment(Predicate<Comment> predicate);
 
+    void or(@DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure sheetCriterion);
+
 }
