@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.2.0" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.0" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -429,8 +429,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Groovy Spreadsheet Builder</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_writing_spreadsheets">Writing Spreadsheets</a>
 <ul class="sectlevel1">
-<li><a href="#_getting_started">Getting Started</a></li>
 <li><a href="#_sheets_and_rows">Sheets and Rows</a>
 <ul class="sectlevel2">
 <li><a href="#_outlines">Outlines</a></li>
@@ -464,6 +465,32 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 </ul>
+</li>
+<li><a href="#_reading_and_querying_spreadsheets">Reading and Querying spreadsheets</a>
+<ul class="sectlevel1">
+<li><a href="#_data_model">Data Model</a></li>
+<li><a href="#_sheets_and_rows_2">Sheets and Rows</a></li>
+<li><a href="#_cells_2">Cells</a>
+<ul class="sectlevel2">
+<li><a href="#_merged_cells">Merged Cells</a></li>
+<li><a href="#_comments_2">Comments</a></li>
+<li><a href="#_names_2">Names</a></li>
+<li><a href="#_styles_and_fonts">Styles and Fonts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_changelog">Changelog</a>
+<ul class="sectlevel1">
+<li><a href="#_0_3_0">0.3.0</a>
+<ul class="sectlevel2">
+<li><a href="#_breaking_changes">Breaking Changes</a></li>
+</ul>
+</li>
+<li><a href="#_0_2_0">0.2.0</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="content">
@@ -475,70 +502,68 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>Spreadsheet builder provides convenient way how to create MS Excel OfficeOpenXML
+<p>Spreadsheet builder provides convenient way how to read and create MS Excel OfficeOpenXML
 Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_getting_started">Getting Started</h2>
-<div class="sectionbody">
+<h1 id="_writing_spreadsheets" class="sect0">Writing Spreadsheets</h1>
 <div class="paragraph">
 <p>Following example creates the basic spreadsheet with two rows and three columns.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.2.0')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.0')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
 
-import org.modelcatalogue.builder.spreadsheet.poi.PoiSpreadsheetBuilder
-
-def builder = new PoiSpreadsheetBuilder()
+import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-file.withOutputStream { out ->
-    builder.build(out) {
-        sheet('Sample') {
-            row(2) {
-               style {
-                   background whiteSmoke
-                   border top, bottom {
-                       style thin
-                       color black
-                   }
-               }
-               cell('B') {
-                   value 'A'
-                   style {
-                       border left, {
-                           style thin
-                           color black
-                       }
-                   }
-               }
-               cell 'B'
-               cell {
-                   value 'C'
-                   style {
-                       border right, {
-                           style thin
-                           color black
-                       }
-                   }
-               }
-           }
-           row {
-               cell('B') { value 1 }
-               cell 2
-               cell 3
-           }
+PoiSpreadsheetBuilder.INSTANCE.build {                                                  // <1>
+    sheet('Sample') {                                                                   // <2>
+        row {                                                                           // <3>
+            cell 'A'                                                                    // <4>
+            cell 'B'
+            cell 'C'
+        }
+        row {
+            cell 1
+            cell 2
+            cell 3
         }
     }
-}</code></pre>
+} writeTo file                                                                          // <5></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Build new spreadsheet based on Apache POI</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Create new sheet with the name <code>Sample</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Create new row</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Create new cell</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Write the spreadsheet to the file</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p><em>Result</em></p>
@@ -546,8 +571,6 @@ file.withOutputStream { out ->
 <div class="imageblock">
 <div class="content">
 <img src="images/basic_sample.png" alt="basic sample">
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -668,7 +691,7 @@ or view any formulas. This can emphasize that user changes are not desired.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
-    locked
+    lock it // 'it' represents the first argument of the closure
     row {
         cell {
             value 'Locked'
@@ -1232,7 +1255,7 @@ Colors can be defined as hexadecimal string as well.</p>
         value 'Bold Red 22'
         style {
             font {
-                bold
+                make bold
                 color red
                 size 22
             }
@@ -1243,7 +1266,7 @@ Colors can be defined as hexadecimal string as well.</p>
         value 'Underline Courier New'
         style {
             font {
-                underline
+                make underline
                 name 'Courier New'
             }
         }
@@ -1253,7 +1276,7 @@ Colors can be defined as hexadecimal string as well.</p>
         value 'Italic'
         style {
             font {
-                italic
+                make italic
             }
         }
     }
@@ -1262,7 +1285,7 @@ Colors can be defined as hexadecimal string as well.</p>
         value 'Strikeout'
         style {
             font {
-                strikeout
+                make strikeout
             }
         }
     }
@@ -1294,12 +1317,12 @@ definition is the same as <a href="#_fonts">above</a>.</p>
     }
     text ' '
     text 'Riding', {
-        italic
+        make italic
         size 18
     }
     text ' '
     text 'Hood', {
-        bold
+        make bold
         size 22
     }
 
@@ -1474,7 +1497,7 @@ You can update this by writing <code>wrap text</code> line in the style definiti
 <div class="sect2">
 <h3 id="_reusing_styles">Reusing Styles</h3>
 <div class="paragraph">
-<p>You can externalize your styles configuration into class implementing <code>org.modelcatalogue.builder.spreadsheet.api.Stylesheet</code>
+<p>You can externalize your styles configuration into class implementing <code>org.modelcatalogue.spreadsheet.builder.api.Stylesheet</code>
 interface to maximize code reuse or report customization.</p>
 </div>
 <div class="listingblock">
@@ -1533,10 +1556,393 @@ builder.build(out) {
 </div>
 </div>
 </div>
+<h1 id="_reading_and_querying_spreadsheets" class="sect0">Reading and Querying spreadsheets</h1>
+<div class="paragraph">
+<p>You can query the spreadsheet with similar syntax as you build it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.0')
+// fixes bugs on Groovy 2.4.x
+@Grab(group='commons-codec', module='commons-codec', version='1.10')
+@GrabExclude('org.codehaus.groovy:groovy-all')
+
+import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
+
+File file = new File('spreadsheet.xlsx')
+
+SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)                      // <1>
+
+Collection<Cell>  cells = query.query {                                                 // <2>
+    sheet {                                                                             // <3>
+        row {                                                                           // <4>
+            cell {
+                value 'B'                                                               // <5>
+            }
+        }
+    }
+}
+
+assert cells.size() == 1
+assert cells.first().value == 'B'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create new spreadsheet query for given file</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Start a query</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Query any sheet</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Query any row</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Query every cell containing value 'B'</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>query</code> method returns collections of every cell found matching given criteria. There is also shortcut methods
+<code>all()</code>, <code>find()</code> and <code>exists()</code> to return every cell, find single cell or just test for cell presence.</p>
+</div>
+<div class="sect1">
+<h2 id="_data_model">Data Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>Cell</code> objects provides getters counterparts to methods supported by query such as <code>getName()</code>. You can also
+easily navigate into all eight directions with methods like <code>getLeft()</code>, <code>getAboveLeft()</code> etc.  or access the whole
+row with <code>getRow()</code>. Rows can be also easily navigated with <code>getAbove()</code> and <code>getbellow</code> methods.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Cell a = query.find {
+    sheet {
+        row {
+            cell {
+                value 'A'
+            }
+        }
+    }
+}
+
+assert a.right.value == 'B'
+assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sheets_and_rows_2">Sheets and Rows</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can query only specific sheet or row</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet('Content')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from sheet <code>Content</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
+ rows by it number. The number starts with one so it corresponds the one displayed in Excel.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet(name({ name.startsWith('Con') })) {
+        row(1)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from every first row of every sheet which name starts with <code>Con</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you repeat the call to either <code>sheet</code> or <code>row</code> query method you it&#8217;s understood as <code>and</code> condition but
+ you can also create <code>or</code> condition by wrapping the calls with <code>or</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy"> query.query {
+    or {
+       sheet(name({ name.startsWith('Con') })) {
+         row(1)
+       }
+       sheet(name({ name.endsWith('Air') })) {
+         row(2)
+       }
+    }
+ }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from every first row of every sheet which name starts with <code>Con</code> and every cell
+from every second row of sheet which name ends with <code>Air</code>. If the one sheet fits both criteria the cells are not returned
+twice.</p>
+</div>
+<div class="paragraph">
+<p>Also row method accepts predicate with two predefined <code>number</code> and <code>range</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        row (range(1,10)) { // body required when the predicate is used }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from first ten rows of every sheet in the spreadsheet.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cells_2">Cells</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can easily specify which cells you want to return from the query. For example by specifying desired value.
+You can also query for more specific type with <code>date</code>, <code>number</code>, <code>string</code>, <code>bool</code> methods.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        row {
+            cell {
+                value 'B'
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from any sheet and row with value 'B'</p>
+</div>
+<div class="paragraph">
+<p>You can only return cells from specific column or column range specified by both number or string.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        row {
+            cell('B')
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from column 'B' of any sheet and row</p>
+</div>
+<div class="sect2">
+<h3 id="_merged_cells">Merged Cells</h3>
+<div class="paragraph">
+<p>You can query for merged cells only.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        row {
+            cell {
+                colspan 5
+                rowspan 2
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell in the spreadsheet which are merged over five cells horizontally and two cells vertically.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_comments_2">Comments</h3>
+<div class="paragraph">
+<p>You can query for cells with given comment.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        row {
+            cell {
+                comment "This is interesting"
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell in the spreadsheet which has a comment "This is interesting".</p>
+</div>
+<div class="paragraph">
+<p>Again you can use predicate closure to be more specific.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        row {
+            cell {
+                comment { it.author == 'Steve' }
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_names_2">Names</h3>
+<div class="paragraph">
+<p>You can query for specific named cell.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.find {
+    sheet {
+        row {
+            cell {
+                name "THE_CELL"
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> The cell with the named reference 'THE_CELL'.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Be careful as the names can be different than the one you&#8217;ve used in the builder as some implementation has certain naming limitations.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_styles_and_fonts">Styles and Fonts</h3>
+<div class="paragraph">
+<p>You can query cells by style parameters such as foreground color or font height. All the options from the style builder is currently supported
+except text wrapping, rich texts and alignment options. All font options are supported. See the guide above for reference.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.find {
+    sheet {
+        row {
+            cell {
+                style {
+                    foreground red
+                    font {
+                        make bold
+                        color white
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell from the spreadsheet which has red foreground and white font color with bold style.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The color you usually see in the cell is <code>foreground!</code> not a <code>background</code> as you may think.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_changelog" class="sect0">Changelog</h1>
+<div class="sect1">
+<h2 id="_0_3_0">0.3.0</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_breaking_changes">Breaking Changes</h3>
+<div class="paragraph">
+<p>No more single word mutating DSL statements such as <code>locked</code> or <code>bold</code> as they conflicts with newly introduced getters.
+Keywords which are already getters such as <code>black</code> for color of same name remain unaffected.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>sheet {
+    lock it // instead of "locked"
+}
+
+font {
+    make italic          // instead of "italic"
+    make bold, underline // you can supply more than one style
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The package and names for interfaces has been changed. Most of the previous
+API now resides in <code>org.modelcatalogue.spreadsheet.builder.api</code> package. The
+name of the interfaces used by builder closures got <code>*Definition</code> suffix (e.g. <code>SheetDefinition</code>)
+to distinguish them from the ones returned from queries.</p>
+</div>
+<div class="paragraph">
+<p>The way how the builder is initialized has shifted to <em>Factory</em> patten to distinguish between writing and building</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0_2_0">0.2.0</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Introduced getters for parent such as <code>workbook</code> for <code>sheet</code> etc.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-14 11:30:49 CEST
+Last updated 2016-09-23 18:08:56 CEST
 </div>
 </div>
 </body>
