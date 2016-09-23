@@ -16,56 +16,57 @@ Following example creates the basic spreadsheet with two rows and three columns.
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
 
-import org.modelcatalogue.builder.spreadsheet.poi.PoiSpreadsheetBuilder
-
-def builder = new PoiSpreadsheetBuilder()                                                   // <1>
+import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-file.withOutputStream { out ->
-    builder.build(out) {                                                                    // <2>
-        sheet('Sample') {                                                                   // <3>
-            row {                                                                           // <4>
-                cell 'A'                                                                    // <5>
-                cell 'B'
-                cell 'C'
-            }
-            row {
-                cell 1
-                cell 2
-                cell 3
+PoiSpreadsheetBuilder.INSTANCE.build {                                                  // <1>
+    sheet('Sample') {                                                                   // <2>
+        row {                                                                           // <3>
+            cell 'A'                                                                    // <4>
+            cell 'B'
+            cell 'C'
+        }
+        row {
+            cell 1
+            cell 2
+            cell 3
+        }
+    }
+} writeTo file                                                                          // <5>
+
+SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)                      // <6>
+
+Collection<Cell>  cells = query.query {                                                 // <7>
+    sheet {                                                                             // <8>
+        row {                                                                           // <9>
+            cell {
+                value 'B'                                                               // <10>
             }
         }
     }
 }
+
+assert cells.size() == 1
+assert cells.first().value == 'B'
+
 ----
-<1> Create new spreadsheet builder based on Apache POI (currently the only implementation provided)
-<2> Build new spreadsheet and write it to the output stream
-<3> Create new sheet with the name `Sample`
-<4> Create new row
-<5> Create new cell
+<1> Build new spreadsheet based on Apache POI
+<2> Create new sheet with the name `Sample`
+<3> Create new row
+<4> Create new cell
+<5> Write the spreadsheet to the file
+<6> Create new spreadsheet query for given file
+<7> Start a query
+<8> Query any sheet
+<9> Query any row
+<10> Query all cells containing value 'B'
 
-== Changelog
 
-=== 0.2.1
 
-==== Breaking Changes
-
-No more single word mutating DSL statements such as `locked` or `bold` as they conflicts with newly introduced getters.
-Keywords which are already getters such as `black` for color of same name remain unaffected.
-----
-sheet {
-    lock it // instead of "locked"
-}
-
-font {
-    make italic          // instead of "italic"
-    make bold, underline // you can supply more than one style
-}
-----
-
-=== 0.2.0
-Introduced getters for parent such as `workbook` for `sheet` etc.
 
 == Acknowledgement
 This project is inspired by http://www.craigburke.com/document-builder/[Groovy Document Builder]
