@@ -14,6 +14,8 @@ public interface RowCriterion {
     Predicate<Cell> range(String from, String to);
 
     void cell(Predicate<Cell> predicate);
+    void cell(int column);
+    void cell(String column);
 
     void cell(@DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion);
     void cell(int column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion);

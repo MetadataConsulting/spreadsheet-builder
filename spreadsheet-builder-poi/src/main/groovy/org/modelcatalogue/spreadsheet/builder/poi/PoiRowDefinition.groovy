@@ -184,23 +184,23 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    PoiRowDefinition above(int howMany) {
+    PoiRowDefinition getAbove(int howMany) {
         aboveOrBellow(-howMany)
     }
 
     @Override
-    PoiRowDefinition above() {
-        return above(1)
+    PoiRowDefinition getAbove() {
+        return getAbove(1)
     }
 
     @Override
-    PoiRowDefinition bellow(int howMany) {
+    PoiRowDefinition getBellow(int howMany) {
         aboveOrBellow(howMany)
     }
 
     @Override
-    PoiRowDefinition bellow() {
-        return bellow(1)
+    PoiRowDefinition getBellow() {
+        return getBellow(1)
     }
 
     private PoiRowDefinition aboveOrBellow(int howMany) {

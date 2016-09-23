@@ -6,7 +6,7 @@ import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaFactory
 import org.modelcatalogue.spreadsheet.query.simple.SimpleSpreadsheetCriteria
 
-enum PoiSpreadsheetQuery implements SpreadsheetCriteriaFactory {
+enum PoiSpreadsheetCriteria implements SpreadsheetCriteriaFactory {
 
     FACTORY;
 

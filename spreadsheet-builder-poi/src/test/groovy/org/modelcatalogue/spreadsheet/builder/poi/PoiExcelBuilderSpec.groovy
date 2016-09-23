@@ -6,7 +6,7 @@ import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 import spock.lang.Specification
 
 import java.awt.Desktop
@@ -20,14 +20,13 @@ class PoiExcelBuilderSpec extends Specification {
 
     def "create sample spreadsheet"() {
         when:
-        File tmpFile = tmp.newFile("sample${System.currentTimeMillis()}.xlsx")
+            File tmpFile = tmp.newFile("sample${System.currentTimeMillis()}.xlsx")
 
-        SpreadsheetBuilder builder = new PoiSpreadsheetBuilder()
+            SpreadsheetBuilder builder = PoiSpreadsheetBuilder.INSTANCE
 
-        Date today = new Date()
+            Date today = new Date()
 
-        tmpFile.withOutputStream { OutputStream out ->
-            builder.build(out) {
+            builder.build {
                 style 'red', {
                     font {
                         color red
@@ -64,8 +63,8 @@ class PoiExcelBuilderSpec extends Specification {
 
                 apply MyStyles // or apply(new MyStyles())
 
-                sheet("many rows"){
-                    20000.times{
+                sheet("many rows") {
+                    20000.times {
                         row {
                             cell {
                                 value '1'
@@ -145,8 +144,8 @@ class PoiExcelBuilderSpec extends Specification {
                 }
 
                 sheet('Image') {
-                    row (3) {
-                        cell ('C') {
+                    row(3) {
+                        cell('C') {
                             png image from 'https://goo.gl/UcL1wy'
                         }
                     }
@@ -187,12 +186,12 @@ class PoiExcelBuilderSpec extends Specification {
                                 size 12
                             }
                             text '\n'
-                            for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '':'nothing']) {
+                            for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '': 'nothing']) {
                                 text entry.key, {
                                     make bold
                                 }
                                 text ': '
-                                text  entry.value
+                                text entry.value
                                 text '\n'
                             }
                             text '\n\n'
@@ -216,14 +215,14 @@ class PoiExcelBuilderSpec extends Specification {
                             text '\n'
 
                             for (Map.Entry<String, String> entry in [
-                                    FULL_WITHDRAWAL: 'OPTION 2: FULL WITHDRAWAL: No further use',
+                                    FULL_WITHDRAWAL   : 'OPTION 2: FULL WITHDRAWAL: No further use',
                                     PARTIAL_WITHDRAWAL: 'OPTION 1: PARTIAL WITHDRAWAL: No further contact'
                             ]) {
                                 text entry.key, {
                                     make bold
                                 }
                                 text ': '
-                                text  entry.value
+                                text entry.value
                                 text '\n'
                             }
                         }
@@ -266,7 +265,7 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
                 sheet('One') {
-                    freeze 1,1
+                    freeze 1, 1
                     row {
                         cell 'First Row'
                     }
@@ -318,7 +317,7 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
                 sheet('Links') {
-                    freeze 1,0
+                    freeze 1, 0
                     row {
                         cell {
                             value 'Document (and a very long text)'
@@ -343,7 +342,7 @@ class PoiExcelBuilderSpec extends Specification {
                         }
                     }
                 }
-                sheet ('Groups'){
+                sheet('Groups') {
                     row {
                         cell "Headline 1"
                         group {
@@ -380,7 +379,7 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
                 sheet('Fills') {
-                    for(ForegroundFill foregroundFill in ForegroundFill.values()) {
+                    for (ForegroundFill foregroundFill in ForegroundFill.values()) {
                         row {
                             cell {
                                 width auto
@@ -476,11 +475,9 @@ class PoiExcelBuilderSpec extends Specification {
 
                     }
                 }
-            }
+            } writeTo tmpFile
 
-        }
-
-            SpreadsheetCriteria matcher =  PoiSpreadsheetQuery.FACTORY.forFile(tmpFile)
+            SpreadsheetCriteria matcher =  PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile)
 
             Collection<Cell> allCells = matcher.all()
 
@@ -718,33 +715,33 @@ class PoiExcelBuilderSpec extends Specification {
             Cell cellE = traversal.first()
         then:
             cellE.row.sheet.name == 'Traversal'
-            cellE.row.sheet.previous()
-            cellE.row.sheet.previous().name == 'Formula'
-            cellE.row.sheet.next()
-            cellE.row.sheet.next().name == 'Border'
+            cellE.row.sheet.getPrevious()
+            cellE.row.sheet.getPrevious().name == 'Formula'
+            cellE.row.sheet.getNext()
+            cellE.row.sheet.getNext().name == 'Border'
             cellE.row.number == 2
-            cellE.row.above()
-            cellE.row.above().number == 1
-            cellE.row.bellow()
-            cellE.row.bellow().number == 3
+            cellE.row.getAbove()
+            cellE.row.getAbove().number == 1
+            cellE.row.getBellow()
+            cellE.row.getBellow().number == 3
             cellE.colspan == 2
-            cellE.aboveLeft()
-            cellE.aboveLeft().value == 'A'
-            cellE.above()
-            cellE.above().value == 'B'
-            cellE.aboveRight()
-            cellE.aboveRight().value == 'C'
-            cellE.left()
-            cellE.left().value == 'D'
-            cellE.right()
-            cellE.right().value == 'F'
-            cellE.bellowLeft()
-            cellE.bellowLeft().value == 'G'
-            cellE.bellowRight()
-            cellE.bellowRight().value == 'I'
-            cellE.bellow()
-            cellE.bellow().value == 'H'
-            cellE.bellow().bellow().value == 'J'
+            cellE.getAboveLeft()
+            cellE.getAboveLeft().value == 'A'
+            cellE.getAbove()
+            cellE.getAbove().value == 'B'
+            cellE.getAboveRight()
+            cellE.getAboveRight().value == 'C'
+            cellE.getLeft()
+            cellE.getLeft().value == 'D'
+            cellE.getRight()
+            cellE.getRight().value == 'F'
+            cellE.getBellowLeft()
+            cellE.getBellowLeft().value == 'G'
+            cellE.getBellowRight()
+            cellE.getBellowRight().value == 'I'
+            cellE.getBellow()
+            cellE.getBellow().value == 'H'
+            cellE.getBellow().getBellow().value == 'J'
 
         when:
             open tmpFile

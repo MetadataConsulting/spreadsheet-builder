@@ -437,8 +437,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell above() {
-        PoiRowDefinition row = this.row.above()
+    org.modelcatalogue.spreadsheet.api.Cell getAbove() {
+        PoiRowDefinition row = this.row.getAbove()
         if (!row) {
             return null
         }
@@ -452,8 +452,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell bellow() {
-        PoiRowDefinition row = this.row.bellow(getRowspan())
+    org.modelcatalogue.spreadsheet.api.Cell getBellow() {
+        PoiRowDefinition row = this.row.getBellow(getRowspan())
         if (!row) {
             return null
         }
@@ -467,7 +467,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell left() {
+    org.modelcatalogue.spreadsheet.api.Cell getLeft() {
         if (column == 1) {
             return null
         }
@@ -481,7 +481,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell right() {
+    org.modelcatalogue.spreadsheet.api.Cell getRight() {
         if (column + getColspan() > row.row.lastCellNum) {
             return null
         }
@@ -495,8 +495,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell aboveLeft() {
-        PoiRowDefinition row = this.row.above()
+    org.modelcatalogue.spreadsheet.api.Cell getAboveLeft() {
+        PoiRowDefinition row = this.row.getAbove()
         if (!row) {
             return null
         }
@@ -513,8 +513,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell aboveRight() {
-        PoiRowDefinition row = this.row.above()
+    org.modelcatalogue.spreadsheet.api.Cell getAboveRight() {
+        PoiRowDefinition row = this.row.getAbove()
         if (!row) {
             return null
         }
@@ -531,8 +531,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell bellowLeft() {
-        PoiRowDefinition row = this.row.bellow()
+    org.modelcatalogue.spreadsheet.api.Cell getBellowLeft() {
+        PoiRowDefinition row = this.row.getBellow()
         if (!row) {
             return null
         }
@@ -549,8 +549,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    org.modelcatalogue.spreadsheet.api.Cell bellowRight() {
-        PoiRowDefinition row = this.row.bellow()
+    org.modelcatalogue.spreadsheet.api.Cell getBellowRight() {
+        PoiRowDefinition row = this.row.getBellow()
         if (!row) {
             return null
         }

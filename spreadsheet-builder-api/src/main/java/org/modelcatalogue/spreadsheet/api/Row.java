@@ -9,9 +9,9 @@ public interface Row {
 
     Collection<? extends Cell> getCells();
 
-    Row above();
-    Row above(int howMany);
-    Row bellow();
-    Row bellow(int howMany);
+    Row getAbove();
+    Row getAbove(int howMany);
+    Row getBellow();
+    Row getBellow(int howMany);
 
 }

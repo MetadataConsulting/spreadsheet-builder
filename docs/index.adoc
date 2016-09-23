@@ -3,10 +3,10 @@
 [.ribbon]
 image::ribbon.png[link={projectUrl}]
 
-Spreadsheet builder provides convenient way how to create MS Excel OfficeOpenXML
+Spreadsheet builder provides convenient way how to read and create MS Excel OfficeOpenXML
 Documents (XSLX) focus not only on content side but also on easy styling.
 
-== Getting Started
+= Writing Spreadsheets
 
 Following example creates the basic spreadsheet with two rows and three columns.
 
@@ -20,63 +20,30 @@ Following example creates the basic spreadsheet with two rows and three columns.
 import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetQuery
-
-PoiSpreadsheetBuilder builder = new PoiSpreadsheetBuilder()
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-builder.build(file) {
-    sheet('Sample') {
-        row(2) {
-           style {
-               background whiteSmoke
-               border top, bottom {
-                   style thin
-                   color black
-               }
-           }
-           cell('B') {
-               value 'A'
-               style {
-                   border left, {
-                       style thin
-                       color black
-                   }
-               }
-           }
-           cell 'B'
-           cell {
-               value 'C'
-               style {
-                   border right, {
-                       style thin
-                       color black
-                   }
-               }
-           }
-       }
-       row {
-           cell('B') { value 1 }
-           cell 2
-           cell 3
-       }
-    }
-}
-
-SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)
-
-Collection<Cell>  = query.query {
-    sheet {
+PoiSpreadsheetBuilder.INSTANCE.build {                                                  // <1>
+    sheet('Sample') {                                                                   // <2>
+        row {                                                                           // <3>
+            cell 'A'                                                                    // <4>
+            cell 'B'
+            cell 'C'
+        }
         row {
-            cell {
-                string 'B'
-            }
+            cell 1
+            cell 2
+            cell 3
         }
     }
-}
-
+} writeTo file                                                                          // <5>
 ----
+<1> Build new spreadsheet based on Apache POI
+<2> Create new sheet with the name `Sample`
+<3> Create new row
+<4> Create new cell
+<5> Write the spreadsheet to the file
 
 _Result_
 
@@ -905,11 +872,284 @@ _Result_
 image:stylesheets.png[]
 
 
-== Changelog
+= Reading and Querying spreadsheets
 
-=== 0.3.0
+You can query the spreadsheet with similar syntax as you build it.
 
-==== Breaking Changes
+[source,groovy,subs='attributes']
+----
+@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
+// fixes bugs on Groovy 2.4.x
+@Grab(group='commons-codec', module='commons-codec', version='1.10')
+@GrabExclude('org.codehaus.groovy:groovy-all')
+
+import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
+
+File file = new File('spreadsheet.xlsx')
+
+SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)                      // <1>
+
+Collection<Cell>  cells = query.query {                                                 // <2>
+    sheet {                                                                             // <3>
+        row {                                                                           // <4>
+            cell {
+                value 'B'                                                               // <5>
+            }
+        }
+    }
+}
+
+assert cells.size() == 1
+assert cells.first().value == 'B'
+
+----
+<1> Create new spreadsheet query for given file
+<2> Start a query
+<3> Query any sheet
+<4> Query any row
+<5> Query every cell containing value 'B'
+
+
+The `query` method returns collections of every cell found matching given criteria. There is also shortcut methods
+`all()`, `find()` and `exists()` to return every cell, find single cell or just test for cell presence.
+
+== Data Model
+
+The `Cell` objects provides getters counterparts to methods supported by query such as `getName()`. You can also
+easily navigate into all eight directions with methods like `getLeft()`, `getAboveLeft()` etc.  or access the whole
+row with `getRow()`. Rows can be also easily navigated with `getAbove()` and `getbellow` methods.
+
+[source,groovy,subs='attributes']
+----
+Cell a = query.find {
+    sheet {
+        row {
+            cell {
+                value 'A'
+            }
+        }
+    }
+}
+
+assert a.right.value == 'B'
+assert a.row.bellow.cells.first().value == a.bellow.value
+----
+
+== Sheets and Rows
+
+You can query only specific sheet or row
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet('Content')
+}
+----
+
+_Result:_ Every cell from sheet `Content`.
+
+You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
+ rows by it number. The number starts with one so it corresponds the one displayed in Excel.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet(name({ name.startsWith('Con') })) {
+        row(1)
+    }
+}
+----
+
+_Result:_ Every cell from every first row of every sheet which name starts with `Con`.
+
+If you repeat the call to either `sheet` or `row` query method you it's understood as `and` condition but
+ you can also create `or` condition by wrapping the calls with `or` method.
+
+[source,groovy,subs='attributes']
+----
+ query.query {
+    or {
+       sheet(name({ name.startsWith('Con') })) {
+         row(1)
+       }
+       sheet(name({ name.endsWith('Air') })) {
+         row(2)
+       }
+    }
+ }
+----
+
+_Result:_ Every cell from every first row of every sheet which name starts with `Con` and every cell
+from every second row of sheet which name ends with `Air`. If the one sheet fits both criteria the cells are not returned
+twice.
+
+Also row method accepts predicate with two predefined `number` and `range`.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        row (range(1,10)) { // body required when the predicate is used }
+    }
+}
+----
+
+_Result:_ Every cell from first ten rows of every sheet in the spreadsheet.
+
+== Cells
+
+You can easily specify which cells you want to return from the query. For example by specifying desired value.
+You can also query for more specific type with `date`, `number`, `string`, `bool` methods.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        row {
+            cell {
+                value 'B'
+            }
+        }
+    }
+}
+----
+
+_Result:_ Every cell from any sheet and row with value 'B'
+
+
+You can only return cells from specific column or column range specified by both number or string.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        row {
+            cell('B')
+        }
+    }
+}
+----
+
+_Result:_ Every cell from column 'B' of any sheet and row
+
+
+=== Merged Cells
+
+You can query for merged cells only.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        row {
+            cell {
+                colspan 5
+                rowspan 2
+            }
+        }
+    }
+}
+----
+
+_Result:_ Every cell in the spreadsheet which are merged over five cells horizontally and two cells vertically.
+
+=== Comments
+
+You can query for cells with given comment.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        row {
+            cell {
+                comment "This is interesting"
+            }
+        }
+    }
+}
+----
+
+_Result:_ Every cell in the spreadsheet which has a comment "This is interesting".
+
+Again you can use predicate closure to be more specific.
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        row {
+            cell {
+                comment { it.author == 'Steve' }
+            }
+        }
+    }
+}
+----
+
+=== Names
+
+You can query for specific named cell.
+
+[source,groovy,subs='attributes']
+----
+query.find {
+    sheet {
+        row {
+            cell {
+                name "THE_CELL"
+            }
+        }
+    }
+}
+----
+
+_Result:_ The cell with the named reference 'THE_CELL'.
+
+[WARNING]
+====
+Be careful as the names can be different than the one you've used in the builder as some implementation has certain naming limitations.
+====
+
+=== Styles and Fonts
+
+You can query cells by style parameters such as foreground color or font height. All the options from the style builder is currently supported
+except text wrapping, rich texts and alignment options. All font options are supported. See the guide above for reference.
+
+
+[source,groovy,subs='attributes']
+----
+query.find {
+    sheet {
+        row {
+            cell {
+                style {
+                    foreground red
+                    font {
+                        make bold
+                        color white
+                    }
+                }
+            }
+        }
+    }
+}
+----
+
+_Result:_ Every cell from the spreadsheet which has red foreground and white font color with bold style.
+
+[WARNING]
+====
+The color you usually see in the cell is `foreground!` not a `background` as you may think.
+====
+
+= Changelog
+
+== 0.3.0
+
+=== Breaking Changes
 
 No more single word mutating DSL statements such as `locked` or `bold` as they conflicts with newly introduced getters.
 Keywords which are already getters such as `black` for color of same name remain unaffected.
@@ -929,5 +1169,7 @@ API now resides in `org.modelcatalogue.spreadsheet.builder.api` package. The
 name of the interfaces used by builder closures got `*Definition` suffix (e.g. `SheetDefinition`)
 to distinguish them from the ones returned from queries.
 
-=== 0.2.0
+The way how the builder is initialized has shifted to _Factory_ patten to distinguish between writing and building
+
+== 0.2.0
 Introduced getters for parent such as `workbook` for `sheet` etc.

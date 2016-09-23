@@ -55,7 +55,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    Sheet next() {
+    Sheet getNext() {
         int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
 
         if (current == workbook.workbook.getNumberOfSheets() - 1) {
@@ -70,7 +70,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    Sheet previous() {
+    Sheet getPrevious() {
         int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
 
         if (current == 0) {

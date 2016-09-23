@@ -63,6 +63,16 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCri
     }
 
     @Override
+    public void cell(int column) {
+        cell(column(column));
+    }
+
+    @Override
+    public void cell(String column) {
+        cell(columnAsString(column));
+    }
+
+    @Override
     public void cell(@DelegatesTo(CellCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         SimpleCellCriterion criterion = new SimpleCellCriterion();
         DefaultGroovyMethods.with(criterion, cellCriterion);

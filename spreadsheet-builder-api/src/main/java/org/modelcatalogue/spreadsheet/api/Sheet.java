@@ -9,7 +9,7 @@ public interface Sheet {
 
     Collection<? extends Row> getRows();
 
-    Sheet next();
-    Sheet previous();
+    Sheet getNext();
+    Sheet getPrevious();
 
 }

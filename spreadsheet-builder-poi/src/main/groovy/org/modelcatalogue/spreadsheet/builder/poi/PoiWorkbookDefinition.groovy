@@ -9,10 +9,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.spreadsheet.api.Workbook
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
+import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.builder.api.Stylesheet
 import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition
 
-class PoiWorkbookDefinition implements WorkbookDefinition, Workbook {
+class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, SpreadsheetDefinition {
 
     private final XSSFWorkbook workbook
     private final Map<String, Closure> namedStylesDefinition = [:]
@@ -119,5 +120,17 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook {
     List<PoiSheetDefinition> getSheets() {
         // TODO: reuse existing sheets
         workbook.collect { new PoiSheetDefinition(this, it as XSSFSheet) }
+    }
+
+    @Override
+    void writeTo(OutputStream outputStream) {
+        workbook.write(outputStream)
+    }
+
+    @Override
+    void writeTo(File file) {
+        file.withOutputStream {
+            writeTo(it)
+        }
     }
 }
