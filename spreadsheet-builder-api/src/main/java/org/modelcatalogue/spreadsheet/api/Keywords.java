@@ -36,13 +36,14 @@ public final class Keywords {
         DISTRIBUTED
     }
 
+    //CHECKSTYLE:OFF
     public interface BorderSide {
         BorderSide LEFT = PureBorderSide.LEFT;
         BorderSide RIGHT = PureBorderSide.RIGHT;
         BorderSide TOP = BorderSideAndVerticalAlignment.TOP;
         BorderSide BOTTOM = BorderSideAndVerticalAlignment.BOTTOM;
 
-        BorderSide[] BORDER_SIDES = { TOP, BOTTOM, LEFT, RIGHT };
+        BorderSide[] BORDER_SIDES = {TOP, BOTTOM, LEFT, RIGHT};
     }
 
     public interface VerticalAlignment {
@@ -56,4 +57,5 @@ public final class Keywords {
         VerticalAlignment[] VERTICAL_ALIGNMENTS = {TOP, CENTER, BOTTOM, JUSTIFY, DISTRIBUTED};
 
     }
+    //CHECKSTYLE:ON
 }

@@ -3,10 +3,13 @@ package org.modelcatalogue.spreadsheet.api
 import spock.lang.Specification
 import spock.lang.Unroll
 
+/**
+ * Tests for Cell
+ */
 class CellUtilSpec extends Specification {
 
     @Unroll
-    def "parse column #column to number #index"() {
+    void "parse column #column to number #index"() {
         expect:
         Cell.Util.parseColumn(column) == index
         Cell.Util.toColumn(index) == column

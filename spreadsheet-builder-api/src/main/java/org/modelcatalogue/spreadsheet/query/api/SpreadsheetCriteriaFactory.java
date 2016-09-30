@@ -1,15 +1,8 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.modelcatalogue.spreadsheet.api.Cell;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Collection;
 
 
 /**

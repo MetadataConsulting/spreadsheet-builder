@@ -18,6 +18,8 @@ version = currentVersion
 
 subprojects {
     apply plugin: 'groovy'
+    apply plugin: 'checkstyle'
+    apply plugin: 'codenarc'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
@@ -39,6 +41,21 @@ subprojects {
 
     jar {
         manifest.attributes provider: 'gradle'
+    }
+
+    checkstyle {
+        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    }
+
+    codenarc {
+        configFile = rootProject.file('config/codenarc.xml')
+    }
+
+    test {
+        reports {
+            junitXml.enabled = true
+            html.enabled = true
+        }
     }
 
 

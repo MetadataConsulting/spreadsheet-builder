@@ -5,6 +5,9 @@ import org.apache.poi.xssf.usermodel.XSSFColor
 import org.modelcatalogue.spreadsheet.api.Border
 import org.modelcatalogue.spreadsheet.api.Color
 
+/**
+ * Represents the current border configuration of the cell style.
+ */
 class PoiBorder implements Border {
     private XSSFColor xssfColor
     private BorderStyle borderStyle

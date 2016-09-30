@@ -175,17 +175,17 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
 
     @Override
     public void border(Keywords.BorderSide location, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
-        border(new Keywords.BorderSide[] { location }, borderConfiguration);
+        border(new Keywords.BorderSide[] {location}, borderConfiguration);
     }
 
     @Override
     public void border(Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
-        border(new Keywords.BorderSide[] { first, second }, borderConfiguration);
+        border(new Keywords.BorderSide[] {first, second}, borderConfiguration);
     }
 
     @Override
     public void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
-        border(new Keywords.BorderSide[] { first, second, third }, borderConfiguration);
+        border(new Keywords.BorderSide[] {first, second, third}, borderConfiguration);
     }
 
     private void border(Keywords.BorderSide[] sides, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {

@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.api;
 
+//CHECKSTYLE:OFF
 public interface HTMLColorProvider {
 
     Color aliceBlue = new Color("#F0F8FF");

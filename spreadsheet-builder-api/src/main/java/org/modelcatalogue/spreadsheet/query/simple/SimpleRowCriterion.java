@@ -10,10 +10,6 @@ import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 final class SimpleRowCriterion extends AbstractCriterion<Cell> implements RowCriterion {
 
     SimpleRowCriterion() {}

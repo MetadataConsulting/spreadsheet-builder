@@ -7,6 +7,9 @@ import org.apache.poi.xssf.usermodel.XSSFHyperlink
 import org.apache.poi.xssf.usermodel.XSSFName
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
+/**
+ * Pending link is a link which needs to be resolved at the end of the build when all the named references are known.
+ */
 @PackageScope class PendingLink implements Resolvable {
 
     final XSSFCell cell

@@ -37,9 +37,9 @@ public interface Cell {
             char a = 'A';
             List<Character> chars = reverse(toList(column.toUpperCase().toCharArray()));
             int acc = 0;
-            for (int i = chars.size() - 1 ; i >= 0; i--) {
+            for (int i = chars.size() - 1; i >= 0; i--) {
                 if (i == 0) {
-                    acc += ((int) chars.get(i) - (int) a + 1);
+                    acc += (int) chars.get(i) - (int) a + 1;
                 } else {
                     acc += 26 * i * ((int) chars.get(i) - (int) a + 1);
                 }

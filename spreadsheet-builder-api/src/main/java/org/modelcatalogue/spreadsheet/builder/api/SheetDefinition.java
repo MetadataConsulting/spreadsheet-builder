@@ -11,20 +11,20 @@ public interface SheetDefinition {
     /**
      * Crates new empty row.
      */
-    void row ();
+    void row();
 
     /**
      * Creates new row in the spreadsheet.
      * @param rowDefinition closure defining the content of the row
      */
-    void row (@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
+    void row(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
 
     /**
      * Creates new row in the spreadsheet.
      * @param row row number (1 based - the same as is shown in the file)
      * @param rowDefinition closure defining the content of the row
      */
-    void row (int row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
+    void row(int row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
 
     /**
      * Freeze some column or row or both.

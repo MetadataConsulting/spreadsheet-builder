@@ -1,9 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
 import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
