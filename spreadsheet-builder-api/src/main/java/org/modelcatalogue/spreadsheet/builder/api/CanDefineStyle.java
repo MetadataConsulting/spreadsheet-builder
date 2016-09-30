@@ -13,6 +13,6 @@ public interface CanDefineStyle {
      */
     void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
 
-    void apply(Class<Stylesheet> stylesheet);
+    void apply(Class<? extends Stylesheet> stylesheet);
     void apply(Stylesheet stylesheet);
 }

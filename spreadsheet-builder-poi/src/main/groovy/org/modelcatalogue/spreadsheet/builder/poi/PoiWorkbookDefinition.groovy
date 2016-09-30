@@ -46,7 +46,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
     }
 
     @Override
-    void apply(Class<Stylesheet> stylesheet) {
+    void apply(Class<? extends Stylesheet> stylesheet) {
         apply stylesheet.newInstance()
     }
 
