@@ -38,7 +38,7 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
     }
 } writeTo file                                                                          // <5>
 
-SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)                      // <6>
+SpreadsheetQuery query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                      // <6>
 
 Collection<Cell>  cells = query.query {                                                 // <7>
     sheet {                                                                             // <8>

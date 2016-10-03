@@ -889,7 +889,7 @@ import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-SpreadsheetQuery query = PoiSpreadsheetQuery.FACTORY.forFile(file)                      // <1>
+SpreadsheetQuery query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                      // <1>
 
 Collection<Cell>  cells = query.query {                                                 // <2>
     sheet {                                                                             // <3>
