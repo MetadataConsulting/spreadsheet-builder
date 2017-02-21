@@ -49,6 +49,11 @@ _Result_
 
 image::basic_sample.png[]
 
+[TIP]
+====
+You can pass an existing spreadsheet file as a template as the very first argument of the `build` method.
+====
+
 == Sheets and Rows
 Each sheet needs to have a name provided. Rows are defined inside the sheets.
 
@@ -1146,6 +1151,10 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 ====
 
 = Changelog
+
+== 0.3.2
+
+Ability to use existing spreadsheet as a template in builder's `build` method.
 
 == 0.3.0
 
