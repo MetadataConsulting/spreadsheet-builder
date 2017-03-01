@@ -12,7 +12,7 @@ plugins {
     id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
 }
 
-String currentVersion = '0.3.2'
+String currentVersion = '0.3.3'
 
 version = currentVersion
 
