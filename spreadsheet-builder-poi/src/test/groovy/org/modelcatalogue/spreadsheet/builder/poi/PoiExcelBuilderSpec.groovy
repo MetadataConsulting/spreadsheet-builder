@@ -36,7 +36,7 @@ class PoiExcelBuilderSpec extends Specification {
 
         then:
             allCells
-            allCells.size() == 80102
+            allCells.size() == 80103
 
         when:
             Collection<Cell> sampleCells = matcher.query({
@@ -332,12 +332,27 @@ class PoiExcelBuilderSpec extends Specification {
             }.size() == 1
 
         when:
+            List<Cell> zeroCells = matcher.query({
+                sheet('Zero') {
+                    row {
+                        cell {
+                            value 0d
+                        }
+                    }
+                }
+            })
+        then:
+            zeroCells
+            zeroCells.size() == 1
+            zeroCells.first().value == 0d
+
+
+        when:
             open tmpFile
         then:
             noExceptionThrown()
 
     }
-
 
     @CompileStatic
     private static SpreadsheetDefinition buildSpreadsheet(PoiSpreadsheetBuilder builder, Date today) {
@@ -788,6 +803,13 @@ class PoiExcelBuilderSpec extends Specification {
                         value 2
                     }
 
+                }
+            }
+            sheet('Zero') {
+                row {
+                    cell {
+                        value 0
+                    }
                 }
             }
         }
