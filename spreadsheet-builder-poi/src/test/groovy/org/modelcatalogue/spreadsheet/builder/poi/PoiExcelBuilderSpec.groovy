@@ -297,6 +297,41 @@ class PoiExcelBuilderSpec extends Specification {
             cellE.getBellow().getBellow().value == 'J'
 
         when:
+            SpreadsheetDefinition definition = PoiSpreadsheetBuilder.INSTANCE.build(tmpFile) {
+                sheet('Sample') {
+                    row {
+                        cell {
+                            value 'Ahoj'
+                        }
+                        cell {
+                            value 'Svete'
+                        }
+                    }
+                }
+            }
+
+            definition.writeTo tmpFile
+        then:
+            PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile).query {
+                sheet('Sample') {
+                    row {
+                        cell {
+                            value 'Hello'
+                        }
+                    }
+                }
+            }.size() == 0
+            PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile).query {
+                sheet('Sample') {
+                    row {
+                        cell {
+                            value 'Ahoj'
+                        }
+                    }
+                }
+            }.size() == 1
+
+        when:
             List<Cell> zeroCells = matcher.query({
                 sheet('Zero') {
                     row {
@@ -310,6 +345,7 @@ class PoiExcelBuilderSpec extends Specification {
             zeroCells
             zeroCells.size() == 1
             zeroCells.first().value == 0d
+
 
         when:
             open tmpFile
@@ -440,7 +476,7 @@ class PoiExcelBuilderSpec extends Specification {
             sheet('Image') {
                 row(3) {
                     cell('C') {
-                        png image from 'https://goo.gl/UcL1wy'
+                        // png image from 'https://goo.gl/UcL1wy'
                     }
                 }
             }
