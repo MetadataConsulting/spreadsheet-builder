@@ -101,7 +101,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
     @Override
     void value(Object value) {
-        if (!value) {
+        if (value == null) {
             xssfCell.setCellType(Cell.CELL_TYPE_BLANK)
             return
         }
@@ -121,12 +121,6 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         if (value instanceof Calendar) {
             xssfCell.setCellType(Cell.CELL_TYPE_NUMERIC)
             xssfCell.setCellValue(value as Calendar)
-            return
-        }
-
-        if (value instanceof Boolean) {
-            xssfCell.setCellType(Cell.CELL_TYPE_BOOLEAN)
-            xssfCell.setCellValue(value as Boolean)
             return
         }
 
