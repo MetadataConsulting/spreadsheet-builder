@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.3" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.4" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -437,6 +437,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_outlines">Outlines</a></li>
 <li><a href="#_freezing_columns_and_rows">Freezing columns and rows</a></li>
 <li><a href="#_protection">Protection</a></li>
+<li><a href="#_automatic_filters">Automatic Filters</a></li>
 </ul>
 </li>
 <li><a href="#_cells">Cells</a>
@@ -482,6 +483,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_changelog">Changelog</a>
 <ul class="sectlevel1">
+<li><a href="#_0_3_4">0.3.4</a></li>
+<li><a href="#_0_3_3">0.3.3</a></li>
 <li><a href="#_0_3_2">0.3.2</a></li>
 <li><a href="#_0_3_0">0.3.0</a>
 <ul class="sectlevel2">
@@ -514,7 +517,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.3')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.4')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -727,6 +730,37 @@ sheet('Password Protected') {
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/locked.png" alt="locked"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_automatic_filters">Automatic Filters</h3>
+<div class="paragraph">
+<p>You can create an automatic filter for all data in given sheet.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Filtered') {
+    filter auto
+    row {
+        cell 'Name'
+        cell 'Profession'
+    }
+    row {
+        cell 'Donald'
+        cell 'Sailor'
+    }
+    row {
+        cell 'Bob'
+        cell 'Builder'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result</em></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/filtered.png" alt="filtered"></span></p>
 </div>
 </div>
 </div>
@@ -1577,7 +1611,7 @@ builder.build(out) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.3')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.4')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -1914,6 +1948,22 @@ except text wrapping, rich texts and alignment options. All font options are sup
 </div>
 <h1 id="_changelog" class="sect0">Changelog</h1>
 <div class="sect1">
+<h2 id="_0_3_4">0.3.4</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Added automatic filtering and allowed casting the api objects to their POI equivalents.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0_3_3">0.3.3</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fixed cells with value <code>0</code> rendered as empty cell.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_0_3_2">0.3.2</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1965,7 +2015,7 @@ to distinguish them from the ones returned from queries.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-21 10:37:04 CET
+Last updated 2017-03-02 10:26:47 CET
 </div>
 </div>
 </body>
