@@ -343,7 +343,8 @@ image:comments.png[]
 === Names
 
 Naming cells helps you to refer them with links or you can use them to expand the formula definitions. To declare name
-of the cell simply call the `name` method inside the cell definition. See <<Links>> how to use names to create link
+of the cell simply call the `name` method inside the cell definition. See <<Links>> 
+use names to create link
 to the particular cell.
 
 [source,groovy]
@@ -718,7 +719,7 @@ you are using at least version 3.13.
 
 === Data formats
 You can assing a data format using the `format` method. Detailed guide how the format works can be found in
-link:https://support.microsoft.com/en-us/kb/298368[How to control and understand settings in the Excel for Format Cells
+link:https://support.microsoft.com/en-us/help/264372/how-to-control-and-understand-settings-in-the-format-cells-dialog-box-in-excel[How to control and understand settings in the Excel for Format Cells
 dialog box]. link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html[Apache POI Builtin Formats]
 are great way how to find some of the most common formats.
 
