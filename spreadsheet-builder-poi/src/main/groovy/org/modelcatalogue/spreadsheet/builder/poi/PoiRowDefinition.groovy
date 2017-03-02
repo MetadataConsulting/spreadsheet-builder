@@ -238,4 +238,11 @@ class PoiRowDefinition implements RowDefinition, Row {
     String toString() {
         return "Row[${sheet.name}!${number}]"
     }
+
+    public <T> T asType(Class<T> type) {
+        if (type.isInstance(row)) {
+            return row
+        }
+        return super.asType(type)
+    }
 }

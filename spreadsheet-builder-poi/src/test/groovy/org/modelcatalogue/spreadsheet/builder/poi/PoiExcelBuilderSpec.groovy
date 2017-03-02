@@ -1,9 +1,16 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
 import groovy.transform.CompileStatic
+import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.api.Row
+import org.modelcatalogue.spreadsheet.api.Sheet
+import org.modelcatalogue.spreadsheet.api.Workbook
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
@@ -36,7 +43,7 @@ class PoiExcelBuilderSpec extends Specification {
 
         then:
             allCells
-            allCells.size() == 80103
+            allCells.size() == 80113
 
         when:
             Collection<Cell> sampleCells = matcher.query({
@@ -346,7 +353,24 @@ class PoiExcelBuilderSpec extends Specification {
             zeroCells.size() == 1
             zeroCells.first().value == 0d
 
+        when: 'you shoud be able to cast the '
+            Cell cell = zeroCells.first()
+            cell as org.apache.poi.ss.usermodel.Cell
+            cell as XSSFCell
 
+            Row row = cell.row
+            row as org.apache.poi.ss.usermodel.Row
+            row as XSSFRow
+
+            Sheet sheet = row.sheet
+            sheet as org.apache.poi.ss.usermodel.Sheet
+            sheet as XSSFSheet
+
+            Workbook workbook = sheet.workbook
+            workbook as org.apache.poi.ss.usermodel.Workbook
+            workbook as XSSFWorkbook
+        then:
+            noExceptionThrown()
         when:
             open tmpFile
         then:
@@ -394,6 +418,13 @@ class PoiExcelBuilderSpec extends Specification {
             apply MyStyles // or apply(new MyStyles())
 
             sheet("many rows") {
+                filter auto
+                row {
+                    cell 'One'
+                    cell 'Two'
+                    cell 'Three'
+                    cell 'Four'
+                }
                 20000.times {
                     row {
                         cell {
@@ -560,6 +591,7 @@ class PoiExcelBuilderSpec extends Specification {
             }
 
             sheet('Cell Addressing') {
+                filter auto
                 row(2) {
                     style {
                         background whiteSmoke
@@ -810,6 +842,21 @@ class PoiExcelBuilderSpec extends Specification {
                     cell {
                         value 0
                     }
+                }
+            }
+            sheet('Filtered') {
+                filter auto
+                row {
+                    cell 'Name'
+                    cell 'Profession'
+                }
+                row {
+                    cell 'Donald'
+                    cell 'Sailor'
+                }
+                row {
+                    cell 'Bob'
+                    cell 'Builder'
                 }
             }
         }

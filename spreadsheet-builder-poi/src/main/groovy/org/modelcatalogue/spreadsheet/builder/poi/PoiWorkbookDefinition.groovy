@@ -38,6 +38,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
         sheet.with sheetDefinition
 
         sheet.processAutoColumns()
+        sheet.processAutomaticFilter()
     }
 
     @Override
@@ -133,4 +134,13 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
             writeTo(it)
         }
     }
+
+    public <T> T asType(Class<T> type) {
+        if (type.isInstance(workbook)) {
+            return workbook
+        }
+        return super.asType(type)
+    }
+
+
 }

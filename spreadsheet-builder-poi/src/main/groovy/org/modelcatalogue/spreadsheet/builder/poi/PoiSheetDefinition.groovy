@@ -2,9 +2,11 @@ package org.modelcatalogue.spreadsheet.builder.poi
 
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Sheet
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
@@ -18,6 +20,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     private int nextRowNumber = 0
     private final Set<Integer> autoColumns = new HashSet<Integer>()
     private final Map<Integer, PoiRowDefinition> rows = [:]
+    private boolean automaticFilter
 
     PoiSheetDefinition(PoiWorkbookDefinition workbook, XSSFSheet xssfSheet) {
         this.workbook = workbook
@@ -146,6 +149,16 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
         sheet.protectSheet(password)
     }
 
+    @Override
+    void filter(Keywords.Auto auto) {
+        automaticFilter = true
+    }
+
+    @Override
+    Keywords.Auto getAuto() {
+        return Keywords.Auto.AUTO
+    }
+
     private void createGroup(boolean collapsed, @DelegatesTo(SheetDefinition.class) Closure insideGroupDefinition) {
         startPositions.push nextRowNumber
         with insideGroupDefinition
@@ -183,5 +196,23 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     @Override
     String toString() {
         return "Sheet[${name}]"
+    }
+
+    public <T> T asType(Class<T> type) {
+        if (type.isInstance(sheet)) {
+            return sheet
+        }
+        return super.asType(type)
+    }
+
+    protected void processAutomaticFilter() {
+        if (automaticFilter && sheet.lastRowNum > 0) {
+            sheet.setAutoFilter(new CellRangeAddress(
+                    sheet.firstRowNum,
+                    sheet.lastRowNum,
+                    sheet.getRow(sheet.firstRowNum).firstCellNum,
+                    sheet.getRow(sheet.firstRowNum).lastCellNum - 1
+            ))
+        }
     }
 }

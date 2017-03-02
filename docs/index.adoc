@@ -176,6 +176,31 @@ _Result_
 
 image:locked.png[]
 
+=== Automatic Filters
+
+You can create an automatic filter for all data in given sheet.
+
+[source,groovy]
+----
+sheet('Filtered') {
+    filter auto
+    row {
+        cell 'Name'
+        cell 'Profession'
+    }
+    row {
+        cell 'Donald'
+        cell 'Sailor'
+    }
+    row {
+        cell 'Bob'
+        cell 'Builder'
+    }
+}
+----
+_Result_
+
+image:filtered.png[]
 
 == Cells
 
@@ -1151,6 +1176,14 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 ====
 
 = Changelog
+
+== 0.3.4
+
+Added automatic filtering and allowed casting the api objects to their POI equivalents.
+
+== 0.3.3
+
+Fixed cells with value `0` rendered as empty cell.
 
 == 0.3.2
 

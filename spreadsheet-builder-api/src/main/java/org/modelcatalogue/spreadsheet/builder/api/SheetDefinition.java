@@ -5,6 +5,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Keywords;
 
 public interface SheetDefinition {
 
@@ -46,5 +47,8 @@ public interface SheetDefinition {
     Object getLocked();
 
     void password(String password);
+
+    void filter(Keywords.Auto auto);
+    Keywords.Auto getAuto();
 
 }
