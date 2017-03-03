@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.6" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.7" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -438,6 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_freezing_columns_and_rows">Freezing columns and rows</a></li>
 <li><a href="#_protection">Protection</a></li>
 <li><a href="#_automatic_filters">Automatic Filters</a></li>
+<li><a href="#_page_settings">Page Settings</a></li>
 </ul>
 </li>
 <li><a href="#_cells">Cells</a>
@@ -483,6 +484,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_changelog">Changelog</a>
 <ul class="sectlevel1">
+<li><a href="#_0_3_7">0.3.7</a></li>
 <li><a href="#_0_3_6">0.3.6</a></li>
 <li><a href="#_0_3_5">0.3.5</a></li>
 <li><a href="#_0_3_4">0.3.4</a></li>
@@ -519,7 +521,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.6')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.7')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -763,6 +765,27 @@ sheet('Password Protected') {
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/filtered.png" alt="filtered"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_page_settings">Page Settings</h3>
+<div class="paragraph">
+<p>You can define the paper size, orientation and on how many pages should the sheet be printed within the <code>page</code> closure
+of the sheet.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Custom Page') {
+    page {
+        paper a5
+        fit width to 1
+        orientation landscape
+    }
+    row {
+        cell 'A5 Landcapse'
+    }
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1081,37 +1104,37 @@ sheet('Links') {
 <div class="sect2">
 <h3 id="_dimensions">Dimensions</h3>
 <div class="paragraph">
-<p>You can set the width of the cells as the multiple of standard character width. You can also set the column to accommodate
-the width automatically using the <code>auto</code> keyword but it may slow down the generation. The width is defined inside cells
+<p>You can set the width of the cells as the multiple of standard character width, centimeters or inches.
+You can also set the column to accommodate the width automatically using the <code>auto</code> keyword but it may slow down the generation. The width is defined inside cells
 (usually header cells) but applies to the whole column.</p>
 </div>
 <div class="paragraph">
-<p>You can set the height of the cell in points. The height applies to whole row.</p>
+<p>You can set the height of the cell in points, centimeters or inches. The height applies to whole row.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Dimensions') {
     row {
         cell {
-            value 'No.'
-            width 5
+            value 'cm'
+            height 1 cm
+            width 1 cm
         }
-        cell {
-            value 'Name'
-            width 30
-        }
-        cell {
-            value 'Description'
-            width auto
+    }
+
+    row {
+        cell('B') {
+            value 'inches'
+            width 1 inch
+            height 1 inch
         }
     }
     row {
-        cell 1
-        cell {
-            value "Groovy Spreadsheet Builder"
-            height 30
+        cell('C') {
+            value 'points'
+            width 10
+            height 50
         }
-        cell "Helps building nice spreadsheet reports"
     }
 }</code></pre>
 </div>
@@ -1120,7 +1143,7 @@ the width automatically using the <code>auto</code> keyword but it may slow down
 <p><em>Result</em></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/widths.png" alt="widths"></span></p>
+<p><span class="image"><img src="images/dimensions.png" alt="dimensions"></span></p>
 </div>
 </div>
 </div>
@@ -1776,7 +1799,7 @@ builder.build(out) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.6')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.7')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -1872,6 +1895,24 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 </div>
 <div class="paragraph">
 <p><em>Result:</em> Every cell from sheet <code>Content</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can query sheet by its page setting</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+    sheet {
+        page {
+            paper a5
+            orientation landscape
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every cell on any sheet having the page settings set to A5 paper and with landscape orientation.</p>
 </div>
 <div class="paragraph">
 <p>You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
@@ -2113,6 +2154,14 @@ except text wrapping, rich texts and alignment options. All font options are sup
 </div>
 <h1 id="_changelog" class="sect0">Changelog</h1>
 <div class="sect1">
+<h2 id="_0_3_7">0.3.7</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Simple page settings, ability to set cells' width and height in centimeters or inches and fixed merging row and cell styles.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_0_3_6">0.3.6</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -2197,7 +2246,7 @@ to distinguish them from the ones returned from queries.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-03 16:06:09 CET
+Last updated 2017-03-03 23:00:59 CET
 </div>
 </div>
 </body>
