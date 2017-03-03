@@ -29,8 +29,9 @@ public interface CellDefinition extends HasStyle {
      * The width applies on the whole column.
      *
      * @param width the width as multiplier of standard character width
+     * @return dimension modifier which allows to recalculate the number set to cm or inches
      */
-    void width(double width);
+    DimensionModifier width(double width);
 
     /**
      * Sets the height of the cell in points (multiples of 20 twips).
@@ -38,8 +39,9 @@ public interface CellDefinition extends HasStyle {
      * The height applies on the whole row.
      *
      * @param height the height of the cell in points (multiples of 20 twips)
+     * @return dimension modifier which allows to recalculate the number set to cm or inches
      */
-    void height(double height);
+    DimensionModifier height(double height);
 
     /**
      * Sets that the current column should have automatic width.

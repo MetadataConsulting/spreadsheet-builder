@@ -438,43 +438,43 @@ You can add arbitrary attributes to the email link such as `cc`, `body` or `subj
 
 === Dimensions
 
-You can set the width of the cells as the multiple of standard character width. You can also set the column to accommodate
-the width automatically using the `auto` keyword but it may slow down the generation. The width is defined inside cells
+You can set the width of the cells as the multiple of standard character width, centimeters or inches.
+You can also set the column to accommodate the width automatically using the `auto` keyword but it may slow down the generation. The width is defined inside cells
 (usually header cells) but applies to the whole column.
 
-You can set the height of the cell in points. The height applies to whole row.
+You can set the height of the cell in points, centimeters or inches. The height applies to whole row.
 
 [source,groovy]
 ----
-sheet('Sample') {
+sheet('Dimensions') {
     row {
         cell {
-            value 'No.'
-            width 5
+            value 'cm'
+            height 1 cm
+            width 1 cm
         }
-        cell {
-            value 'Name'
-            width 30
-        }
-        cell {
-            value 'Description'
-            width auto
+    }
+
+    row {
+        cell('B') {
+            value 'inches'
+            width 1 inch
+            height 1 inch
         }
     }
     row {
-        cell 1
-        cell {
-            value "Groovy Spreadsheet Builder"
-            height 30
+        cell('C') {
+            value 'points'
+            width 10
+            height 50
         }
-        cell "Helps building nice spreadsheet reports"
     }
 }
 ----
 
 _Result_
 
-image:widths.png[]
+image:dimensions.png[]
 
 
 == Styles

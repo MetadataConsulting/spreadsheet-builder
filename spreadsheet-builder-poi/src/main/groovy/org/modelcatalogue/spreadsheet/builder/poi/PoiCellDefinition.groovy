@@ -21,6 +21,7 @@ import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
 
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CommentDefinition
+import org.modelcatalogue.spreadsheet.builder.api.DimensionModifier
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 
@@ -273,13 +274,15 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    void width(double width) {
+    DimensionModifier width(double width) {
         row.sheet.sheet.setColumnWidth(xssfCell.columnIndex, (int)Math.round(width * 255D))
+        return new PoiWidthModifier(this, width)
     }
 
     @Override
-    void height(double height) {
-        row.row.setHeightInPoints(height.floatValue());
+    DimensionModifier height(double height) {
+        row.row.setHeightInPoints(height.floatValue())
+        return new PoiHeightModifier(this, height)
     }
 
     @Override

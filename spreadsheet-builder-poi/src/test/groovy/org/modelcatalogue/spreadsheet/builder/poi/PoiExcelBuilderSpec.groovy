@@ -43,7 +43,7 @@ class PoiExcelBuilderSpec extends Specification {
         when:
             int allCellSize = allCells.size()
         then:
-            allCellSize == 80125
+            allCellSize == 80128
 
         when:
             Collection<Cell> sampleCells = matcher.query({
@@ -940,6 +940,31 @@ class PoiExcelBuilderSpec extends Specification {
                         value 'BLUE'
                         rowspan 3
                         styles  'centered', 'bold'
+                    }
+                }
+            }
+
+            sheet('Dimensions') {
+                row {
+                    cell {
+                        value 'cm'
+                        height 1 cm
+                        width 1 cm
+                    }
+                }
+
+                row {
+                    cell('B') {
+                        value 'inches'
+                        width 1 inch
+                        height 1 inch
+                    }
+                }
+                row {
+                    cell('C') {
+                        value 'points'
+                        width 10
+                        height 50
                     }
                 }
             }
