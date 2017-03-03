@@ -165,7 +165,7 @@ class PoiExcelBuilderSpec extends Specification {
             })
         then:
             redOnes
-            redOnes.size() == 20005
+            redOnes.size() == 20006
 
         when:
             Collection<Cell> boldOnes = matcher.query({
@@ -183,7 +183,7 @@ class PoiExcelBuilderSpec extends Specification {
             })
         then:
             boldOnes
-            boldOnes.size() == 3
+            boldOnes.size() == 4
 
         when:
             Collection<Cell> bigOnes = matcher.query({
@@ -220,7 +220,7 @@ class PoiExcelBuilderSpec extends Specification {
             })
         then:
             bordered
-            bordered.size() == 9
+            bordered.size() == 10
         when:
             Collection<Cell> combined = matcher.query({
                 sheet {
@@ -935,11 +935,11 @@ class PoiExcelBuilderSpec extends Specification {
                     }
                 }
                 row(10) {
-                    style 'bluefg'
+                    styles 'bluefg', 'borders'
                     cell {
                         value 'BLUE'
                         rowspan 3
-                        style  'centered'
+                        styles  'centered', 'bold'
                     }
                 }
             }

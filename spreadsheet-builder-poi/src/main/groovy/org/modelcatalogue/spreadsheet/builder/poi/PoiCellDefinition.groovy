@@ -192,17 +192,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
     @Override
     void style(String name) {
-        if (!poiCellStyle) {
-            poiCellStyle = row.sheet.workbook.getStyle(name)
-            poiCellStyle.assignTo(this)
-            return
-        }
-        if (poiCellStyle.sealed && row.styles) {
-            styles([] + row.styles + [name])
-            return
-        }
-        poiCellStyle.checkSealed()
-        poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
+        styles name
     }
 
     @Override
@@ -213,13 +203,13 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     @Override
     void styles(Iterable<String> names) {
         if (!poiCellStyle) {
-            poiCellStyle = row.sheet.workbook.getStyles(names)
+            poiCellStyle = row.sheet.workbook.getStyles(new LinkedHashSet<String>((names + row.styles).toList()))
             poiCellStyle.assignTo(this)
             return
         }
         if (poiCellStyle.sealed && row.styles) {
             poiCellStyle = null
-            styles([] + row.styles + names.toList())
+            styles(new LinkedHashSet<String>(names.toList() + row.styles))
             return
         }
         poiCellStyle.checkSealed()
