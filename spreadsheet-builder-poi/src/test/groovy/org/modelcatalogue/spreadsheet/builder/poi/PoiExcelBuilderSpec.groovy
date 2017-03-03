@@ -43,7 +43,7 @@ class PoiExcelBuilderSpec extends Specification {
         when:
             int allCellSize = allCells.size()
         then:
-            allCellSize == 80129
+            allCellSize == 80130
 
         when:
             Collection<Cell> sampleCells = matcher.query({
@@ -183,7 +183,7 @@ class PoiExcelBuilderSpec extends Specification {
             })
         then:
             boldOnes
-            boldOnes.size() == 4
+            boldOnes.size() == 5
 
         when:
             Collection<Cell> bigOnes = matcher.query({
@@ -984,6 +984,14 @@ class PoiExcelBuilderSpec extends Specification {
                 }
                 row {
                     cell 'A5 Landcapse'
+                }
+            }
+            sheet('Broken row styles') {
+                row {
+                    styles 'bold', 'redfg'
+                    cell {
+                        value 'BOLD and RED'
+                    }
                 }
             }
         }

@@ -16,6 +16,14 @@ public interface HasStyle {
     void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
 
     /**
+     * Applies a customized named style to the current element.
+     *
+     * @param names the names of the styles
+     * @param styleDefinition the definition of the style customizing the predefined style
+     */
+    void styles(Iterable<String> names, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
+
+    /**
      * Applies the style defined by the closure to the current element.
      * @param styleDefinition the definition of the style
      */

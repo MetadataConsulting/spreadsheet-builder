@@ -227,6 +227,14 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
+    void styles(Iterable<String> names, @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+        for (String name in names) {
+            poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
+        }
+        style styleDefinition
+    }
+
+    @Override
     void name(String name) {
         XSSFName theName = xssfCell.row.sheet.workbook.createName() as XSSFName
         theName.setNameName(fixName(name))

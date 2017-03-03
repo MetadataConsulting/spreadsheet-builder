@@ -63,14 +63,11 @@ class PoiRowDefinition implements RowDefinition, Row {
     void cell(Object value) {
         PoiCellDefinition poiCell = findOrCreateCell nextColNumber++
 
-        if (styleNames) {
-            poiCell.styles styleNames
-        }
-        if (styleName) {
+        if (styles) {
             if (styleDefinition) {
-                poiCell.style styleName, styleDefinition
+                poiCell.styles styles, styleDefinition
             } else {
-                poiCell.style styleName
+                poiCell.styles styles
             }
         } else if(styleDefinition) {
             poiCell.style styleDefinition
@@ -85,13 +82,13 @@ class PoiRowDefinition implements RowDefinition, Row {
     void cell(@DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         PoiCellDefinition poiCell = findOrCreateCell nextColNumber
 
-        if (styleName) {
+        if (styles) {
             if (styleDefinition) {
-                poiCell.style styleName, styleDefinition
+                poiCell.styles styles, styleDefinition
             } else {
-                poiCell.style styleName
+                poiCell.styles styles
             }
-        } else if (styleDefinition) {
+        } else if(styleDefinition) {
             poiCell.style styleDefinition
         }
 
@@ -116,11 +113,11 @@ class PoiRowDefinition implements RowDefinition, Row {
 
         PoiCellDefinition poiCell = findOrCreateCell column - 1
 
-        if (styleName) {
+        if (styles) {
             if (styleDefinition) {
-                poiCell.style styleName, styleDefinition
+                poiCell.styles styles, styleDefinition
             } else {
-                poiCell.style styleName
+                poiCell.styles styles
             }
         } else if(styleDefinition) {
             poiCell.style styleDefinition
@@ -151,6 +148,12 @@ class PoiRowDefinition implements RowDefinition, Row {
     @Override
     void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         style name
+        style styleDefinition
+    }
+
+    @Override
+    void styles(Iterable<String> names, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+        styles names
         style styleDefinition
     }
 
