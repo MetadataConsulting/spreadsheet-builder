@@ -245,4 +245,15 @@ class PoiRowDefinition implements RowDefinition, Row {
         }
         return super.asType(type)
     }
+
+    protected List<String> getStyles() {
+        List<String> styles = []
+        if (styleName) {
+            styles << styleName
+        }
+        if (styleNames) {
+            styles.addAll(styleNames)
+        }
+        return styles
+    }
 }

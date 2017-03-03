@@ -76,7 +76,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
         return style
     }
 
-    protected PoiCellStyleDefinition getStyles(String... names) {
+    protected PoiCellStyleDefinition getStyles(Iterable<String> names) {
         String name = names.join('.')
 
         PoiCellStyleDefinition style = namedStyles[name]

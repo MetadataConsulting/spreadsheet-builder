@@ -7,21 +7,17 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import org.modelcatalogue.spreadsheet.api.Cell
-import org.modelcatalogue.spreadsheet.api.Row
-import org.modelcatalogue.spreadsheet.api.Sheet
-import org.modelcatalogue.spreadsheet.api.Workbook
+import org.modelcatalogue.spreadsheet.api.*
+import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 import spock.lang.Specification
 
-import java.awt.Desktop
+import java.awt.*
+import java.util.List
 
 import static org.modelcatalogue.spreadsheet.builder.poi.PoiCellDefinition.fixName
-
 
 class PoiExcelBuilderSpec extends Specification {
 
@@ -43,7 +39,11 @@ class PoiExcelBuilderSpec extends Specification {
 
         then:
             allCells
-            allCells.size() == 80113
+
+        when:
+            int allCellSize = allCells.size()
+        then:
+            allCellSize == 80125
 
         when:
             Collection<Cell> sampleCells = matcher.query({
@@ -183,7 +183,7 @@ class PoiExcelBuilderSpec extends Specification {
             })
         then:
             boldOnes
-            boldOnes.size() == 2
+            boldOnes.size() == 3
 
         when:
             Collection<Cell> bigOnes = matcher.query({
@@ -353,24 +353,55 @@ class PoiExcelBuilderSpec extends Specification {
             zeroCells.size() == 1
             zeroCells.first().value == 0d
 
-        when: 'you shoud be able to cast the '
-            Cell cell = zeroCells.first()
-            cell as org.apache.poi.ss.usermodel.Cell
-            cell as XSSFCell
+        when: 'you shoud be able to cast the to poi objects'
+            Cell testCell = zeroCells.first()
+            testCell as org.apache.poi.ss.usermodel.Cell
+            testCell as XSSFCell
 
-            Row row = cell.row
-            row as org.apache.poi.ss.usermodel.Row
-            row as XSSFRow
+            Row testRow = testCell.row
+            testRow as org.apache.poi.ss.usermodel.Row
+            testRow as XSSFRow
 
-            Sheet sheet = row.sheet
-            sheet as org.apache.poi.ss.usermodel.Sheet
-            sheet as XSSFSheet
+            Sheet testSheet = testRow.sheet
+            testSheet as org.apache.poi.ss.usermodel.Sheet
+            testSheet as XSSFSheet
 
-            Workbook workbook = sheet.workbook
+            Workbook workbook = testSheet.workbook
             workbook as org.apache.poi.ss.usermodel.Workbook
             workbook as XSSFWorkbook
         then:
             noExceptionThrown()
+        when:
+            Cell noneCell = matcher.find {
+                sheet('Styles') {
+                    row {
+                        cell {
+                            value 'NONE'
+            }   }   }   }
+            Cell redCell = matcher.find {
+                sheet('Styles') {
+                    row {
+                        cell {
+                            value 'RED'
+            }   }   }   }
+            Cell blueCell = matcher.find {
+                sheet('Styles') {
+                    row {
+                        cell {
+                            value 'BLUE'
+            }   }   }   }
+            Cell greenCell = matcher.find {
+                sheet('Styles') {
+                    row {
+                        cell {
+                            value 'GREEN'
+            }   }   }   }
+        then:
+            !noneCell?.style?.foreground
+            redCell?.style?.foreground == HTMLColorProvider.red
+            blueCell?.style?.foreground == HTMLColorProvider.blue
+            greenCell?.style?.foreground == HTMLColorProvider.green
+
         when:
             open tmpFile
         then:
@@ -413,6 +444,24 @@ class PoiExcelBuilderSpec extends Specification {
                     color black
                 }
             }
+
+            style 'centered', {
+                align center center
+            }
+
+            style 'redfg', {
+                foreground red
+            }
+
+            style 'greenfg', {
+                foreground green
+            }
+
+            style 'bluefg', {
+                foreground blue
+            }
+
+            style 'nonefg', {}
 
 
             apply MyStyles // or apply(new MyStyles())
@@ -857,6 +906,41 @@ class PoiExcelBuilderSpec extends Specification {
                 row {
                     cell 'Bob'
                     cell 'Builder'
+                }
+            }
+
+            sheet('Styles') {
+                row {
+                    style 'nonefg'
+                    cell {
+                        value 'NONE'
+                        rowspan 3
+                        style 'centered'
+                    }
+                }
+                row(4) {
+                    style 'redfg'
+                    cell {
+                        value 'RED'
+                        rowspan 3
+                        style 'centered'
+                    }
+                }
+                row(7) {
+                    style 'greenfg'
+                    cell {
+                        value 'GREEN'
+                        rowspan 3
+                        styles 'centered', 'bold'
+                    }
+                }
+                row(10) {
+                    style 'bluefg'
+                    cell {
+                        value 'BLUE'
+                        rowspan 3
+                        style  'centered'
+                    }
                 }
             }
         }

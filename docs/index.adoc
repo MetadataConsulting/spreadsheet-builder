@@ -1338,6 +1338,11 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 
 = Changelog
 
+== 0.3.5
+
+Added ability to defined named styles for whole row and particular cell as well and fixed problem with
+merged cells formatting.
+
 == 0.3.4
 
 Added automatic filtering and allowed casting the api objects to their POI equivalents.

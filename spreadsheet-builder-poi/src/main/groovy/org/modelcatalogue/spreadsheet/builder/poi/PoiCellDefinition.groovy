@@ -197,26 +197,36 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             poiCellStyle.assignTo(this)
             return
         }
+        if (poiCellStyle.sealed && row.styles) {
+            styles([] + row.styles + [name])
+            return
+        }
         poiCellStyle.checkSealed()
         poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
     }
 
     @Override
     void styles(String... names) {
+        styles(names.toList())
+    }
+
+    @Override
+    void styles(Iterable<String> names) {
         if (!poiCellStyle) {
             poiCellStyle = row.sheet.workbook.getStyles(names)
             poiCellStyle.assignTo(this)
+            return
+        }
+        if (poiCellStyle.sealed && row.styles) {
+            poiCellStyle = null
+            styles([] + row.styles + names.toList())
             return
         }
         poiCellStyle.checkSealed()
         for (String name in names) {
             poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
         }
-    }
 
-    @Override
-    void styles(Iterable<String> names) {
-        styles(names.toList().toArray(new String[names.size()]))
     }
 
     @Override
@@ -418,6 +428,8 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         }
         if ((colspan > 1 || rowspan > 1) && poiCellStyle) {
             poiCellStyle.setBorderTo(cellRangeAddress, row.sheet)
+            // XXX: setting border messes up the style of the cell
+            poiCellStyle.assignTo(this)
         }
     }
 
