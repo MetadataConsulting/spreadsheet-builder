@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.4" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.5" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -483,6 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_changelog">Changelog</a>
 <ul class="sectlevel1">
+<li><a href="#_0_3_5">0.3.5</a></li>
 <li><a href="#_0_3_4">0.3.4</a></li>
 <li><a href="#_0_3_3">0.3.3</a></li>
 <li><a href="#_0_3_2">0.3.2</a></li>
@@ -517,7 +518,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.4')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.5')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -951,7 +952,8 @@ the author of the comment as well. The author only appears in the status bar of 
 <h3 id="_names">Names</h3>
 <div class="paragraph">
 <p>Naming cells helps you to refer them with links or you can use them to expand the formula definitions. To declare name
-of the cell simply call the <code>name</code> method inside the cell definition. See <a href="#_links">Links</a> how to use names to create link
+of the cell simply call the <code>name</code> method inside the cell definition. See <a href="#_links">Links</a>
+use names to create link
 to the particular cell.</p>
 </div>
 <div class="listingblock">
@@ -1404,7 +1406,7 @@ you are using at least version 3.13.</p>
 <h3 id="_data_formats">Data formats</h3>
 <div class="paragraph">
 <p>You can assing a data format using the <code>format</code> method. Detailed guide how the format works can be found in
-<a href="https://support.microsoft.com/en-us/kb/298368">How to control and understand settings in the Excel for Format Cells
+<a href="https://support.microsoft.com/en-us/help/264372/how-to-control-and-understand-settings-in-the-format-cells-dialog-box-in-excel">How to control and understand settings in the Excel for Format Cells
 dialog box</a>. <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html">Apache POI Builtin Formats</a>
 are great way how to find some of the most common formats.</p>
 </div>
@@ -1419,6 +1421,168 @@ are great way how to find some of the most common formats.</p>
         format 'dd/mm/yy'
     }
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Each of the formats can contain up to four parts separated by semicolon: <code>&lt;POSITIVE&gt;;&lt;NEGATIVE&gt;;&lt;ZERO&gt;;&lt;TEXT&gt;</code>.
+The excerpt from the official documentation follows:</em></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Format Symbol      Description/result
+   ------------------------------------------------------------------------
+
+   0                  Digit placeholder. For example, if you type 8.9 and
+                      you want it to display as 8.90, then use the
+                      format #.00
+
+   #                  Digit placeholder. Follows the same rules as the 0
+                      symbol except Excel does not display extra zeros
+                      when the number you type has fewer digits on either
+                      side of the decimal than there are # symbols in the
+                      format. For example, if the custom format is #.## and
+                      you type 8.9 in the cell, the number 8.9 is
+                      displayed.
+
+   ?                  Digit placeholder. Follows the same rules as the 0
+                      symbol except Excel places a space for insignificant
+                      zeros on either side of the decimal point so that
+                      decimal points are aligned in the column. For
+                      example, the custom format 0.0? aligns the decimal
+                      points for the numbers 8.9 and 88.99 in a column.
+
+   . (period)         Decimal point.
+
+   %                  Percentage. If you enter a number between 0 and 1,
+                      and you use the custom format 0%, Excel multiplies
+                      the number by 100 and adds the % symbol in the cell.
+
+   , (comma)          Thousands separator. Excel separates thousands by
+                      commas if the format contains a comma surrounded by
+                      '#'s or '0's. A comma following a placeholder
+                      scales the number by a thousand. For example, if the
+                      format is #.0,, and you type 12,200,000 in the cell,
+                      the number 12.2 is displayed.
+
+   E- E+ e- e+        Scientific format. Excel displays a number to the
+                      right of the "E" symbol that corresponds to the
+                      number of places the decimal point was moved. For
+                      example, if the format is 0.00E+00 and you type
+                      12,200,000 in the cell, the number 1.22E+07 is
+                      displayed. If you change the number format to #0.0E+0
+                      the number 12.2E+6 is displayed.
+
+   $-+/():space       Displays the symbol. If you want to display a
+                      character that is different than one of these
+                      symbols, precede the character with a backslash (\)
+                      or enclose the character in quotation marks (" ").
+                      For example, if the number format is (000) and you
+                      type 12 in the cell, the number (012) is displayed.
+
+   \                  Display the next character in the format. Excel does
+                      not display the backslash. For example, if the number
+                      format is 0\! and you type 3 in the cell, the value
+                      3! is displayed.
+
+   *                  Repeat the next character in the format enough times
+                      to fill the column to its current width. You cannot
+                      have more than one asterisk in one section of the
+                      format. For example, if the number format is 0*x and
+                      you type 3 in the cell, the value 3xxxxxx is
+                      displayed. Note, the number of "x" characters
+                      displayed in the cell vary based on the width of the
+                      column.
+
+   _ (underline)      Skip the width of the next character. This is useful
+                      for lining up negative and positive values in
+                      different cells of the same column. For example, the
+                      number format _(0.0_);(0.0) align the numbers
+                      2.3 and -4.5 in the column even though the negative
+                      number has parentheses around it.
+
+   "text"             Display whatever text is inside the quotation marks.
+                      For example, the format 0.00 "dollars" displays
+                      "1.23 dollars" (without quotation marks) when you
+                      type 1.23 into the cell.
+
+   @                  Text placeholder. If there is text typed in the
+                      cell, the text from the cell is placed in the format
+                      where the @ symbol appears. For example, if the
+                      number format is "Bob "@" Smith" (including
+                      quotation marks) and you type "John" (without
+                      quotation marks) in the cell, the value
+                      "Bob John Smith" (without quotation marks) is
+                      displayed.
+
+   DATE FORMATS
+
+   m                  Display the month as a number without a leading zero.
+
+   mm                 Display the month as a number with a leading zero
+                      when appropriate.
+
+   mmm                Display the month as an abbreviation (Jan-Dec).
+
+   mmmm               Display the month as a full name (January-December).
+
+   d                  Display the day as a number without a leading zero.
+
+   dd                 Display the day as a number with a leading zero
+                      when appropriate.
+
+   ddd                Display the day as an abbreviation (Sun-Sat).
+
+   dddd               Display the day as a full name (Sunday-Saturday).
+
+   yy                 Display the year as a two-digit number.
+
+   yyyy               Display the year as a four-digit number.
+
+   TIME FORMATS
+
+   h                  Display the hour as a number without a leading zero.
+
+   [h]                Elapsed time, in hours. If you are working with a
+                      formula that returns a time where the number of hours
+                      exceeds 24, use a number format similar to
+                      [h]:mm:ss.
+
+   hh                 Display the hour as a number with a leading zero when
+                      appropriate. If the format contains AM or PM, then
+                      the hour is based on the 12-hour clock. Otherwise,
+                      the hour is based on the 24-hour clock.
+
+   m                  Display the minute as a number without a leading
+                      zero.
+
+   [m]                Elapsed time, in minutes. If you are working with a
+                      formula that returns a time where the number of
+                      minutes exceeds 60, use a number format similar to
+                      [mm]:ss.
+
+   mm                 Display the minute as a number with a leading zero
+                      when appropriate. The m or mm must appear immediately
+                      after the h or hh symbol, or Excel displays the
+                      month rather than the minute.
+
+   s                  Display the second as a number without a leading
+                      zero.
+
+   [s]                Elapsed time, in seconds. If you are working with a
+                      formula that returns a time where the number of
+                      seconds exceeds 60, use a number format similar to
+                      [ss].
+
+   ss                 Display the second as a number with a leading zero
+                      when appropriate.
+
+                      NOTE: If you want to display fractions of a second,
+                      use a number format similar to h:mm:ss.00.
+
+   AM/PM              Display the hour using a 12-hour clock. Excel
+   am/pm              displays AM, am, A, or a for times from midnight
+   A/P                until noon, and PM, pm, P, or p for times from noon
+   a/p                until midnight.</pre>
 </div>
 </div>
 </div>
@@ -1611,7 +1775,7 @@ builder.build(out) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.4')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.5')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -1948,6 +2112,15 @@ except text wrapping, rich texts and alignment options. All font options are sup
 </div>
 <h1 id="_changelog" class="sect0">Changelog</h1>
 <div class="sect1">
+<h2 id="_0_3_5">0.3.5</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Added ability to defined named styles for whole row and particular cell as well and fixed problem with
+merged cells formatting.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_0_3_4">0.3.4</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -2015,7 +2188,7 @@ to distinguish them from the ones returned from queries.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-02 10:26:47 CET
+Last updated 2017-03-03 11:15:41 CET
 </div>
 </div>
 </body>
