@@ -9,6 +9,8 @@ public interface Sheet {
 
     Collection<? extends Row> getRows();
 
+    Page getPage();
+
     Sheet getNext();
     Sheet getPrevious();
 

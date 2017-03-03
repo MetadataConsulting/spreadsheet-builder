@@ -51,4 +51,11 @@ public interface SheetDefinition {
     void filter(Keywords.Auto auto);
     Keywords.Auto getAuto();
 
+    /**
+     * Configures the basic page settings.
+     * @param pageDefinition closure defining the page settings
+     */
+    void page(@DelegatesTo(PageDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.PageDefinition") Closure pageDefinition);
+
+
 }

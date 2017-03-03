@@ -7,7 +7,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Keywords
+import org.modelcatalogue.spreadsheet.api.Page
 import org.modelcatalogue.spreadsheet.api.Sheet
+import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
 
@@ -59,12 +61,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
 
     @Override
     Sheet getNext() {
-        int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
+        int current = workbook.workbook.getSheetIndex(sheet.getSheetName())
 
         if (current == workbook.workbook.getNumberOfSheets() - 1) {
             return null
         }
-        XSSFSheet next = workbook.workbook.getSheetAt(current + 1);
+        XSSFSheet next = workbook.workbook.getSheetAt(current + 1)
         Sheet nextPoiSheet = workbook.sheets.find { it.sheet.sheetName == next.sheetName }
         if (nextPoiSheet) {
             return nextPoiSheet
@@ -85,6 +87,11 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
             return nextPoiSheet
         }
         return new PoiSheetDefinition(workbook, next)
+    }
+
+    @Override
+    Page getPage() {
+        return new PoiPageSettingsProvider(this)
     }
 
     private PoiRowDefinition findOrCreateRow(int zeroBasedRowNumber) {
@@ -157,6 +164,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     @Override
     Keywords.Auto getAuto() {
         return Keywords.Auto.AUTO
+    }
+
+    @Override
+    void page(@DelegatesTo(PageDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.PageDefinition") Closure pageDefinition) {
+        PageDefinition page = new PoiPageSettingsProvider(this)
+        page.with pageDefinition
     }
 
     private void createGroup(boolean collapsed, @DelegatesTo(SheetDefinition.class) Closure insideGroupDefinition) {

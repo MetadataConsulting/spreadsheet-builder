@@ -5,7 +5,10 @@ import groovy.lang.DelegatesTo;
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+import org.modelcatalogue.spreadsheet.api.Page;
 import org.modelcatalogue.spreadsheet.api.Row;
+import org.modelcatalogue.spreadsheet.api.Sheet;
+import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
 import org.modelcatalogue.spreadsheet.query.api.SheetCriterion;
@@ -17,11 +20,15 @@ import java.util.Collections;
 final class SimpleSheetCriterion extends AbstractCriterion<Row> implements SheetCriterion {
 
     private final Collection<SimpleRowCriterion> criteria = new ArrayList<SimpleRowCriterion>();
+    private final SimpleWorkbookCriterion parent;
 
-    SimpleSheetCriterion() {}
+    SimpleSheetCriterion(SimpleWorkbookCriterion parent) {
+        this.parent = parent;
+    }
 
-    private SimpleSheetCriterion(boolean disjoint) {
+    private SimpleSheetCriterion(boolean disjoint, SimpleWorkbookCriterion parent) {
         super(disjoint);
+        this.parent = parent;
     }
 
     @Override
@@ -69,6 +76,22 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
     }
 
     @Override
+    public void page(@DelegatesTo(PageCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.PageCriterion") Closure pageCriterion) {
+        SimplePageCriterion criterion = new SimplePageCriterion(parent);
+        DefaultGroovyMethods.with(criterion, pageCriterion);
+    }
+
+    @Override
+    public void page(final Predicate<Page> predicate) {
+        parent.addCondition(new Predicate<Sheet>() {
+            @Override
+            public boolean test(Sheet o) {
+                return predicate.test(o.getPage());
+            }
+        });
+    }
+
+    @Override
     public void row(int row) {
         row(number(row));
     }
@@ -79,6 +102,6 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
 
     @Override
     Predicate<Row> newDisjointCriterionInstance() {
-        return new SimpleSheetCriterion(true);
+        return new SimpleSheetCriterion(true, parent);
     }
 }

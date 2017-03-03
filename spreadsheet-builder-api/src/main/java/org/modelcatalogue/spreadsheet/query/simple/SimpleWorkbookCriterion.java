@@ -68,7 +68,7 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements 
 
     @Override
     public void sheet(@DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
-        SimpleSheetCriterion sheet = new SimpleSheetCriterion();
+        SimpleSheetCriterion sheet = new SimpleSheetCriterion(this);
         DefaultGroovyMethods.with(sheet, sheetCriterion);
         criteria.add(sheet);
     }

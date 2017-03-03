@@ -5,10 +5,8 @@ import groovy.lang.DelegatesTo;
 import groovy.transform.stc.ClosureParams;
 import groovy.transform.stc.FromString;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
-import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.api.Row;
-import org.modelcatalogue.spreadsheet.api.Sheet;
-import org.modelcatalogue.spreadsheet.api.Workbook;
+import org.modelcatalogue.spreadsheet.api.*;
+import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion;
 

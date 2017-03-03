@@ -43,7 +43,7 @@ class PoiExcelBuilderSpec extends Specification {
         when:
             int allCellSize = allCells.size()
         then:
-            allCellSize == 80128
+            allCellSize == 80129
 
         when:
             Collection<Cell> sampleCells = matcher.query({
@@ -401,6 +401,13 @@ class PoiExcelBuilderSpec extends Specification {
             redCell?.style?.foreground == HTMLColorProvider.red
             blueCell?.style?.foreground == HTMLColorProvider.blue
             greenCell?.style?.foreground == HTMLColorProvider.green
+        expect:
+            matcher.query {
+                sheet {
+                    page {
+                        paper a5
+                        orientation landscape
+            }   }   }.size() == 1
 
         when:
             open tmpFile
@@ -966,6 +973,17 @@ class PoiExcelBuilderSpec extends Specification {
                         width 10
                         height 50
                     }
+                }
+            }
+
+            sheet('Custom Page') {
+                page {
+                    paper a5
+                    fit width to 1
+                    orientation landscape
+                }
+                row {
+                    cell 'A5 Landcapse'
                 }
             }
         }

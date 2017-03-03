@@ -202,6 +202,25 @@ _Result_
 
 image:filtered.png[]
 
+=== Page Settings
+You can define the paper size, orientation and on how many pages should the sheet be printed within the `page` closure
+of the sheet.
+
+[source,groovy]
+----
+sheet('Custom Page') {
+    page {
+        paper a5
+        fit width to 1
+        orientation landscape
+    }
+    row {
+        cell 'A5 Landcapse'
+    }
+}
+----
+
+
 == Cells
 
 Cells are defined within rows. The simples example to create a cell is providing its value as a method call argument.
@@ -1141,6 +1160,22 @@ query.query {
 
 _Result:_ Every cell from sheet `Content`.
 
+You can query sheet by its page setting
+
+[source,groovy,subs='attributes']
+----
+query.query {
+    sheet {
+        page {
+            paper a5
+            orientation landscape
+        }
+    }
+}
+----
+
+_Result:_ Every cell on any sheet having the page settings set to A5 paper and with landscape orientation.
+
 You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
  rows by it number. The number starts with one so it corresponds the one displayed in Excel.
 
@@ -1337,6 +1372,9 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 ====
 
 = Changelog
+
+== 0.3.7
+Simple page settings, ability to set cells' width and height in centimeters or inches and fixed merging row and cell styles.
 
 == 0.3.6
 
