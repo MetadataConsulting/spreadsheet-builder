@@ -1373,6 +1373,15 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 
 = Changelog
 
+== 0.4.0
+Ability to also retrieve sheet or rows from the criteria query.
+
+=== Breaking Changes
+Criteria methods `query` and `all` no longer returns collections of cells but object of type `SpreadsheetCriteriaResult`.
+This object itself implements at least `Iterable<Cell>` interface allowing to use the results directly in the for loops
+and call most of the default groovy method available on collections. `Collection<Cell>` as well as `Collection<Row>`
+and `Collection<Sheet>` can be accessed using the result object properties `cells`, `rows` and `sheets`.
+
 == 0.3.7
 Simple page settings, ability to set cells' width and height in centimeters or inches and fixed merging row and cell styles.
 

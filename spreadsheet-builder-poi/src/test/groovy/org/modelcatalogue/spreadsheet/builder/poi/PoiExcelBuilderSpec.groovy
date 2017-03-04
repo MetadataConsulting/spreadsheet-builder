@@ -11,6 +11,7 @@ import org.modelcatalogue.spreadsheet.api.*
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 import spock.lang.Specification
 
@@ -35,26 +36,32 @@ class PoiExcelBuilderSpec extends Specification {
 
             SpreadsheetCriteria matcher =  PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile)
 
-            Collection<Cell> allCells = matcher.all()
+            SpreadsheetCriteriaResult allCells = matcher.all()
 
         then:
             allCells
 
         when:
             int allCellSize = allCells.size()
+            int sheetCount = allCells.sheets.size()
+            int rowsCount = allCells.rows.size()
         then:
             allCellSize == 80130
+            sheetCount == 19
+            rowsCount == 20065
 
         when:
-            Collection<Cell> sampleCells = matcher.query({
+            SpreadsheetCriteriaResult sampleCells = matcher.query({
                 sheet('Sample')
             })
         then:
             sampleCells
             sampleCells.size() == 2
+            sampleCells.sheets.size() == 1
+            sampleCells.rows.size() == 1
 
         when:
-            Collection<Cell> rowCells = matcher.query({
+            Iterable<Cell> rowCells = matcher.query({
                 sheet("many rows") {
                     row(1)
                 }
@@ -62,9 +69,11 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             rowCells
             rowCells.size() == 4
+            rowCells.sheets.size() == 1
+            rowCells.rows.size() == 1
 
         when:
-            Collection<Cell> someCells = matcher.query({
+            Iterable<Cell> someCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -78,7 +87,7 @@ class PoiExcelBuilderSpec extends Specification {
             someCells.size() == 1
 
         when:
-            Collection<Cell> commentedCells = matcher.query({
+            Iterable<Cell> commentedCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -92,7 +101,7 @@ class PoiExcelBuilderSpec extends Specification {
             commentedCells.size() == 1
 
         when:
-            Collection<Cell> namedCells = matcher.query({
+            Iterable<Cell> namedCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -105,7 +114,7 @@ class PoiExcelBuilderSpec extends Specification {
             namedCells
             namedCells.size() == 1
         when:
-            Collection<Cell> dateCells = matcher.query({
+            Iterable<Cell> dateCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -120,7 +129,7 @@ class PoiExcelBuilderSpec extends Specification {
             dateCells
             dateCells.size() == 1
         when:
-            Collection<Cell> filledCells = matcher.query({
+            Iterable<Cell> filledCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -135,7 +144,7 @@ class PoiExcelBuilderSpec extends Specification {
             filledCells
             filledCells.size() == 1
         when:
-            Collection<Cell> magentaCells = matcher.query({
+            Iterable<Cell> magentaCells = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -150,7 +159,7 @@ class PoiExcelBuilderSpec extends Specification {
             magentaCells
             magentaCells.size() == 1
         when:
-            Collection<Cell> redOnes = matcher.query({
+            Iterable<Cell> redOnes = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -166,9 +175,10 @@ class PoiExcelBuilderSpec extends Specification {
         then:
             redOnes
             redOnes.size() == 20006
+            redOnes.rows.size() == 20004
 
         when:
-            Collection<Cell> boldOnes = matcher.query({
+            Iterable<Cell> boldOnes = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -186,7 +196,7 @@ class PoiExcelBuilderSpec extends Specification {
             boldOnes.size() == 5
 
         when:
-            Collection<Cell> bigOnes = matcher.query({
+            Iterable<Cell> bigOnes = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -205,7 +215,7 @@ class PoiExcelBuilderSpec extends Specification {
 
 
         when:
-            Collection<Cell> bordered = matcher.query({
+            Iterable<Cell> bordered = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -222,7 +232,7 @@ class PoiExcelBuilderSpec extends Specification {
             bordered
             bordered.size() == 10
         when:
-            Collection<Cell> combined = matcher.query({
+            Iterable<Cell> combined = matcher.query({
                 sheet {
                     row {
                         cell {
@@ -242,7 +252,7 @@ class PoiExcelBuilderSpec extends Specification {
 
 
         when:
-            Collection<Cell> conjunction = matcher.query({
+            Iterable<Cell> conjunction = matcher.query({
                 sheet {
                     row {
                         or {
@@ -261,7 +271,7 @@ class PoiExcelBuilderSpec extends Specification {
             conjunction.size() == 3
 
         when:
-            Collection<Cell> traversal = matcher.query({
+            Iterable<Cell> traversal = matcher.query({
                 sheet('Traversal') {
                     row {
                         cell {
@@ -339,7 +349,7 @@ class PoiExcelBuilderSpec extends Specification {
             }.size() == 1
 
         when:
-            List<Cell> zeroCells = matcher.query({
+            Iterable<Cell> zeroCells = matcher.query({
                 sheet('Zero') {
                     row {
                         cell {
