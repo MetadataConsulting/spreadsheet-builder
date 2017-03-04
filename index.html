@@ -1893,31 +1893,31 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Sheet content = query.query {
     sheet('Content')
-}</code></pre>
+}.sheet</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><em>Result:</em> Every cell from sheet <code>Content</code>.</p>
+<p><em>Result:</em> Sheet <code>Content</code> if present.</p>
 </div>
 <div class="paragraph">
 <p>You can query sheet by its page setting</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Collection<Sheet> a5s = query.query {
     sheet {
         page {
             paper a5
             orientation landscape
         }
     }
-}</code></pre>
+}.sheets</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><em>Result:</em> Every cell on any sheet having the page settings set to A5 paper and with landscape orientation.</p>
+<p><em>Result:</em> Every sheet having the page settings set to A5 paper and with landscape orientation.</p>
 </div>
 <div class="paragraph">
 <p>You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
@@ -1925,15 +1925,15 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Collection<Row> rows = query.query {
     sheet(name({ name.startsWith('Con') })) {
         row(1)
     }
-}</code></pre>
+}.rows</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><em>Result:</em> Every cell from every first row of every sheet which name starts with <code>Con</code>.</p>
+<p><em>Result:</em> Every first row of every sheet which name starts with <code>Con</code>.</p>
 </div>
 <div class="paragraph">
 <p>If you repeat the call to either <code>sheet</code> or <code>row</code> query method you it&#8217;s understood as <code>and</code> condition but
@@ -2268,7 +2268,7 @@ to distinguish them from the ones returned from queries.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-04 17:21:27 CET
+Last updated 2017-03-04 17:37:59 CET
 </div>
 </div>
 </body>
