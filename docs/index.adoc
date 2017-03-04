@@ -1153,42 +1153,42 @@ You can query only specific sheet or row
 
 [source,groovy,subs='attributes']
 ----
-query.query {
+Sheet content = query.query {
     sheet('Content')
-}
+}.sheet
 ----
 
-_Result:_ Every cell from sheet `Content`.
+_Result:_ Sheet `Content` if present.
 
 You can query sheet by its page setting
 
 [source,groovy,subs='attributes']
 ----
-query.query {
+Collection<Sheet> a5s = query.query {
     sheet {
         page {
             paper a5
             orientation landscape
         }
     }
-}
+}.sheets
 ----
 
-_Result:_ Every cell on any sheet having the page settings set to A5 paper and with landscape orientation.
+_Result:_ Every sheet having the page settings set to A5 paper and with landscape orientation.
 
 You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
  rows by it number. The number starts with one so it corresponds the one displayed in Excel.
 
 [source,groovy,subs='attributes']
 ----
-query.query {
+Collection<Row> rows = query.query {
     sheet(name({ name.startsWith('Con') })) {
         row(1)
     }
-}
+}.rows
 ----
 
-_Result:_ Every cell from every first row of every sheet which name starts with `Con`.
+_Result:_ Every first row of every sheet which name starts with `Con`.
 
 If you repeat the call to either `sheet` or `row` query method you it's understood as `and` condition but
  you can also create `or` condition by wrapping the calls with `or` method.

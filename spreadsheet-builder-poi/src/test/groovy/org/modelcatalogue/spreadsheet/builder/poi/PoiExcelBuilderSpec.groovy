@@ -362,6 +362,8 @@ class PoiExcelBuilderSpec extends Specification {
             zeroCells
             zeroCells.size() == 1
             zeroCells.first().value == 0d
+            zeroCells.cell
+            zeroCells.cell.value == 0d
 
         when: 'you shoud be able to cast the to poi objects'
             Cell testCell = zeroCells.first()
