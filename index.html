@@ -412,7 +412,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.3.7" />
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.4.0i" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -484,6 +484,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_changelog">Changelog</a>
 <ul class="sectlevel1">
+<li><a href="#_0_4_0">0.4.0</a>
+<ul class="sectlevel2">
+<li><a href="#_breaking_changes">Breaking Changes</a></li>
+</ul>
+</li>
 <li><a href="#_0_3_7">0.3.7</a></li>
 <li><a href="#_0_3_6">0.3.6</a></li>
 <li><a href="#_0_3_5">0.3.5</a></li>
@@ -492,7 +497,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_0_3_2">0.3.2</a></li>
 <li><a href="#_0_3_0">0.3.0</a>
 <ul class="sectlevel2">
-<li><a href="#_breaking_changes">Breaking Changes</a></li>
+<li><a href="#_breaking_changes_2">Breaking Changes</a></li>
 </ul>
 </li>
 <li><a href="#_0_2_0">0.2.0</a></li>
@@ -521,7 +526,7 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.7')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.4.0i')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -1799,7 +1804,7 @@ builder.build(out) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.3.7')
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.4.0i')
 // fixes bugs on Groovy 2.4.x
 @Grab(group='commons-codec', module='commons-codec', version='1.10')
 @GrabExclude('org.codehaus.groovy:groovy-all')
@@ -2154,6 +2159,23 @@ except text wrapping, rich texts and alignment options. All font options are sup
 </div>
 <h1 id="_changelog" class="sect0">Changelog</h1>
 <div class="sect1">
+<h2 id="_0_4_0">0.4.0</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ability to also retrieve sheet or rows from the criteria query.</p>
+</div>
+<div class="sect2">
+<h3 id="_breaking_changes">Breaking Changes</h3>
+<div class="paragraph">
+<p>Criteria methods <code>query</code> and <code>all</code> no longer returns collections of cells but object of type <code>SpreadsheetCriteriaResult</code>.
+This object itself implements at least <code>Iterable&lt;Cell&gt;</code> interface allowing to use the results directly in the for loops
+and call most of the default groovy method available on collections. <code>Collection&lt;Cell&gt;</code> as well as <code>Collection&lt;Row&gt;</code>
+and <code>Collection&lt;Sheet&gt;</code> can be accessed using the result object properties <code>cells</code>, <code>rows</code> and <code>sheets</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_0_3_7">0.3.7</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -2206,7 +2228,7 @@ merged cells formatting.</p>
 <h2 id="_0_3_0">0.3.0</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_breaking_changes">Breaking Changes</h3>
+<h3 id="_breaking_changes_2">Breaking Changes</h3>
 <div class="paragraph">
 <p>No more single word mutating DSL statements such as <code>locked</code> or <code>bold</code> as they conflicts with newly introduced getters.
 Keywords which are already getters such as <code>black</code> for color of same name remain unaffected.</p>
@@ -2246,7 +2268,7 @@ to distinguish them from the ones returned from queries.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-03 23:00:59 CET
+Last updated 2017-03-04 17:21:27 CET
 </div>
 </div>
 </body>
