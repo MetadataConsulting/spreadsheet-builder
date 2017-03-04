@@ -1224,6 +1224,26 @@ query.query {
 
 _Result:_ Every cell from first ten rows of every sheet in the spreadsheet.
 
+If you have a row containing headers to the following rows you can convert any of following rows to data row which
+provide convenient way how to retrieve cells using the label specified in the header
+
+[source,groovy]
+----
+Row manyRowsHeader = matcher.query {
+    sheet('many rows') {
+        row(1)
+}   }.row
+
+Row manyRowsDataRow= matcher.query {
+    sheet('many rows') {
+        row(2)
+}   }.row
+
+DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader)
+assert dataRow['One']
+assert dataRow['One'].value == 1
+----
+
 == Cells
 
 You can easily specify which cells you want to return from the query. For example by specifying desired value.

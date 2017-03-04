@@ -16,7 +16,6 @@ import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 import spock.lang.Specification
 
 import java.awt.*
-import java.util.List
 
 import static org.modelcatalogue.spreadsheet.builder.poi.PoiCellDefinition.fixName
 
@@ -71,6 +70,28 @@ class PoiExcelBuilderSpec extends Specification {
             rowCells.size() == 4
             rowCells.sheets.size() == 1
             rowCells.rows.size() == 1
+        when:
+            Row manyRowsHeader = matcher.query {
+                sheet('many rows') {
+                    row(1)
+            }   }.row
+        then:
+            manyRowsHeader
+        when:
+            Row manyRowsDataRow= matcher.query {
+                sheet('many rows') {
+                    row(2)
+            }   }.row
+            DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader)
+        then:
+            dataRow['One']
+            dataRow['One'].value == '1'
+
+        when:
+            DataRow dataRowFromMapping = DataRow.create(manyRowsDataRow, primo: 1)
+        then:
+            dataRowFromMapping['primo']
+            dataRowFromMapping['primo'].value == '1'
 
         when:
             Iterable<Cell> someCells = matcher.query({
