@@ -67,7 +67,7 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell, RowCriterion> imp
     @Override
     public void cell(Configurer<CellCriterion> cellCriterion) {
         SimpleCellCriterion criterion = new SimpleCellCriterion();
-        cellCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(cellCriterion, criterion);
         addCondition(criterion);
     }
 

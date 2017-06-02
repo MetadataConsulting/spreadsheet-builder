@@ -65,7 +65,7 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet, WorkbookCri
     @Override
     public void sheet(Configurer<SheetCriterion> sheetCriterion) {
         SimpleSheetCriterion sheet = new SimpleSheetCriterion(this);
-        sheetCriterion.configure(sheet);
+        Configurer.Runner.doConfigure(sheetCriterion, sheet);
         criteria.add(sheet);
     }
 

@@ -53,7 +53,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     @Override
     void base(String stylename) {
         checkSealed()
-        workbook.getStyleDefinition(stylename)?.configure(this)
+        Configurer.Runner.doConfigure(workbook.getStyleDefinition(stylename), this)
     }
 
     void checkSealed() {
@@ -165,7 +165,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
         if (!poiFont) {
             poiFont = new PoiFontDefinition(workbook.workbook, style)
         }
-        fontConfiguration.configure(poiFont)
+        Configurer.Runner.doConfigure(fontConfiguration, poiFont)
     }
 
     @Override
@@ -231,7 +231,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     void border(Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        borderConfiguration.configure(poiBorder)
+        Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
 
         Keywords.BorderSide.BORDER_SIDES.each { Keywords.BorderSide side ->
             poiBorder.applyTo(side)
@@ -242,7 +242,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     void border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        borderConfiguration.configure(poiBorder)
+        Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
         poiBorder.applyTo(location)
     }
 
@@ -251,7 +251,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
                 Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        borderConfiguration.configure(poiBorder)
+        Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
 
@@ -262,7 +262,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
                 Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        borderConfiguration.configure(poiBorder)
+        Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
         poiBorder.applyTo(third)

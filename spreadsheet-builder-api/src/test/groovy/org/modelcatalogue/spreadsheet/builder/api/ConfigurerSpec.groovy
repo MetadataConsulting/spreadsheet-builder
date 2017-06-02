@@ -11,7 +11,7 @@ class ConfigurerSpec extends Specification {
                 text = "Hello World"
             }
         when:
-            messageConfigurer.configure(message)
+            Configurer.Runner.doConfigure(messageConfigurer, message)
         then:
             message.text == "Hello World"
     }

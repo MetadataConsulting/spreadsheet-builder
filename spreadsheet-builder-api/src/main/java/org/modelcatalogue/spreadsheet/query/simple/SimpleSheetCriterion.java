@@ -50,7 +50,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     @Override
     public void row(Configurer<RowCriterion> rowCriterion) {
         SimpleRowCriterion criterion = new SimpleRowCriterion();
-        rowCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(rowCriterion, criterion);
         criteria.add(criterion);
     }
 
@@ -74,7 +74,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     @Override
     public void page(Configurer<PageCriterion> pageCriterion) {
         SimplePageCriterion criterion = new SimplePageCriterion(parent);
-        pageCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(pageCriterion, criterion);
     }
 
     @Override

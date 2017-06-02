@@ -91,7 +91,7 @@ class PoiRowDefinition implements RowDefinition, Row {
             poiCell.style styleDefinition
         }
 
-        cellDefinition.configure(poiCell)
+        Configurer.Runner.doConfigure(cellDefinition, poiCell)
 
         nextColNumber += poiCell.colspan
 
@@ -102,7 +102,7 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     private void handleSpans(PoiCellDefinition poiCell) {
         if (poiCell.colspan > 1 || poiCell.rowspan > 1) {
-            xssfRow.sheet.addMergedRegion(poiCell.cellRangeAddress);
+            xssfRow.sheet.addMergedRegion(poiCell.cellRangeAddress)
         }
     }
 
@@ -122,7 +122,7 @@ class PoiRowDefinition implements RowDefinition, Row {
             poiCell.style styleDefinition
         }
 
-        cellDefinition.configure(poiCell)
+        Configurer.Runner.doConfigure(cellDefinition, poiCell)
 
         handleSpans(poiCell)
 
@@ -218,7 +218,7 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     private void createGroup(boolean collapsed, Configurer<RowDefinition> insideGroupDefinition) {
         startPositions.push nextColNumber
-        insideGroupDefinition.configure(this)
+        Configurer.Runner.doConfigure(insideGroupDefinition, this)
 
         int startPosition = startPositions.pop()
 
@@ -243,7 +243,7 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     public <T> T asType(Class<T> type) {
         if (type.isInstance(row)) {
-            return row
+            return row as T
         }
         return super.asType(type)
     }

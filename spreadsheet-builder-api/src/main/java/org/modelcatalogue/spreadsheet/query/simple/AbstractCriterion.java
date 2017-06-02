@@ -31,7 +31,7 @@ abstract class AbstractCriterion<T, Criterion extends Predicate<T>> implements P
 
     public void or(Configurer<Criterion> sheetCriterion) {
         Criterion criterion = newDisjointCriterionInstance();
-        sheetCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(sheetCriterion, criterion);
         addCondition(criterion);
     }
 

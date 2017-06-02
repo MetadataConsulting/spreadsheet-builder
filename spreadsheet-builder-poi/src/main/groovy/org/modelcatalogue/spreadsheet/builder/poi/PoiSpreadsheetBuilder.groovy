@@ -9,16 +9,16 @@ import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition
 
 enum PoiSpreadsheetBuilder implements SpreadsheetBuilder {
 
-    INSTANCE;
+    INSTANCE
 
     @Override
-    SpreadsheetDefinition build( Configurer<WorkbookDefinition> workbookDefinition) {
+    SpreadsheetDefinition build(Configurer<WorkbookDefinition> workbookDefinition) {
         return buildInternal(new XSSFWorkbook(), workbookDefinition)
     }
 
     private static PoiWorkbookDefinition buildInternal(XSSFWorkbook workbook, Configurer<WorkbookDefinition> workbookDefinition) {
         PoiWorkbookDefinition poiWorkbook = new PoiWorkbookDefinition(workbook)
-        workbookDefinition.configure(poiWorkbook)
+        Configurer.Runner.doConfigure(workbookDefinition, poiWorkbook)
         poiWorkbook.resolve()
 
         return poiWorkbook

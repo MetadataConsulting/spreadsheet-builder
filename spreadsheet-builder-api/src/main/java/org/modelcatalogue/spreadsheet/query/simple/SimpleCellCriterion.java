@@ -101,7 +101,7 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> i
     @Override
     public void style(Configurer<CellStyleCriterion> styleCriterion) {
         SimpleCellStyleCriterion criterion = new SimpleCellStyleCriterion(this);
-        styleCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(styleCriterion, criterion);
         // no need to add criteria, they are added by the style criterion itself
     }
 

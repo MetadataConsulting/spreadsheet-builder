@@ -26,7 +26,7 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
     private Collection<Cell> getCellsInternal(int currentMax) {
         Collection<Cell> cells = new LinkedHashSet<Cell>();
         SimpleWorkbookCriterion criterion = new SimpleWorkbookCriterion();
-        workbookCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(workbookCriterion, criterion);
 
         for (Sheet sheet : workbook.getSheets()) {
             if (criterion.test(sheet)) {
@@ -69,7 +69,7 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
     private Collection<Row> getRowsInternal(int currentMax) {
         Collection<Row> rows = new LinkedHashSet<Row>();
         SimpleWorkbookCriterion criterion = new SimpleWorkbookCriterion();
-        workbookCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(workbookCriterion, criterion);
 
         for (Sheet sheet : workbook.getSheets()) {
             if (criterion.test(sheet)) {
@@ -114,7 +114,7 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
     private Collection<Sheet> getSheetsInternal(int currentMax) {
         Collection<Sheet> sheets = new LinkedHashSet<Sheet>();
         SimpleWorkbookCriterion criterion = new SimpleWorkbookCriterion();
-        workbookCriterion.configure(criterion);
+        Configurer.Runner.doConfigure(workbookCriterion, criterion);
 
         sheets_loop:
         for (Sheet sheet : workbook.getSheets()) {

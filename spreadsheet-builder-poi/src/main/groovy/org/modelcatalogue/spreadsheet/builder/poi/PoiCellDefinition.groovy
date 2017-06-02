@@ -90,12 +90,12 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     @Override
     Object getValue() {
         switch (xssfCell.cellType) {
-            case Cell.CELL_TYPE_BLANK: return '';
-            case Cell.CELL_TYPE_BOOLEAN: return xssfCell.getBooleanCellValue();
-            case Cell.CELL_TYPE_ERROR: return xssfCell.getErrorCellString();
-            case Cell.CELL_TYPE_FORMULA: return xssfCell.getCellFormula();
-            case Cell.CELL_TYPE_NUMERIC: return xssfCell.getNumericCellValue();
-            case Cell.CELL_TYPE_STRING: return xssfCell.getStringCellValue();
+            case Cell.CELL_TYPE_BLANK: return ''
+            case Cell.CELL_TYPE_BOOLEAN: return xssfCell.getBooleanCellValue()
+            case Cell.CELL_TYPE_ERROR: return xssfCell.getErrorCellString()
+            case Cell.CELL_TYPE_FORMULA: return xssfCell.getCellFormula()
+            case Cell.CELL_TYPE_NUMERIC: return xssfCell.getNumericCellValue()
+            case Cell.CELL_TYPE_STRING: return xssfCell.getStringCellValue()
         }
         return xssfCell.getRawValue()
     }
@@ -145,7 +145,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
             poiCellStyle = new PoiCellStyleDefinition(this)
         }
         poiCellStyle.checkSealed()
-        styleDefinition.configure(poiCellStyle)
+        Configurer.Runner.doConfigure(styleDefinition, poiCellStyle)
     }
 
     @Override
@@ -163,7 +163,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     @Override
     void comment(Configurer<CommentDefinition> commentDefinition) {
         PoiCommentDefinition poiComment = new PoiCommentDefinition()
-        commentDefinition.configure poiComment
+        Configurer.Runner.doConfigure(commentDefinition, poiComment)
         poiComment.applyTo xssfCell
     }
 
@@ -215,7 +215,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         }
         poiCellStyle.checkSealed()
         for (String name in names) {
-            row.sheet.workbook.getStyleDefinition(name)?.configure(poiCellStyle)
+            Configurer.Runner.doConfigure(row.sheet.workbook.getStyleDefinition(name), poiCellStyle)
         }
 
     }
@@ -229,7 +229,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     @Override
     void styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
         for (String name in names) {
-            row.sheet.workbook.getStyleDefinition(name)?.configure(poiCellStyle)
+            Configurer.Runner.doConfigure(row.sheet.workbook.getStyleDefinition(name), poiCellStyle)
         }
         style styleDefinition
     }
@@ -320,7 +320,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         }
 
         PoiFontDefinition font = new PoiFontDefinition(xssfCell.row.sheet.workbook)
-        fontConfiguration.configure(font)
+        Configurer.Runner.doConfigure(fontConfiguration, font)
 
         richTextParts << new RichTextPart(run, font, start, end)
     }
@@ -575,7 +575,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
 
     protected static XSSFCell getCell(XSSFRow row, int column) {
-        XSSFCell cell = row.getCell(column);
+        XSSFCell cell = row.getCell(column)
         if (cell) {
             return cell
         }

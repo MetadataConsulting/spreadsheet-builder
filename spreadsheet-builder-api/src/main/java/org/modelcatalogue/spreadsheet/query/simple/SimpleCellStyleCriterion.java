@@ -161,7 +161,7 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
     @Override
     public void font(Configurer<FontCriterion> fontCriterion) {
         SimpleFontCriterion simpleFontCriterion = new SimpleFontCriterion(parent);
-        fontCriterion.configure(simpleFontCriterion);
+        Configurer.Runner.doConfigure(fontCriterion, simpleFontCriterion);
     }
 
     @Override
@@ -187,7 +187,7 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
     private void border(Keywords.BorderSide[] sides, Configurer<BorderCriterion> borderConfiguration) {
         for (Keywords.BorderSide side : sides) {
             SimpleBorderCriterion criterion = new SimpleBorderCriterion(parent, side);
-            borderConfiguration.configure(criterion);
+            Configurer.Runner.doConfigure(borderConfiguration, criterion);
         }
     }
 

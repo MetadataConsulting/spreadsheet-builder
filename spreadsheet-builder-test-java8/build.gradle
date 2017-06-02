@@ -1,0 +1,7 @@
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile project(':spreadsheet-builder-poi')
+    testCompile 'junit:junit:4.11'
+}

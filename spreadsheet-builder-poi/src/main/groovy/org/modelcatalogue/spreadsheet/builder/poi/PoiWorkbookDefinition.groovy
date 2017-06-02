@@ -34,7 +34,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
             sheets[name] = sheet
         }
 
-        sheetDefinition.configure sheet
+        Configurer.Runner.doConfigure(sheetDefinition, sheet)
 
         sheet.processAutoColumns()
         sheet.processAutomaticFilter()
@@ -67,7 +67,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
         }
 
         style = new PoiCellStyleDefinition(this)
-        getStyleDefinition(name)?.configure(style)
+        Configurer.Runner.doConfigure(getStyleDefinition(name), style)
         style.seal()
 
         namedStyles[name] = style
@@ -86,7 +86,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
 
         style = new PoiCellStyleDefinition(this)
         for (String n in names) {
-            getStyleDefinition(n)?.configure(style)
+            Configurer.Runner.doConfigure(getStyleDefinition(n), style)
         }
         style.seal()
 

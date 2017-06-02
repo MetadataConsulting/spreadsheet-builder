@@ -112,7 +112,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     @Override
     void row(Configurer<RowDefinition> rowDefinition) {
         PoiRowDefinition row = findOrCreateRow nextRowNumber++
-        rowDefinition.configure(row)
+        Configurer.Runner.doConfigure(rowDefinition, row)
     }
 
     @Override
@@ -121,7 +121,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
         nextRowNumber = oneBasedRowNumber
 
         PoiRowDefinition poiRow = findOrCreateRow oneBasedRowNumber - 1
-        rowDefinition.configure(poiRow)
+        Configurer.Runner.doConfigure(rowDefinition, poiRow)
     }
 
     @Override
@@ -168,12 +168,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     @Override
     void page(Configurer<PageDefinition> pageDefinition) {
         PageDefinition page = new PoiPageSettingsProvider(this)
-        pageDefinition.configure(page)
+        Configurer.Runner.doConfigure(pageDefinition, page)
     }
 
     private void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {
         startPositions.push nextRowNumber
-        insideGroupDefinition.configure(this)
+        Configurer.Runner.doConfigure(insideGroupDefinition, this)
 
         int startPosition = startPositions.pop()
 

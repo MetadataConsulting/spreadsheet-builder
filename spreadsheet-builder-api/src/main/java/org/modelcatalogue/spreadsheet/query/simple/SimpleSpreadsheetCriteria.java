@@ -25,7 +25,7 @@ public final class SimpleSpreadsheetCriteria implements SpreadsheetCriteria {
 
     @Override
     public SpreadsheetCriteriaResult all() {
-        return queryInternal(Integer.MAX_VALUE, Configurer.<WorkbookCriterion>noop());
+        return queryInternal(Integer.MAX_VALUE, Configurer.Noop.NOOP);
     }
 
     @Override
