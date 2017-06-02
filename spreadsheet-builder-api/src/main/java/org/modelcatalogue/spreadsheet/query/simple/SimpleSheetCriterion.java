@@ -1,13 +1,9 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Page;
 import org.modelcatalogue.spreadsheet.api.Row;
 import org.modelcatalogue.spreadsheet.api.Sheet;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
@@ -17,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-final class SimpleSheetCriterion extends AbstractCriterion<Row> implements SheetCriterion {
+final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> implements SheetCriterion {
 
     private final Collection<SimpleRowCriterion> criteria = new ArrayList<SimpleRowCriterion>();
     private final SimpleWorkbookCriterion parent;
@@ -52,20 +48,20 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
     }
 
     @Override
-    public void row(@DelegatesTo(RowCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
+    public void row(Configurer<RowCriterion> rowCriterion) {
         SimpleRowCriterion criterion = new SimpleRowCriterion();
-        DefaultGroovyMethods.with(criterion, rowCriterion);
+        rowCriterion.configure(criterion);
         criteria.add(criterion);
     }
 
     @Override
-    public void row(int row, @DelegatesTo(RowCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
+    public void row(int row, Configurer<RowCriterion> rowCriterion) {
         row(row);
         row(rowCriterion);
     }
 
     @Override
-    public void row(Predicate<Row> predicate, @DelegatesTo(RowCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
+    public void row(Predicate<Row> predicate, Configurer<RowCriterion> rowCriterion) {
         row(predicate);
         row(rowCriterion);
     }
@@ -76,9 +72,9 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
     }
 
     @Override
-    public void page(@DelegatesTo(PageCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.PageCriterion") Closure pageCriterion) {
+    public void page(Configurer<PageCriterion> pageCriterion) {
         SimplePageCriterion criterion = new SimplePageCriterion(parent);
-        DefaultGroovyMethods.with(criterion, pageCriterion);
+        pageCriterion.configure(criterion);
     }
 
     @Override
@@ -101,7 +97,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row> implements Sheet
     }
 
     @Override
-    Predicate<Row> newDisjointCriterionInstance() {
+    SheetCriterion newDisjointCriterionInstance() {
         return new SimpleSheetCriterion(true, parent);
     }
 }

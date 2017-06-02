@@ -1,12 +1,8 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Comment;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
@@ -14,10 +10,9 @@ import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import java.util.Calendar;
 import java.util.Date;
 
-final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
+final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> implements CellCriterion {
 
-    SimpleCellCriterion() {
-    }
+    SimpleCellCriterion() {}
 
     private SimpleCellCriterion(boolean disjoint) {
         super(disjoint);
@@ -104,9 +99,9 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellC
 
 
     @Override
-    public void style(@DelegatesTo(CellStyleCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion") Closure styleCriterion) {
+    public void style(Configurer<CellStyleCriterion> styleCriterion) {
         SimpleCellStyleCriterion criterion = new SimpleCellStyleCriterion(this);
-        DefaultGroovyMethods.with(criterion, styleCriterion);
+        styleCriterion.configure(criterion);
         // no need to add criteria, they are added by the style criterion itself
     }
 
@@ -197,7 +192,7 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellC
     }
 
     @Override
-    Predicate<Cell> newDisjointCriterionInstance() {
+    CellCriterion newDisjointCriterionInstance() {
         return new SimpleCellCriterion(true);
     }
 }

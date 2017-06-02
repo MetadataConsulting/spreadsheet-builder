@@ -1,13 +1,12 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
-import groovy.transform.stc.ClosureParams
-import groovy.transform.stc.FromString
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
+import org.modelcatalogue.spreadsheet.builder.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 
 class PoiRowDefinition implements RowDefinition, Row {
@@ -17,7 +16,7 @@ class PoiRowDefinition implements RowDefinition, Row {
 
     private String styleName
     private String[] styleNames
-    private Closure styleDefinition
+    private Configurer<CellStyleDefinition> styleDefinition
 
     private final List<Integer> startPositions = []
     private int nextColNumber = 0
@@ -79,7 +78,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(@DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
+    void cell(Configurer<CellDefinition> cellDefinition) {
         PoiCellDefinition poiCell = findOrCreateCell nextColNumber
 
         if (styles) {
@@ -92,7 +91,7 @@ class PoiRowDefinition implements RowDefinition, Row {
             poiCell.style styleDefinition
         }
 
-        poiCell.with cellDefinition
+        cellDefinition.configure(poiCell)
 
         nextColNumber += poiCell.colspan
 
@@ -108,7 +107,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(int column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
+    void cell(int column, Configurer<CellDefinition> cellDefinition) {
         nextColNumber = column
 
         PoiCellDefinition poiCell = findOrCreateCell column - 1
@@ -123,7 +122,7 @@ class PoiRowDefinition implements RowDefinition, Row {
             poiCell.style styleDefinition
         }
 
-        poiCell.with cellDefinition
+        cellDefinition.configure(poiCell)
 
         handleSpans(poiCell)
 
@@ -131,12 +130,12 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
+    void cell(String column, Configurer<CellDefinition> cellDefinition) {
         cell Cell.Util.parseColumn(column), cellDefinition
     }
 
     @Override
-    void style(@DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    void style(Configurer<CellStyleDefinition> styleDefinition) {
         this.styleDefinition = styleDefinition
     }
 
@@ -146,13 +145,13 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    void style(String name, Configurer<CellStyleDefinition> styleDefinition) {
         style name
         style styleDefinition
     }
 
     @Override
-    void styles(Iterable<String> names, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    void styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
         styles names
         style styleDefinition
     }
@@ -177,12 +176,12 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void group(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
+    void group(Configurer<RowDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
     }
 
     @Override
-    void collapse(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
+    void collapse(Configurer<RowDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
 
@@ -217,9 +216,9 @@ class PoiRowDefinition implements RowDefinition, Row {
         return sheet.createRowWrapper(number + howMany)
     }
 
-    private void createGroup(boolean collapsed, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
+    private void createGroup(boolean collapsed, Configurer<RowDefinition> insideGroupDefinition) {
         startPositions.push nextColNumber
-        with insideGroupDefinition
+        insideGroupDefinition.configure(this)
 
         int startPosition = startPositions.pop()
 

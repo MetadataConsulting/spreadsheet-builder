@@ -1,7 +1,5 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
-import groovy.transform.stc.ClosureParams
-import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
@@ -17,11 +15,13 @@ import org.modelcatalogue.spreadsheet.builder.api.AbstractCellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 
 import org.modelcatalogue.spreadsheet.api.Color
+import org.modelcatalogue.spreadsheet.builder.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.Keywords
 
 import org.modelcatalogue.spreadsheet.api.HorizontalAlignmentConfigurer
+import sun.security.krb5.Config
 
 import java.util.regex.Matcher
 
@@ -53,7 +53,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     @Override
     void base(String stylename) {
         checkSealed()
-        with workbook.getStyleDefinition(stylename)
+        workbook.getStyleDefinition(stylename)?.configure(this)
     }
 
     void checkSealed() {
@@ -160,12 +160,12 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void font(@DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
+    void font(Configurer<FontDefinition> fontConfiguration) {
         checkSealed()
         if (!poiFont) {
             poiFont = new PoiFontDefinition(workbook.workbook, style)
         }
-        poiFont.with fontConfiguration
+        fontConfiguration.configure(poiFont)
     }
 
     @Override
@@ -228,10 +228,10 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void border(@DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+    void border(Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        poiBorder.with borderConfiguration
+        borderConfiguration.configure(poiBorder)
 
         Keywords.BorderSide.BORDER_SIDES.each { Keywords.BorderSide side ->
             poiBorder.applyTo(side)
@@ -239,19 +239,19 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void border(Keywords.BorderSide location, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+    void border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        poiBorder.with borderConfiguration
+        borderConfiguration.configure(poiBorder)
         poiBorder.applyTo(location)
     }
 
     @Override
     void border(Keywords.BorderSide first, Keywords.BorderSide second,
-                @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+                Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        poiBorder.with borderConfiguration
+        borderConfiguration.configure(poiBorder)
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
 
@@ -259,10 +259,10 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
 
     @Override
     void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third,
-                @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+                Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
-        poiBorder.with borderConfiguration
+        borderConfiguration.configure(poiBorder)
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
         poiBorder.applyTo(third)

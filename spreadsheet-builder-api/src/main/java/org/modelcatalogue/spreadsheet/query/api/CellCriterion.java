@@ -1,14 +1,12 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Comment;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 
 import java.util.Date;
 
-public interface CellCriterion {
+public interface CellCriterion extends Predicate<Cell> {
 
     void date(Date value);
     void date(Predicate<Date> predicate);
@@ -22,7 +20,7 @@ public interface CellCriterion {
     void value(Object value);
     void bool(Boolean value);
 
-    void style(@DelegatesTo(CellStyleCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion") Closure styleCriterion);
+    void style(Configurer<CellStyleCriterion> styleCriterion);
 
     void rowspan(int span);
     void rowspan(Predicate<Integer> predicate);
@@ -36,6 +34,6 @@ public interface CellCriterion {
     void comment(String comment);
     void comment(Predicate<Comment> predicate);
 
-    void or(@DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure sheetCriterion);
+    void or(Configurer<CellCriterion> sheetCriterion);
 
 }

@@ -1,11 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Sheet;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.SheetCriterion;
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion;
@@ -14,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements WorkbookCriterion {
+final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet, WorkbookCriterion> implements WorkbookCriterion {
 
     private final Collection<SimpleSheetCriterion> criteria = new ArrayList<SimpleSheetCriterion>();
 
@@ -50,7 +46,7 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements 
     }
 
     @Override
-    public void sheet(String name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(String name, Configurer<SheetCriterion> sheetCriterion) {
         sheet(name(name));
         sheet(sheetCriterion);
     }
@@ -61,15 +57,15 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements 
     }
 
     @Override
-    public void sheet(Predicate<Sheet> name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(Predicate<Sheet> name, Configurer<SheetCriterion> sheetCriterion) {
         sheet(name);
         sheet(sheetCriterion);
     }
 
     @Override
-    public void sheet(@DelegatesTo(SheetCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
+    public void sheet(Configurer<SheetCriterion> sheetCriterion) {
         SimpleSheetCriterion sheet = new SimpleSheetCriterion(this);
-        DefaultGroovyMethods.with(sheet, sheetCriterion);
+        sheetCriterion.configure(sheet);
         criteria.add(sheet);
     }
 
@@ -78,7 +74,7 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet> implements 
     }
 
     @Override
-    Predicate<Sheet> newDisjointCriterionInstance() {
+    WorkbookCriterion newDisjointCriterionInstance() {
         return new SimpleWorkbookCriterion(true);
     }
 }

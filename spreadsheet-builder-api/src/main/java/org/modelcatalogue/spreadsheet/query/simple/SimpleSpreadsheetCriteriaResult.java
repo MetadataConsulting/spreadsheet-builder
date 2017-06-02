@@ -1,12 +1,12 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Row;
 import org.modelcatalogue.spreadsheet.api.Sheet;
 import org.modelcatalogue.spreadsheet.api.Workbook;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.AbstractSpreadsheetCriteriaResult;
+import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -14,10 +14,10 @@ import java.util.LinkedHashSet;
 final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaResult {
 
     private final Workbook workbook;
-    private final Closure workbookCriterion;
+    private final Configurer<WorkbookCriterion> workbookCriterion;
     private final int max;
 
-    SimpleSpreadsheetCriteriaResult(Workbook workbook, Closure workbookCriterion, int max) {
+    SimpleSpreadsheetCriteriaResult(Workbook workbook, Configurer<WorkbookCriterion> workbookCriterion, int max) {
         this.workbook = workbook;
         this.workbookCriterion = workbookCriterion;
         this.max = max;
@@ -26,7 +26,7 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
     private Collection<Cell> getCellsInternal(int currentMax) {
         Collection<Cell> cells = new LinkedHashSet<Cell>();
         SimpleWorkbookCriterion criterion = new SimpleWorkbookCriterion();
-        DefaultGroovyMethods.with(criterion, workbookCriterion);
+        workbookCriterion.configure(criterion);
 
         for (Sheet sheet : workbook.getSheets()) {
             if (criterion.test(sheet)) {
@@ -69,7 +69,7 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
     private Collection<Row> getRowsInternal(int currentMax) {
         Collection<Row> rows = new LinkedHashSet<Row>();
         SimpleWorkbookCriterion criterion = new SimpleWorkbookCriterion();
-        DefaultGroovyMethods.with(criterion, workbookCriterion);
+        workbookCriterion.configure(criterion);
 
         for (Sheet sheet : workbook.getSheets()) {
             if (criterion.test(sheet)) {
@@ -114,7 +114,7 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
     private Collection<Sheet> getSheetsInternal(int currentMax) {
         Collection<Sheet> sheets = new LinkedHashSet<Sheet>();
         SimpleWorkbookCriterion criterion = new SimpleWorkbookCriterion();
-        DefaultGroovyMethods.with(criterion, workbookCriterion);
+        workbookCriterion.configure(criterion);
 
         sheets_loop:
         for (Sheet sheet : workbook.getSheets()) {

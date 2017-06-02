@@ -1,14 +1,10 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Color;
 import org.modelcatalogue.spreadsheet.api.ForegroundFill;
 import org.modelcatalogue.spreadsheet.api.Keywords;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.BorderCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
@@ -163,35 +159,35 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
-    public void font(@DelegatesTo(FontCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.FontCriterion") Closure fontCriterion) {
+    public void font(Configurer<FontCriterion> fontCriterion) {
         SimpleFontCriterion simpleFontCriterion = new SimpleFontCriterion(parent);
-        DefaultGroovyMethods.with(simpleFontCriterion, fontCriterion);
+        fontCriterion.configure(simpleFontCriterion);
     }
 
     @Override
-    public void border(@DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public void border(Configurer<BorderCriterion> borderConfiguration) {
         border(Keywords.BorderSide.BORDER_SIDES, borderConfiguration);
     }
 
     @Override
-    public void border(Keywords.BorderSide location, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public void border(Keywords.BorderSide location, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {location}, borderConfiguration);
     }
 
     @Override
-    public void border(Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public void border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second}, borderConfiguration);
     }
 
     @Override
-    public void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second, third}, borderConfiguration);
     }
 
-    private void border(Keywords.BorderSide[] sides, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    private void border(Keywords.BorderSide[] sides, Configurer<BorderCriterion> borderConfiguration) {
         for (Keywords.BorderSide side : sides) {
             SimpleBorderCriterion criterion = new SimpleBorderCriterion(parent, side);
-            DefaultGroovyMethods.with(criterion, borderConfiguration);
+            borderConfiguration.configure(criterion);
         }
     }
 

@@ -1,1 +1,1 @@
-include 'spreadsheet-builder-api', 'spreadsheet-builder-poi'
+include 'spreadsheet-builder-groovy', 'spreadsheet-builder-api', 'spreadsheet-builder-poi'

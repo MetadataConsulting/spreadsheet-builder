@@ -1,10 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
 import org.modelcatalogue.spreadsheet.api.*;
+import org.modelcatalogue.spreadsheet.builder.api.Configurer;
 
 public interface CellStyleCriterion extends HTMLColorProvider, ForegroundFillProvider {
 
@@ -28,37 +25,37 @@ public interface CellStyleCriterion extends HTMLColorProvider, ForegroundFillPro
     void format(String format);
     void format(Predicate<String> format);
 
-    void font(@DelegatesTo(FontCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.FontCriterion") Closure fontCriterion);
+    void font(Configurer<FontCriterion> fontCriterion);
 
     /**
      * Configures all the borders of the cell.
-     * @param borderConfiguration border configuration closure
+     * @param borderConfiguration border configuration
      */
-    void border(@DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration);
+    void border(Configurer<BorderCriterion> borderConfiguration);
 
     /**
      * Configures one border of the cell.
      * @param location border to be configured
-     * @param borderConfiguration border configuration closure
+     * @param borderConfiguration border configuration
      */
-    void border(Keywords.BorderSide location, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration);
+    void border(Keywords.BorderSide location, Configurer<BorderCriterion> borderConfiguration);
 
     /**
      * Configures two borders of the cell.
      * @param first first border to be configured
      * @param second second border to be configured
-     * @param borderConfiguration border configuration closure
+     * @param borderConfiguration border configuration
      */
-    void border(Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration);
+    void border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderCriterion> borderConfiguration);
 
     /**
      * Configures three borders of the cell.
      * @param first first border to be configured
      * @param second second border to be configured
      * @param third third border to be configured
-     * @param borderConfiguration border configuration closure
+     * @param borderConfiguration border configuration
      */
-    void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration);
+    void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration);
 
     // keywords
     Keywords.PureBorderSide getLeft();

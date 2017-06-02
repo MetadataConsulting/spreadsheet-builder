@@ -1,20 +1,14 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
-
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-
 public interface RowDefinition extends HasStyle {
 
     void cell();
     void cell(Object value);
-    void cell(@DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition);
-    void cell(int column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition);
-    void cell(String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition);
+    void cell(Configurer<CellDefinition> cellDefinition);
+    void cell(int column, Configurer<CellDefinition> cellDefinition);
+    void cell(String column, Configurer<CellDefinition> cellDefinition);
 
-    void group(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition);
-    void collapse(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition);
+    void group(Configurer<RowDefinition> insideGroupDefinition);
+    void collapse(Configurer<RowDefinition> insideGroupDefinition);
 
 }

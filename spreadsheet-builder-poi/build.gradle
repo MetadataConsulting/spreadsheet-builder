@@ -1,7 +1,8 @@
 dependencies {
-    compile project(':spreadsheet-builder-api')
+    compile project(':spreadsheet-builder-groovy')
 
-    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    compile 'org.codehaus.groovy:groovy-all:2.4.11'
+
     compile 'org.apache.poi:poi-ooxml:3.13'
     compile 'org.apache.poi:ooxml-schemas:1.1'
     

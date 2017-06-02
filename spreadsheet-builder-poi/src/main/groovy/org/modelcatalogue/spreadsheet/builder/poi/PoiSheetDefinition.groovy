@@ -1,7 +1,5 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
-import groovy.transform.stc.ClosureParams
-import groovy.transform.stc.FromString
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -9,6 +7,7 @@ import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Page
 import org.modelcatalogue.spreadsheet.api.Sheet
+import org.modelcatalogue.spreadsheet.builder.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
@@ -76,12 +75,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
 
     @Override
     Sheet getPrevious() {
-        int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
+        int current = workbook.workbook.getSheetIndex(sheet.getSheetName())
 
         if (current == 0) {
             return null
         }
-        XSSFSheet next = workbook.workbook.getSheetAt(current - 1);
+        XSSFSheet next = workbook.workbook.getSheetAt(current - 1)
         Sheet nextPoiSheet = workbook.sheets.find { it.sheet.sheetName == next.sheetName }
         if (nextPoiSheet) {
             return nextPoiSheet
@@ -111,18 +110,18 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void row(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
+    void row(Configurer<RowDefinition> rowDefinition) {
         PoiRowDefinition row = findOrCreateRow nextRowNumber++
-        row.with rowDefinition
+        rowDefinition.configure(row)
     }
 
     @Override
-    void row(int oneBasedRowNumber, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
+    void row(int oneBasedRowNumber, Configurer<RowDefinition> rowDefinition) {
         assert oneBasedRowNumber > 0
         nextRowNumber = oneBasedRowNumber
 
         PoiRowDefinition poiRow = findOrCreateRow oneBasedRowNumber - 1
-        poiRow.with rowDefinition
+        rowDefinition.configure(poiRow)
     }
 
     @Override
@@ -136,12 +135,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
+    void collapse(Configurer<SheetDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
     }
 
     @Override
-    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
+    void group(Configurer<SheetDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
     }
 
@@ -167,14 +166,14 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void page(@DelegatesTo(PageDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.PageDefinition") Closure pageDefinition) {
+    void page(Configurer<PageDefinition> pageDefinition) {
         PageDefinition page = new PoiPageSettingsProvider(this)
-        page.with pageDefinition
+        pageDefinition.configure(page)
     }
 
-    private void createGroup(boolean collapsed, @DelegatesTo(SheetDefinition.class) Closure insideGroupDefinition) {
+    private void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {
         startPositions.push nextRowNumber
-        with insideGroupDefinition
+        insideGroupDefinition.configure(this)
 
         int startPosition = startPositions.pop()
 
@@ -213,7 +212,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
 
     public <T> T asType(Class<T> type) {
         if (type.isInstance(sheet)) {
-            return sheet
+            return sheet as T
         }
         return super.asType(type)
     }
