@@ -6,11 +6,11 @@ import org.modelcatalogue.spreadsheet.api.Color;
 
 public interface BorderCriterion extends BorderStyleProvider {
 
-    void style(BorderStyle style);
-    void style(Predicate<BorderStyle> predicate);
+    BorderCriterion style(BorderStyle style);
+    BorderCriterion style(Predicate<BorderStyle> predicate);
 
-    void color(String hexColor);
-    void color(Color color);
-    void color(Predicate<Color> predicate);
+    BorderCriterion color(String hexColor);
+    BorderCriterion color(Color color);
+    BorderCriterion color(Predicate<Color> predicate);
 
 }

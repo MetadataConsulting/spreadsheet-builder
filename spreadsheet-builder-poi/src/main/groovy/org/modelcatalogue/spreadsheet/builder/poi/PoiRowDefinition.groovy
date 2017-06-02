@@ -6,7 +6,7 @@ import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
-import org.modelcatalogue.spreadsheet.builder.api.Configurer
+import org.modelcatalogue.spreadsheet.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 
 class PoiRowDefinition implements RowDefinition, Row {
@@ -49,8 +49,9 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell() {
+    PoiRowDefinition cell() {
         cell null
+        this
     }
 
     @Override
@@ -59,7 +60,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(Object value) {
+    PoiRowDefinition cell(Object value) {
         PoiCellDefinition poiCell = findOrCreateCell nextColNumber++
 
         if (styles) {
@@ -75,10 +76,11 @@ class PoiRowDefinition implements RowDefinition, Row {
         poiCell.value value
 
         poiCell.resolve()
+        this
     }
 
     @Override
-    void cell(Configurer<CellDefinition> cellDefinition) {
+    PoiRowDefinition cell(Configurer<CellDefinition> cellDefinition) {
         PoiCellDefinition poiCell = findOrCreateCell nextColNumber
 
         if (styles) {
@@ -98,6 +100,7 @@ class PoiRowDefinition implements RowDefinition, Row {
         handleSpans(poiCell)
 
         poiCell.resolve()
+        this
     }
 
     private void handleSpans(PoiCellDefinition poiCell) {
@@ -107,7 +110,7 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void cell(int column, Configurer<CellDefinition> cellDefinition) {
+    PoiRowDefinition cell(int column, Configurer<CellDefinition> cellDefinition) {
         nextColNumber = column
 
         PoiCellDefinition poiCell = findOrCreateCell column - 1
@@ -127,43 +130,51 @@ class PoiRowDefinition implements RowDefinition, Row {
         handleSpans(poiCell)
 
         poiCell.resolve()
+        this
     }
 
     @Override
-    void cell(String column, Configurer<CellDefinition> cellDefinition) {
+    PoiRowDefinition cell(String column, Configurer<CellDefinition> cellDefinition) {
         cell Cell.Util.parseColumn(column), cellDefinition
+        this
     }
 
     @Override
-    void style(Configurer<CellStyleDefinition> styleDefinition) {
+    PoiRowDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
         this.styleDefinition = styleDefinition
+        this
     }
 
     @Override
-    void style(String name) {
+    PoiRowDefinition style(String name) {
         this.styleName = name
+        this
     }
 
     @Override
-    void style(String name, Configurer<CellStyleDefinition> styleDefinition) {
+    PoiRowDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
         style name
         style styleDefinition
+        this
     }
 
     @Override
-    void styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
+    PoiRowDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
         styles names
         style styleDefinition
+        this
     }
 
     @Override
-    void styles(String... names) {
+    PoiRowDefinition styles(String... names) {
         this.styleNames = names
+        this
     }
 
     @Override
-    void styles(Iterable<String> names) {
+    PoiRowDefinition styles(Iterable<String> names) {
         styles(names.toList().toArray(new String[names.size()]))
+        this
     }
 
     @Override
@@ -176,13 +187,15 @@ class PoiRowDefinition implements RowDefinition, Row {
     }
 
     @Override
-    void group(Configurer<RowDefinition> insideGroupDefinition) {
+    PoiRowDefinition group(Configurer<RowDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
+        this
     }
 
     @Override
-    void collapse(Configurer<RowDefinition> insideGroupDefinition) {
+    PoiRowDefinition collapse(Configurer<RowDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
+        this
     }
 
     @Override

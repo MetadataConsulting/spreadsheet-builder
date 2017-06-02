@@ -15,12 +15,13 @@ final class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public void color(String hexColor) {
+    public SimpleFontCriterion color(String hexColor) {
         color(new Color(hexColor));
+        return this;
     }
 
     @Override
-    public void color(final Color color) {
+    public SimpleFontCriterion color(final Color color) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -32,10 +33,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && color.equals(font.getColor());
             }
         });
+        return this;
     }
 
     @Override
-    public void color(final Predicate<Color> conition) {
+    public SimpleFontCriterion color(final Predicate<Color> conition) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -47,10 +49,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && conition.test(font.getColor());
             }
         });
+        return this;
     }
 
     @Override
-    public void size(final int size) {
+    public SimpleFontCriterion size(final int size) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -62,10 +65,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && size == font.getSize();
             }
         });
+        return this;
     }
 
     @Override
-    public void size(final Predicate<Integer> predicate) {
+    public SimpleFontCriterion size(final Predicate<Integer> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -77,10 +81,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && predicate.test(font.getSize());
             }
         });
+        return this;
     }
 
     @Override
-    public void name(final String name) {
+    public SimpleFontCriterion name(final String name) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -92,10 +97,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && name.equals(font.getName());
             }
         });
+        return this;
     }
 
     @Override
-    public void name(final Predicate<String> predicate) {
+    public SimpleFontCriterion name(final Predicate<String> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -107,10 +113,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && predicate.test(font.getName());
             }
         });
+        return this;
     }
 
     @Override
-    public void make(final FontStyle first, final FontStyle... other) {
+    public SimpleFontCriterion make(final FontStyle first, final FontStyle... other) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -135,10 +142,11 @@ final class SimpleFontCriterion implements FontCriterion {
                 return true;
             }
         });
+        return this;
     }
 
     @Override
-    public void make(final Predicate<EnumSet<FontStyle>> predicate) {
+    public SimpleFontCriterion make(final Predicate<EnumSet<FontStyle>> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -150,6 +158,7 @@ final class SimpleFontCriterion implements FontCriterion {
                 return font != null && predicate.test(font.getStyles());
             }
         });
+        return this;
     }
 
     @Override

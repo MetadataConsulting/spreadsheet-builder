@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.api
 
+import org.modelcatalogue.spreadsheet.api.Configurer
 import spock.lang.Specification
 
 class ConfigurerSpec extends Specification {

@@ -20,18 +20,21 @@ class PoiBorderDefinition extends AbstractBorderProvider {
     }
 
     @Override
-    void style(BorderStyle style) {
+    PoiBorderDefinition style(BorderStyle style) {
         borderStyle = style
+        return this
     }
 
     @Override
-    void color(String hexColor) {
+    PoiBorderDefinition color(String hexColor) {
         color = PoiCellStyleDefinition.parseColor(hexColor)
+        return this
     }
 
     @Override
-    void color(Color colorPreset) {
+    PoiBorderDefinition color(Color colorPreset) {
         color colorPreset.hex
+        return this
     }
 
     protected void applyTo(Keywords.BorderSide location) {

@@ -1,28 +1,28 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
-import org.apache.poi.xssf.usermodel.XSSFPrintSetup
 import org.modelcatalogue.spreadsheet.api.Keywords.Fit
 import org.modelcatalogue.spreadsheet.builder.api.FitDimension
 
 class PoiFitDimension implements FitDimension{
 
-    private final XSSFPrintSetup printSetup
+    private final PoiPageSettingsProvider pageSettingsProvider
     private final Fit fit
 
-    PoiFitDimension(XSSFPrintSetup printSetup, Fit fit) {
-        this.printSetup = printSetup
+    PoiFitDimension(PoiPageSettingsProvider pageSettingsProvider, Fit fit) {
+        this.pageSettingsProvider = pageSettingsProvider
         this.fit = fit
     }
 
     @Override
-    void to(int numberOfPages) {
+    PoiPageSettingsProvider to(int numberOfPages) {
         switch (fit) {
             case Fit.HEIGHT:
-                printSetup.setFitHeight(numberOfPages.shortValue())
+                pageSettingsProvider.printSetup.setFitHeight(numberOfPages.shortValue())
                 break
             case Fit.WIDTH:
-                printSetup.setFitWidth(numberOfPages.shortValue())
+                pageSettingsProvider.printSetup.setFitWidth(numberOfPages.shortValue())
                 break
         }
+        return pageSettingsProvider
     }
 }

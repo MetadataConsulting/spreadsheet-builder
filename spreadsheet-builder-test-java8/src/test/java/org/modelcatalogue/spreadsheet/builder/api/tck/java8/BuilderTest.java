@@ -28,7 +28,7 @@ public class BuilderTest {
         }).writeTo(excel);
 
         assertEquals(1, PoiSpreadsheetCriteria.FACTORY.forFile(excel).query(w -> {
-            w.sheet(s -> {
+            w.sheet("test", s -> {
                s.row(r -> {
                    r.cell(c -> {
                        c.value("Hello World");

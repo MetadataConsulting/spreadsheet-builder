@@ -6,8 +6,8 @@ import org.modelcatalogue.spreadsheet.api.Color;
 
 public interface BorderDefinition extends BorderStyleProvider {
 
-    void style(BorderStyle style);
-    void color(String hexColor);
-    void color(Color color);
+    BorderDefinition style(BorderStyle style);
+    BorderDefinition color(String hexColor);
+    BorderDefinition color(Color color);
 
 }

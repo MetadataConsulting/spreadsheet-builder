@@ -17,14 +17,16 @@ class PoiCommentDefinition implements CommentDefinition, Comment{
     private int height = DEFAULT_HEIGHT
 
     @Override
-    void author(String author) {
+    PoiCommentDefinition author(String author) {
         this.author = author
+        this
     }
 
     @Override
-    void text(String text) {
+    PoiCommentDefinition text(String text) {
         assert text
         this.text = text
+        this
     }
 
 
@@ -44,18 +46,18 @@ class PoiCommentDefinition implements CommentDefinition, Comment{
             throw new IllegalStateException("Comment text has not been set!")
         }
         XSSFWorkbook wb = cell.row.sheet.workbook as XSSFWorkbook
-        XSSFCreationHelper factory = wb.getCreationHelper();
+        XSSFCreationHelper factory = wb.getCreationHelper()
 
-        XSSFDrawing drawing = cell.row.sheet.createDrawingPatriarch() as XSSFDrawing;
+        XSSFDrawing drawing = cell.row.sheet.createDrawingPatriarch() as XSSFDrawing
 
-        XSSFClientAnchor anchor = factory.createClientAnchor();
-        anchor.setCol1(cell.getColumnIndex());
-        anchor.setCol2(cell.getColumnIndex() + width);
-        anchor.setRow1(cell.row.getRowNum());
-        anchor.setRow2(cell.row.getRowNum() + height);
+        XSSFClientAnchor anchor = factory.createClientAnchor()
+        anchor.setCol1(cell.getColumnIndex())
+        anchor.setCol2(cell.getColumnIndex() + width)
+        anchor.setRow1(cell.row.getRowNum())
+        anchor.setRow2(cell.row.getRowNum() + height)
 
         // Create the comment and set the text+author
-        XSSFComment comment = drawing.createCellComment(anchor);
+        XSSFComment comment = drawing.createCellComment(anchor)
         comment.setString(text)
         if (author) {
             comment.setAuthor(author)

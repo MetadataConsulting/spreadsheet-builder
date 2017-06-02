@@ -1,6 +1,7 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
 
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.api.Keywords;
 
 public interface SheetDefinition {
@@ -8,50 +9,50 @@ public interface SheetDefinition {
     /**
      * Crates new empty row.
      */
-    void row();
+    SheetDefinition row();
 
     /**
      * Creates new row in the spreadsheet.
      * @param rowDefinition definition of the content of the row
      */
-    void row(Configurer<RowDefinition> rowDefinition);
+    SheetDefinition row(Configurer<RowDefinition> rowDefinition);
 
     /**
      * Creates new row in the spreadsheet.
      * @param row row number (1 based - the same as is shown in the file)
      * @param rowDefinition definition of the content of the row
      */
-    void row(int row, Configurer<RowDefinition> rowDefinition);
+    SheetDefinition row(int row, Configurer<RowDefinition> rowDefinition);
 
     /**
      * Freeze some column or row or both.
      * @param column last freeze column
      * @param row last freeze row
      */
-    void freeze(int column, int row);
+    SheetDefinition freeze(int column, int row);
 
     /**
      * Freeze some column or row or both.
      * @param column last freeze column
      * @param row last freeze row
      */
-    void freeze(String column, int row);
+    SheetDefinition freeze(String column, int row);
 
-    void group(Configurer<SheetDefinition> insideGroupDefinition);
-    void collapse(Configurer<SheetDefinition> insideGroupDefinition);
+    SheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition);
+    SheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition);
 
     Object getLocked();
 
-    void password(String password);
+    SheetDefinition password(String password);
 
-    void filter(Keywords.Auto auto);
+    SheetDefinition filter(Keywords.Auto auto);
     Keywords.Auto getAuto();
 
     /**
      * Configures the basic page settings.
      * @param pageDefinition definition of the page settings
      */
-    void page(Configurer<PageDefinition> pageDefinition);
+    SheetDefinition page(Configurer<PageDefinition> pageDefinition);
 
 
 }

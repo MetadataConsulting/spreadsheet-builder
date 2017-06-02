@@ -5,7 +5,7 @@ import org.modelcatalogue.spreadsheet.api.PageSettingsProvider;
 
 public interface PageCriterion extends PageSettingsProvider {
 
-    void orientation(Keywords.Orientation orientation);
-    void paper(Keywords.Paper paper);
+    PageCriterion orientation(Keywords.Orientation orientation);
+    PageCriterion paper(Keywords.Paper paper);
 
 }

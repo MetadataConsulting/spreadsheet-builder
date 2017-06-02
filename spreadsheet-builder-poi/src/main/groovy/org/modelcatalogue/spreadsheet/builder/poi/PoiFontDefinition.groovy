@@ -23,23 +23,27 @@ class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
     }
 
     @Override
-    void color(String hexColor) {
+    PoiFontDefinition color(String hexColor) {
         font.setColor(PoiCellStyleDefinition.parseColor(hexColor))
+        this
     }
 
     @Override
-    void color(Color colorPreset) {
+    PoiFontDefinition color(Color colorPreset) {
         color colorPreset.hex
+        this
     }
 
     @Override
-    void size(int size) {
+    PoiFontDefinition size(int size) {
         font.setFontHeightInPoints(size.shortValue())
+        this
     }
 
     @Override
-    void name(String name) {
+    PoiFontDefinition name(String name) {
         font.setFontName(name)
+        this
     }
 
     @Override
@@ -63,7 +67,7 @@ class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
     }
 
     @Override
-    void make(FontStyle first, FontStyle... other) {
+    PoiFontDefinition make(FontStyle first, FontStyle... other) {
         EnumSet enumSet = EnumSet.of(first, other)
         if (FontStyle.ITALIC in enumSet) {
             font.italic = true
@@ -80,6 +84,7 @@ class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
         if (FontStyle.UNDERLINE in enumSet) {
             font.setUnderline(FontUnderline.SINGLE)
         }
+        this
     }
 
     protected XSSFFont getFont() {

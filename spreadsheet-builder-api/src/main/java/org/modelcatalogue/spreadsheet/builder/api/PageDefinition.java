@@ -5,8 +5,8 @@ import org.modelcatalogue.spreadsheet.api.PageSettingsProvider;
 
 public interface PageDefinition extends PageSettingsProvider {
 
-    void orientation(Keywords.Orientation orientation);
-    void paper(Keywords.Paper paper);
+    PageDefinition orientation(Keywords.Orientation orientation);
+    PageDefinition paper(Keywords.Paper paper);
     FitDimension fit(Keywords.Fit widthOrHeight);
 
 }

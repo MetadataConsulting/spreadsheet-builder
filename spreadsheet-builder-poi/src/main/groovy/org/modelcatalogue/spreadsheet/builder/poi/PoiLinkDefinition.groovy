@@ -8,48 +8,53 @@ import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
 
 class PoiLinkDefinition implements LinkDefinition {
 
-    private final XSSFCell cell
+    private final PoiCellDefinition cell
     private final PoiWorkbookDefinition workbook
 
-    PoiLinkDefinition(PoiWorkbookDefinition workbook, XSSFCell xssfCell) {
-        this.cell = xssfCell
+    PoiLinkDefinition(PoiWorkbookDefinition workbook, PoiCellDefinition cell) {
+        this.cell = cell
         this.workbook = workbook
     }
 
     @Override
-    void name(String name) {
-        workbook.addPendingLink(name, cell)
+    PoiCellDefinition name(String name) {
+        workbook.addPendingLink(name, cell.cell)
+        return cell
     }
 
     @Override
-    void email(String email) {
+    PoiCellDefinition email(String email) {
         XSSFWorkbook workbook = cell.row.sheet.workbook as XSSFWorkbook
         XSSFHyperlink link = workbook.creationHelper.createHyperlink(Hyperlink.LINK_EMAIL) as XSSFHyperlink
         link.address = "mailto:$email"
-        cell.hyperlink = link
+        cell.cell.hyperlink = link
+        return cell
     }
 
     @Override
-    void email(Map<String, ?> parameters, String email) {
+    PoiCellDefinition email(Map<String, ?> parameters, String email) {
         XSSFWorkbook workbook = cell.row.sheet.workbook as XSSFWorkbook
         XSSFHyperlink link = workbook.creationHelper.createHyperlink(Hyperlink.LINK_EMAIL) as XSSFHyperlink
         link.address = "mailto:$email?${parameters.collect { String key, value -> "${URLEncoder.encode(key, 'UTF-8')}=${value ? URLEncoder.encode(value.toString(), 'UTF-8') : ''}"}.join('&')}"
-        cell.hyperlink = link
+        cell.cell.hyperlink = link
+        return cell
     }
 
     @Override
-    void url(String url) {
+    PoiCellDefinition url(String url) {
         XSSFWorkbook workbook = cell.row.sheet.workbook as XSSFWorkbook
         XSSFHyperlink link = workbook.creationHelper.createHyperlink(Hyperlink.LINK_URL) as XSSFHyperlink
         link.address = url
-        cell.hyperlink = link
+        cell.cell.hyperlink = link
+        return cell
     }
 
     @Override
-    void file(String path) {
+    PoiCellDefinition file(String path) {
         XSSFWorkbook workbook = cell.row.sheet.workbook as XSSFWorkbook
         XSSFHyperlink link = workbook.creationHelper.createHyperlink(Hyperlink.LINK_FILE) as XSSFHyperlink
         link.address = path
-        cell.hyperlink = link
+        cell.cell.hyperlink = link
+        return cell
     }
 }

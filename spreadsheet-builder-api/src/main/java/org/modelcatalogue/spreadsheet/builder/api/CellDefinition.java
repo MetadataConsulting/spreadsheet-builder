@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.api.Keywords;
 
 public interface CellDefinition extends HasStyle {
@@ -8,16 +9,16 @@ public interface CellDefinition extends HasStyle {
      * Sets the value.
      * @param value new value
      */
-    void value(Object value);
-    void name(String name);
-    void formula(String formula);
-    void comment(String comment);
-    void comment(Configurer<CommentDefinition> commentDefinition);
+    CellDefinition value(Object value);
+    CellDefinition name(String name);
+    CellDefinition formula(String formula);
+    CellDefinition comment(String comment);
+    CellDefinition comment(Configurer<CommentDefinition> commentDefinition);
 
     LinkDefinition link(Keywords.To to);
 
-    void colspan(int span);
-    void rowspan(int span);
+    CellDefinition colspan(int span);
+    CellDefinition rowspan(int span);
 
     /**
      * Sets the width as multiplier of standard character width.
@@ -43,7 +44,7 @@ public interface CellDefinition extends HasStyle {
      * Sets that the current column should have automatic width.
      * @param auto keyword
      */
-    void width(Keywords.Auto auto);
+    CellDefinition width(Keywords.Auto auto);
 
     Keywords.Auto getAuto();
     Keywords.To getTo();
@@ -56,7 +57,7 @@ public interface CellDefinition extends HasStyle {
      *
      * @param text new text run
      */
-    void text(String text);
+    CellDefinition text(String text);
 
     /**
      * Add a new text run to the cell.
@@ -66,7 +67,7 @@ public interface CellDefinition extends HasStyle {
      *
      * @param text new text run
      */
-    void text(String text, Configurer<FontDefinition> fontConfiguration);
+    CellDefinition text(String text, Configurer<FontDefinition> fontConfiguration);
 
     ImageCreator png(Keywords.Image image);
     ImageCreator jpeg(Keywords.Image image);
@@ -76,5 +77,12 @@ public interface CellDefinition extends HasStyle {
     ImageCreator dib(Keywords.Image image);
 
     Keywords.Image getImage();
+
+    CellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition style(Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition style(String name);
+    CellDefinition styles(String... names);
+    CellDefinition styles(Iterable<String> names);
 
 }

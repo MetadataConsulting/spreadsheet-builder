@@ -1,7 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
 import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.builder.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 
 import java.io.FileNotFoundException;
 

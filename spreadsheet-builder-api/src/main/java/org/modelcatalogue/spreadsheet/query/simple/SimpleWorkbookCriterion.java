@@ -1,7 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
 import org.modelcatalogue.spreadsheet.api.Sheet;
-import org.modelcatalogue.spreadsheet.builder.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.SheetCriterion;
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion;
@@ -41,32 +41,42 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet, WorkbookCri
     }
 
     @Override
-    public void sheet(String name) {
+    public SimpleWorkbookCriterion sheet(String name) {
         sheet(name(name));
+        return this;
     }
 
     @Override
-    public void sheet(String name, Configurer<SheetCriterion> sheetCriterion) {
+    public SimpleWorkbookCriterion sheet(String name, Configurer<SheetCriterion> sheetCriterion) {
         sheet(name(name));
         sheet(sheetCriterion);
+        return this;
     }
 
     @Override
-    public void sheet(Predicate<Sheet> name) {
+    public SimpleWorkbookCriterion sheet(Predicate<Sheet> name) {
         addCondition(name);
+        return this;
     }
 
     @Override
-    public void sheet(Predicate<Sheet> name, Configurer<SheetCriterion> sheetCriterion) {
+    public SimpleWorkbookCriterion sheet(Predicate<Sheet> name, Configurer<SheetCriterion> sheetCriterion) {
         sheet(name);
         sheet(sheetCriterion);
+        return this;
     }
 
     @Override
-    public void sheet(Configurer<SheetCriterion> sheetCriterion) {
+    public SimpleWorkbookCriterion sheet(Configurer<SheetCriterion> sheetCriterion) {
         SimpleSheetCriterion sheet = new SimpleSheetCriterion(this);
         Configurer.Runner.doConfigure(sheetCriterion, sheet);
         criteria.add(sheet);
+        return this;
+    }
+
+    @Override
+    public SimpleWorkbookCriterion or(Configurer<WorkbookCriterion> sheetCriterion) {
+        return (SimpleWorkbookCriterion) super.or(sheetCriterion);
     }
 
     Collection<SimpleSheetCriterion> getCriteria() {

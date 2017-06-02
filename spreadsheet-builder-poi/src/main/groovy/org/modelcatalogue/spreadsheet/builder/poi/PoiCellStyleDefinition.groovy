@@ -15,13 +15,12 @@ import org.modelcatalogue.spreadsheet.builder.api.AbstractCellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 
 import org.modelcatalogue.spreadsheet.api.Color
-import org.modelcatalogue.spreadsheet.builder.api.Configurer
+import org.modelcatalogue.spreadsheet.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.Keywords
 
 import org.modelcatalogue.spreadsheet.api.HorizontalAlignmentConfigurer
-import sun.security.krb5.Config
 
 import java.util.regex.Matcher
 
@@ -51,9 +50,10 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void base(String stylename) {
+    PoiCellStyleDefinition base(String stylename) {
         checkSealed()
         Configurer.Runner.doConfigure(workbook.getStyleDefinition(stylename), this)
+        this
     }
 
     void checkSealed() {
@@ -67,23 +67,25 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void background(String hexColor) {
+    PoiCellStyleDefinition background(String hexColor) {
         checkSealed()
         if (style.fillForegroundColor == IndexedColors.AUTOMATIC.index) {
             foreground hexColor
         } else {
             style.setFillBackgroundColor(parseColor(hexColor))
         }
+        this
     }
 
     @Override
-    void background(Color colorPreset) {
+    PoiCellStyleDefinition background(Color colorPreset) {
         checkSealed()
         background colorPreset.hex
+        this
     }
 
     @Override
-    void foreground(String hexColor) {
+    PoiCellStyleDefinition foreground(String hexColor) {
         checkSealed()
         if (style.fillForegroundColor != IndexedColors.AUTOMATIC.index) {
             // already set as background color
@@ -93,16 +95,18 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
         if (style.fillPatternEnum == FillPatternType.NO_FILL) {
             fill solidForeground
         }
+        this
     }
 
     @Override
-    void foreground(Color colorPreset) {
+    PoiCellStyleDefinition foreground(Color colorPreset) {
         checkSealed()
         foreground colorPreset.hex
+        this
     }
 
     @Override
-    void fill(ForegroundFill fill) {
+    PoiCellStyleDefinition fill(ForegroundFill fill) {
         checkSealed()
         switch (fill) {
             case ForegroundFill.NO_FILL:
@@ -157,21 +161,24 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
                 style.fillPattern = CellStyle.DIAMONDS
                 break
         }
+        this
     }
 
     @Override
-    void font(Configurer<FontDefinition> fontConfiguration) {
+    PoiCellStyleDefinition font(Configurer<FontDefinition> fontConfiguration) {
         checkSealed()
         if (!poiFont) {
             poiFont = new PoiFontDefinition(workbook.workbook, style)
         }
         Configurer.Runner.doConfigure(fontConfiguration, poiFont)
+        this
     }
 
     @Override
-    void indent(int indent) {
+    PoiCellStyleDefinition indent(int indent) {
         checkSealed()
         style.indention = (short) indent
+        this
     }
 
     Object getLocked() {
@@ -180,9 +187,10 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void wrap(Keywords.Text text) {
+    PoiCellStyleDefinition wrap(Keywords.Text text) {
         checkSealed()
         style.wrapText = true
+        this
     }
 
     Object getHidden() {
@@ -191,15 +199,17 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void rotation(int rotation) {
+    PoiCellStyleDefinition rotation(int rotation) {
         checkSealed()
         style.rotation = (short) rotation
+        this
     }
 
     @Override
-    void format(String format) {
+    PoiCellStyleDefinition format(String format) {
         XSSFDataFormat dataFormat = workbook.workbook.createDataFormat()
         style.dataFormat = dataFormat.getFormat(format)
+        this
     }
 
     @Override
@@ -228,7 +238,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
     }
 
     @Override
-    void border(Configurer<BorderDefinition> borderConfiguration) {
+    PoiCellStyleDefinition border(Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
@@ -236,29 +246,31 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
         Keywords.BorderSide.BORDER_SIDES.each { Keywords.BorderSide side ->
             poiBorder.applyTo(side)
         }
+        this
     }
 
     @Override
-    void border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration) {
+    PoiCellStyleDefinition border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
         poiBorder.applyTo(location)
+        this
     }
 
     @Override
-    void border(Keywords.BorderSide first, Keywords.BorderSide second,
+    PoiCellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second,
                 Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
         Configurer.Runner.doConfigure(borderConfiguration, poiBorder)
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
-
+        this
     }
 
     @Override
-    void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third,
+    PoiCellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third,
                 Configurer<BorderDefinition> borderConfiguration) {
         checkSealed()
         PoiBorderDefinition poiBorder = findOrCreateBorder()
@@ -266,6 +278,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
         poiBorder.applyTo(first)
         poiBorder.applyTo(second)
         poiBorder.applyTo(third)
+        this
     }
 
     private PoiBorderDefinition findOrCreateBorder() {

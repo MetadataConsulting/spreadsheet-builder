@@ -6,7 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.spreadsheet.api.Workbook
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
-import org.modelcatalogue.spreadsheet.builder.api.Configurer
+import org.modelcatalogue.spreadsheet.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.builder.api.Stylesheet
@@ -25,7 +25,7 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
     }
 
     @Override
-    void sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
+    PoiWorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
         PoiSheetDefinition sheet = sheets[name]
 
         if (!sheet) {
@@ -38,21 +38,25 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
 
         sheet.processAutoColumns()
         sheet.processAutomaticFilter()
+        this
     }
 
     @Override
-    void style(String name, Configurer<CellStyleDefinition> styleDefinition) {
+    PoiWorkbookDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
         namedStylesDefinition[name] = styleDefinition
+        this
     }
 
     @Override
-    void apply(Class<? extends Stylesheet> stylesheet) {
+    PoiWorkbookDefinition apply(Class<? extends Stylesheet> stylesheet) {
         apply stylesheet.newInstance()
+        this
     }
 
     @Override
-    void apply(Stylesheet stylesheet) {
+    PoiWorkbookDefinition apply(Stylesheet stylesheet) {
         stylesheet.declareStyles(this)
+        this
     }
 
     XSSFWorkbook getWorkbook() {

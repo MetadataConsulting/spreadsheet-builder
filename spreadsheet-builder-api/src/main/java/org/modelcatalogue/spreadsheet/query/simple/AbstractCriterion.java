@@ -1,6 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import org.modelcatalogue.spreadsheet.builder.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
 import java.util.ArrayList;
@@ -29,10 +29,11 @@ abstract class AbstractCriterion<T, Criterion extends Predicate<T>> implements P
 
     abstract Criterion newDisjointCriterionInstance();
 
-    public void or(Configurer<Criterion> sheetCriterion) {
+    public AbstractCriterion<T, Criterion> or(Configurer<Criterion> sheetCriterion) {
         Criterion criterion = newDisjointCriterionInstance();
         Configurer.Runner.doConfigure(sheetCriterion, criterion);
         addCondition(criterion);
+        return this;
     }
 
     void addCondition(Predicate<T> predicate) {

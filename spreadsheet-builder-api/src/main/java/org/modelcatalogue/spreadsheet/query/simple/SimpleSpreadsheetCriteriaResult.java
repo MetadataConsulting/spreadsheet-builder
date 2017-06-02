@@ -4,7 +4,7 @@ import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Row;
 import org.modelcatalogue.spreadsheet.api.Sheet;
 import org.modelcatalogue.spreadsheet.api.Workbook;
-import org.modelcatalogue.spreadsheet.builder.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.AbstractSpreadsheetCriteriaResult;
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion;
 

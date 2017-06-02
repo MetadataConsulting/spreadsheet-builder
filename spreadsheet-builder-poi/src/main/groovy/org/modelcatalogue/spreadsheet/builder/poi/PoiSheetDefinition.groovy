@@ -7,7 +7,7 @@ import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Page
 import org.modelcatalogue.spreadsheet.api.Sheet
-import org.modelcatalogue.spreadsheet.builder.api.Configurer
+import org.modelcatalogue.spreadsheet.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
@@ -54,8 +54,9 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void row() {
+    PoiSheetDefinition row() {
         findOrCreateRow nextRowNumber++
+        this
     }
 
     @Override
@@ -110,38 +111,44 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void row(Configurer<RowDefinition> rowDefinition) {
+    PoiSheetDefinition row(Configurer<RowDefinition> rowDefinition) {
         PoiRowDefinition row = findOrCreateRow nextRowNumber++
         Configurer.Runner.doConfigure(rowDefinition, row)
+        this
     }
 
     @Override
-    void row(int oneBasedRowNumber, Configurer<RowDefinition> rowDefinition) {
+    PoiSheetDefinition row(int oneBasedRowNumber, Configurer<RowDefinition> rowDefinition) {
         assert oneBasedRowNumber > 0
         nextRowNumber = oneBasedRowNumber
 
         PoiRowDefinition poiRow = findOrCreateRow oneBasedRowNumber - 1
         Configurer.Runner.doConfigure(rowDefinition, poiRow)
+        this
     }
 
     @Override
-    void freeze(int column, int row) {
+    PoiSheetDefinition freeze(int column, int row) {
         xssfSheet.createFreezePane(column, row)
+        this
     }
 
     @Override
-    void freeze(String column, int row) {
+    PoiSheetDefinition freeze(String column, int row) {
         freeze Cell.Util.parseColumn(column), row
+        this
     }
 
     @Override
-    void collapse(Configurer<SheetDefinition> insideGroupDefinition) {
+    PoiSheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
+        this
     }
 
     @Override
-    void group(Configurer<SheetDefinition> insideGroupDefinition) {
+    PoiSheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
+        this
     }
 
     @Override
@@ -151,13 +158,15 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void password(String password) {
+    PoiSheetDefinition password(String password) {
         sheet.protectSheet(password)
+        this
     }
 
     @Override
-    void filter(Keywords.Auto auto) {
+    PoiSheetDefinition filter(Keywords.Auto auto) {
         automaticFilter = true
+        this
     }
 
     @Override
@@ -166,9 +175,10 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void page(Configurer<PageDefinition> pageDefinition) {
+    PoiSheetDefinition page(Configurer<PageDefinition> pageDefinition) {
         PageDefinition page = new PoiPageSettingsProvider(this)
         Configurer.Runner.doConfigure(pageDefinition, page)
+        this
     }
 
     private void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {

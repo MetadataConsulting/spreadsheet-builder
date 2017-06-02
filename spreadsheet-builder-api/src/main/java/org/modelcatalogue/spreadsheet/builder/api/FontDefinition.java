@@ -7,12 +7,12 @@ import org.modelcatalogue.spreadsheet.api.HTMLColorProvider;
 
 public interface FontDefinition extends HTMLColorProvider, FontStylesProvider {
 
-    void color(String hexColor);
-    void color(Color color);
-    
-    void size(int size);
-    void name(String name);
+    FontDefinition color(String hexColor);
+    FontDefinition color(Color color);
 
-    void make(FontStyle first, FontStyle... other);
+    FontDefinition size(int size);
+    FontDefinition name(String name);
+
+    FontDefinition make(FontStyle first, FontStyle... other);
 
 }

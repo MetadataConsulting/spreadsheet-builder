@@ -13,23 +13,25 @@ public class SimplePageCriterion extends AbstractPageSettingsProvider implements
     }
 
     @Override
-    public void orientation(final Keywords.Orientation orientation) {
+    public SimplePageCriterion orientation(final Keywords.Orientation orientation) {
         workbookCriterion.addCondition(new Predicate<Sheet>() {
             @Override
             public boolean test(Sheet o) {
                 return orientation.equals(o.getPage().getOrientation());
             }
         });
+        return this;
     }
 
     @Override
-    public void paper(final Keywords.Paper paper) {
+    public SimplePageCriterion paper(final Keywords.Paper paper) {
         workbookCriterion.addCondition(new Predicate<Sheet>() {
             @Override
             public boolean test(Sheet o) {
                 return paper.equals(o.getPage().getPaper());
             }
         });
+        return this;
     }
 
 }

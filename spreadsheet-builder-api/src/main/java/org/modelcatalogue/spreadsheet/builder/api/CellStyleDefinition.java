@@ -4,30 +4,30 @@ import org.modelcatalogue.spreadsheet.api.*;
 
 public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillProvider {
 
-    void base(String stylename);
+    CellStyleDefinition base(String stylename);
 
-    void background(String hexColor);
-    void background(Color color);
+    CellStyleDefinition background(String hexColor);
+    CellStyleDefinition background(Color color);
 
-    void foreground(String hexColor);
-    void foreground(Color color);
+    CellStyleDefinition foreground(String hexColor);
+    CellStyleDefinition foreground(Color color);
 
-    void fill(ForegroundFill fill);
+    CellStyleDefinition fill(ForegroundFill fill);
 
-    void font(Configurer<FontDefinition> fontConfiguration);
+    CellStyleDefinition font(Configurer<FontDefinition> fontConfiguration);
 
     /**
      * Sets the indent of the cell in spaces.
      * @param indent the indent of the cell in spaces
      */
-    void indent(int indent);
+    CellStyleDefinition indent(int indent);
 
     /**
      * Enables word wrapping
      *
      * @param text keyword
      */
-    void wrap(Keywords.Text text);
+    CellStyleDefinition wrap(Keywords.Text text);
 
     Keywords.Text getText();
 
@@ -35,9 +35,9 @@ public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillPr
      * Sets the rotation from 0 to 180 (flipped).
      * @param rotation the rotation from 0 to 180 (flipped)
      */
-    void rotation(int rotation);
+    CellStyleDefinition rotation(int rotation);
 
-    void format(String format);
+    CellStyleDefinition format(String format);
 
     HorizontalAlignmentConfigurer align(Keywords.VerticalAlignment alignment);
 
@@ -45,14 +45,14 @@ public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillPr
      * Configures all the borders of the cell.
      * @param borderConfiguration border configuration
      */
-    void border(Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Configurer<BorderDefinition> borderConfiguration);
 
     /**
      * Configures one border of the cell.
      * @param location border to be configured
      * @param borderConfiguration border configuration
      */
-    void border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration);
 
     /**
      * Configures two borders of the cell.
@@ -60,7 +60,7 @@ public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillPr
      * @param second second border to be configured
      * @param borderConfiguration border configuration
      */
-    void border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderDefinition> borderConfiguration);
 
     /**
      * Configures three borders of the cell.
@@ -69,7 +69,7 @@ public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillPr
      * @param third third border to be configured
      * @param borderConfiguration border configuration
      */
-    void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderDefinition> borderConfiguration);
 
     Keywords.PureVerticalAlignment getCenter();
     Keywords.PureVerticalAlignment getJustify();

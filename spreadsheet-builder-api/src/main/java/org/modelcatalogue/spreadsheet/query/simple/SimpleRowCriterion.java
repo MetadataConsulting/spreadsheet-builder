@@ -1,7 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
 import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.builder.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
@@ -50,43 +50,55 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell, RowCriterion> imp
     }
 
     @Override
-    public void cell(Predicate<Cell> predicate) {
+    public SimpleRowCriterion cell(Predicate<Cell> predicate) {
         addCondition(predicate);
+        return this;
     }
 
     @Override
-    public void cell(int column) {
+    public SimpleRowCriterion cell(int column) {
         cell(column(column));
+        return this;
     }
 
     @Override
-    public void cell(String column) {
+    public SimpleRowCriterion cell(String column) {
         cell(columnAsString(column));
+        return this;
     }
 
     @Override
-    public void cell(Configurer<CellCriterion> cellCriterion) {
+    public SimpleRowCriterion cell(Configurer<CellCriterion> cellCriterion) {
         SimpleCellCriterion criterion = new SimpleCellCriterion();
         Configurer.Runner.doConfigure(cellCriterion, criterion);
         addCondition(criterion);
+        return this;
     }
 
     @Override
-    public void cell(int column, Configurer<CellCriterion> cellCriterion) {
+    public SimpleRowCriterion cell(int column, Configurer<CellCriterion> cellCriterion) {
         addCondition(column(column));
         cell(cellCriterion);
+        return this;
     }
 
     @Override
-    public void cell(String column, Configurer<CellCriterion> cellCriterion) {
+    public SimpleRowCriterion cell(String column, Configurer<CellCriterion> cellCriterion) {
         addCondition(columnAsString(column));
         cell(cellCriterion);
+        return this;
     }
 
     @Override
-    public void cell(Predicate<Cell> predicate, Configurer<CellCriterion> cellCriterion) {
+    public SimpleRowCriterion cell(Predicate<Cell> predicate, Configurer<CellCriterion> cellCriterion) {
         addCondition(predicate);
         cell(cellCriterion);
+        return this;
+    }
+
+    @Override
+    public SimpleRowCriterion or(Configurer<RowCriterion> sheetCriterion) {
+        return (SimpleRowCriterion) super.or(sheetCriterion);
     }
 
     @Override
