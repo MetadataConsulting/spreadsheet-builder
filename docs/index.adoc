@@ -1,4 +1,4 @@
-= Groovy Spreadsheet Builder
+= Spreadsheet Builder
 
 [.ribbon]
 image::ribbon.png[link={projectUrl}]
@@ -1394,7 +1394,9 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 = Changelog
 
 == 0.5.0
-Java-only API which can be easily used with Java 8.
+Java-only API which can be used with Java 8.
+
+Builder and criteria definition chaining - methods returning self instead of `void`.
 
 === Breaking Changes
 `PoiSpradsheetBuilder` will no longer allow to create cell names which are invalid by Excel. Use `PoiCellDefinition#fixName(String)`
