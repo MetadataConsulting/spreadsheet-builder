@@ -1,4 +1,4 @@
-package org.modelcatalogue.spreadsheet.builder.poi
+package org.modelcatalogue.spreadsheet.builder.tck
 
 import org.modelcatalogue.spreadsheet.builder.api.CanDefineStyle
 import org.modelcatalogue.spreadsheet.builder.api.Stylesheet

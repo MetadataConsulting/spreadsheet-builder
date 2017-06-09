@@ -246,8 +246,11 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
     @Override
     PoiCellDefinition name(String name) {
+        if (fixName(name) != name) {
+            throw new IllegalArgumentException("Name ${name} is not valid Excel name! Suggestion: ${fixName(name)}")
+        }
         XSSFName theName = xssfCell.row.sheet.workbook.createName() as XSSFName
-        theName.setNameName(fixName(name))
+        theName.setNameName(name)
         theName.setRefersToFormula(generateRefersToFormula())
         this
     }

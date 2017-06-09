@@ -1,1 +1,5 @@
-include 'spreadsheet-builder-groovy', 'spreadsheet-builder-api', 'spreadsheet-builder-poi', 'spreadsheet-builder-test-java8'
+include 'spreadsheet-builder-groovy',
+        'spreadsheet-builder-api',
+        'spreadsheet-builder-poi',
+        'spreadsheet-builder-tck-groovy',
+        'spreadsheet-builder-test-java8'

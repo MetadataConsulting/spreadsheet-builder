@@ -26,10 +26,13 @@ import org.apache.poi.xssf.usermodel.XSSFName
 
     protected String expandNames(String withNames) {
         withNames.replaceAll(/\#\{(.+?)\}/) { List<String> found ->
-            XSSFName nameFound = cell.sheet.workbook.getName(PoiCellDefinition.fixName(found[1]))
+            String name = found[1]
+            if (name != PoiCellDefinition.fixName(name)) {
+                throw new IllegalArgumentException("Name ${name} is not valid Excel name! Suggestion: ${PoiCellDefinition.fixName(name)}")
+            }
+            XSSFName nameFound = cell.sheet.workbook.getName(name)
             if (!found) {
-                throw new IllegalArgumentException("Named cell '${found[1]}' cannot be found! Please, take a note " +
-                "that the name was normalized to ${PoiCellDefinition.fixName(found[1])} due the Excel constraints.")
+                throw new IllegalArgumentException("Named cell '${name}' cannot be found!")
             }
             nameFound.refersToFormula
         }
