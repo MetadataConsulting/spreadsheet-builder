@@ -3,23 +3,29 @@ package org.modelcatalogue.spreadsheet.builder.api.tck.java8;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.modelcatalogue.spreadsheet.api.ForegroundFill;
+import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder;
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition;
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult;
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.modelcatalogue.spreadsheet.api.BorderStyle.DASH_DOT_DOT;
 import static org.modelcatalogue.spreadsheet.api.BorderStyle.THIN;
 import static org.modelcatalogue.spreadsheet.api.FontStyle.*;
+import static org.modelcatalogue.spreadsheet.api.ForegroundFill.FINE_DOTS;
 import static org.modelcatalogue.spreadsheet.api.ForegroundFill.SOLID_FOREGROUND;
 import static org.modelcatalogue.spreadsheet.api.HTMLColorProvider.*;
 import static org.modelcatalogue.spreadsheet.api.Keywords.Auto.AUTO;
@@ -53,8 +59,392 @@ public class BuilderTest {
     }
 
     @Test public void testBuilderFull() throws IOException {
+        Date today = new Date();
         File excel = tmp.newFile();
-        buildSpreadsheet(PoiSpreadsheetBuilder.INSTANCE, new Date()).writeTo(excel);
+
+        buildSpreadsheet(PoiSpreadsheetBuilder.INSTANCE, today).writeTo(excel);
+
+        SpreadsheetCriteria matcher = PoiSpreadsheetCriteria.FACTORY.forFile(excel);
+
+        SpreadsheetCriteriaResult allCells = matcher.all();
+
+        assertEquals(80130, allCells.getCells().size());
+        assertEquals(19, allCells.getSheets().size());
+        assertEquals(20065, allCells.getRows().size());
+
+
+        SpreadsheetCriteriaResult sampleCells = matcher.query(w -> {
+                w.sheet("Sample");
+        });
+
+        assertEquals(2, sampleCells.getCells().size());
+        assertEquals(1, sampleCells.getSheets().size());
+        assertEquals(1, sampleCells.getRows().size());
+
+        SpreadsheetCriteriaResult rowCells = matcher.query(w -> {
+            w.sheet("many rows", s -> {
+                    s.row(1);
+            });
+        });
+
+        assertEquals(4, rowCells.getCells().size());
+        assertEquals(1, rowCells.getSheets().size());
+        assertEquals(1, rowCells.getRows().size());
+
+        Row manyRowsHeader = matcher.query(w -> {
+            w.sheet("many rows", s -> {
+                s.row(1);
+            });
+        }).getRow();
+        assertNotNull(manyRowsHeader);
+
+        Row manyRowsDataRow = matcher.query(w -> w.sheet("many rows", s -> s.row(2))).getRow();
+
+        DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader);
+
+        assertNotNull(dataRow.getAt("One"));
+        assertEquals("1", dataRow.getAt("One").getValue());
+
+
+        Map<String, Integer> dataRowMapping = new HashMap<>();
+        dataRowMapping.put("primo", 1);
+
+
+        DataRow dataRowFromMapping = DataRow.create(dataRowMapping, manyRowsDataRow);
+        assertNotNull(dataRowFromMapping.getAt("primo"));
+        assertEquals("1", dataRowFromMapping.getAt("primo").getValue());
+
+
+        SpreadsheetCriteriaResult someCells = matcher.query(w -> {
+            w.sheet(s -> {
+               s.row(r -> {
+                   r.cell(c -> {
+                      c.date(today);
+                   });
+               });
+            });
+        });
+
+        assertEquals(1, someCells.getCells().size());
+
+
+        SpreadsheetCriteriaResult commentedCells = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.comment("This is a date!");
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, commentedCells.getCells().size());
+
+
+        SpreadsheetCriteriaResult namedCells = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.name("_Cell10");
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, namedCells.getCells().size());
+
+
+        SpreadsheetCriteriaResult dateCells = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.format("d.m.y");
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, dateCells.getCells().size());
+
+        SpreadsheetCriteriaResult filledCells = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.fill(FINE_DOTS);
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, filledCells.getCells().size());
+
+        SpreadsheetCriteriaResult magentaCells = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.foreground(aquamarine);
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, magentaCells.getCells().size());
+
+        SpreadsheetCriteriaResult redOnes = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.font(f -> {
+                                f.color(red);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(20006, redOnes.getCells().size());
+        assertEquals(20004, redOnes.getRows().size());
+
+
+        SpreadsheetCriteriaResult boldOnes = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.font(f -> {
+                                f.make(BOLD);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(5, boldOnes.getCells().size());
+
+        SpreadsheetCriteriaResult bigOnes = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.font(f -> {
+                                f.size(22);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(40002, bigOnes.getCells().size());
+
+        SpreadsheetCriteriaResult bordered = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.style(st -> {
+                            st.border(TOP, b -> {
+                                b.style(THIN);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(10, bordered.getCells().size());
+
+        SpreadsheetCriteriaResult combined = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("Bold Red 22");
+                        c.style(st -> {
+                            st.font(f -> {
+                                f.color(red);
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, combined.getCells().size());
+
+        SpreadsheetCriteriaResult conjunction = matcher.query(w -> {
+            w.sheet(s -> {
+                s.row(r -> {
+                    r.or(o -> {
+                        o.cell(c -> {
+                            c.value("Bold Red 22");
+                        });
+                        o.cell(c -> {
+                            c.value("A");
+                        });
+                    });
+                });
+            });
+        });
+
+        assertEquals(3, conjunction.getCells().size());
+
+        SpreadsheetCriteriaResult traversal = matcher.query(w -> {
+            w.sheet("Traversal", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("E");
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, traversal.getCells().size());
+
+        Cell cellE = traversal.iterator().next();
+        
+        assertEquals("Traversal", cellE.getRow().getSheet().getName());
+        assertNotNull(cellE.getRow().getSheet().getPrevious());
+        assertEquals("Formula", cellE.getRow().getSheet().getPrevious().getName());
+        assertNotNull(cellE.getRow().getSheet().getNext());
+        assertEquals("Border", cellE.getRow().getSheet().getNext().getName());
+        assertEquals(2, cellE.getRow().getNumber());
+        assertNotNull(cellE.getRow().getAbove());
+        assertEquals(1, cellE.getRow().getAbove().getNumber());
+        assertNotNull(cellE.getRow().getBellow());
+        assertEquals(3, cellE.getRow().getBellow().getNumber());
+        assertEquals(2, cellE.getColspan());
+        assertNotNull(cellE.getAboveLeft());
+        assertEquals("A", cellE.getAboveLeft().getValue());
+        assertNotNull(cellE.getAbove());
+        assertEquals("B", cellE.getAbove().getValue());
+        assertNotNull(cellE.getAboveRight());
+        assertEquals("C", cellE.getAboveRight().getValue());
+        assertNotNull(cellE.getLeft());
+        assertEquals("D", cellE.getLeft().getValue());
+        assertNotNull(cellE.getRight());
+        assertEquals("F", cellE.getRight().getValue());
+        assertNotNull(cellE.getBellowLeft());
+        assertEquals("G", cellE.getBellowLeft().getValue());
+        assertNotNull(cellE.getBellowRight());
+        assertEquals("I", cellE.getBellowRight().getValue());
+        assertNotNull(cellE.getBellow());
+        assertEquals("H", cellE.getBellow().getValue());
+        assertEquals("J", cellE.getBellow().getBellow().getValue());
+        
+        SpreadsheetCriteriaResult zeroCells = matcher.query(w -> {
+            w.sheet("Zero", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value(0);
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, zeroCells.getCells().size());
+        assertEquals(0d, zeroCells.getCell().getValue());
+
+        Cell noneCell = matcher.find(w -> {
+            w.sheet("Styles", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("NONE");
+                    });
+                });
+            });
+        });
+
+        Cell redCell = matcher.find(w -> {
+            w.sheet("Styles", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("RED");
+                    });
+                });
+            });
+        });
+
+        Cell blueCell = matcher.find(w -> {
+            w.sheet("Styles", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("BLUE");
+                    });
+                });
+            });
+        });
+
+        Cell greenCell = matcher.find(w -> {
+            w.sheet("Styles", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("GREEN");
+                    });
+                });
+            });
+        });
+
+        assertNull(noneCell.getStyle().getForeground());
+        assertEquals(red, redCell.getStyle().getForeground());
+        assertEquals(blue, blueCell.getStyle().getForeground());
+        assertEquals(green, greenCell.getStyle().getForeground());
+
+        assertEquals(1, matcher.query(w -> {
+            w.sheet(s -> {
+                s.page(p -> {
+                    p.paper(Keywords.Paper.A5);
+                    p.orientation(Keywords.Orientation.LANDSCAPE);
+                });
+            });
+        }).getCells().size());
+
+        SpreadsheetDefinition definition = PoiSpreadsheetBuilder.INSTANCE.build(excel, w -> {
+            w.sheet("Sample", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("Ahoj");
+                    });
+                    r.cell(c -> {
+                        c.value("Svete");
+                    });
+                });
+            });
+        });
+
+
+        File tmpFile = tmp.newFile();
+        definition.writeTo(tmpFile);
+
+        assertEquals(0, PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile).query(w -> {
+            w.sheet("Sample", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("Hello");
+                    });
+
+                });
+            });
+        }).getCells().size());
+
+
+        assertEquals(1, PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile).query(w -> {
+            w.sheet("Sample", s -> {
+                s.row(r -> {
+                    r.cell(c -> {
+                        c.value("Ahoj");
+                    });
+
+                });
+            });
+        }).getCells().size());
     }
 
     private static SpreadsheetDefinition buildSpreadsheet(SpreadsheetBuilder builder, Date today) {
@@ -120,7 +510,7 @@ public class BuilderTest {
                     r.cell("Three");
                     r.cell("Four");
                 });
-                for (int i = 0; i < 2000; i++) {
+                for (int i = 0; i < 20000; i++) {
                     s.row(r -> {
                         r.cell(c -> {
                             c.value("1");
