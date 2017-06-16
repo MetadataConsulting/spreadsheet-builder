@@ -3,7 +3,7 @@ package org.modelcatalogue.spreadsheet.query.api;
 import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.api.Configurer;
 
-public interface CellStyleCriterion extends HTMLColorProvider, ForegroundFillProvider {
+public interface CellStyleCriterion extends ForegroundFillProvider, BorderPositionProvider {
 
     CellStyleCriterion background(String hexColor);
     CellStyleCriterion background(Color color);
@@ -56,12 +56,5 @@ public interface CellStyleCriterion extends HTMLColorProvider, ForegroundFillPro
      * @param borderConfiguration border configuration
      */
     CellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration);
-
-    // keywords
-    Keywords.PureBorderSide getLeft();
-    Keywords.PureBorderSide getRight();
-
-    Keywords.BorderSideAndVerticalAlignment getTop();
-    Keywords.BorderSideAndVerticalAlignment getBottom();
 
 }

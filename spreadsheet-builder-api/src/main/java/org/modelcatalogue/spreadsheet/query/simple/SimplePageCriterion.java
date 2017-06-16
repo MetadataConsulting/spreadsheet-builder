@@ -4,7 +4,7 @@ import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
-public class SimplePageCriterion extends AbstractPageSettingsProvider implements PageCriterion {
+public class SimplePageCriterion implements PageCriterion {
 
     private final SimpleWorkbookCriterion workbookCriterion;
 

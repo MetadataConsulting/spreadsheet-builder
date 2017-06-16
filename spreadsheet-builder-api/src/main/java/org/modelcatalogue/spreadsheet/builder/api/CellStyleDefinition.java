@@ -2,7 +2,7 @@ package org.modelcatalogue.spreadsheet.builder.api;
 
 import org.modelcatalogue.spreadsheet.api.*;
 
-public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillProvider {
+public interface CellStyleDefinition extends ForegroundFillProvider, BorderPositionProvider {
 
     CellStyleDefinition base(String stylename);
 
@@ -28,8 +28,6 @@ public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillPr
      * @param text keyword
      */
     CellStyleDefinition wrap(Keywords.Text text);
-
-    Keywords.Text getText();
 
     /**
      * Sets the rotation from 0 to 180 (flipped).
@@ -71,14 +69,4 @@ public interface CellStyleDefinition extends HTMLColorProvider, ForegroundFillPr
      */
     CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderDefinition> borderConfiguration);
 
-    Keywords.PureVerticalAlignment getCenter();
-    Keywords.PureVerticalAlignment getJustify();
-    Keywords.PureVerticalAlignment getDistributed();
-
-    // keywords
-    Keywords.PureBorderSide getLeft();
-    Keywords.PureBorderSide getRight();
-
-    Keywords.BorderSideAndVerticalAlignment getTop();
-    Keywords.BorderSideAndVerticalAlignment getBottom();
 }

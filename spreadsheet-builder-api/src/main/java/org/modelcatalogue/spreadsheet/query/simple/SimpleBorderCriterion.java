@@ -4,7 +4,7 @@ import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.BorderCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
-final class SimpleBorderCriterion extends AbstractBorderProvider implements BorderCriterion {
+final class SimpleBorderCriterion implements BorderCriterion {
 
     private final SimpleCellCriterion parent;
     private final Keywords.BorderSide side;

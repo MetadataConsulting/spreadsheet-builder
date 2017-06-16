@@ -2,13 +2,13 @@ package org.modelcatalogue.spreadsheet.builder.poi
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
-import org.modelcatalogue.spreadsheet.api.AbstractBorderProvider
 
 import org.modelcatalogue.spreadsheet.api.BorderStyle
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.api.Keywords
+import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 
-class PoiBorderDefinition extends AbstractBorderProvider {
+class PoiBorderDefinition implements BorderDefinition {
 
     private final XSSFCellStyle xssfCellStyle
 

@@ -46,9 +46,6 @@ public interface CellDefinition extends HasStyle {
      */
     CellDefinition width(Keywords.Auto auto);
 
-    Keywords.Auto getAuto();
-    Keywords.To getTo();
-
     /**
      * Add a new text run to the cell.
      *
@@ -75,8 +72,6 @@ public interface CellDefinition extends HasStyle {
     ImageCreator emf(Keywords.Image image);
     ImageCreator wmf(Keywords.Image image);
     ImageCreator dib(Keywords.Image image);
-
-    Keywords.Image getImage();
 
     CellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition);
     CellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);

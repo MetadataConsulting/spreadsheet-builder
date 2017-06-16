@@ -3,8 +3,17 @@ package org.modelcatalogue.spreadsheet.api.groovy
 import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
+import org.modelcatalogue.spreadsheet.api.BorderPositionProvider
+import org.modelcatalogue.spreadsheet.api.BorderStyle
+import org.modelcatalogue.spreadsheet.api.BorderStyleProvider
 import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.api.DataRow
+import org.modelcatalogue.spreadsheet.api.FontStyle
+import org.modelcatalogue.spreadsheet.api.FontStylesProvider
+import org.modelcatalogue.spreadsheet.api.ForegroundFill
+import org.modelcatalogue.spreadsheet.api.ForegroundFillProvider
 import org.modelcatalogue.spreadsheet.api.Keywords
+import org.modelcatalogue.spreadsheet.api.PageSettingsProvider
 import org.modelcatalogue.spreadsheet.api.Row
 import org.modelcatalogue.spreadsheet.api.Sheet
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
@@ -284,5 +293,295 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         workbook.or(workbookCriterion as Configurer<WorkbookCriterion>)
     }
 
-    
+    static Cell getAt(DataRow self, String name) {
+        self.get(name)
+    }
+
+    static BorderStyle getNone(BorderStyleProvider self) {
+        return BorderStyle.NONE
+    }
+
+    static BorderStyle getThin(BorderStyleProvider self) {
+        return BorderStyle.THIN
+    }
+
+    static BorderStyle getMedium(BorderStyleProvider self) {
+        return BorderStyle.MEDIUM
+    }
+
+    static BorderStyle getDashed(BorderStyleProvider self) {
+        return BorderStyle.DASHED
+    }
+
+    static BorderStyle getDotted(BorderStyleProvider self) {
+        return BorderStyle.DOTTED
+    }
+
+    static BorderStyle getThick(BorderStyleProvider self) {
+        return BorderStyle.THICK
+    }
+
+    static BorderStyle getDouble(BorderStyleProvider self) {
+        return BorderStyle.DOUBLE
+    }
+
+    static BorderStyle getHair(BorderStyleProvider self) {
+        return BorderStyle.HAIR
+    }
+
+    static BorderStyle getMediumDashed(BorderStyleProvider self) {
+        return BorderStyle.MEDIUM_DASHED
+    }
+
+    static BorderStyle getDashDot(BorderStyleProvider self) {
+        return BorderStyle.DASH_DOT
+    }
+
+    static BorderStyle getMediumDashDot(BorderStyleProvider self) {
+        return BorderStyle.MEDIUM_DASH_DOT
+    }
+
+    static BorderStyle getDashDotDot(BorderStyleProvider self) {
+        return BorderStyle.DASH_DOT_DOT
+    }
+
+    static BorderStyle getMediumDashDotDot(BorderStyleProvider self) {
+        return BorderStyle.MEDIUM_DASH_DOT_DOT
+    }
+
+    static BorderStyle getSlantedDashDot(BorderStyleProvider self) {
+        return BorderStyle.SLANTED_DASH_DOT
+    }
+
+    static Keywords.Auto getAuto(CellDefinition self) {
+        return Keywords.Auto.AUTO
+    }
+
+    static Keywords.To getTo(CellDefinition self) {
+        return Keywords.To.TO
+    }
+
+    static Keywords.Image getImage(CellDefinition self) {
+        return Keywords.Image.IMAGE
+    }
+
+    static ForegroundFill getNoFill(ForegroundFillProvider self) {
+        return ForegroundFill.NO_FILL
+    }
+
+    static ForegroundFill getSolidForeground(ForegroundFillProvider self) {
+        return ForegroundFill.SOLID_FOREGROUND
+    }
+
+    static ForegroundFill getFineDots(ForegroundFillProvider self) {
+        return ForegroundFill.FINE_DOTS
+    }
+
+    static ForegroundFill getAltBars(ForegroundFillProvider self) {
+        return ForegroundFill.ALT_BARS
+    }
+
+    static ForegroundFill getSparseDots(ForegroundFillProvider self) {
+        return ForegroundFill.SPARSE_DOTS
+    }
+
+    static ForegroundFill getThickHorizontalBands(ForegroundFillProvider self) {
+        return ForegroundFill.THICK_HORZ_BANDS
+    }
+
+    static ForegroundFill getThickVerticalBands(ForegroundFillProvider self) {
+        return ForegroundFill.THICK_VERT_BANDS
+    }
+
+    static ForegroundFill getThickBackwardDiagonals(ForegroundFillProvider self) {
+        return ForegroundFill.THICK_BACKWARD_DIAG
+    }
+
+    static ForegroundFill getThickForwardDiagonals(ForegroundFillProvider self) {
+        return ForegroundFill.THICK_FORWARD_DIAG
+    }
+
+    static ForegroundFill getBigSpots(ForegroundFillProvider self) {
+        return ForegroundFill.BIG_SPOTS
+    }
+
+    static ForegroundFill getBricks(ForegroundFillProvider self) {
+        return ForegroundFill.BRICKS
+    }
+
+    static ForegroundFill getThinHorizontalBands(ForegroundFillProvider self) {
+        return ForegroundFill.THIN_HORZ_BANDS
+    }
+
+    static ForegroundFill getThinVerticalBands(ForegroundFillProvider self) {
+        return ForegroundFill.THIN_VERT_BANDS
+    }
+
+    static ForegroundFill getThinBackwardDiagonals(ForegroundFillProvider self) {
+        return ForegroundFill.THIN_BACKWARD_DIAG
+    }
+
+    static ForegroundFill getThinForwardDiagonals(ForegroundFillProvider self) {
+        return ForegroundFill.THICK_FORWARD_DIAG
+    }
+
+    static ForegroundFill getSquares(ForegroundFillProvider self) {
+        return ForegroundFill.SQUARES
+    }
+
+    static ForegroundFill getDiamonds(ForegroundFillProvider self) {
+        return ForegroundFill.DIAMONDS
+    }
+
+    static Keywords.PureBorderSide getLeft(CellStyleDefinition self) {
+        return Keywords.PureBorderSide.LEFT
+    }
+
+    static Keywords.PureBorderSide getRight(CellStyleDefinition self) {
+        return Keywords.PureBorderSide.RIGHT
+    }
+
+    static Keywords.BorderSideAndVerticalAlignment getTop(CellStyleDefinition self) {
+        return Keywords.BorderSideAndVerticalAlignment.TOP
+    }
+
+    static Keywords.BorderSideAndVerticalAlignment getBottom(CellStyleDefinition self) {
+        return Keywords.BorderSideAndVerticalAlignment.BOTTOM
+    }
+
+    static Keywords.PureVerticalAlignment getCenter(CellStyleDefinition self) {
+        return Keywords.PureVerticalAlignment.CENTER
+    }
+
+    static Keywords.PureVerticalAlignment getJustify(CellStyleDefinition self) {
+        return Keywords.PureVerticalAlignment.JUSTIFY
+    }
+
+    static Keywords.PureVerticalAlignment getDistributed(CellStyleDefinition self) {
+        return Keywords.PureVerticalAlignment.DISTRIBUTED
+    }
+
+    static Keywords.Text getText(CellStyleDefinition self) {
+        return Keywords.Text.WRAP
+    }
+
+    static Keywords.Orientation getPortrait(PageSettingsProvider self) {
+        return Keywords.Orientation.PORTRAIT
+    }
+
+    static Keywords.Orientation getLandscape(PageSettingsProvider self) {
+        return Keywords.Orientation.LANDSCAPE
+    }
+
+    static Keywords.Fit getWidth(PageSettingsProvider self) {
+        return Keywords.Fit.WIDTH
+    }
+
+    static Keywords.Fit getHeight(PageSettingsProvider self) {
+        return Keywords.Fit.HEIGHT
+    }
+
+    static Keywords.To getTo(PageSettingsProvider self) {
+        return Keywords.To.TO
+    }
+
+    static Keywords.Paper getLetter(PageSettingsProvider self) {
+        return Keywords.Paper.LETTER
+    }
+
+    static Keywords.Paper getLetterSmall(PageSettingsProvider self) {
+        return Keywords.Paper.LETTER_SMALL
+    }
+
+    static Keywords.Paper getTabloid(PageSettingsProvider self) {
+        return Keywords.Paper.TABLOID
+    }
+
+    static Keywords.Paper getLedger(PageSettingsProvider self) {
+        return Keywords.Paper.LEDGER
+    }
+
+    static Keywords.Paper getLegal(PageSettingsProvider self) {
+        return Keywords.Paper.LEGAL
+    }
+
+    static Keywords.Paper getStatement(PageSettingsProvider self) {
+        return Keywords.Paper.STATEMENT
+    }
+
+    static Keywords.Paper getExecutive(PageSettingsProvider self) {
+        return Keywords.Paper.EXECUTIVE
+    }
+
+    static Keywords.Paper getA3(PageSettingsProvider self) {
+        return Keywords.Paper.A3
+    }
+
+    static Keywords.Paper getA4(PageSettingsProvider self) {
+        return Keywords.Paper.A4
+    }
+
+    static Keywords.Paper getA4Small(PageSettingsProvider self) {
+        return Keywords.Paper.A4_SMALL
+    }
+
+    static Keywords.Paper getA5(PageSettingsProvider self) {
+        return Keywords.Paper.A5
+    }
+
+    static Keywords.Paper getB4(PageSettingsProvider self) {
+        return Keywords.Paper.B4
+    }
+
+    static Keywords.Paper getB5(PageSettingsProvider self) {
+        return Keywords.Paper.B5
+    }
+
+    static Keywords.Paper getFolio(PageSettingsProvider self) {
+        return Keywords.Paper.FOLIO
+    }
+
+    static Keywords.Paper getQuarto(PageSettingsProvider self) {
+        return Keywords.Paper.QUARTO
+    }
+
+    static Keywords.Paper getStandard10x14(PageSettingsProvider self) {
+        return Keywords.Paper.STANDARD_10_14
+    }
+
+    static Keywords.Paper getStandard11x17(PageSettingsProvider self) {
+        return Keywords.Paper.STANDARD_11_17
+    }
+
+    static FontStyle getItalic(FontStylesProvider self) {
+        FontStyle.ITALIC
+    }
+
+    static FontStyle getBold(FontStylesProvider self) {
+        FontStyle.BOLD
+    }
+
+    static FontStyle getStrikeout(FontStylesProvider self) {
+        FontStyle.STRIKEOUT
+    }
+
+    static FontStyle getUnderline(FontStylesProvider self) {
+        FontStyle.UNDERLINE
+    }
+
+    static Keywords.PureBorderSide getLeft(BorderPositionProvider self) {
+        return Keywords.PureBorderSide.LEFT;
+    }
+
+    static Keywords.PureBorderSide getRight(BorderPositionProvider self) {
+        return Keywords.PureBorderSide.RIGHT;
+    }
+
+    static Keywords.BorderSideAndVerticalAlignment getTop(BorderPositionProvider self) {
+        return Keywords.BorderSideAndVerticalAlignment.TOP;
+    }
+
+    static Keywords.BorderSideAndVerticalAlignment getBottom(BorderPositionProvider self) {
+        return Keywords.BorderSideAndVerticalAlignment.BOTTOM;
+    }
 }

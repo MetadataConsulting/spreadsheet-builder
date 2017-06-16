@@ -5,11 +5,10 @@ import org.apache.poi.ss.usermodel.PrintOrientation
 import org.apache.poi.xssf.usermodel.XSSFPrintSetup
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Page
-import org.modelcatalogue.spreadsheet.api.AbstractPageSettingsProvider
 import org.modelcatalogue.spreadsheet.builder.api.FitDimension
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 
-class PoiPageSettingsProvider extends AbstractPageSettingsProvider implements Page, PageDefinition {
+class PoiPageSettingsProvider implements Page, PageDefinition {
 
     final XSSFPrintSetup printSetup
 

@@ -22,14 +22,9 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.modelcatalogue.spreadsheet.api.BorderStyle.DASH_DOT_DOT;
-import static org.modelcatalogue.spreadsheet.api.BorderStyle.THIN;
-import static org.modelcatalogue.spreadsheet.api.FontStyle.*;
-import static org.modelcatalogue.spreadsheet.api.ForegroundFill.FINE_DOTS;
-import static org.modelcatalogue.spreadsheet.api.ForegroundFill.SOLID_FOREGROUND;
-import static org.modelcatalogue.spreadsheet.api.HTMLColorProvider.*;
-import static org.modelcatalogue.spreadsheet.api.Keywords.Auto.AUTO;
-import static org.modelcatalogue.spreadsheet.api.Keywords.BorderSide.*;
+
+import static org.modelcatalogue.spreadsheet.api.Keywords.*;
+import static org.modelcatalogue.spreadsheet.api.Color.*;
 
 public class BuilderTest {
 
@@ -102,8 +97,8 @@ public class BuilderTest {
 
         DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader);
 
-        assertNotNull(dataRow.getAt("One"));
-        assertEquals("1", dataRow.getAt("One").getValue());
+        assertNotNull(dataRow.get("One"));
+        assertEquals("1", dataRow.get("One").getValue());
 
 
         Map<String, Integer> dataRowMapping = new HashMap<>();
@@ -111,8 +106,8 @@ public class BuilderTest {
 
 
         DataRow dataRowFromMapping = DataRow.create(dataRowMapping, manyRowsDataRow);
-        assertNotNull(dataRowFromMapping.getAt("primo"));
-        assertEquals("1", dataRowFromMapping.getAt("primo").getValue());
+        assertNotNull(dataRowFromMapping.get("primo"));
+        assertEquals("1", dataRowFromMapping.get("primo").getValue());
 
 
         SpreadsheetCriteriaResult someCells = matcher.query(w -> {
@@ -173,7 +168,7 @@ public class BuilderTest {
                 s.row(r -> {
                     r.cell(c -> {
                         c.style(st -> {
-                            st.fill(FINE_DOTS);
+                            st.fill(fineDots);
                         });
                     });
                 });
@@ -220,7 +215,7 @@ public class BuilderTest {
                     r.cell(c -> {
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(BOLD);
+                                f.make(bold);
                             });
                         });
                     });
@@ -251,8 +246,8 @@ public class BuilderTest {
                 s.row(r -> {
                     r.cell(c -> {
                         c.style(st -> {
-                            st.border(TOP, b -> {
-                                b.style(THIN);
+                            st.border(top, b -> {
+                                b.style(thin);
                             });
                         });
                     });
@@ -456,19 +451,19 @@ public class BuilderTest {
             });
             w.style("bold", s -> {
                 s.font(f -> {
-                    f.make(BOLD);
+                    f.make(bold);
                 });
             });
 
             w.style("h1", s -> {
                 s.font(f -> {
-                    f.make(BOLD);
+                    f.make(bold);
                 });
             });
 
             w.style("h2", s -> {
                 s.font(f -> {
-                    f.make(BOLD);
+                    f.make(bold);
                 });
             });
 
@@ -477,12 +472,12 @@ public class BuilderTest {
                     f.color(red);
                 });
                 s.border(b -> {
-                    b.style(THIN).color(black);
+                    b.style(thin).color(black);
                 });
             });
 
             w.style("centered", s -> {
-                    s.align(s.getCenter()).getCenter();
+                    s.align(center).getCenter();
             });
 
             w.style("redfg", s -> {
@@ -548,41 +543,41 @@ public class BuilderTest {
             w.sheet("Fonts", s -> {
                 s.row(r -> {
                     r.cell(c -> {
-                        c.width(c.getAuto());
+                        c.width(auto);
                         c.value("Bold Red 22");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(BOLD);
+                                f.make(bold);
                                 f.color(red);
                                 f.size(22);
                             });
                         });
                     });
                     r.cell(c -> {
-                        c.width(c.getAuto());
+                        c.width(auto);
                         c.value("Underline Courier New");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(UNDERLINE);
+                                f.make(underline);
                                 f.name("Courier New");
                             });
                         });
                     });
                     r.cell(c -> {
-                        c.width(c.getAuto());
+                        c.width(auto);
                         c.value("Italic");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(ITALIC);
+                                f.make(italic);
                             });
                         });
                     });
                     r.cell(c -> {
-                        c.width(c.getAuto());
+                        c.width(auto);
                         c.value("Strikeout");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(STRIKEOUT);
+                                f.make(strikeout);
                             });
                         });
                     });
@@ -609,12 +604,12 @@ public class BuilderTest {
                         });
                         c.text(" ");
                         c.text("Riding", f -> {
-                                f.make(ITALIC);
+                                f.make(italic);
                                 f.size(18);
                         });
                         c.text(" ");
                         c.text("Hood", f -> {
-                                f.make(BOLD);
+                                f.make(bold);
                                 f.size(22);
                         });
 
@@ -623,12 +618,12 @@ public class BuilderTest {
                 s.row(r -> {
                     r.cell(c -> {
                         c.style(st -> {
-                            st.wrap(st.getText());
+                            st.wrap(text);
                         });
                         c.text("First Line");
                         c.text("\n");
                         c.text("Second Line", f -> {
-                                f.make(BOLD);
+                                f.make(bold);
                                 f.size(12);
                         });
                         c.text("\n");
@@ -646,7 +641,7 @@ public class BuilderTest {
                         c.text("Next line after two spaces");
                         c.text("\n");
                         c.text("Last line", f -> {
-                                f.make(ITALIC);
+                                f.make(italic);
                         });
                         c.text("\n");
                     });
@@ -658,7 +653,7 @@ public class BuilderTest {
                         c.text("\n\n");
                         c.text("Enumerations", f -> {
                                 f.size(12);
-                                f.make(BOLD);
+                                f.make(bold);
                         });
                         c.text("\n");
 
@@ -678,16 +673,16 @@ public class BuilderTest {
                 s.row(2, r -> {
                     r.style(st -> {
                         st.background(whiteSmoke);
-                        st.border(TOP, BOTTOM, b -> {
-                            b.style(THIN);
+                        st.border(top, bottom, b -> {
+                            b.style(thin);
                             b.color(black);
                         });
                     });
                     r.cell("B", c -> {
                         c.value("A");
                         c.style(st -> {
-                            st.border(LEFT,  b -> {
-                                b.style(THIN);
+                            st.border(left,  b -> {
+                                b.style(thin);
                                 b.color(black);
                             });
                         });
@@ -696,8 +691,8 @@ public class BuilderTest {
                     r.cell(c -> {
                         c.value("C");
                         c.style(st -> {
-                            st.border(RIGHT, b -> {
-                                b.style(THIN);
+                            st.border(right, b -> {
+                                b.style(thin);
                                 b.color(black);
                             });
                         });
@@ -722,19 +717,19 @@ public class BuilderTest {
 
                 s.row(r -> {
                     r.style(st -> {
-                        st.align(st.getCenter()).getLeft();
+                        st.align(center).getLeft();
                         st.border(b -> {
                             b.color("#abcdef");
-                            b.style(DASH_DOT_DOT);
+                            b.style(dashDotDot);
                         });
-                        st.border(RIGHT, b -> {
+                        st.border(right, b -> {
                             b.color("#00ff00");
                         });
                     });
                     r.cell(c -> {
                         c.value("Hello");
                         c.name("Salutation");
-                        c.width(c.getAuto());
+                        c.width(auto);
                     });
                     r.cell(c -> {
                         c.style("bold");
@@ -745,7 +740,7 @@ public class BuilderTest {
                     r.cell(c -> {
                         c.style(st -> {
                             st.format("d.m.y");
-                            st.align(st.getCenter()).getCenter();
+                            st.align(center).getCenter();
                         });
                         c.value(today);
                         c.comment("This is a date!");
@@ -759,27 +754,27 @@ public class BuilderTest {
                 s.row(r -> {
                     r.cell(c -> {
                         c.value("Document (and a very long text)");
-                        c.link(c.getTo()).name("Salutation");
-                        c.width(c.getAuto());
+                        c.link(to).name("Salutation");
+                        c.width(auto);
                     });
                     r.cell(c -> {
                         c.value("File");
-                        c.link(c.getTo()).file("text.txt");
+                        c.link(to).file("text.txt");
                     });
                     r.cell(c -> {
                         c.value("URL");
-                        c.link(c.getTo()).url("https://www.google.com");
+                        c.link(to).url("https://www.google.com");
                     });
                     r.cell(c -> {
                         c.value("Mail (plain)");
-                        c.link(c.getTo()).email("vladimir@orany.cz");
+                        c.link(to).email("vladimir@orany.cz");
                     });
                     r.cell(c -> {
                         c.value("Mail (with subject)");
                         Map<String, String> email = new LinkedHashMap<>();
                         email.put("subject", "Testing Excel Builder");
                         email.put("body", "It is really great tools");
-                        c.link(c.getTo()).email(email,"vladimir@orany.cz");
+                        c.link(to).email(email,"vladimir@orany.cz");
                     });
                 });
             });
@@ -791,7 +786,7 @@ public class BuilderTest {
                             c.value("Headline 2");
                             c.style(st -> {
                                 st.foreground(aquamarine);
-                                st.fill(SOLID_FOREGROUND);
+                                st.fill(solidForeground);
                             });
                         });
                         g.cell("Headline 3");
@@ -823,7 +818,7 @@ public class BuilderTest {
                 for (ForegroundFill foregroundFill : ForegroundFill.values()) {
                     s.row(r -> {
                         r.cell(c -> {
-                            c.width(c.getAuto());
+                            c.width(auto);
                             c.value(foregroundFill.name());
                         });
                         r.cell(c -> {
@@ -926,7 +921,7 @@ public class BuilderTest {
                 });
             });
             w.sheet("Filtered", s -> {
-                s.filter(AUTO);
+                s.filter(auto);
                 s.row(r -> {
                     r.cell("Name");
                     r.cell("Profession");
@@ -1003,9 +998,9 @@ public class BuilderTest {
 
             w.sheet("Custom Page", s -> {
                 s.page( page -> {
-                    page.paper(page.getA5());
-                    page.fit(page.getWidth()).to(1);
-                    page.orientation(page.getLandscape());
+                    page.paper(A5);
+                    page.fit(width).to(1);
+                    page.orientation(landscape);
                 });
                 s.row(r -> {
                     r.cell("A5 Landcapse");
@@ -1015,7 +1010,7 @@ public class BuilderTest {
                 s.row(r -> {
                     r.styles("bold", "redfg");
                     r.cell(c -> {
-                        c.value("BOLD and RED");
+                        c.value("bold and RED");
                     });
                 });
             });
@@ -1024,7 +1019,7 @@ public class BuilderTest {
 
     private static void printMap(CellDefinition c, Map.Entry<String, String> entry) {
         c.text(entry.getKey(), f -> {
-                f.make(BOLD);
+                f.make(bold);
         });
         c.text(": ");
         c.text(entry.getValue());

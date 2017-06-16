@@ -1,10 +1,6 @@
 package org.modelcatalogue.spreadsheet.api;
 
-public interface FontStylesProvider {
-
-    FontStyle getItalic();
-    FontStyle getBold();
-    FontStyle getStrikeout();
-    FontStyle getUnderline();
-
-}
+/**
+ * Marker interface used to inject DSL keywords by Groovy DSL.
+ */
+public interface FontStylesProvider { }

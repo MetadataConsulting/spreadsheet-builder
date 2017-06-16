@@ -10,12 +10,11 @@ import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFDataFormat
-import org.modelcatalogue.spreadsheet.api.HTMLColorProvider
-import org.modelcatalogue.spreadsheet.builder.api.AbstractCellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.api.Configurer
+import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.Keywords
@@ -24,7 +23,7 @@ import org.modelcatalogue.spreadsheet.api.HorizontalAlignmentConfigurer
 
 import java.util.regex.Matcher
 
-class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTMLColorProvider {
+class PoiCellStyleDefinition implements CellStyleDefinition {
 
     private final XSSFCellStyle style
     private final PoiWorkbookDefinition workbook
@@ -93,7 +92,7 @@ class PoiCellStyleDefinition extends AbstractCellStyleDefinition implements HTML
         }
         style.setFillForegroundColor(parseColor(hexColor))
         if (style.fillPatternEnum == FillPatternType.NO_FILL) {
-            fill solidForeground
+            fill ForegroundFill.SOLID_FOREGROUND
         }
         this
     }

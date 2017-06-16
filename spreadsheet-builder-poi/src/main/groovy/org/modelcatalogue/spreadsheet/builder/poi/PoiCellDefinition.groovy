@@ -15,8 +15,7 @@ import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
 import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Comment
-import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
-
+import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CommentDefinition
 import org.modelcatalogue.spreadsheet.api.Configurer
@@ -27,7 +26,7 @@ import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
 
-class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, SpreadsheetCell {
+class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
 
     private final PoiRowDefinition row
     private final XSSFCell xssfCell

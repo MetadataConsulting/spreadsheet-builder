@@ -160,24 +160,4 @@ final class SimpleFontCriterion implements FontCriterion {
         });
         return this;
     }
-
-    @Override
-    public FontStyle getItalic() {
-        return FontStyle.ITALIC;
-    }
-
-    @Override
-    public FontStyle getBold() {
-        return FontStyle.BOLD;
-    }
-
-    @Override
-    public FontStyle getStrikeout() {
-        return FontStyle.STRIKEOUT;
-    }
-
-    @Override
-    public FontStyle getUnderline() {
-        return FontStyle.UNDERLINE;
-    }
 }

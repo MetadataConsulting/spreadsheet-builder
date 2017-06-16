@@ -4,12 +4,11 @@ import org.apache.poi.ss.usermodel.FontUnderline
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.modelcatalogue.spreadsheet.api.HTMLColorProvider
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.FontStyle
 
-class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
+class PoiFontDefinition implements FontDefinition {
 
     private final XSSFFont font
 
@@ -44,26 +43,6 @@ class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
     PoiFontDefinition name(String name) {
         font.setFontName(name)
         this
-    }
-
-    @Override
-    FontStyle getItalic() {
-        FontStyle.ITALIC
-    }
-
-    @Override
-    FontStyle getBold() {
-        FontStyle.BOLD
-    }
-
-    @Override
-    FontStyle getStrikeout() {
-        FontStyle.STRIKEOUT
-    }
-
-    @Override
-    FontStyle getUnderline() {
-        FontStyle.UNDERLINE
     }
 
     @Override
