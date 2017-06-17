@@ -26,31 +26,31 @@ import static org.junit.Assert.assertNull;
 import static org.modelcatalogue.spreadsheet.api.Keywords.*;
 import static org.modelcatalogue.spreadsheet.api.Color.*;
 
-public class BuilderTest {
+public class Java8BuilderTest {
 
     @Rule public TemporaryFolder tmp = new TemporaryFolder();
 
     @Test public void testBuilder() throws IOException {
         File excel = tmp.newFile();
-        PoiSpreadsheetBuilder.INSTANCE.build((w) -> {
-            w.sheet("test", s -> {
-                s.row(r -> {
-                    r.cell(c -> {
-                        c.value("Hello World");
-                    });
-                });
-            });
-        }).writeTo(excel);
+        PoiSpreadsheetBuilder.INSTANCE.build(w ->
+            w.sheet("test", s ->
+                s.row(r ->
+                    r.cell(c ->
+                        c.value("Hello World")
+                    )
+                )
+            )
+        ).writeTo(excel);
 
-        assertEquals(1, PoiSpreadsheetCriteria.FACTORY.forFile(excel).query(w -> {
-            w.sheet("test", s -> {
-               s.row(r -> {
-                   r.cell(c -> {
-                       c.value("Hello World");
-                   });
-               });
-            });
-        }).getCells().size());
+        assertEquals(1, PoiSpreadsheetCriteria.FACTORY.forFile(excel).query(w ->
+            w.sheet("test", s ->
+               s.row(r ->
+                   r.cell(c ->
+                       c.value("Hello World")
+                   )
+               )
+            )
+        ).getCells().size());
     }
 
     @Test public void testBuilderFull() throws IOException {
@@ -68,29 +68,28 @@ public class BuilderTest {
         assertEquals(20065, allCells.getRows().size());
 
 
-        SpreadsheetCriteriaResult sampleCells = matcher.query(w -> {
-                w.sheet("Sample");
-        });
+        SpreadsheetCriteriaResult sampleCells = matcher.query(w -> w.sheet("Sample"));
 
         assertEquals(2, sampleCells.getCells().size());
         assertEquals(1, sampleCells.getSheets().size());
         assertEquals(1, sampleCells.getRows().size());
 
-        SpreadsheetCriteriaResult rowCells = matcher.query(w -> {
-            w.sheet("many rows", s -> {
-                    s.row(1);
-            });
-        });
+        SpreadsheetCriteriaResult rowCells = matcher.query(w ->
+            w.sheet("many rows", s ->
+                    s.row(1)
+            )
+        );
 
         assertEquals(4, rowCells.getCells().size());
         assertEquals(1, rowCells.getSheets().size());
         assertEquals(1, rowCells.getRows().size());
 
-        Row manyRowsHeader = matcher.query(w -> {
-            w.sheet("many rows", s -> {
-                s.row(1);
-            });
-        }).getRow();
+        Row manyRowsHeader = matcher.query(w ->
+            w.sheet("many rows", s ->
+                s.row(1)
+            )
+        ).getRow();
+
         assertNotNull(manyRowsHeader);
 
         Row manyRowsDataRow = matcher.query(w -> w.sheet("many rows", s -> s.row(2))).getRow();
@@ -110,28 +109,28 @@ public class BuilderTest {
         assertEquals("1", dataRowFromMapping.get("primo").getValue());
 
 
-        SpreadsheetCriteriaResult someCells = matcher.query(w -> {
-            w.sheet(s -> {
-               s.row(r -> {
-                   r.cell(c -> {
-                      c.date(today);
-                   });
-               });
-            });
-        });
+        SpreadsheetCriteriaResult someCells = matcher.query(w ->
+            w.sheet(s ->
+               s.row(r ->
+                   r.cell(c ->
+                      c.date(today)
+                   )
+               )
+            )
+        );
 
         assertEquals(1, someCells.getCells().size());
 
 
-        SpreadsheetCriteriaResult commentedCells = matcher.query(w -> {
-            w.sheet(s -> {
-                s.row(r -> {
-                    r.cell(c -> {
-                        c.comment("This is a date!");
-                    });
-                });
-            });
-        });
+        SpreadsheetCriteriaResult commentedCells = matcher.query(w ->
+            w.sheet(s ->
+                s.row(r ->
+                    r.cell(c ->
+                        c.comment("This is a date!")
+                    )
+                )
+            )
+        );
 
         assertEquals(1, commentedCells.getCells().size());
 
@@ -304,7 +303,7 @@ public class BuilderTest {
         assertEquals(1, traversal.getCells().size());
 
         Cell cellE = traversal.iterator().next();
-        
+
         assertEquals("Traversal", cellE.getRow().getSheet().getName());
         assertNotNull(cellE.getRow().getSheet().getPrevious());
         assertEquals("Formula", cellE.getRow().getSheet().getPrevious().getName());
@@ -333,7 +332,7 @@ public class BuilderTest {
         assertNotNull(cellE.getBellow());
         assertEquals("H", cellE.getBellow().getValue());
         assertEquals("J", cellE.getBellow().getBellow().getValue());
-        
+
         SpreadsheetCriteriaResult zeroCells = matcher.query(w -> {
             w.sheet("Zero", s -> {
                 s.row(r -> {
@@ -1006,14 +1005,13 @@ public class BuilderTest {
                     r.cell("A5 Landcapse");
                 });
             });
-            w.sheet("Broken row styles", s -> {
-                s.row(r -> {
-                    r.styles("bold", "redfg");
-                    r.cell(c -> {
-                        c.value("bold and RED");
-                    });
-                });
-            });
+            w.sheet("Broken row styles", s ->
+                    s.row(r ->
+                            r.styles("bold", "redfg").cell(c ->
+                                c.value("bold and RED")
+                            )
+                    )
+            );
         });
     }
 
