@@ -3,4 +3,4 @@ jdk:
 - oraclejdk8
 script:
   #- "./gradlew check"
-  - "./gradlew test --parallel"
+  - "./gradlew test"
