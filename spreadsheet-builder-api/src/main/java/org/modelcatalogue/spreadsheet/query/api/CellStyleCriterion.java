@@ -57,4 +57,6 @@ public interface CellStyleCriterion extends ForegroundFillProvider, BorderPositi
      */
     CellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration);
 
+    CellStyleCriterion having(Predicate<CellStyle> cellStylePredicate);
+
 }

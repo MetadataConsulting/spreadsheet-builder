@@ -35,5 +35,6 @@ public interface CellCriterion extends Predicate<Cell> {
     CellCriterion comment(Predicate<Comment> predicate);
 
     CellCriterion or(Configurer<CellCriterion> sheetCriterion);
+    CellCriterion having(Predicate<Cell> cellPredicate);
 
 }

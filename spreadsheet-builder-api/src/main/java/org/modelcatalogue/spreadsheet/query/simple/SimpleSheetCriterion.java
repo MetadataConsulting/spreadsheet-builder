@@ -1,9 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import org.modelcatalogue.spreadsheet.api.Page;
-import org.modelcatalogue.spreadsheet.api.Row;
-import org.modelcatalogue.spreadsheet.api.Sheet;
-import org.modelcatalogue.spreadsheet.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
@@ -28,28 +25,8 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public Predicate<Row> number(final int row) {
-        return new Predicate<Row>() {
-            @Override
-            public boolean test(Row o) {
-                return o.getNumber() == row;
-            }
-        };
-    }
-
-    @Override
-    public Predicate<Row> range(final int from, final int to) {
-        return new Predicate<Row>() {
-            @Override
-            public boolean test(Row o) {
-                return o.getNumber() >= from && o.getNumber() <= to;
-            }
-        };
-    }
-
-    @Override
     public SimpleSheetCriterion row(Configurer<RowCriterion> rowCriterion) {
-        SimpleRowCriterion criterion = new SimpleRowCriterion();
+        SimpleRowCriterion criterion = new SimpleRowCriterion(this);
         Configurer.Runner.doConfigure(rowCriterion, criterion);
         criteria.add(criterion);
         return this;
@@ -63,19 +40,6 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public SimpleSheetCriterion row(Predicate<Row> predicate, Configurer<RowCriterion> rowCriterion) {
-        row(predicate);
-        row(rowCriterion);
-        return this;
-    }
-
-    @Override
-    public SimpleSheetCriterion row(Predicate<Row> predicate) {
-        addCondition(predicate);
-        return this;
-    }
-
-    @Override
     public SimpleSheetCriterion page(Configurer<PageCriterion> pageCriterion) {
         SimplePageCriterion criterion = new SimplePageCriterion(parent);
         Configurer.Runner.doConfigure(pageCriterion, criterion);
@@ -83,25 +47,41 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public SimpleSheetCriterion page(final Predicate<Page> predicate) {
-        parent.addCondition(new Predicate<Sheet>() {
+    public SimpleSheetCriterion row(final int row) {
+        addCondition(new Predicate<Row>() {
             @Override
-            public boolean test(Sheet o) {
-                return predicate.test(o.getPage());
+            public boolean test(Row o) {
+                return o.getNumber() == row;
             }
         });
         return this;
     }
 
     @Override
-    public SimpleSheetCriterion row(int row) {
-        row(number(row));
+    public SimpleSheetCriterion or(Configurer<SheetCriterion> sheetCriterion) {
+        return (SimpleSheetCriterion) super.or(sheetCriterion);
+    }
+
+    @Override
+    public SheetCriterion having(Predicate<Sheet> sheetPredicate) {
+        parent.addCondition(sheetPredicate);
         return this;
     }
 
     @Override
-    public SimpleSheetCriterion or(Configurer<SheetCriterion> sheetCriterion) {
-        return (SimpleSheetCriterion) super.or(sheetCriterion);
+    public SheetCriterion row(final int from, final int to) {
+        addCondition(new Predicate<Row>() {
+            @Override
+            public boolean test(Row o) {
+                return o.getNumber() >= from && o.getNumber() <= to;
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public SheetCriterion row(int from, int to, Configurer<RowCriterion> rowCriterion) {
+        return null;
     }
 
     Collection<SimpleRowCriterion> getCriteria() {

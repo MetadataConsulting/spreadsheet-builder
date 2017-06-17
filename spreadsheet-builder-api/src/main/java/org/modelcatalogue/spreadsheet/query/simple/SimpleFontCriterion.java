@@ -160,4 +160,20 @@ final class SimpleFontCriterion implements FontCriterion {
         });
         return this;
     }
+
+    @Override
+    public FontCriterion having(final Predicate<Font> fontPredicate) {
+        parent.addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Font font = style.getFont();
+                return font != null && fontPredicate.test(font);
+            }
+        });
+        return this;
+    }
 }

@@ -214,6 +214,12 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> i
     }
 
     @Override
+    public CellCriterion having(Predicate<Cell> cellPredicate) {
+        addCondition(cellPredicate);
+        return this;
+    }
+
+    @Override
     CellCriterion newDisjointCriterionInstance() {
         return new SimpleCellCriterion(true);
     }

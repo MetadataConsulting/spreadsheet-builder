@@ -83,4 +83,20 @@ final class SimpleBorderCriterion implements BorderCriterion {
         });
         return this;
     }
+
+    @Override
+    public BorderCriterion having(final Predicate<Border> borderPredicate) {
+        parent.addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Border border = style.getBorder(side);
+                return border != null && borderPredicate.test(border);
+            }
+        });
+        return this;
+    }
 }

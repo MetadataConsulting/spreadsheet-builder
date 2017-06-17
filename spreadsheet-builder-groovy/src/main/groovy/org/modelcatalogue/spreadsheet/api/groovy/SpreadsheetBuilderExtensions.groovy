@@ -35,13 +35,15 @@ import org.modelcatalogue.spreadsheet.query.api.CellCriterion
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion
 import org.modelcatalogue.spreadsheet.query.api.FontCriterion
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion
-import org.modelcatalogue.spreadsheet.query.api.Predicate
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion
 import org.modelcatalogue.spreadsheet.query.api.SheetCriterion
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
 import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
 
+/**
+ * Main purpose of this class is to provide additional context for IDEs and static type checking.
+ */
 @CompileStatic class SpreadsheetBuilderExtensions {
 
     static CanDefineStyle style(CanDefineStyle stylable, String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
@@ -247,9 +249,13 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
     static RowCriterion cell(RowCriterion row, String column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         row.cell(column, cellCriterion as Configurer<CellCriterion>)
     }
-    static RowCriterion cell(RowCriterion row, Predicate<Cell> predicate, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
-        row.cell(predicate, cellCriterion as Configurer<CellCriterion>)
+    static RowCriterion cell(RowCriterion row, int from, int to, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+        row.cell(from, to, cellCriterion as Configurer<CellCriterion>)
     }
+    static RowCriterion cell(RowCriterion row, String from, String to, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+        row.cell(from, to, cellCriterion as Configurer<CellCriterion>)
+    }
+
     static RowCriterion or(RowCriterion row, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
         row.or(rowCriterion as Configurer<RowCriterion>)
     }
@@ -259,9 +265,6 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
     }
     static SheetCriterion row(SheetCriterion sheet, int row, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
         sheet.row(row, rowCriterion as Configurer<RowCriterion>)
-    }
-    static SheetCriterion row(SheetCriterion sheet, Predicate<Row> predicate, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
-        sheet.row(predicate, rowCriterion as Configurer<RowCriterion>)
     }
     static SheetCriterion page(SheetCriterion sheet, @DelegatesTo(PageCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.PageCriterion") Closure pageCriterion) {
         sheet.page(pageCriterion as Configurer<PageCriterion>)
@@ -282,9 +285,6 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
 
     static WorkbookCriterion sheet(WorkbookCriterion workbook, String name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         workbook.sheet(name, sheetCriterion as Configurer<SheetCriterion>)
-    }
-    static WorkbookCriterion sheet(WorkbookCriterion workbook, Predicate<Sheet> predicate, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
-        workbook.sheet(predicate, sheetCriterion as Configurer<SheetCriterion>)
     }
     static WorkbookCriterion sheet(WorkbookCriterion workbook, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         workbook.sheet(sheetCriterion as Configurer<SheetCriterion>)

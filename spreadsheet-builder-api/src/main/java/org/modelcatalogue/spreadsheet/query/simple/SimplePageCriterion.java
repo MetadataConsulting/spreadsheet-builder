@@ -34,4 +34,14 @@ public class SimplePageCriterion implements PageCriterion {
         return this;
     }
 
+    @Override
+    public PageCriterion having(final Predicate<Page> pagePredicate) {
+        workbookCriterion.addCondition(new Predicate<Sheet>() {
+            @Override
+            public boolean test(Sheet o) {
+                return pagePredicate.test(o.getPage());
+            }
+        });
+        return this;
+    }
 }

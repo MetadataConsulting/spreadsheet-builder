@@ -1,6 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
 import org.modelcatalogue.spreadsheet.api.Color;
+import org.modelcatalogue.spreadsheet.api.Font;
 import org.modelcatalogue.spreadsheet.api.FontStyle;
 import org.modelcatalogue.spreadsheet.api.FontStylesProvider;
 
@@ -20,4 +21,6 @@ public interface FontCriterion extends FontStylesProvider {
 
     FontCriterion make(FontStyle first, FontStyle... other);
     FontCriterion make(Predicate<EnumSet<FontStyle>> predicate);
+
+    FontCriterion having(Predicate<Font> fontPredicate);
 }

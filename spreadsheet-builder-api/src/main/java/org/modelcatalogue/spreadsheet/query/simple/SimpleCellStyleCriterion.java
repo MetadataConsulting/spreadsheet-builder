@@ -1,10 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.api.Color;
-import org.modelcatalogue.spreadsheet.api.ForegroundFill;
-import org.modelcatalogue.spreadsheet.api.Keywords;
-import org.modelcatalogue.spreadsheet.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.BorderCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
@@ -200,6 +196,17 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
     @Override
     public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second, third}, borderConfiguration);
+        return this;
+    }
+
+    @Override
+    public CellStyleCriterion having(final Predicate<CellStyle> cellStylePredicate) {
+        parent.addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return o.getStyle() != null && cellStylePredicate.test(o.getStyle());
+            }
+        });
         return this;
     }
 

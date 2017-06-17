@@ -20,47 +20,20 @@ final class SimpleWorkbookCriterion extends AbstractCriterion<Sheet, WorkbookCri
 
     SimpleWorkbookCriterion() {}
 
+
     @Override
-    public Predicate<Sheet> name(final String name) {
-        return new Predicate<Sheet>() {
+    public SimpleWorkbookCriterion sheet(final String name) {
+        addCondition(new Predicate<Sheet>() {
             @Override
             public boolean test(Sheet o) {
                 return o.getName().equals(name);
             }
-        };
-    }
-
-    @Override
-    public Predicate<Sheet> name(final Predicate<String> namePredicate) {
-        return new Predicate<Sheet>() {
-            @Override
-            public boolean test(Sheet o) {
-                return namePredicate.test(o.getName());
-            }
-        };
-    }
-
-    @Override
-    public SimpleWorkbookCriterion sheet(String name) {
-        sheet(name(name));
+        });
         return this;
     }
 
     @Override
-    public SimpleWorkbookCriterion sheet(String name, Configurer<SheetCriterion> sheetCriterion) {
-        sheet(name(name));
-        sheet(sheetCriterion);
-        return this;
-    }
-
-    @Override
-    public SimpleWorkbookCriterion sheet(Predicate<Sheet> name) {
-        addCondition(name);
-        return this;
-    }
-
-    @Override
-    public SimpleWorkbookCriterion sheet(Predicate<Sheet> name, Configurer<SheetCriterion> sheetCriterion) {
+    public SimpleWorkbookCriterion sheet(final String name, Configurer<SheetCriterion> sheetCriterion) {
         sheet(name);
         sheet(sheetCriterion);
         return this;
