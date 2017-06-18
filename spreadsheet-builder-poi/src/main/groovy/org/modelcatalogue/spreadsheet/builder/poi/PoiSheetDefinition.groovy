@@ -170,11 +170,6 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    Keywords.Auto getAuto() {
-        return Keywords.Auto.AUTO
-    }
-
-    @Override
     PoiSheetDefinition page(Configurer<PageDefinition> pageDefinition) {
         PageDefinition page = new PoiPageSettingsProvider(this)
         Configurer.Runner.doConfigure(pageDefinition, page)

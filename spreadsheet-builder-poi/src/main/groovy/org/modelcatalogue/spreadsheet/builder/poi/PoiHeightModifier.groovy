@@ -14,24 +14,24 @@ class PoiHeightModifier implements DimensionModifier {
     }
 
     @Override
-    PoiCellDefinition getCm() {
+    PoiCellDefinition cm() {
         cell.height(28 * height)
         return cell
     }
 
     @Override
-    PoiCellDefinition getInch() {
+    PoiCellDefinition inch() {
         cell.height(72 * height)
         return cell
     }
 
     @Override
-    PoiCellDefinition getInches() {
+    PoiCellDefinition inches() {
         return inch
     }
 
     @Override
-    CellDefinition getPoints() {
+    CellDefinition points() {
         return cell
     }
 }

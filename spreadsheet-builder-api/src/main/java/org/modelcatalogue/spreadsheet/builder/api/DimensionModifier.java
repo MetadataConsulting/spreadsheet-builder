@@ -10,26 +10,26 @@ public interface DimensionModifier {
      *
      * This feature is currently experimental.
      */
-    CellDefinition getCm();
+    CellDefinition cm();
 
     /**
      * Converts the dimension to inches.
      *
      * This feature is currently experimental.
      */
-    CellDefinition getInch();
+    CellDefinition inch();
 
     /**
      * Converts the dimension to inches.
      *
      * This feature is currently experimental.
      */
-    CellDefinition getInches();
+    CellDefinition inches();
 
     /**
      * Keeps the dimesion in points.
      *
      * This feature is currently experimental.
      */
-    CellDefinition getPoints();
+    CellDefinition points();
 }

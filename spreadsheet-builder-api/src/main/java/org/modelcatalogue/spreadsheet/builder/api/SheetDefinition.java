@@ -46,7 +46,6 @@ public interface SheetDefinition {
     SheetDefinition password(String password);
 
     SheetDefinition filter(Keywords.Auto auto);
-    Keywords.Auto getAuto();
 
     /**
      * Configures the basic page settings.

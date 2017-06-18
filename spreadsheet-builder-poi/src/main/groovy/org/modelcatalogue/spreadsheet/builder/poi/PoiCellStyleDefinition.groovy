@@ -19,8 +19,6 @@ import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.Keywords
 
-import org.modelcatalogue.spreadsheet.api.HorizontalAlignmentConfigurer
-
 import java.util.regex.Matcher
 
 class PoiCellStyleDefinition implements CellStyleDefinition {
@@ -212,16 +210,16 @@ class PoiCellStyleDefinition implements CellStyleDefinition {
     }
 
     @Override
-    HorizontalAlignmentConfigurer align(Keywords.VerticalAlignment alignment) {
+    PoiCellStyleDefinition align(Keywords.VerticalAlignment verticalAlignment, Keywords.HorizontalAlignment horizontalAlignment) {
         checkSealed()
-        switch (alignment) {
-            case Keywords.PureVerticalAlignment.CENTER:
+        switch (verticalAlignment) {
+            case Keywords.VerticalAndHorizontalAlignment.CENTER:
                 style.setVerticalAlignment(VerticalAlignment.CENTER)
                 break
             case Keywords.PureVerticalAlignment.DISTRIBUTED:
                 style.setVerticalAlignment(VerticalAlignment.DISTRIBUTED)
                 break
-            case Keywords.PureVerticalAlignment.JUSTIFY:
+            case Keywords.VerticalAndHorizontalAlignment.JUSTIFY:
                 style.setVerticalAlignment(VerticalAlignment.JUSTIFY)
                 break
             case Keywords.BorderSideAndVerticalAlignment.TOP:
@@ -231,9 +229,32 @@ class PoiCellStyleDefinition implements CellStyleDefinition {
                 style.setVerticalAlignment(VerticalAlignment.BOTTOM)
                 break
             default:
-                throw new IllegalArgumentException("$alignment is not supported!")
+                throw new IllegalArgumentException("$verticalAlignment is not supported!")
         }
-        return new PoiHorizontalAlignmentConfigurer(this)
+        switch (horizontalAlignment) {
+            case Keywords.HorizontalAlignment.RIGHT:
+                style.setAlignment(HorizontalAlignment.RIGHT)
+                break;
+            case Keywords.HorizontalAlignment.LEFT:
+                style.setAlignment(HorizontalAlignment.LEFT)
+                break;
+            case Keywords.HorizontalAlignment.GENERAL:
+                style.setAlignment(HorizontalAlignment.GENERAL)
+                break;
+            case Keywords.HorizontalAlignment.CENTER:
+                style.setAlignment(HorizontalAlignment.CENTER)
+                break;
+            case Keywords.HorizontalAlignment.FILL:
+                style.setAlignment(HorizontalAlignment.FILL)
+                break;
+            case Keywords.HorizontalAlignment.JUSTIFY:
+                style.setAlignment(HorizontalAlignment.JUSTIFY)
+                break;
+            case Keywords.HorizontalAlignment.CENTER_SELECTION:
+                style.setAlignment(HorizontalAlignment.CENTER_SELECTION)
+                break;
+        }
+        return this
     }
 
     @Override

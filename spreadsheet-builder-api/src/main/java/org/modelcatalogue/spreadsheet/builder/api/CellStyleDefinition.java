@@ -37,7 +37,7 @@ public interface CellStyleDefinition extends ForegroundFillProvider, BorderPosit
 
     CellStyleDefinition format(String format);
 
-    HorizontalAlignmentConfigurer align(Keywords.VerticalAlignment alignment);
+    CellStyleDefinition align(Keywords.VerticalAlignment verticalAlignment, Keywords.HorizontalAlignment horizontalAlignment);
 
     /**
      * Configures all the borders of the cell.

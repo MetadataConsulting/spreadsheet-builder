@@ -13,15 +13,15 @@ import org.modelcatalogue.spreadsheet.api.FontStylesProvider
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.ForegroundFillProvider
 import org.modelcatalogue.spreadsheet.api.Keywords
+import org.modelcatalogue.spreadsheet.api.Keywords.VerticalAlignment
 import org.modelcatalogue.spreadsheet.api.PageSettingsProvider
-import org.modelcatalogue.spreadsheet.api.Row
-import org.modelcatalogue.spreadsheet.api.Sheet
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CanDefineStyle
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CommentDefinition
 import org.modelcatalogue.spreadsheet.api.Configurer
+import org.modelcatalogue.spreadsheet.builder.api.DimensionModifier
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.builder.api.HasStyle
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
@@ -297,6 +297,46 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         self.get(name)
     }
 
+    /**
+     * Converts the dimension to centimeters.
+     *
+     * This feature is currently experimental.
+     */
+    static CellDefinition getCm(DimensionModifier self){
+        self.cm()
+    }
+
+    /**
+     * Converts the dimension to inches.
+     *
+     * This feature is currently experimental.
+     */
+    static CellDefinition getInch(DimensionModifier self){
+        self.inch()
+    }
+
+    /**
+     * Converts the dimension to inches.
+     *
+     * This feature is currently experimental.
+     */
+    static CellDefinition getInches(DimensionModifier self){
+        self.inches()
+    }
+
+    /**
+     * Keeps the dimesion in points.
+     *
+     * This feature is currently experimental.
+     */
+    static CellDefinition getPoints(DimensionModifier self){
+        self.points()
+    }
+
+    static HorizontalAlignmentConfigurer align(CellStyleDefinition self, VerticalAlignment verticalAlignment) {
+        new DefaultHorizontalAlignmentConfigurer(self, verticalAlignment);
+    }
+
     static BorderStyle getNone(BorderStyleProvider self) {
         return BorderStyle.NONE
     }
@@ -433,12 +473,12 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         return ForegroundFill.DIAMONDS
     }
 
-    static Keywords.PureBorderSide getLeft(CellStyleDefinition self) {
-        return Keywords.PureBorderSide.LEFT
+    static Keywords.BorderSideAndHorizontalAlignment getLeft(CellStyleDefinition self) {
+        return Keywords.BorderSideAndHorizontalAlignment.LEFT
     }
 
-    static Keywords.PureBorderSide getRight(CellStyleDefinition self) {
-        return Keywords.PureBorderSide.RIGHT
+    static Keywords.BorderSideAndHorizontalAlignment getRight(CellStyleDefinition self) {
+        return Keywords.BorderSideAndHorizontalAlignment.RIGHT
     }
 
     static Keywords.BorderSideAndVerticalAlignment getTop(CellStyleDefinition self) {
@@ -449,12 +489,12 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         return Keywords.BorderSideAndVerticalAlignment.BOTTOM
     }
 
-    static Keywords.PureVerticalAlignment getCenter(CellStyleDefinition self) {
-        return Keywords.PureVerticalAlignment.CENTER
+    static Keywords.VerticalAndHorizontalAlignment getCenter(CellStyleDefinition self) {
+        return Keywords.VerticalAndHorizontalAlignment.CENTER
     }
 
-    static Keywords.PureVerticalAlignment getJustify(CellStyleDefinition self) {
-        return Keywords.PureVerticalAlignment.JUSTIFY
+    static Keywords.VerticalAndHorizontalAlignment getJustify(CellStyleDefinition self) {
+        return Keywords.VerticalAndHorizontalAlignment.JUSTIFY
     }
 
     static Keywords.PureVerticalAlignment getDistributed(CellStyleDefinition self) {
@@ -569,12 +609,12 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         FontStyle.UNDERLINE
     }
 
-    static Keywords.PureBorderSide getLeft(BorderPositionProvider self) {
-        return Keywords.PureBorderSide.LEFT;
+    static Keywords.BorderSideAndHorizontalAlignment getLeft(BorderPositionProvider self) {
+        return Keywords.BorderSideAndHorizontalAlignment.LEFT;
     }
 
-    static Keywords.PureBorderSide getRight(BorderPositionProvider self) {
-        return Keywords.PureBorderSide.RIGHT;
+    static Keywords.BorderSideAndHorizontalAlignment getRight(BorderPositionProvider self) {
+        return Keywords.BorderSideAndHorizontalAlignment.RIGHT;
     }
 
     static Keywords.BorderSideAndVerticalAlignment getTop(BorderPositionProvider self) {
@@ -583,5 +623,18 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
 
     static Keywords.BorderSideAndVerticalAlignment getBottom(BorderPositionProvider self) {
         return Keywords.BorderSideAndVerticalAlignment.BOTTOM;
+    }
+
+    static Keywords.PureHorizontalAlignment getGeneral(CellStyleDefinition self) {
+        return Keywords.PureHorizontalAlignment.GENERAL
+    }
+    static Keywords.PureHorizontalAlignment getFill(CellStyleDefinition self) {
+        return Keywords.PureHorizontalAlignment.FILL
+    }
+    static Keywords.PureHorizontalAlignment getCenterSelection(CellStyleDefinition self) {
+        return Keywords.PureHorizontalAlignment.CENTER_SELECTION
+    }
+    static Keywords.Auto getAuto(SheetDefinition self) {
+        return Keywords.Auto.AUTO
     }
 }

@@ -59,17 +59,20 @@ public final class Keywords {
     public static final ForegroundFill thinForwardDiagonals = ForegroundFill.THICK_FORWARD_DIAG;
     public static final ForegroundFill squares = ForegroundFill.SQUARES;
     public static final ForegroundFill diamonds = ForegroundFill.DIAMONDS;
-    public static final Keywords.PureBorderSide left = Keywords.PureBorderSide.LEFT;
-    public static final Keywords.PureBorderSide right = Keywords.PureBorderSide.RIGHT;
+    public static final BorderSideAndHorizontalAlignment left = BorderSideAndHorizontalAlignment.LEFT;
+    public static final BorderSideAndHorizontalAlignment right = BorderSideAndHorizontalAlignment.RIGHT;
     public static final Keywords.BorderSideAndVerticalAlignment top = Keywords.BorderSideAndVerticalAlignment.TOP;
     public static final Keywords.BorderSideAndVerticalAlignment bottom = Keywords.BorderSideAndVerticalAlignment.BOTTOM;
-    public static final Keywords.PureVerticalAlignment center = Keywords.PureVerticalAlignment.CENTER;
-    public static final Keywords.PureVerticalAlignment justify = Keywords.PureVerticalAlignment.JUSTIFY;
+    public static final Keywords.VerticalAndHorizontalAlignment center = VerticalAndHorizontalAlignment.CENTER;
+    public static final Keywords.VerticalAndHorizontalAlignment justify = VerticalAndHorizontalAlignment.JUSTIFY;
     public static final Keywords.PureVerticalAlignment distributed = Keywords.PureVerticalAlignment.DISTRIBUTED;
     public static final Keywords.Text text = Keywords.Text.WRAP;
     public static final Keywords.Auto auto = Keywords.Auto.AUTO;
     public static final Keywords.To to = Keywords.To.TO;
     public static final Keywords.Image image = Keywords.Image.IMAGE;
+    public static PureHorizontalAlignment general = PureHorizontalAlignment.GENERAL;
+    public static PureHorizontalAlignment fill = PureHorizontalAlignment.FILL;
+    public static PureHorizontalAlignment centerSelection = PureHorizontalAlignment.CENTER_SELECTION;
 
 
     private Keywords() {}
@@ -95,14 +98,17 @@ public final class Keywords {
         BOTTOM
     }
 
-    public enum PureBorderSide implements BorderSide {
+    public enum BorderSideAndHorizontalAlignment implements BorderSide, HorizontalAlignment {
         LEFT,
         RIGHT
     }
 
-    public enum PureVerticalAlignment implements VerticalAlignment {
+    public enum VerticalAndHorizontalAlignment implements VerticalAlignment, HorizontalAlignment {
         CENTER,
-        JUSTIFY,
+        JUSTIFY
+    }
+
+    public enum PureVerticalAlignment implements VerticalAlignment {
         DISTRIBUTED
     }
 
@@ -136,10 +142,16 @@ public final class Keywords {
         STANDARD_11_17
     }
 
+    public enum PureHorizontalAlignment implements HorizontalAlignment {
+        GENERAL,
+        FILL,
+        CENTER_SELECTION
+    }
+
     //CHECKSTYLE:OFF
     public interface BorderSide {
-        BorderSide LEFT = PureBorderSide.LEFT;
-        BorderSide RIGHT = PureBorderSide.RIGHT;
+        BorderSide LEFT = BorderSideAndHorizontalAlignment.LEFT;
+        BorderSide RIGHT = BorderSideAndHorizontalAlignment.RIGHT;
         BorderSide TOP = BorderSideAndVerticalAlignment.TOP;
         BorderSide BOTTOM = BorderSideAndVerticalAlignment.BOTTOM;
 
@@ -149,13 +161,25 @@ public final class Keywords {
     public interface VerticalAlignment {
 
         VerticalAlignment TOP = BorderSideAndVerticalAlignment.TOP;
-        VerticalAlignment CENTER = PureVerticalAlignment.CENTER;
+        VerticalAlignment CENTER = VerticalAndHorizontalAlignment.CENTER;
         VerticalAlignment BOTTOM = BorderSideAndVerticalAlignment.BOTTOM;
-        VerticalAlignment JUSTIFY = PureVerticalAlignment.JUSTIFY;
+        VerticalAlignment JUSTIFY = VerticalAndHorizontalAlignment.JUSTIFY;
         VerticalAlignment DISTRIBUTED = PureVerticalAlignment.DISTRIBUTED;
 
         VerticalAlignment[] VERTICAL_ALIGNMENTS = {TOP, CENTER, BOTTOM, JUSTIFY, DISTRIBUTED};
 
+    }
+
+    public interface HorizontalAlignment {
+        HorizontalAlignment RIGHT = BorderSideAndHorizontalAlignment.RIGHT;
+        HorizontalAlignment LEFT = BorderSideAndHorizontalAlignment.LEFT;
+        HorizontalAlignment GENERAL = PureHorizontalAlignment.GENERAL;
+        HorizontalAlignment CENTER = VerticalAndHorizontalAlignment.CENTER;
+        HorizontalAlignment FILL = PureHorizontalAlignment.FILL;
+        HorizontalAlignment JUSTIFY = VerticalAndHorizontalAlignment.JUSTIFY;
+        HorizontalAlignment CENTER_SELECTION = PureHorizontalAlignment.CENTER_SELECTION;
+
+        HorizontalAlignment[] HORIZONTAL_ALIGNMENTS = {RIGHT, LEFT, GENERAL, CENTER, FILL, JUSTIFY, CENTER_SELECTION};
     }
     //CHECKSTYLE:ON
 }

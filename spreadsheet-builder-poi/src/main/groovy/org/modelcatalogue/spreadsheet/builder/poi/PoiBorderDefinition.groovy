@@ -39,7 +39,7 @@ class PoiBorderDefinition implements BorderDefinition {
 
     protected void applyTo(Keywords.BorderSide location) {
         switch (location) {
-            case Keywords.PureBorderSide.BOTTOM:
+            case Keywords.BorderSideAndHorizontalAlignment.BOTTOM:
                 if (borderStyle) {
                     xssfCellStyle.setBorderBottom(poiBorderStyle)
                 }
@@ -47,7 +47,7 @@ class PoiBorderDefinition implements BorderDefinition {
                     xssfCellStyle.setBottomBorderColor(color)
                 }
                 break
-            case Keywords.PureBorderSide.TOP:
+            case Keywords.BorderSideAndHorizontalAlignment.TOP:
                 if (borderStyle) {
                     xssfCellStyle.setBorderTop(poiBorderStyle)
                 }

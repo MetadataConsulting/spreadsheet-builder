@@ -476,7 +476,7 @@ public class Java8BuilderTest {
             });
 
             w.style("centered", s -> {
-                    s.align(center).getCenter();
+                    s.align(center, center);
             });
 
             w.style("redfg", s -> {
@@ -497,7 +497,7 @@ public class Java8BuilderTest {
             w.apply(MyStyles.class);
 
             w.sheet("many rows", s -> {
-                s.filter(s.getAuto());
+                s.filter(auto);
                 s.row(r -> {
                     r.cell("One");
                     r.cell("Two");
@@ -668,7 +668,7 @@ public class Java8BuilderTest {
             });
 
             w.sheet("Cell Addressing", s -> {
-                s.filter(s.getAuto());
+                s.filter(auto);
                 s.row(2, r -> {
                     r.style(st -> {
                         st.background(whiteSmoke);
@@ -716,7 +716,7 @@ public class Java8BuilderTest {
 
                 s.row(r -> {
                     r.style(st -> {
-                        st.align(center).getLeft();
+                        st.align(center, left);
                         st.border(b -> {
                             b.color("#abcdef");
                             b.style(dashDotDot);
@@ -739,7 +739,7 @@ public class Java8BuilderTest {
                     r.cell(c -> {
                         c.style(st -> {
                             st.format("d.m.y");
-                            st.align(center).getCenter();
+                            st.align(center, center);
                         });
                         c.value(today);
                         c.comment("This is a date!");
@@ -974,16 +974,16 @@ public class Java8BuilderTest {
                 s.row(r -> {
                     r.cell(c -> {
                         c.value("cm");
-                        c.height(1).getCm();
-                        c.width(1).getCm();
+                        c.height(1).cm();
+                        c.width(1).cm();
                     });
                 });
 
                 s.row(r -> {
                     r.cell("B", c -> {
                         c.value("inches");
-                        c.width(1).getInch();
-                        c.height(1).getInch();
+                        c.width(1).inch();
+                        c.height(1).inch();
                     });
                 });
                 s.row(r -> {
