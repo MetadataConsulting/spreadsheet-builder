@@ -61,14 +61,30 @@ You can specify the row number when creating a row. Another rows created without
 after this row. The row number is the same as in the spreadsheet e.g. the index of the rows is *starting with number 1*.
 To skip a single row, just use `row()` without any parameters.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
+
 sheet('Sample') {
     row 5, { cell 'Line 5' }
     row()
     row { cell 'Line 7' }
 }
+
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+
+w.sheet("Sample", s -> {
+    s.row(5, r -> r.cell("Line 5"));
+    s.row();
+    s.row(r -> r.cell("Line 7"));
+}
+
+----
+
 
 _Result_
 
@@ -1401,6 +1417,8 @@ Builder and criteria definition chaining - methods returning self instead of `vo
 === Breaking Changes
 `PoiSpradsheetBuilder` will no longer allow to create cell names which are invalid by Excel. Use `PoiCellDefinition#fixName(String)`
  manually to ensure no exception will be thrown.
+
+ Colors made constants of `Color` so they needs to be imported statically in Groovy code.
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.
