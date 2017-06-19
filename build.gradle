@@ -1,16 +1,32 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
-        asciidoctor 'io.spring.asciidoctor:spring-asciidoctor-extensions:0.1.1.RELEASE'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
     }
 }
 
 plugins {
     id 'org.ajoberstar.github-pages' version '1.3.1'
-    id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
+}
+
+apply plugin: 'org.asciidoctor.convert'
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://repo.spring.io/release/'
+    }
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/io.spring.asciidoctor/spring-asciidoctor-extensions
+    asciidoctor group: 'io.spring.asciidoctor', name: 'spring-asciidoctor-extensions', version: '0.1.1.RELEASE'
+
 }
 
 String currentVersion = '0.5.0'
