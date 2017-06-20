@@ -7,11 +7,13 @@ import org.modelcatalogue.spreadsheet.api.BorderPositionProvider
 import org.modelcatalogue.spreadsheet.api.BorderStyle
 import org.modelcatalogue.spreadsheet.api.BorderStyleProvider
 import org.modelcatalogue.spreadsheet.api.Cell
+import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.api.DataRow
 import org.modelcatalogue.spreadsheet.api.FontStyle
 import org.modelcatalogue.spreadsheet.api.FontStylesProvider
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.ForegroundFillProvider
+import org.modelcatalogue.spreadsheet.api.ColorProvider
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Keywords.VerticalAlignment
 import org.modelcatalogue.spreadsheet.api.PageSettingsProvider
@@ -637,4 +639,146 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
     static Keywords.Auto getAuto(SheetDefinition self) {
         return Keywords.Auto.AUTO
     }
+
+    static Color getAliceBlue(ColorProvider colorProvider) { return Color.aliceBlue }
+    static Color getAntiqueWhite(ColorProvider colorProvider) { return Color.antiqueWhite }
+    static Color getAqua(ColorProvider colorProvider) { return Color.aqua }
+    static Color getAquamarine(ColorProvider colorProvider) { return Color.aquamarine }
+    static Color getAzure(ColorProvider colorProvider) { return Color.azure }
+    static Color getBeige(ColorProvider colorProvider) { return Color.beige }
+    static Color getBisque(ColorProvider colorProvider) { return Color.bisque }
+    static Color getBlack(ColorProvider colorProvider) { return Color.black }
+    static Color getBlanchedAlmond(ColorProvider colorProvider) { return Color.blanchedAlmond }
+    static Color getBlue(ColorProvider colorProvider) { return Color.blue }
+    static Color getBlueViolet(ColorProvider colorProvider) { return Color.blueViolet }
+    static Color getBrown(ColorProvider colorProvider) { return Color.brown }
+    static Color getBurlyWood(ColorProvider colorProvider) { return Color.burlyWood }
+    static Color getCadetBlue(ColorProvider colorProvider) { return Color.cadetBlue }
+    static Color getChartreuse(ColorProvider colorProvider) { return Color.chartreuse }
+    static Color getChocolate(ColorProvider colorProvider) { return Color.chocolate }
+    static Color getCoral(ColorProvider colorProvider) { return Color.coral }
+    static Color getCornflowerBlue(ColorProvider colorProvider) { return Color.cornflowerBlue }
+    static Color getCornsilk(ColorProvider colorProvider) { return Color.cornsilk }
+    static Color getCrimson(ColorProvider colorProvider) { return Color.crimson }
+    static Color getCyan(ColorProvider colorProvider) { return Color.cyan }
+    static Color getDarkBlue(ColorProvider colorProvider) { return Color.darkBlue }
+    static Color getDarkCyan(ColorProvider colorProvider) { return Color.darkCyan }
+    static Color getDarkGoldenRod(ColorProvider colorProvider) { return Color.darkGoldenRod }
+    static Color getDarkGray(ColorProvider colorProvider) { return Color.darkGray }
+    static Color getDarkGreen(ColorProvider colorProvider) { return Color.darkGreen }
+    static Color getDarkKhaki(ColorProvider colorProvider) { return Color.darkKhaki }
+    static Color getDarkMagenta(ColorProvider colorProvider) { return Color.darkMagenta }
+    static Color getDarkOliveGreen(ColorProvider colorProvider) { return Color.darkOliveGreen }
+    static Color getDarkOrange(ColorProvider colorProvider) { return Color.darkOrange }
+    static Color getDarkOrchid(ColorProvider colorProvider) { return Color.darkOrchid }
+    static Color getDarkRed(ColorProvider colorProvider) { return Color.darkRed }
+    static Color getDarkSalmon(ColorProvider colorProvider) { return Color.darkSalmon }
+    static Color getDarkSeaGreen(ColorProvider colorProvider) { return Color.darkSeaGreen }
+    static Color getDarkSlateBlue(ColorProvider colorProvider) { return Color.darkSlateBlue }
+    static Color getDarkSlateGray(ColorProvider colorProvider) { return Color.darkSlateGray }
+    static Color getDarkTurquoise(ColorProvider colorProvider) { return Color.darkTurquoise }
+    static Color getDarkViolet(ColorProvider colorProvider) { return Color.darkViolet }
+    static Color getDeepPink(ColorProvider colorProvider) { return Color.deepPink }
+    static Color getDeepSkyBlue(ColorProvider colorProvider) { return Color.deepSkyBlue }
+    static Color getDimGray(ColorProvider colorProvider) { return Color.dimGray }
+    static Color getDodgerBlue(ColorProvider colorProvider) { return Color.dodgerBlue }
+    static Color getFireBrick(ColorProvider colorProvider) { return Color.fireBrick }
+    static Color getFloralWhite(ColorProvider colorProvider) { return Color.floralWhite }
+    static Color getForestGreen(ColorProvider colorProvider) { return Color.forestGreen }
+    static Color getFuchsia(ColorProvider colorProvider) { return Color.fuchsia }
+    static Color getGainsboro(ColorProvider colorProvider) { return Color.gainsboro }
+    static Color getGhostWhite(ColorProvider colorProvider) { return Color.ghostWhite }
+    static Color getGold(ColorProvider colorProvider) { return Color.gold }
+    static Color getGoldenRod(ColorProvider colorProvider) { return Color.goldenRod }
+    static Color getGray(ColorProvider colorProvider) { return Color.gray }
+    static Color getGreen(ColorProvider colorProvider) { return Color.green }
+    static Color getGreenYellow(ColorProvider colorProvider) { return Color.greenYellow }
+    static Color getHoneyDew(ColorProvider colorProvider) { return Color.honeyDew }
+    static Color getHotPink(ColorProvider colorProvider) { return Color.hotPink }
+    static Color getIndianRed (ColorProvider colorProvider) { return Color.indianRed  }
+    static Color getIndigo (ColorProvider colorProvider) { return Color.indigo  }
+    static Color getIvory(ColorProvider colorProvider) { return Color.ivory }
+    static Color getKhaki(ColorProvider colorProvider) { return Color.khaki }
+    static Color getLavender(ColorProvider colorProvider) { return Color.lavender }
+    static Color getLavenderBlush(ColorProvider colorProvider) { return Color.lavenderBlush }
+    static Color getLawnGreen(ColorProvider colorProvider) { return Color.lawnGreen }
+    static Color getLemonChiffon(ColorProvider colorProvider) { return Color.lemonChiffon }
+    static Color getLightBlue(ColorProvider colorProvider) { return Color.lightBlue }
+    static Color getLightCoral(ColorProvider colorProvider) { return Color.lightCoral }
+    static Color getLightCyan(ColorProvider colorProvider) { return Color.lightCyan }
+    static Color getLightGoldenRodYellow(ColorProvider colorProvider) { return Color.lightGoldenRodYellow }
+    static Color getLightGray(ColorProvider colorProvider) { return Color.lightGray }
+    static Color getLightGreen(ColorProvider colorProvider) { return Color.lightGreen }
+    static Color getLightPink(ColorProvider colorProvider) { return Color.lightPink }
+    static Color getLightSalmon(ColorProvider colorProvider) { return Color.lightSalmon }
+    static Color getLightSeaGreen(ColorProvider colorProvider) { return Color.lightSeaGreen }
+    static Color getLightSkyBlue(ColorProvider colorProvider) { return Color.lightSkyBlue }
+    static Color getLightSlateGray(ColorProvider colorProvider) { return Color.lightSlateGray }
+    static Color getLightSteelBlue(ColorProvider colorProvider) { return Color.lightSteelBlue }
+    static Color getLightYellow(ColorProvider colorProvider) { return Color.lightYellow }
+    static Color getLime(ColorProvider colorProvider) { return Color.lime }
+    static Color getLimeGreen(ColorProvider colorProvider) { return Color.limeGreen }
+    static Color getLinen(ColorProvider colorProvider) { return Color.linen }
+    static Color getMagenta(ColorProvider colorProvider) { return Color.magenta }
+    static Color getMaroon(ColorProvider colorProvider) { return Color.maroon }
+    static Color getMediumAquaMarine(ColorProvider colorProvider) { return Color.mediumAquaMarine }
+    static Color getMediumBlue(ColorProvider colorProvider) { return Color.mediumBlue }
+    static Color getMediumOrchid(ColorProvider colorProvider) { return Color.mediumOrchid }
+    static Color getMediumPurple(ColorProvider colorProvider) { return Color.mediumPurple }
+    static Color getMediumSeaGreen(ColorProvider colorProvider) { return Color.mediumSeaGreen }
+    static Color getMediumSlateBlue(ColorProvider colorProvider) { return Color.mediumSlateBlue }
+    static Color getMediumSpringGreen(ColorProvider colorProvider) { return Color.mediumSpringGreen }
+    static Color getMediumTurquoise(ColorProvider colorProvider) { return Color.mediumTurquoise }
+    static Color getMediumVioletRed(ColorProvider colorProvider) { return Color.mediumVioletRed }
+    static Color getMidnightBlue(ColorProvider colorProvider) { return Color.midnightBlue }
+    static Color getMintCream(ColorProvider colorProvider) { return Color.mintCream }
+    static Color getMistyRose(ColorProvider colorProvider) { return Color.mistyRose }
+    static Color getMoccasin(ColorProvider colorProvider) { return Color.moccasin }
+    static Color getNavajoWhite(ColorProvider colorProvider) { return Color.navajoWhite }
+    static Color getNavy(ColorProvider colorProvider) { return Color.navy }
+    static Color getOldLace(ColorProvider colorProvider) { return Color.oldLace }
+    static Color getOlive(ColorProvider colorProvider) { return Color.olive }
+    static Color getOliveDrab(ColorProvider colorProvider) { return Color.oliveDrab }
+    static Color getOrange(ColorProvider colorProvider) { return Color.orange }
+    static Color getOrangeRed(ColorProvider colorProvider) { return Color.orangeRed }
+    static Color getOrchid(ColorProvider colorProvider) { return Color.orchid }
+    static Color getPaleGoldenRod(ColorProvider colorProvider) { return Color.paleGoldenRod }
+    static Color getPaleGreen(ColorProvider colorProvider) { return Color.paleGreen }
+    static Color getPaleTurquoise(ColorProvider colorProvider) { return Color.paleTurquoise }
+    static Color getPaleVioletRed(ColorProvider colorProvider) { return Color.paleVioletRed }
+    static Color getPapayaWhip(ColorProvider colorProvider) { return Color.papayaWhip }
+    static Color getPeachPuff(ColorProvider colorProvider) { return Color.peachPuff }
+    static Color getPeru(ColorProvider colorProvider) { return Color.peru }
+    static Color getPink(ColorProvider colorProvider) { return Color.pink }
+    static Color getPlum(ColorProvider colorProvider) { return Color.plum }
+    static Color getPowderBlue(ColorProvider colorProvider) { return Color.powderBlue }
+    static Color getPurple(ColorProvider colorProvider) { return Color.purple }
+    static Color getRebeccaPurple(ColorProvider colorProvider) { return Color.rebeccaPurple }
+    static Color getRed(ColorProvider colorProvider) { return Color.red }
+    static Color getRosyBrown(ColorProvider colorProvider) { return Color.rosyBrown }
+    static Color getRoyalBlue(ColorProvider colorProvider) { return Color.royalBlue }
+    static Color getSaddleBrown(ColorProvider colorProvider) { return Color.saddleBrown }
+    static Color getSalmon(ColorProvider colorProvider) { return Color.salmon }
+    static Color getSandyBrown(ColorProvider colorProvider) { return Color.sandyBrown }
+    static Color getSeaGreen(ColorProvider colorProvider) { return Color.seaGreen }
+    static Color getSeaShell(ColorProvider colorProvider) { return Color.seaShell }
+    static Color getSienna(ColorProvider colorProvider) { return Color.sienna }
+    static Color getSilver(ColorProvider colorProvider) { return Color.silver }
+    static Color getSkyBlue(ColorProvider colorProvider) { return Color.skyBlue }
+    static Color getSlateBlue(ColorProvider colorProvider) { return Color.slateBlue }
+    static Color getSlateGray(ColorProvider colorProvider) { return Color.slateGray }
+    static Color getSnow(ColorProvider colorProvider) { return Color.snow }
+    static Color getSpringGreen(ColorProvider colorProvider) { return Color.springGreen }
+    static Color getSteelBlue(ColorProvider colorProvider) { return Color.steelBlue }
+    static Color getTan(ColorProvider colorProvider) { return Color.tan }
+    static Color getTeal(ColorProvider colorProvider) { return Color.teal }
+    static Color getThistle(ColorProvider colorProvider) { return Color.thistle }
+    static Color getTomato(ColorProvider colorProvider) { return Color.tomato }
+    static Color getTurquoise(ColorProvider colorProvider) { return Color.turquoise }
+    static Color getViolet(ColorProvider colorProvider) { return Color.violet }
+    static Color getWheat(ColorProvider colorProvider) { return Color.wheat }
+    static Color getWhite(ColorProvider colorProvider) { return Color.white }
+    static Color getWhiteSmoke(ColorProvider colorProvider) { return Color.whiteSmoke }
+    static Color getYellow(ColorProvider colorProvider) { return Color.yellow }
+    static Color getYellowGreen(ColorProvider colorProvider) { return Color.yellowGreen }
 }

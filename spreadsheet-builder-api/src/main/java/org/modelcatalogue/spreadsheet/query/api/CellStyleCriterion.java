@@ -3,7 +3,7 @@ package org.modelcatalogue.spreadsheet.query.api;
 import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.api.Configurer;
 
-public interface CellStyleCriterion extends ForegroundFillProvider, BorderPositionProvider {
+public interface CellStyleCriterion extends ForegroundFillProvider, BorderPositionProvider, ColorProvider {
 
     CellStyleCriterion background(String hexColor);
     CellStyleCriterion background(Color color);

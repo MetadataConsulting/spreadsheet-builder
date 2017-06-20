@@ -1418,7 +1418,8 @@ Builder and criteria definition chaining - methods returning self instead of `vo
 `PoiSpradsheetBuilder` will no longer allow to create cell names which are invalid by Excel. Use `PoiCellDefinition#fixName(String)`
  manually to ensure no exception will be thrown.
 
- Colors made constants of `Color` so they needs to be imported statically in Groovy code.
+Colors made constants of `Color` and generally removed keywords getters from the interfaces but
+they are still available in Groovy as they are injected through extension class.
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.

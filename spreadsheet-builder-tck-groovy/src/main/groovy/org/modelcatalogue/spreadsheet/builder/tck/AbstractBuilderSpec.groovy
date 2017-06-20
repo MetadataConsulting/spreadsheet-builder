@@ -13,8 +13,6 @@ import spock.lang.Specification
 
 import java.awt.*
 
-import static org.modelcatalogue.spreadsheet.api.Color.*
-
 abstract class AbstractBuilderSpec extends Specification {
 
     @Rule TemporaryFolder tmp
@@ -411,9 +409,9 @@ abstract class AbstractBuilderSpec extends Specification {
             }   }   }   }
         then:
             !noneCell?.style?.foreground
-            redCell?.style?.foreground == red
-            blueCell?.style?.foreground == blue
-            greenCell?.style?.foreground == green
+            redCell?.style?.foreground == Color.red
+            blueCell?.style?.foreground == Color.blue
+            greenCell?.style?.foreground == Color.green
         expect:
             matcher.query {
                 sheet {

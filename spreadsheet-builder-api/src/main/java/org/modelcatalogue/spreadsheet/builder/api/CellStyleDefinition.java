@@ -2,7 +2,7 @@ package org.modelcatalogue.spreadsheet.builder.api;
 
 import org.modelcatalogue.spreadsheet.api.*;
 
-public interface CellStyleDefinition extends ForegroundFillProvider, BorderPositionProvider {
+public interface CellStyleDefinition extends ForegroundFillProvider, BorderPositionProvider, ColorProvider {
 
     CellStyleDefinition base(String stylename);
 

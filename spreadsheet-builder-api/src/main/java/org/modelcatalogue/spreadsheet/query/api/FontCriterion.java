@@ -1,13 +1,10 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
-import org.modelcatalogue.spreadsheet.api.Color;
-import org.modelcatalogue.spreadsheet.api.Font;
-import org.modelcatalogue.spreadsheet.api.FontStyle;
-import org.modelcatalogue.spreadsheet.api.FontStylesProvider;
+import org.modelcatalogue.spreadsheet.api.*;
 
 import java.util.EnumSet;
 
-public interface FontCriterion extends FontStylesProvider {
+public interface FontCriterion extends FontStylesProvider, ColorProvider {
 
     FontCriterion color(String hexColor);
     FontCriterion color(Color color);
