@@ -178,6 +178,10 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         sheet.page(pageDefinition as Configurer<PageDefinition>)
     }
 
+    static SheetDefinition lock(SheetDefinition self, SheetDefinition otherSelf) {
+        otherSelf.lock()
+    }
+
     static SpreadsheetDefinition build(SpreadsheetBuilder builder, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
         builder.build(workbookDefinition as Configurer<WorkbookDefinition>)
     }

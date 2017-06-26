@@ -152,7 +152,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    Object getLocked() {
+    PoiSheetDefinition lock() {
         sheet.enableLocking()
         return null
     }

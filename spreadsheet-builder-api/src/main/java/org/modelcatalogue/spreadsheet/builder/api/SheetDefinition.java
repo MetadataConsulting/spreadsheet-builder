@@ -41,7 +41,7 @@ public interface SheetDefinition {
     SheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition);
     SheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition);
 
-    Object getLocked();
+    SheetDefinition lock();
 
     SheetDefinition password(String password);
 
