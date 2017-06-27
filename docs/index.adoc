@@ -6,21 +6,35 @@ image::ribbon.png[link={projectUrl}]
 Spreadsheet builder provides convenient way how to read and create MS Excel OfficeOpenXML
 Documents (XSLX) focus not only on content side but also on easy styling.
 
+= Installation
+
+Spreadsheet Builder API is available on Maven central and JCenter.
+
+[source,indent=0,role="primary"]
+.Gradle
+----
+compile 'org.modelcatalogue:spreadsheet-builder-poi:{version}'
+----
+
+[source,xml,indent=0,role="secondary"]
+.Maven
+----
+<dependency>
+  <groupId>org.modelcatalogue</groupId>
+  <artifactId>spreadsheet-builder-poi</artifactId>
+  <version>{version}</version>
+  <type>pom</type>
+</dependency>
+----
+
 = Writing Spreadsheets
 
 Following example creates the basic spreadsheet with two rows and three columns.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
-@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
-// fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.10')
-@GrabExclude('org.codehaus.groovy:groovy-all')
-
-import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
@@ -39,6 +53,38 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
     }
 } writeTo file                                                                          // <5>
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
+
+import static org.modelcatalogue.spreadsheet.api.Keywords.*;
+
+public class SpreadsheetWriter {
+    
+    public static void main(String... args) {
+        File file = new File("spreadsheet.xlsx");
+
+        PoiSpreadsheetBuilder.INSTANCE.build(w -> {                                     // <1>
+            w.sheet("Sample", s -> {                                                    // <2>
+                s.row(r -> {                                                            // <3>
+                    r.cell("A");                                                        // <4>
+                    r.cell("B");
+                    r.cell("C");
+                });
+                s.row(r -> {
+                    r.cell(1);
+                    r.cell(2);
+                    r.cell(3);
+                });
+            });
+        }).writeTo(file);                                                               // <5>
+    }
+
+}
+----
+
 <1> Build new spreadsheet based on Apache POI
 <2> Create new sheet with the name `Sample`
 <3> Create new row
@@ -386,11 +432,8 @@ sheet('Sample') {
         cell()
         cell 'Third'
         cell(5) {
-            value 'Fifth'
-        }
-        cell('G') {
-            formula 'YEAR(TODAY())'
-        }
+ value 'Fifth' }
+        cell('G') { formula 'YEAR(TODAY())' }
     }
 }
 ----
@@ -1715,22 +1758,18 @@ image:stylesheets.png[]
 
 You can query the spreadsheet with similar syntax as you build it.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
-@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
-// fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.10')
-@GrabExclude('org.codehaus.groovy:groovy-all')
-
-import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-SpreadsheetQuery query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                      // <1>
+SpreadsheetCriteria query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                // <1>
 
-Collection<Cell>  cells = query.query {                                                 // <2>
+SpreadsheetCriteriaResult result = query.query {                                        // <2>
     sheet {                                                                             // <3>
         row {                                                                           // <4>
             cell {
@@ -1740,10 +1779,45 @@ Collection<Cell>  cells = query.query {                                         
     }
 }
 
-assert cells.size() == 1
-assert cells.first().value == 'B'
-
+assert result.cells.size() == 1
+assert result.cells.first().value == 'B'
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult;
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
+
+public class CriteriaDemo {
+
+    public static void main(String[] args) throws Exception {
+        File file = new File("spreadsheet.xlsx");
+
+        SpreadsheetCriteria query = PoiSpreadsheetCriteria.FACTORY.forFile(file);       // <1>
+
+        SpreadsheetCriteriaResult result = query.query(w -> {                           // <2>
+            w.sheet(s -> {                                                              // <3>
+                s.row(r -> {                                                            // <4>
+                    r.cell(c -> {
+                        c.value("B");                                                   // <5>
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, result.getCells().size());
+        assertEquals("B", result.getCell().getValue());
+    }
+
+}
+----
+
 <1> Create new spreadsheet query for given file
 <2> Start a query
 <3> Query any sheet
@@ -1760,7 +1834,8 @@ The `Cell` objects provides getters counterparts to methods supported by query s
 easily navigate into all eight directions with methods like `getLeft()`, `getAboveLeft()` etc.  or access the whole
 row with `getRow()`. Rows can be also easily navigated with `getAbove()` and `getbellow` methods.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Cell a = query.find {
     sheet {
@@ -1776,22 +1851,49 @@ assert a.right.value == 'B'
 assert a.row.bellow.cells.first().value == a.bellow.value
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Cell a = query.find(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.value("A");
+            });
+        });
+    });
+});
+
+assert a.right.value == 'B'
+assert a.row.bellow.cells.first().value == a.bellow.value
+----
+
 == Sheets and Rows
 
 You can query only specific sheet or row
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Sheet content = query.query {
     sheet('Content')
 }.sheet
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Sheet content = query.query(w -> {
+    w.sheet("Content");
+}).getSheet();
+----
+
 _Result:_ Sheet `Content` if present.
 
 You can query sheet by its page setting
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Collection<Sheet> a5s = query.query {
     sheet {
@@ -1803,18 +1905,49 @@ Collection<Sheet> a5s = query.query {
 }.sheets
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Collection<Sheet> a5s = query.query(w -> {
+    w.sheet(s -> {
+        s.page(p -> {
+            p.paper(A5);
+            p.orientation(landscape);
+        });
+    });
+}).getSheets();
+----
+
+
 _Result:_ Every sheet having the page settings set to A5 paper and with landscape orientation.
 
 You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
  rows by it number. The number starts with one so it corresponds the one displayed in Excel.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Collection<Row> rows = query.query {
-    sheet(name({ name.startsWith('Con') })) {
+    sheet {
+        having {
+            it.name.startsWith('Con')
+        }
         row(1)
     }
 }.rows
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Collection<Row> rows = query.query(w -> {
+    w.sheet(s -> {
+        s.having(it -> {
+            it.getName().startsWith("Con");
+        });
+        s.row(1);
+    });
+}).getRows();
 ----
 
 _Result:_ Every first row of every sheet which name starts with `Con`.
@@ -1822,33 +1955,70 @@ _Result:_ Every first row of every sheet which name starts with `Con`.
 If you repeat the call to either `sheet` or `row` query method you it's understood as `and` condition but
  you can also create `or` condition by wrapping the calls with `or` method.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
- query.query {
+query.query {
     or {
-       sheet(name({ name.startsWith('Con') })) {
-         row(1)
-       }
-       sheet(name({ name.endsWith('Air') })) {
-         row(2)
-       }
+        sheet {
+            having {
+                it.name.startsWith('Con')
+            }
+            row(1)
+        }
+        sheet {
+            having {
+                it.name.endsWith('Air')
+            }
+            row(2)
+        }
     }
- }
+}
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    or(disj -> {
+        disj.sheet(s -> {
+            s.having(it -> {
+                it.getName().startsWith("Con");
+            });
+            s.row(1);
+        });
+        disj.sheet(s -> {
+            s.having(it -> {
+                it.getName().endsWith("Air");
+            });
+            s.row(2);
+        });
+    });
+});
 ----
 
 _Result:_ Every cell from every first row of every sheet which name starts with `Con` and every cell
 from every second row of sheet which name ends with `Air`. If the one sheet fits both criteria the cells are not returned
 twice.
 
-Also row method accepts predicate with two predefined `number` and `range`.
-
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
-        row (range(1,10)) { // body required when the predicate is used }
+        row(1,10)
     }
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(1,10);
+    });
+});
 ----
 
 _Result:_ Every cell from first ten rows of every sheet in the spreadsheet.
@@ -1862,16 +2032,38 @@ provide convenient way how to retrieve cells using the label specified in the he
 Row manyRowsHeader = matcher.query {
     sheet('many rows') {
         row(1)
-}   }.row
+    }   
+}.row
 
 Row manyRowsDataRow= matcher.query {
     sheet('many rows') {
         row(2)
-}   }.row
+    }   
+}.row
 
 DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader)
 assert dataRow['One']
 assert dataRow['One'].value == 1
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Row manyRowsHeader = matcher.query(w -> {
+    w.sheet("many rows", s -> {
+        s.row(1);
+    });
+}).getRow();
+
+Row manyRowsDataRow= matcher.query(w -> {
+    w.sheet("many rows", s -> {
+        s.row(2);
+    });
+}).getRow();
+
+DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader);
+assertNotNull(dataRow.get("One"));
+assertEquals(1, dataRow.get("One"));
 ----
 
 == Cells
@@ -1879,7 +2071,8 @@ assert dataRow['One'].value == 1
 You can easily specify which cells you want to return from the query. For example by specifying desired value.
 You can also query for more specific type with `date`, `number`, `string`, `bool` methods.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1892,12 +2085,27 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.value("B");
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell from any sheet and row with value 'B'
 
 
 You can only return cells from specific column or column range specified by both number or string.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1908,6 +2116,19 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell("B");
+        });
+    });
+});
+----
+
+
 _Result:_ Every cell from column 'B' of any sheet and row
 
 
@@ -1915,7 +2136,8 @@ _Result:_ Every cell from column 'B' of any sheet and row
 
 You can query for merged cells only.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1929,13 +2151,29 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.colspan(5);
+                c.rowspan(2);
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell in the spreadsheet which are merged over five cells horizontally and two cells vertically.
 
 === Comments
 
 You can query for cells with given comment.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1948,11 +2186,26 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.comment("This is interesting");
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell in the spreadsheet which has a comment "This is interesting".
 
 Again you can use predicate closure to be more specific.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1965,11 +2218,26 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.comment(it -> "Steve".equals(it.author));
+            });
+        });
+    });
+});
+----
+
 === Names
 
 You can query for specific named cell.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.find {
     sheet {
@@ -1980,6 +2248,20 @@ query.find {
         }
     }
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.find(w ->{
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.name("THE_CELL");
+            });
+        });
+    });
+});
 ----
 
 _Result:_ The cell with the named reference 'THE_CELL'.
@@ -1995,7 +2277,8 @@ You can query cells by style parameters such as foreground color or font height.
 except text wrapping, rich texts and alignment options. All font options are supported. See the guide above for reference.
 
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.find {
     sheet {
@@ -2014,11 +2297,31 @@ query.find {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.find(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.style(st -> {
+                    st.foreground(red);
+                    st.font(f -> {
+                        f.make(bold);
+                        f.color(white);
+                    });
+                });
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell from the spreadsheet which has red foreground and white font color with bold style.
 
 [WARNING]
 ====
-The color you usually see in the cell is `foreground!` not a `background` as you may think.
+The color you usually see in the cell is `foreground` not a `background` as you may think!
 ====
 
 = Changelog
@@ -2034,6 +2337,10 @@ Builder and criteria definition chaining - methods returning self instead of `vo
 
 Colors made constants of `Color` and generally removed keywords getters from the interfaces but
 they are still available in Groovy as they are injected through extension class.
+
+Criteria will no longer accepts predicates in the same position as configuration but there is `having` method inside each
+criterion where can one write predicate for given surrounding element. Method shortcuts which helped created predicates
+has been removed.
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.
