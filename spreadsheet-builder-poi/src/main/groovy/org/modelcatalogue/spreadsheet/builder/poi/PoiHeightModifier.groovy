@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
+import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.DimensionModifier
 
 class PoiHeightModifier implements DimensionModifier {
@@ -13,19 +14,24 @@ class PoiHeightModifier implements DimensionModifier {
     }
 
     @Override
-    Object getCm() {
+    PoiCellDefinition cm() {
         cell.height(28 * height)
-        return null
+        return cell
     }
 
     @Override
-    Object getInch() {
+    PoiCellDefinition inch() {
         cell.height(72 * height)
-        return null
+        return cell
     }
 
     @Override
-    Object getInches() {
-        inch
+    PoiCellDefinition inches() {
+        return inch
+    }
+
+    @Override
+    CellDefinition points() {
+        return cell
     }
 }

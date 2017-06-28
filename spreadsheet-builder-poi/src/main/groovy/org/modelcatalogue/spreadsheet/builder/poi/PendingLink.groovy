@@ -16,16 +16,19 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
     final String name
 
     PendingLink(XSSFCell cell, String name) {
+        if (name != PoiCellDefinition.fixName(name)) {
+            throw new IllegalArgumentException("Cannot call cell '${name}' as this is invalid identifier in Excel. Suggestion: ${PoiCellDefinition.fixName(name)}")
+        }
         this.cell = cell
         this.name = name
     }
 
     void resolve() {
         XSSFWorkbook workbook = cell.row.sheet.workbook as XSSFWorkbook
-        XSSFName xssfName = workbook.getName(PoiCellDefinition.fixName(name)) as XSSFName
+        XSSFName xssfName = workbook.getName(name) as XSSFName
 
         if (!xssfName) {
-            throw new IllegalArgumentException("Name $name does not exist! Please consider that the name was normalized to ${PoiCellDefinition.fixName(name)}")
+            throw new IllegalArgumentException("Name $name does not exist!")
         }
 
         XSSFHyperlink link = workbook.creationHelper.createHyperlink(Hyperlink.LINK_DOCUMENT) as XSSFHyperlink

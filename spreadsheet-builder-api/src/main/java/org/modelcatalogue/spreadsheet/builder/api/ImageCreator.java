@@ -4,8 +4,8 @@ import java.io.InputStream;
 
 public interface ImageCreator {
 
-    void from(String fileOrUrl);
-    void from(InputStream stream);
-    void from(byte[] imageData);
+    CellDefinition from(String fileOrUrl);
+    CellDefinition from(InputStream stream);
+    CellDefinition from(byte[] imageData);
 
 }

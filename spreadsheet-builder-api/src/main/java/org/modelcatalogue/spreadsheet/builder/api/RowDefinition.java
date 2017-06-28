@@ -1,20 +1,23 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
-
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 
 public interface RowDefinition extends HasStyle {
 
-    void cell();
-    void cell(Object value);
-    void cell(@DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition);
-    void cell(int column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition);
-    void cell(String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellDefinition") Closure cellDefinition);
+    RowDefinition cell();
+    RowDefinition cell(Object value);
+    RowDefinition cell(Configurer<CellDefinition> cellDefinition);
+    RowDefinition cell(int column, Configurer<CellDefinition> cellDefinition);
+    RowDefinition cell(String column, Configurer<CellDefinition> cellDefinition);
 
-    void group(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition);
-    void collapse(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition);
+    RowDefinition group(Configurer<RowDefinition> insideGroupDefinition);
+    RowDefinition collapse(Configurer<RowDefinition> insideGroupDefinition);
+
+    RowDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition);
+    RowDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);
+    RowDefinition style(Configurer<CellStyleDefinition> styleDefinition);
+    RowDefinition style(String name);
+    RowDefinition styles(String... names);
+    RowDefinition styles(Iterable<String> names);
 
 }

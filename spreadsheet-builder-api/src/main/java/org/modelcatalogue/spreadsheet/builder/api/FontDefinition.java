@@ -1,18 +1,18 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
 import org.modelcatalogue.spreadsheet.api.Color;
+import org.modelcatalogue.spreadsheet.api.ColorProvider;
 import org.modelcatalogue.spreadsheet.api.FontStyle;
 import org.modelcatalogue.spreadsheet.api.FontStylesProvider;
-import org.modelcatalogue.spreadsheet.api.HTMLColorProvider;
 
-public interface FontDefinition extends HTMLColorProvider, FontStylesProvider {
+public interface FontDefinition extends FontStylesProvider, ColorProvider {
 
-    void color(String hexColor);
-    void color(Color color);
-    
-    void size(int size);
-    void name(String name);
+    FontDefinition color(String hexColor);
+    FontDefinition color(Color color);
 
-    void make(FontStyle first, FontStyle... other);
+    FontDefinition size(int size);
+    FontDefinition name(String name);
+
+    FontDefinition make(FontStyle first, FontStyle... other);
 
 }

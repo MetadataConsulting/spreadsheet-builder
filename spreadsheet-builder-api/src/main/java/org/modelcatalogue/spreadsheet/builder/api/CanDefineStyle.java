@@ -1,9 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 
 public interface CanDefineStyle {
     /**
@@ -11,8 +8,8 @@ public interface CanDefineStyle {
      * @param name name of the style
      * @param styleDefinition definition of the style
      */
-    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
+    CanDefineStyle style(String name, Configurer<CellStyleDefinition> styleDefinition);
 
-    void apply(Class<? extends Stylesheet> stylesheet);
-    void apply(Stylesheet stylesheet);
+    CanDefineStyle apply(Class<? extends Stylesheet> stylesheet);
+    CanDefineStyle apply(Stylesheet stylesheet);
 }

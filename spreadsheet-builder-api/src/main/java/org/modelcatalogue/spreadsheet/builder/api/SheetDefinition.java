@@ -1,10 +1,7 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.api.Keywords;
 
 public interface SheetDefinition {
@@ -12,50 +9,49 @@ public interface SheetDefinition {
     /**
      * Crates new empty row.
      */
-    void row();
+    SheetDefinition row();
 
     /**
      * Creates new row in the spreadsheet.
-     * @param rowDefinition closure defining the content of the row
+     * @param rowDefinition definition of the content of the row
      */
-    void row(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
+    SheetDefinition row(Configurer<RowDefinition> rowDefinition);
 
     /**
      * Creates new row in the spreadsheet.
      * @param row row number (1 based - the same as is shown in the file)
-     * @param rowDefinition closure defining the content of the row
+     * @param rowDefinition definition of the content of the row
      */
-    void row(int row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition);
+    SheetDefinition row(int row, Configurer<RowDefinition> rowDefinition);
 
     /**
      * Freeze some column or row or both.
      * @param column last freeze column
      * @param row last freeze row
      */
-    void freeze(int column, int row);
+    SheetDefinition freeze(int column, int row);
 
     /**
      * Freeze some column or row or both.
      * @param column last freeze column
      * @param row last freeze row
      */
-    void freeze(String column, int row);
+    SheetDefinition freeze(String column, int row);
 
-    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition);
-    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition);
+    SheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition);
+    SheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition);
 
-    Object getLocked();
+    SheetDefinition lock();
 
-    void password(String password);
+    SheetDefinition password(String password);
 
-    void filter(Keywords.Auto auto);
-    Keywords.Auto getAuto();
+    SheetDefinition filter(Keywords.Auto auto);
 
     /**
      * Configures the basic page settings.
-     * @param pageDefinition closure defining the page settings
+     * @param pageDefinition definition of the page settings
      */
-    void page(@DelegatesTo(PageDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.PageDefinition") Closure pageDefinition);
+    SheetDefinition page(Configurer<PageDefinition> pageDefinition);
 
 
 }

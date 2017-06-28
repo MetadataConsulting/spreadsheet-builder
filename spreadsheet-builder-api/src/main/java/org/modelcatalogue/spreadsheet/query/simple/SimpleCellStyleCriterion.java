@@ -1,14 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
-import org.modelcatalogue.spreadsheet.api.Cell;
-import org.modelcatalogue.spreadsheet.api.Color;
-import org.modelcatalogue.spreadsheet.api.ForegroundFill;
-import org.modelcatalogue.spreadsheet.api.Keywords;
+import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.BorderCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
@@ -23,281 +15,206 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
-    public void background(final String hexColor) {
+    public SimpleCellStyleCriterion background(final String hexColor) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && new Color(hexColor).equals(o.getStyle().getBackground());
             }
         });
+        return this;
     }
 
     @Override
-    public void background(final Color color) {
+    public SimpleCellStyleCriterion background(final Color color) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && color.equals(o.getStyle().getBackground());
             }
         });
+        return this;
     }
 
     @Override
-    public void background(final Predicate<Color> predicate) {
+    public SimpleCellStyleCriterion background(final Predicate<Color> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && predicate.test(o.getStyle().getBackground());
             }
         });
+        return this;
     }
 
     @Override
-    public void foreground(final String hexColor) {
+    public SimpleCellStyleCriterion foreground(final String hexColor) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && new Color(hexColor).equals(o.getStyle().getForeground());
             }
         });
+        return this;
     }
 
     @Override
-    public void foreground(final Color color) {
+    public SimpleCellStyleCriterion foreground(final Color color) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && color.equals(o.getStyle().getForeground());
             }
         });
+        return this;
     }
 
     @Override
-    public void foreground(final Predicate<Color> predicate) {
+    public SimpleCellStyleCriterion foreground(final Predicate<Color> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && predicate.test(o.getStyle().getForeground());
             }
         });
+        return this;
     }
 
     @Override
-    public void fill(final ForegroundFill fill) {
+    public SimpleCellStyleCriterion fill(final ForegroundFill fill) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && fill.equals(o.getStyle().getFill());
             }
         });
+        return this;
     }
 
     @Override
-    public void fill(final Predicate<ForegroundFill> predicate) {
+    public SimpleCellStyleCriterion fill(final Predicate<ForegroundFill> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && predicate.test(o.getStyle().getFill());
             }
         });
+        return this;
     }
 
     @Override
-    public void indent(final int indent) {
+    public SimpleCellStyleCriterion indent(final int indent) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && indent == o.getStyle().getIndent();
             }
         });
+        return this;
     }
 
     @Override
-    public void indent(final Predicate<Integer> predicate) {
+    public SimpleCellStyleCriterion indent(final Predicate<Integer> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && predicate.test(o.getStyle().getIndent());
             }
         });
+        return this;
     }
 
     @Override
-    public void rotation(final int rotation) {
+    public SimpleCellStyleCriterion rotation(final int rotation) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && rotation == o.getStyle().getRotation();
             }
         });
+        return this;
     }
 
     @Override
-    public void rotation(final Predicate<Integer> predicate) {
+    public SimpleCellStyleCriterion rotation(final Predicate<Integer> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && predicate.test(o.getStyle().getRotation());
             }
         });
+        return this;
     }
 
     @Override
-    public void format(final String format) {
+    public SimpleCellStyleCriterion format(final String format) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && format.equals(o.getStyle().getFormat());
             }
         });
+        return this;
     }
 
     @Override
-    public void format(final Predicate<String> format) {
+    public SimpleCellStyleCriterion format(final Predicate<String> format) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return o.getStyle() != null && format.test(o.getStyle().getFormat());
             }
         });
+        return this;
     }
 
     @Override
-    public void font(@DelegatesTo(FontCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.FontCriterion") Closure fontCriterion) {
+    public SimpleCellStyleCriterion font(Configurer<FontCriterion> fontCriterion) {
         SimpleFontCriterion simpleFontCriterion = new SimpleFontCriterion(parent);
-        DefaultGroovyMethods.with(simpleFontCriterion, fontCriterion);
+        Configurer.Runner.doConfigure(fontCriterion, simpleFontCriterion);
+        return this;
     }
 
     @Override
-    public void border(@DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public SimpleCellStyleCriterion border(Configurer<BorderCriterion> borderConfiguration) {
         border(Keywords.BorderSide.BORDER_SIDES, borderConfiguration);
+        return this;
     }
 
     @Override
-    public void border(Keywords.BorderSide location, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public SimpleCellStyleCriterion border(Keywords.BorderSide location, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {location}, borderConfiguration);
+        return this;
     }
 
     @Override
-    public void border(Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second}, borderConfiguration);
+        return this;
     }
 
     @Override
-    public void border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second, third}, borderConfiguration);
+        return this;
     }
 
-    private void border(Keywords.BorderSide[] sides, @DelegatesTo(BorderCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    @Override
+    public CellStyleCriterion having(final Predicate<CellStyle> cellStylePredicate) {
+        parent.addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                return o.getStyle() != null && cellStylePredicate.test(o.getStyle());
+            }
+        });
+        return this;
+    }
+
+    private void border(Keywords.BorderSide[] sides, Configurer<BorderCriterion> borderConfiguration) {
         for (Keywords.BorderSide side : sides) {
             SimpleBorderCriterion criterion = new SimpleBorderCriterion(parent, side);
-            DefaultGroovyMethods.with(criterion, borderConfiguration);
+            Configurer.Runner.doConfigure(borderConfiguration, criterion);
         }
-    }
-
-    @Override
-    public ForegroundFill getNoFill() {
-        return ForegroundFill.NO_FILL;
-    }
-
-    @Override
-    public ForegroundFill getSolidForeground() {
-        return ForegroundFill.SOLID_FOREGROUND;
-    }
-
-    @Override
-    public ForegroundFill getFineDots() {
-        return ForegroundFill.FINE_DOTS;
-    }
-
-    @Override
-    public ForegroundFill getAltBars() {
-        return ForegroundFill.ALT_BARS;
-    }
-
-    @Override
-    public ForegroundFill getSparseDots() {
-        return ForegroundFill.SPARSE_DOTS;
-    }
-
-    @Override
-    public ForegroundFill getThickHorizontalBands() {
-        return ForegroundFill.THICK_HORZ_BANDS;
-    }
-
-    @Override
-    public ForegroundFill getThickVerticalBands() {
-        return ForegroundFill.THICK_VERT_BANDS;
-    }
-
-    @Override
-    public ForegroundFill getThickBackwardDiagonals() {
-        return ForegroundFill.THICK_BACKWARD_DIAG;
-    }
-
-    @Override
-    public ForegroundFill getThickForwardDiagonals() {
-        return ForegroundFill.THICK_FORWARD_DIAG;
-    }
-
-    @Override
-    public ForegroundFill getBigSpots() {
-        return ForegroundFill.BIG_SPOTS;
-    }
-
-    @Override
-    public ForegroundFill getBricks() {
-        return ForegroundFill.BRICKS;
-    }
-
-    @Override
-    public ForegroundFill getThinHorizontalBands() {
-        return ForegroundFill.THIN_HORZ_BANDS;
-    }
-
-    @Override
-    public ForegroundFill getThinVerticalBands() {
-        return ForegroundFill.THIN_VERT_BANDS;
-    }
-
-    @Override
-    public ForegroundFill getThinBackwardDiagonals() {
-        return ForegroundFill.THIN_BACKWARD_DIAG;
-    }
-
-    @Override
-    public ForegroundFill getThinForwardDiagonals() {
-        return ForegroundFill.THICK_FORWARD_DIAG;
-    }
-
-    @Override
-    public ForegroundFill getSquares() {
-        return ForegroundFill.SQUARES;
-    }
-
-    @Override
-    public ForegroundFill getDiamonds() {
-        return ForegroundFill.DIAMONDS;
-    }
-
-    @Override
-    public Keywords.PureBorderSide getLeft() {
-        return Keywords.PureBorderSide.LEFT;
-    }
-
-    @Override
-    public Keywords.PureBorderSide getRight() {
-        return Keywords.PureBorderSide.RIGHT;
-    }
-
-    @Override
-    public Keywords.BorderSideAndVerticalAlignment getTop() {
-        return Keywords.BorderSideAndVerticalAlignment.TOP;
-    }
-
-    @Override
-    public Keywords.BorderSideAndVerticalAlignment getBottom() {
-        return Keywords.BorderSideAndVerticalAlignment.BOTTOM;
     }
 
 }

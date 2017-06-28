@@ -1,7 +1,5 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
-import groovy.transform.stc.ClosureParams
-import groovy.transform.stc.FromString
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -9,6 +7,7 @@ import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Page
 import org.modelcatalogue.spreadsheet.api.Sheet
+import org.modelcatalogue.spreadsheet.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
@@ -55,8 +54,9 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void row() {
+    PoiSheetDefinition row() {
         findOrCreateRow nextRowNumber++
+        this
     }
 
     @Override
@@ -76,12 +76,12 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
 
     @Override
     Sheet getPrevious() {
-        int current = workbook.workbook.getSheetIndex(sheet.getSheetName());
+        int current = workbook.workbook.getSheetIndex(sheet.getSheetName())
 
         if (current == 0) {
             return null
         }
-        XSSFSheet next = workbook.workbook.getSheetAt(current - 1);
+        XSSFSheet next = workbook.workbook.getSheetAt(current - 1)
         Sheet nextPoiSheet = workbook.sheets.find { it.sheet.sheetName == next.sheetName }
         if (nextPoiSheet) {
             return nextPoiSheet
@@ -111,70 +111,74 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
     }
 
     @Override
-    void row(@DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
+    PoiSheetDefinition row(Configurer<RowDefinition> rowDefinition) {
         PoiRowDefinition row = findOrCreateRow nextRowNumber++
-        row.with rowDefinition
+        Configurer.Runner.doConfigure(rowDefinition, row)
+        this
     }
 
     @Override
-    void row(int oneBasedRowNumber, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
+    PoiSheetDefinition row(int oneBasedRowNumber, Configurer<RowDefinition> rowDefinition) {
         assert oneBasedRowNumber > 0
         nextRowNumber = oneBasedRowNumber
 
         PoiRowDefinition poiRow = findOrCreateRow oneBasedRowNumber - 1
-        poiRow.with rowDefinition
+        Configurer.Runner.doConfigure(rowDefinition, poiRow)
+        this
     }
 
     @Override
-    void freeze(int column, int row) {
+    PoiSheetDefinition freeze(int column, int row) {
         xssfSheet.createFreezePane(column, row)
+        this
     }
 
     @Override
-    void freeze(String column, int row) {
+    PoiSheetDefinition freeze(String column, int row) {
         freeze Cell.Util.parseColumn(column), row
+        this
     }
 
     @Override
-    void collapse(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
+    PoiSheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition)
+        this
     }
 
     @Override
-    void group(@DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
+    PoiSheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition)
+        this
     }
 
     @Override
-    Object getLocked() {
+    PoiSheetDefinition lock() {
         sheet.enableLocking()
         return null
     }
 
     @Override
-    void password(String password) {
+    PoiSheetDefinition password(String password) {
         sheet.protectSheet(password)
+        this
     }
 
     @Override
-    void filter(Keywords.Auto auto) {
+    PoiSheetDefinition filter(Keywords.Auto auto) {
         automaticFilter = true
+        this
     }
 
     @Override
-    Keywords.Auto getAuto() {
-        return Keywords.Auto.AUTO
-    }
-
-    @Override
-    void page(@DelegatesTo(PageDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.PageDefinition") Closure pageDefinition) {
+    PoiSheetDefinition page(Configurer<PageDefinition> pageDefinition) {
         PageDefinition page = new PoiPageSettingsProvider(this)
-        page.with pageDefinition
+        Configurer.Runner.doConfigure(pageDefinition, page)
+        this
     }
 
-    private void createGroup(boolean collapsed, @DelegatesTo(SheetDefinition.class) Closure insideGroupDefinition) {
+    private void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {
         startPositions.push nextRowNumber
-        with insideGroupDefinition
+        Configurer.Runner.doConfigure(insideGroupDefinition, this)
 
         int startPosition = startPositions.pop()
 
@@ -213,7 +217,7 @@ class PoiSheetDefinition implements SheetDefinition, Sheet {
 
     public <T> T asType(Class<T> type) {
         if (type.isInstance(sheet)) {
-            return sheet
+            return sheet as T
         }
         return super.asType(type)
     }

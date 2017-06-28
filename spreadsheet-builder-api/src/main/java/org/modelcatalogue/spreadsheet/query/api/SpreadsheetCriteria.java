@@ -1,13 +1,9 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
 import org.modelcatalogue.spreadsheet.api.Cell;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
 
 
 /**
@@ -18,8 +14,8 @@ import java.util.Collection;
 public interface SpreadsheetCriteria {
 
     SpreadsheetCriteriaResult all();
-    SpreadsheetCriteriaResult query(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException;
-    Cell find(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException;
-    boolean exists(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException;
+    SpreadsheetCriteriaResult query(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
+    Cell find(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
+    boolean exists(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
 
 }

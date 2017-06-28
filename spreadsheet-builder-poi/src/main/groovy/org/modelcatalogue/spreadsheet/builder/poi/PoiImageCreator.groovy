@@ -17,33 +17,36 @@ class PoiImageCreator implements ImageCreator {
     }
 
     @Override
-    void from(String fileOrUrl) {
+    PoiCellDefinition from(String fileOrUrl) {
         if (fileOrUrl.startsWith('https://') || fileOrUrl.startsWith('http://')) {
             from new URL(fileOrUrl).newInputStream()
-            return
+            return cell
         }
         from new FileInputStream(new File(fileOrUrl))
+        return cell
     }
 
     @Override
-    void from(InputStream stream) {
+    PoiCellDefinition from(InputStream stream) {
         addPicture(cell.row.sheet.sheet.workbook.addPicture(stream, type))
+        return cell
     }
 
     @Override
-    void from(byte[] imageData) {
+    PoiCellDefinition from(byte[] imageData) {
         addPicture(cell.row.sheet.sheet.workbook.addPicture(imageData, type))
+        return cell
     }
 
     void addPicture(int pictureIdx) {
-        Drawing drawing = cell.row.sheet.sheet.createDrawingPatriarch();
+        Drawing drawing = cell.row.sheet.sheet.createDrawingPatriarch()
 
-        CreationHelper helper = cell.row.sheet.sheet.workbook.getCreationHelper();
-        ClientAnchor anchor = helper.createClientAnchor();
+        CreationHelper helper = cell.row.sheet.sheet.workbook.getCreationHelper()
+        ClientAnchor anchor = helper.createClientAnchor()
         anchor.setCol1(cell.cell.columnIndex)
         anchor.setRow1(cell.cell.rowIndex)
 
-        Picture pict = drawing.createPicture(anchor, pictureIdx);
-        pict.resize();
+        Picture pict = drawing.createPicture(anchor, pictureIdx)
+        pict.resize()
     }
 }

@@ -4,7 +4,7 @@ import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.BorderCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
-final class SimpleBorderCriterion extends AbstractBorderProvider implements BorderCriterion {
+final class SimpleBorderCriterion implements BorderCriterion {
 
     private final SimpleCellCriterion parent;
     private final Keywords.BorderSide side;
@@ -15,7 +15,7 @@ final class SimpleBorderCriterion extends AbstractBorderProvider implements Bord
     }
 
     @Override
-    public void style(final BorderStyle borderStyle) {
+    public SimpleBorderCriterion style(final BorderStyle borderStyle) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -27,10 +27,11 @@ final class SimpleBorderCriterion extends AbstractBorderProvider implements Bord
                 return border != null && borderStyle.equals(border.getStyle());
             }
         });
+        return this;
     }
 
     @Override
-    public void style(final Predicate<BorderStyle> predicate) {
+    public SimpleBorderCriterion style(final Predicate<BorderStyle> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -42,15 +43,17 @@ final class SimpleBorderCriterion extends AbstractBorderProvider implements Bord
                 return border != null && predicate.test(border.getStyle());
             }
         });
+        return this;
     }
 
     @Override
-    public void color(String hexColor) {
+    public SimpleBorderCriterion color(String hexColor) {
         color(new Color(hexColor));
+        return this;
     }
 
     @Override
-    public void color(final Color color) {
+    public SimpleBorderCriterion color(final Color color) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -62,10 +65,11 @@ final class SimpleBorderCriterion extends AbstractBorderProvider implements Bord
                 return border != null && color.equals(border.getColor());
             }
         });
+        return this;
     }
 
     @Override
-    public void color(final Predicate<Color> predicate) {
+    public SimpleBorderCriterion color(final Predicate<Color> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -77,5 +81,22 @@ final class SimpleBorderCriterion extends AbstractBorderProvider implements Bord
                 return border != null && predicate.test(border.getColor());
             }
         });
+        return this;
+    }
+
+    @Override
+    public BorderCriterion having(final Predicate<Border> borderPredicate) {
+        parent.addCondition(new Predicate<Cell>() {
+            @Override
+            public boolean test(Cell o) {
+                CellStyle style = o.getStyle();
+                if (style == null) {
+                    return false;
+                }
+                Border border = style.getBorder(side);
+                return border != null && borderPredicate.test(border);
+            }
+        });
+        return this;
     }
 }

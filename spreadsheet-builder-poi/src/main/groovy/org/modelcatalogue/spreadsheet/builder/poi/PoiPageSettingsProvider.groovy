@@ -5,20 +5,19 @@ import org.apache.poi.ss.usermodel.PrintOrientation
 import org.apache.poi.xssf.usermodel.XSSFPrintSetup
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Page
-import org.modelcatalogue.spreadsheet.api.AbstractPageSettingsProvider
 import org.modelcatalogue.spreadsheet.builder.api.FitDimension
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 
-class PoiPageSettingsProvider extends AbstractPageSettingsProvider implements Page, PageDefinition {
+class PoiPageSettingsProvider implements Page, PageDefinition {
 
-    private final XSSFPrintSetup printSetup
+    final XSSFPrintSetup printSetup
 
     PoiPageSettingsProvider(PoiSheetDefinition sheet) {
         this.printSetup = sheet.sheet.printSetup
     }
 
     @Override
-    void orientation(Keywords.Orientation orientation) {
+    PoiPageSettingsProvider orientation(Keywords.Orientation orientation) {
         switch (orientation) {
             case Keywords.Orientation.PORTRAIT:
                 printSetup.setOrientation(PrintOrientation.PORTRAIT)
@@ -27,10 +26,11 @@ class PoiPageSettingsProvider extends AbstractPageSettingsProvider implements Pa
                 printSetup.setOrientation(PrintOrientation.LANDSCAPE)
                 break
         }
+        this
     }
 
     @Override
-    void paper(Keywords.Paper paper) {
+    PoiPageSettingsProvider paper(Keywords.Paper paper) {
         switch (paper) {
             case Keywords.Paper.LETTER:
                 printSetup.setPaperSize(PaperSize.LETTER_PAPER)
@@ -84,11 +84,12 @@ class PoiPageSettingsProvider extends AbstractPageSettingsProvider implements Pa
                 printSetup.setPaperSize(PaperSize.STANDARD_PAPER_11_17)
                 break
         }
+        this
     }
 
     @Override
     FitDimension fit(Keywords.Fit widthOrHeight) {
-        return new PoiFitDimension(printSetup, widthOrHeight)
+        return new PoiFitDimension(this, widthOrHeight)
     }
 
     @Override

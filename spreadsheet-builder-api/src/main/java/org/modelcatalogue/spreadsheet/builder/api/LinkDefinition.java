@@ -4,12 +4,12 @@ import java.util.Map;
 
 public interface LinkDefinition {
 
-    void name(String name);
+    CellDefinition name(String name);
 
-    void email(String email);
-    void email(Map<String, ?> parameters, String email);
+    CellDefinition email(String email);
+    CellDefinition email(Map<String, ?> parameters, String email);
 
-    void url(String url);
+    CellDefinition url(String url);
 
-    void file(String path);
+    CellDefinition file(String path);
 }

@@ -4,12 +4,11 @@ import org.apache.poi.ss.usermodel.FontUnderline
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.modelcatalogue.spreadsheet.api.HTMLColorProvider
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.FontStyle
 
-class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
+class PoiFontDefinition implements FontDefinition {
 
     private final XSSFFont font
 
@@ -23,47 +22,31 @@ class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
     }
 
     @Override
-    void color(String hexColor) {
+    PoiFontDefinition color(String hexColor) {
         font.setColor(PoiCellStyleDefinition.parseColor(hexColor))
+        this
     }
 
     @Override
-    void color(Color colorPreset) {
+    PoiFontDefinition color(Color colorPreset) {
         color colorPreset.hex
+        this
     }
 
     @Override
-    void size(int size) {
+    PoiFontDefinition size(int size) {
         font.setFontHeightInPoints(size.shortValue())
+        this
     }
 
     @Override
-    void name(String name) {
+    PoiFontDefinition name(String name) {
         font.setFontName(name)
+        this
     }
 
     @Override
-    FontStyle getItalic() {
-        FontStyle.ITALIC
-    }
-
-    @Override
-    FontStyle getBold() {
-        FontStyle.BOLD
-    }
-
-    @Override
-    FontStyle getStrikeout() {
-        FontStyle.STRIKEOUT
-    }
-
-    @Override
-    FontStyle getUnderline() {
-        FontStyle.UNDERLINE
-    }
-
-    @Override
-    void make(FontStyle first, FontStyle... other) {
+    PoiFontDefinition make(FontStyle first, FontStyle... other) {
         EnumSet enumSet = EnumSet.of(first, other)
         if (FontStyle.ITALIC in enumSet) {
             font.italic = true
@@ -80,6 +63,7 @@ class PoiFontDefinition implements FontDefinition, HTMLColorProvider {
         if (FontStyle.UNDERLINE in enumSet) {
             font.setUnderline(FontUnderline.SINGLE)
         }
+        this
     }
 
     protected XSSFFont getFont() {

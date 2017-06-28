@@ -46,7 +46,7 @@ public final class DataRow implements Row {
      * @param name label from header or mapping
      * @return the cell by the label given from headers or mapping
      */
-    public Cell getAt(String name) {
+    public Cell get(String name) {
         return cells.get(name);
     }
 

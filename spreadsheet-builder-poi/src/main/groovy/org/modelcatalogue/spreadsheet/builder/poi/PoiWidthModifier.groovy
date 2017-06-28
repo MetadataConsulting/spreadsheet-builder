@@ -13,19 +13,24 @@ class PoiWidthModifier implements DimensionModifier {
     }
 
     @Override
-    Object getCm() {
+    PoiCellDefinition cm() {
         cell.width(width * 4.6666666666666666666667)
-        return null
+        return cell
     }
 
     @Override
-    Object getInch() {
+    PoiCellDefinition inch() {
         cell.width(width * 12)
-        return null
+        return cell
     }
 
     @Override
-    Object getInches() {
-        inch
+    PoiCellDefinition inches() {
+        return inch
+    }
+
+    @Override
+    PoiCellDefinition points() {
+        return cell
     }
 }

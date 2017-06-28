@@ -1,13 +1,12 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class AbstractCriterion<T> implements Predicate<T> {
+abstract class AbstractCriterion<T, Criterion extends Predicate<T>> implements Predicate<T> {
 
     private final List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
     private final boolean disjoint;
@@ -28,12 +27,13 @@ abstract class AbstractCriterion<T> implements Predicate<T> {
         return passesAllConditions(o);
     }
 
-    abstract Predicate<T> newDisjointCriterionInstance();
+    abstract Criterion newDisjointCriterionInstance();
 
-    public void or(Closure sheetCriterion) {
-        Predicate<T> criterion = newDisjointCriterionInstance();
-        DefaultGroovyMethods.with(criterion, sheetCriterion);
+    public AbstractCriterion<T, Criterion> or(Configurer<Criterion> sheetCriterion) {
+        Criterion criterion = newDisjointCriterionInstance();
+        Configurer.Runner.doConfigure(sheetCriterion, criterion);
         addCondition(criterion);
+        return this;
     }
 
     void addCondition(Predicate<T> predicate) {

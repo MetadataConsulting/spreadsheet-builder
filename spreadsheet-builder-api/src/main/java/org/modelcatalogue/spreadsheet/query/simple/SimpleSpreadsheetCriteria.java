@@ -1,10 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
 import org.modelcatalogue.spreadsheet.api.*;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.*;
 
 import java.io.FileNotFoundException;
@@ -22,22 +19,22 @@ public final class SimpleSpreadsheetCriteria implements SpreadsheetCriteria {
         this.workbook = workbook;
     }
 
-    private SpreadsheetCriteriaResult queryInternal(final int max, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") final Closure workbookCriterion) {
+    private SpreadsheetCriteriaResult queryInternal(final int max, Configurer<WorkbookCriterion>  workbookCriterion) {
         return new SimpleSpreadsheetCriteriaResult(workbook, workbookCriterion, max);
     }
 
     @Override
     public SpreadsheetCriteriaResult all() {
-        return queryInternal(Integer.MAX_VALUE, Closure.IDENTITY);
+        return queryInternal(Integer.MAX_VALUE, Configurer.Noop.NOOP);
     }
 
     @Override
-    public SpreadsheetCriteriaResult query(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    public SpreadsheetCriteriaResult query(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
         return queryInternal(Integer.MAX_VALUE, workbookCriterion);
     }
 
     @Override
-    public Cell find(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    public Cell find(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
         SpreadsheetCriteriaResult cells = queryInternal(1, workbookCriterion);
         Iterator<Cell> cellIterator = cells.iterator();
         if (cellIterator.hasNext()) {
@@ -47,7 +44,7 @@ public final class SimpleSpreadsheetCriteria implements SpreadsheetCriteria {
     }
 
     @Override
-    public boolean exists(@DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    public boolean exists(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
         return find(workbookCriterion) != null;
     }
 

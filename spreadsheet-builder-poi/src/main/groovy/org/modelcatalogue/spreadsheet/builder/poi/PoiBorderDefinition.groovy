@@ -2,13 +2,13 @@ package org.modelcatalogue.spreadsheet.builder.poi
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
-import org.modelcatalogue.spreadsheet.api.AbstractBorderProvider
 
 import org.modelcatalogue.spreadsheet.api.BorderStyle
 import org.modelcatalogue.spreadsheet.api.Color
 import org.modelcatalogue.spreadsheet.api.Keywords
+import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition
 
-class PoiBorderDefinition extends AbstractBorderProvider {
+class PoiBorderDefinition implements BorderDefinition {
 
     private final XSSFCellStyle xssfCellStyle
 
@@ -20,23 +20,26 @@ class PoiBorderDefinition extends AbstractBorderProvider {
     }
 
     @Override
-    void style(BorderStyle style) {
+    PoiBorderDefinition style(BorderStyle style) {
         borderStyle = style
+        return this
     }
 
     @Override
-    void color(String hexColor) {
+    PoiBorderDefinition color(String hexColor) {
         color = PoiCellStyleDefinition.parseColor(hexColor)
+        return this
     }
 
     @Override
-    void color(Color colorPreset) {
+    PoiBorderDefinition color(Color colorPreset) {
         color colorPreset.hex
+        return this
     }
 
     protected void applyTo(Keywords.BorderSide location) {
         switch (location) {
-            case Keywords.PureBorderSide.BOTTOM:
+            case Keywords.BorderSideAndHorizontalAlignment.BOTTOM:
                 if (borderStyle) {
                     xssfCellStyle.setBorderBottom(poiBorderStyle)
                 }
@@ -44,7 +47,7 @@ class PoiBorderDefinition extends AbstractBorderProvider {
                     xssfCellStyle.setBottomBorderColor(color)
                 }
                 break
-            case Keywords.PureBorderSide.TOP:
+            case Keywords.BorderSideAndHorizontalAlignment.TOP:
                 if (borderStyle) {
                     xssfCellStyle.setBorderTop(poiBorderStyle)
                 }

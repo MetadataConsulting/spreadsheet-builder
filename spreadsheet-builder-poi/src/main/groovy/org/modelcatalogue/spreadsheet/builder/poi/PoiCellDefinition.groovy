@@ -1,7 +1,5 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
-import groovy.transform.stc.ClosureParams
-import groovy.transform.stc.FromString
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Name
 import org.apache.poi.ss.usermodel.Workbook
@@ -17,10 +15,10 @@ import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
 import org.modelcatalogue.spreadsheet.api.CellStyle
 import org.modelcatalogue.spreadsheet.api.Comment
-import org.modelcatalogue.spreadsheet.builder.api.AbstractCellDefinition
-
+import org.modelcatalogue.spreadsheet.builder.api.CellDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.CommentDefinition
+import org.modelcatalogue.spreadsheet.api.Configurer
 import org.modelcatalogue.spreadsheet.builder.api.DimensionModifier
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
@@ -28,7 +26,7 @@ import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
 
-class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, SpreadsheetCell {
+class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
 
     private final PoiRowDefinition row
     private final XSSFCell xssfCell
@@ -90,45 +88,45 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     @Override
     Object getValue() {
         switch (xssfCell.cellType) {
-            case Cell.CELL_TYPE_BLANK: return '';
-            case Cell.CELL_TYPE_BOOLEAN: return xssfCell.getBooleanCellValue();
-            case Cell.CELL_TYPE_ERROR: return xssfCell.getErrorCellString();
-            case Cell.CELL_TYPE_FORMULA: return xssfCell.getCellFormula();
-            case Cell.CELL_TYPE_NUMERIC: return xssfCell.getNumericCellValue();
-            case Cell.CELL_TYPE_STRING: return xssfCell.getStringCellValue();
+            case Cell.CELL_TYPE_BLANK: return ''
+            case Cell.CELL_TYPE_BOOLEAN: return xssfCell.getBooleanCellValue()
+            case Cell.CELL_TYPE_ERROR: return xssfCell.getErrorCellString()
+            case Cell.CELL_TYPE_FORMULA: return xssfCell.getCellFormula()
+            case Cell.CELL_TYPE_NUMERIC: return xssfCell.getNumericCellValue()
+            case Cell.CELL_TYPE_STRING: return xssfCell.getStringCellValue()
         }
         return xssfCell.getRawValue()
     }
 
     @Override
-    void value(Object value) {
+    PoiCellDefinition value(Object value) {
         if (value == null) {
             xssfCell.setCellType(Cell.CELL_TYPE_BLANK)
-            return
+            return this
         }
 
         if (value instanceof Number) {
             xssfCell.setCellType(Cell.CELL_TYPE_NUMERIC)
             xssfCell.setCellValue(value.doubleValue())
-            return
+            return this
         }
 
         if (value instanceof Date) {
             xssfCell.setCellType(Cell.CELL_TYPE_NUMERIC)
             xssfCell.setCellValue(value as Date)
-            return
+            return this
         }
 
         if (value instanceof Calendar) {
             xssfCell.setCellType(Cell.CELL_TYPE_NUMERIC)
             xssfCell.setCellValue(value as Calendar)
-            return
+            return this
         }
 
         if (value instanceof Boolean) {
             xssfCell.setCellType(Cell.CELL_TYPE_BOOLEAN)
             xssfCell.setCellValue(value as Boolean)
-            return
+            return this
         }
 
         if (value instanceof CharSequence) {
@@ -137,34 +135,39 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
         xssfCell.setCellType(Cell.CELL_TYPE_STRING)
         xssfCell.setCellValue(value.toString())
+        return this
     }
 
     @Override
-    void style(@DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    PoiCellDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
         if (!poiCellStyle) {
             poiCellStyle = new PoiCellStyleDefinition(this)
         }
         poiCellStyle.checkSealed()
-        poiCellStyle.with styleDefinition
+        Configurer.Runner.doConfigure(styleDefinition, poiCellStyle)
+        this
     }
 
     @Override
-    void comment(String commentText) {
+    PoiCellDefinition comment(String commentText) {
         comment {
             text commentText
         }
+        this
     }
 
     @Override
-    void formula(String formula) {
+    PoiCellDefinition formula(String formula) {
         row.sheet.workbook.addPendingFormula(formula, xssfCell)
+        this
     }
 
     @Override
-    void comment(@DelegatesTo(CommentDefinition.class) Closure commentDefinition) {
+    PoiCellDefinition comment(Configurer<CommentDefinition> commentDefinition) {
         PoiCommentDefinition poiComment = new PoiCommentDefinition()
-        poiComment.with commentDefinition
+        Configurer.Runner.doConfigure(commentDefinition, poiComment)
         poiComment.applyTo xssfCell
+        this
     }
 
     @Override
@@ -182,63 +185,73 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    void colspan(int span) {
+    PoiCellDefinition colspan(int span) {
         this.colspan = span
+        this
     }
 
     @Override
-    void rowspan(int span) {
+    PoiCellDefinition rowspan(int span) {
         this.rowspan = span
+        this
     }
 
     @Override
-    void style(String name) {
+    PoiCellDefinition style(String name) {
         styles name
+        this
     }
 
     @Override
-    void styles(String... names) {
+    PoiCellDefinition styles(String... names) {
         styles(names.toList())
+        this
     }
 
     @Override
-    void styles(Iterable<String> names) {
+    PoiCellDefinition styles(Iterable<String> names) {
         if (!poiCellStyle) {
             poiCellStyle = row.sheet.workbook.getStyles(new LinkedHashSet<String>((names + row.styles).toList()))
             poiCellStyle.assignTo(this)
-            return
+            return this
         }
         if (poiCellStyle.sealed && row.styles) {
             poiCellStyle = null
             styles(new LinkedHashSet<String>(names.toList() + row.styles))
-            return
+            return this
         }
         poiCellStyle.checkSealed()
         for (String name in names) {
-            poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
+            Configurer.Runner.doConfigure(row.sheet.workbook.getStyleDefinition(name), poiCellStyle)
         }
-
+        this
     }
 
     @Override
-    void style(String name, @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    PoiCellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
         style row.sheet.workbook.getStyleDefinition(name)
         style styleDefinition
+        this
     }
 
     @Override
-    void styles(Iterable<String> names, @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    PoiCellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
         for (String name in names) {
-            poiCellStyle.with row.sheet.workbook.getStyleDefinition(name)
+            Configurer.Runner.doConfigure(row.sheet.workbook.getStyleDefinition(name), poiCellStyle)
         }
         style styleDefinition
+        this
     }
 
     @Override
-    void name(String name) {
+    PoiCellDefinition name(String name) {
+        if (fixName(name) != name) {
+            throw new IllegalArgumentException("Name ${name} is not valid Excel name! Suggestion: ${fixName(name)}")
+        }
         XSSFName theName = xssfCell.row.sheet.workbook.createName() as XSSFName
-        theName.setNameName(fixName(name))
+        theName.setNameName(name)
         theName.setRefersToFormula(generateRefersToFormula())
+        this
     }
 
     private String generateRefersToFormula() {
@@ -252,11 +265,11 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
         new CellReference(xssfCell).formatAsString()
         List<String> possibleReferences = [new CellReference(xssfCell).formatAsString(), generateRefersToFormula()]
         for (int nn=0; nn< wb.getNumberOfNames(); nn++) {
-            Name n = wb.getNameAt(nn);
+            Name n = wb.getNameAt(nn)
             for (String reference in possibleReferences) {
                 if (n.sheetIndex == -1 || n.sheetIndex == wb.getSheetIndex(xssfCell.sheet)) {
                     if (n.refersToFormula == reference) {
-                        return n.nameName;
+                        return n.nameName
                     }
                 }
             }
@@ -278,7 +291,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
     @Override
     LinkDefinition link(Keywords.To to) {
-        return new PoiLinkDefinition(row.sheet.workbook, xssfCell)
+        return new PoiLinkDefinition(row.sheet.workbook, this)
     }
 
     @Override
@@ -294,19 +307,21 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
     }
 
     @Override
-    void width(Keywords.Auto auto) {
+    PoiCellDefinition width(Keywords.Auto auto) {
         row.sheet.addAutoColumn(xssfCell.columnIndex)
+        this
     }
 
     @Override
-    void text(String run) {
+    PoiCellDefinition text(String run) {
         text(run, null)
+        this
     }
 
     @Override
-    void text(String run, @DelegatesTo(FontDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
+    PoiCellDefinition text(String run, Configurer<FontDefinition> fontConfiguration) {
         if (!run) {
-            return
+            return this
         }
         int start = 0
         if (richTextParts) {
@@ -316,13 +331,14 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
         if (!fontConfiguration) {
             richTextParts << new RichTextPart(run, null, start, end)
-            return
+            return this
         }
 
         PoiFontDefinition font = new PoiFontDefinition(xssfCell.row.sheet.workbook)
-        font.with fontConfiguration
+        Configurer.Runner.doConfigure(fontConfiguration, font)
 
         richTextParts << new RichTextPart(run, font, start, end)
+        this
     }
 
     @Override
@@ -575,7 +591,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
 
     protected static XSSFCell getCell(XSSFRow row, int column) {
-        XSSFCell cell = row.getCell(column);
+        XSSFCell cell = row.getCell(column)
         if (cell) {
             return cell
         }
@@ -602,7 +618,7 @@ class PoiCellDefinition extends AbstractCellDefinition implements Resolvable, Sp
 
     public <T> T asType(Class<T> type) {
         if (type.isInstance(cell)) {
-            return cell
+            return cell as T
         }
         return super.asType(type)
     }

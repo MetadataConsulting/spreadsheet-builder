@@ -1,12 +1,14 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 
 public interface WorkbookDefinition extends CanDefineStyle {
 
-    void sheet(String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure sheetDefinition);
+    WorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition);
+
+    WorkbookDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition);
+
+    WorkbookDefinition apply(Class<? extends Stylesheet> stylesheet);
+    WorkbookDefinition apply(Stylesheet stylesheet);
 
 }

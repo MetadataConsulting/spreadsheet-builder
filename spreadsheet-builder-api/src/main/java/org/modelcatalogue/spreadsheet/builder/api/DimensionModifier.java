@@ -9,23 +9,27 @@ public interface DimensionModifier {
      * Converts the dimension to centimeters.
      *
      * This feature is currently experimental.
-     * @return null to comply with getter signatures
      */
-    Object getCm();
+    CellDefinition cm();
 
     /**
      * Converts the dimension to inches.
      *
      * This feature is currently experimental.
-     * @return null to comply with getter signatures
      */
-    Object getInch();
+    CellDefinition inch();
 
     /**
      * Converts the dimension to inches.
      *
      * This feature is currently experimental.
-     * @return null to comply with getter signatures
      */
-    Object getInches();
+    CellDefinition inches();
+
+    /**
+     * Keeps the dimesion in points.
+     *
+     * This feature is currently experimental.
+     */
+    CellDefinition points();
 }

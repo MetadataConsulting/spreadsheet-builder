@@ -1,4 +1,4 @@
-= Groovy Spreadsheet Builder
+= Spreadsheet Builder
 
 [.ribbon]
 image::ribbon.png[link={projectUrl}]
@@ -6,21 +6,35 @@ image::ribbon.png[link={projectUrl}]
 Spreadsheet builder provides convenient way how to read and create MS Excel OfficeOpenXML
 Documents (XSLX) focus not only on content side but also on easy styling.
 
+= Installation
+
+Spreadsheet Builder API is available on Maven central and JCenter.
+
+[source,indent=0,role="primary"]
+.Gradle
+----
+compile 'org.modelcatalogue:spreadsheet-builder-poi:{version}'
+----
+
+[source,xml,indent=0,role="secondary"]
+.Maven
+----
+<dependency>
+  <groupId>org.modelcatalogue</groupId>
+  <artifactId>spreadsheet-builder-poi</artifactId>
+  <version>{version}</version>
+  <type>pom</type>
+</dependency>
+----
+
 = Writing Spreadsheets
 
 Following example creates the basic spreadsheet with two rows and three columns.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
-@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
-// fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.10')
-@GrabExclude('org.codehaus.groovy:groovy-all')
-
-import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
@@ -39,6 +53,38 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
     }
 } writeTo file                                                                          // <5>
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
+
+import static org.modelcatalogue.spreadsheet.api.Keywords.*;
+
+public class SpreadsheetWriter {
+    
+    public static void main(String... args) {
+        File file = new File("spreadsheet.xlsx");
+
+        PoiSpreadsheetBuilder.INSTANCE.build(w -> {                                     // <1>
+            w.sheet("Sample", s -> {                                                    // <2>
+                s.row(r -> {                                                            // <3>
+                    r.cell("A");                                                        // <4>
+                    r.cell("B");
+                    r.cell("C");
+                });
+                s.row(r -> {
+                    r.cell(1);
+                    r.cell(2);
+                    r.cell(3);
+                });
+            });
+        }).writeTo(file);                                                               // <5>
+    }
+
+}
+----
+
 <1> Build new spreadsheet based on Apache POI
 <2> Create new sheet with the name `Sample`
 <3> Create new row
@@ -61,14 +107,30 @@ You can specify the row number when creating a row. Another rows created without
 after this row. The row number is the same as in the spreadsheet e.g. the index of the rows is *starting with number 1*.
 To skip a single row, just use `row()` without any parameters.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
+
 sheet('Sample') {
     row 5, { cell 'Line 5' }
     row()
     row { cell 'Line 7' }
 }
+
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+
+w.sheet("Sample", s -> {
+    s.row(5, r -> r.cell("Line 5"));
+    s.row();
+    s.row(r -> r.cell("Line 7"));
+}
+
+----
+
 
 _Result_
 
@@ -77,7 +139,8 @@ image:specific_row.png[]
 === Outlines
 Rows and columns can be optionally grouped into expanded or collapsed groups for better readability.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -111,6 +174,42 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell("Heading 1");
+        r.group(g -> {
+            g.cell("Heading 2");
+            g.cell("Heading 3");
+            g.cell("Heading 4");
+
+            g.collapse(cps -> {
+                cps.cell("Heading 5");
+                cps.cell("Heading 6");
+            });
+            g.cell("Heading 7");
+        });
+    });
+
+    // expanded group
+    s.group(g -> {
+        g.row(r -> r.cell("Heading 2"));
+        g.row(r -> r.cell("Heading 3"));
+        g.row(r -> r.cell("Heading 4"));
+
+        // collapsed group
+        g.collapse(cps -> {
+            cps.row(r -> r.cell("Heading 5"));
+            cps.row(r -> r.cell("Heading 6"));
+        });
+
+        g.row(r -> r.cell("Heading 7"));
+    }
+});
+----
+
 _Result_
 
 image:outline_for_rows.png[]
@@ -119,7 +218,8 @@ image:outline_for_rows.png[]
 
 You can freeze some rows and or columns to prevent scrolling them.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     freeze 1, 1
@@ -144,6 +244,33 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.freeze(1, 1);
+
+    s.row(r -> {
+        r.cell("-");
+        r.cell("A");
+        r.cell("B");
+        r.cell("C");
+        r.cell("D");
+        r.cell("E");
+        r.cell("F");
+    });
+
+    for (int i = 0; i < 10 ; i++) {
+        s.row(r -> {
+            r.cell("Row " + (i + 1));
+            for (int j = 0; j < 6; j++) {
+                r.cell(10 * i + j);
+            }
+        });
+    });
+});
+----
+
 _Result_
 
 
@@ -153,7 +280,8 @@ image:frozen_cells.gif[]
 You can either lock the sheet or you can protect it with password. Then the users won't be able to edit any cells
 or view any formulas. This can emphasize that user changes are not desired.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     lock it // 'it' represents the first argument of the closure
@@ -172,6 +300,26 @@ sheet('Password Protected') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.lock();
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Locked");
+        });
+    });
+});
+
+w.sheet("Password Protected", s -> {
+    s.password("p4$$w0rd");
+    s.row(r -> {
+        r.cell("Protected by Password");
+    });
+});
+----
+
 _Result_
 
 image:locked.png[]
@@ -180,7 +328,8 @@ image:locked.png[]
 
 You can create an automatic filter for all data in given sheet.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Filtered') {
     filter auto
@@ -198,6 +347,27 @@ sheet('Filtered') {
     }
 }
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Filtered", s -> {
+    s.filter(auto);
+    s.row(r -> {
+        r.cell("Name");
+        r.cell("Profession");
+    });
+    s.row(r -> {
+        r.cell("Donald");
+        r.cell("Sailor");
+    });
+    s.row(r -> {
+        r.cell("Bob");
+        r.cell("Builder");
+    });
+});
+----
+
 _Result_
 
 image:filtered.png[]
@@ -206,7 +376,8 @@ image:filtered.png[]
 You can define the paper size, orientation and on how many pages should the sheet be printed within the `page` closure
 of the sheet.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Custom Page') {
     page {
@@ -220,6 +391,20 @@ sheet('Custom Page') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Custom Page", s -> {
+    s.page(p -> {
+        p.paper(A5);
+        p.fit(width).to(1);
+        p.orientation(landscape);
+    });
+    s.row(r -> {
+        r.cell("A5 Landcapse");
+    });
+});
+----
 
 == Cells
 
@@ -238,7 +423,8 @@ You can either specify the column for the cell as number *starting from `1`* or 
 in the generated spreadsheet e.g. `C`. Otherwise the cells will be generated one after another. To create empty cell
 call the `cell` method without any parameters.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -246,15 +432,25 @@ sheet('Sample') {
         cell()
         cell 'Third'
         cell(5) {
-            value 'Fifth'
-        }
-        cell('G') {
-            formula 'YEAR(TODAY())'
-        }
+ value 'Fifth' }
+        cell('G') { formula 'YEAR(TODAY())' }
     }
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell("First");
+        r.cell();
+        r.cell("Third");
+        r.cell(5, c -> c.value("Fifth"));
+        r.cell("G", c -> c.formula("YEAR(TODAY())"));
+    });
+});
+----
 
 _Result_
 
@@ -275,7 +471,8 @@ For `Boolean` the type of the cell is set automatically to `BOOLEAN`.
 
 You can set `rowspan` and/or `colspan` of any cell to merge multiple cells together.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -300,6 +497,31 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Columns");
+            c.colspan(2);
+        });
+    });
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Rows");
+            c.rowspan(3);
+        });
+        r.cell("Value 1");
+    });
+    s.row(r -> {
+        r.cell("B", c -> c.value("Value 2"));
+    }
+    s.row(r -> {
+        r.cell("B", c -> c.value("Value 3"));
+    });
+});
+----
 
 _Result_
 
@@ -308,11 +530,20 @@ image:spans.png[]
 === Images
 You can insert an image calling one of `png`, `jpeg`, `emf`, `wmf`, `pict`, `dib` method inside the cell definition.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 cell ('C') {
     png image from 'https://goo.gl/UcL1wy'
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+r.cell("C", c -> {
+    c.png(image).from("https://goo.gl/UcL1wy");
+});
 ----
 
 _Result_
@@ -333,7 +564,8 @@ Resizing images with API is not reliable so you need to resize your image proper
 You can set comment of any cell using the `comment` method. Use the variant accepting closure If you want to specify
 the author of the comment as well. The author only appears in the status bar of the application.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -354,6 +586,28 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Commented 1");
+            c.comment("This is a comment 1");
+        });
+    });
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Commented 2");
+            c.comment(cmt -> {
+                cmt.author("musketyr");
+                cmt.text("This is a comment 2");
+            });
+        });
+    });
+});
+----
+
 
 _Result_
 
@@ -366,7 +620,8 @@ of the cell simply call the `name` method inside the cell definition. See <<Link
 use names to create link
 to the particular cell.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -390,6 +645,31 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell("A");
+        r.cell("B");
+        r.cell("A + B");
+    });
+    s.row(r -> {
+        r.cell(c -> {
+            c.value(10);
+            c.name("CellA");
+        });
+        r.cell(c -> {
+            c.value(20);
+            c.name("CellB");
+        });
+        r.cell(c -> {
+            c.formula("SUM(#{CellA},#{CellB})");
+        });
+    });
+});
+----
+
 
 _Result_
 
@@ -410,7 +690,8 @@ You can create for types of links
 Links does not appear blue and underline by default You need to <<Styles,style>> them appropriately yourself.
 ====
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -450,6 +731,50 @@ sheet('Links') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Hello World");
+            c.name("Salutation");
+        });
+    });
+});
+
+w.sheet("Links", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Document");
+            c.link(to).name("Salutation");
+            c.width(auto);
+        });
+        r.cell(c -> {
+            c.value("File");
+            c.link(to).file("text.txt");
+        });
+        r.cell(c -> {
+            c.value("URL");
+            c.link(to).url("https://www.example.com");
+        });
+        r.cell(c -> {
+            c.value("Mail (plain)");
+            c.link(to).email("musketyr@example.com");
+        });
+        r.cell(c -> {
+            c.value("Mail (with subject)");
+            Map<String, String> email = new LinkedHashMap<>();
+            email.put("subject", "Testing Excel Builder");
+            email.put("cc", "tester@example.com");
+            email.put("body", "It is really great tools");
+            c.link(to).email(email, "vladimir@orany.cz");
+        });
+    });
+});
+----
+
+
 [TIP]
 ====
 You can add arbitrary attributes to the email link such as `cc`, `body` or `subject`.
@@ -463,7 +788,8 @@ You can also set the column to accommodate the width automatically using the `au
 
 You can set the height of the cell in points, centimeters or inches. The height applies to whole row.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Dimensions') {
     row {
@@ -491,6 +817,35 @@ sheet('Dimensions') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Dimensions", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("cm");
+            c.height(1).cm();
+            c.width(1).cm();
+        });
+    });
+
+    s.row(r -> {
+        r.cell("B", c -> {
+            c.value("inches"
+            c.width(1).inch();
+            c.height(1).inch();
+        });
+    });
+    s.row(r -> {
+        r.cell("C", c -> {
+            c.value("points");
+            c.width(10);
+            c.height(50);
+        });
+    });
+});
+----
+
 _Result_
 
 image:dimensions.png[]
@@ -500,7 +855,8 @@ image:dimensions.png[]
 Cell styles are defined either for a whole row or a particular cell. You can define a named style on the top level along
 with sheets and than refer to it from cell or row.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 style ('headers') {
     border(bottom) {
@@ -508,7 +864,7 @@ style ('headers') {
         color black
     }
     font {
-        bold
+        make bold
     }
     background whiteSmoke
 }
@@ -534,14 +890,58 @@ sheet('Sample') {
             value "Groovy Spreadsheet Builder"
             style {
                 font {
-                    bold
+                    make bold
                 }
             }
         }
         cell "Helps building nice spreadsheet reports"
     }
 }
+----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.style ("headers", st -> {
+    st.border(bottom, b -> {
+        b.style(thick);
+        b.color(black);
+    });
+    st.font(f -> {
+        f.make(bold);
+    });
+    st.background(whiteSmoke);
+});
+
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.style("headers");
+        r.cell(c -> {
+            c.value("No.");
+            c.width(5);
+        });
+        r.cell(c -> {
+            c.value("Name");
+            c.width(30);
+        });
+        r.cell(c -> {
+            c.value("Description");
+            c.width(auto);
+        });
+    });
+    s.row(r -> {
+        r.cell(c -> 1
+        r.cell(c -> {
+            c.value("Groovy Spreadsheet Builder");
+            c.style(st -> {
+                st.font(f -> {
+                    f.make(bold);
+                });
+            });
+        });
+        r.cell("Helps building nice spreadsheet reports");
+    });
+});
 ----
 
 _Result_
@@ -562,7 +962,8 @@ See link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/VerticalAlig
 full description of vertical alignment options.
 
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -593,6 +994,38 @@ sheet('Sample') {
  }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.value("Top Left");
+            c.style(st -> {
+                st.align(top, left);
+            });
+            c.width(20);
+            c.height(50);
+        });
+        r.cell(c -> {
+            c.value("Top Center");
+            c.style(st -> {
+                st.align(top, center);
+            });
+            c.width(20);
+        });
+        r.cell(c -> {
+            c.value("Top Right");
+            c.style(st ->{
+                st.align(top, right);
+            });
+            c.width(20);
+        });
+    });
+    // rest skipped
+ });
+----
+
 _Result_
 
 image:alignment.png[]
@@ -603,7 +1036,8 @@ You can set the background color or combination of foreground color, background 
 appearance. Color can be set as hexadecimal string starting with `#` or you can use one of predefined colors
 which are exactly the same as HTML predefined colors.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 cell {
     style {
@@ -612,6 +1046,18 @@ cell {
         fill square
     }
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+r.cell(c -> {
+    c.style(st -> {
+        st.background("#FF8C00"); // darkOrange
+        st.foreground(brown);
+        st.fill(square);
+    });
+});
 ----
 
 ==== Available predefined colors
@@ -627,7 +1073,8 @@ You can define a color and style of the cell border. To address which color to c
 and/or `right` keywords when calling the `border` method. See <<Available predefined colors>>.
 Colors can be defined as hexadecimal string as well.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 cell {
     style {
@@ -639,6 +1086,19 @@ cell {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+r.cell(c -> {
+    c.style(st -> {
+        st.border(top, bottom, b -> {
+            b.style(solid);
+            b.color(gray);
+        });
+    });
+});
+----
+
 ==== Available border styles
 
 image:borders.png[]
@@ -648,7 +1108,8 @@ image:borders.png[]
 You can customize the font size, name and color of the text in the cell. You also can make it `bold`, `italic`, `underline` or
 `strikeout`. See <<Available predefined colors>>.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 row {
     cell {
@@ -693,6 +1154,52 @@ row {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+s.row(r -> {
+    cell(c -> {
+        c.width(auto);
+        c.value("Bold Red 22");
+        c.style(st -> {
+            st.font(f -> {
+                f.make(bold);
+                f.color(red);
+                f.size(22);
+            });
+        });
+    });
+    cell(c -> {
+        c.width(auto);
+        c.value("Underline Courier New");
+        c.style(st -> {
+            st.font(f -> {
+                f.make(underline);
+                f.name("Courier New");
+            });
+        });
+    });
+    cell(c -> {
+        c.width(auto);
+        c.value("Italic");
+        c.style(st -> {
+            st.font(f -> {
+                f.make(italic);
+            });
+        });
+    });
+    cell(c -> {
+        c.width(auto);
+        c.value("Strikeout");
+        c.style(st -> {
+            st.font(f -> {
+                f.make(strikeout);
+            });
+        });
+    });
+});
+----
+
 _Result_
 
 image:fonts.png[]
@@ -703,7 +1210,8 @@ Apart from setting the font for the whole cell you can create a rich text cell c
 use multiple calls to `text` method which takes optional closure to define the font for the current text run. The font
 definition is the same as <<Fonts,above>>.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 cell {
     text 'Little'
@@ -726,6 +1234,30 @@ cell {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+r.cell(c -> {
+    c.text("Little");
+    c.text(" ");
+    c.text("Red", f -> {
+        f.color(red);
+        f.size(22);
+    });
+    c.text(" ");
+    c.text("Riding", f -> {
+        f.make(italic);
+        f.size(18);
+    });
+    c.text(" ");;
+    c.text("Hood", f -> {
+        f.make(bold);
+        f.size(22);
+    });
+});
+----
+
+
 _Result_
 
 image:rich_text.png[]
@@ -737,22 +1269,33 @@ you are using at least version 3.13.
 ====
 
 === Data formats
-You can assing a data format using the `format` method. Detailed guide how the format works can be found in
+You can assign a data format using the `format` method. Detailed guide how the format works can be found in
 link:https://support.microsoft.com/en-us/help/264372/how-to-control-and-understand-settings-in-the-format-cells-dialog-box-in-excel[How to control and understand settings in the Excel for Format Cells
 dialog box]. link:https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html[Apache POI Builtin Formats]
 are great way how to find some of the most common formats.
 
 Following example will print current date as e.g. `31.12.15`.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
-
 cell {
-    style {
-        value new Date()
+    value new Date()
+    style {    
         format 'dd/mm/yy'
     }
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+r.cell(c -> {
+    c.value(new Date());
+    c.style(st -> {
+        st.format("dd/mm/yy");
+    });
+});
 ----
 
 _Each of the formats can contain up to four parts separated by semicolon: `<POSITIVE>;<NEGATIVE>;<ZERO>;<TEXT>`.
@@ -918,7 +1461,8 @@ Format Symbol      Description/result
 
 You can set the indentation in number of characters from the beginning of the cell.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     7.times { int i ->
@@ -934,6 +1478,23 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    for (int i = 0; i < 7; i++) {
+        s.row(r -> {
+            r.cell(c -> {
+                c.value("x");
+                c.style(st -> {
+                    st.indent(i);
+                });
+            });
+        });
+    });
+});
+----
+
 _Result_
 
 image:indent.png[]
@@ -943,7 +1504,8 @@ image:indent.png[]
 You can rotate the text in the cell using the `rotation` method. It accepts number from `0` to `180`.
 Numbers lower from `1` to `90` will produces text going _uphill_ and from `91` to `180` text going _downhill_
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -980,6 +1542,44 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s -> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.height(150);
+            c.width(20);
+            c.value("From bottom to top (90)");
+            c.style(st -> st.rotation(90));
+        });
+
+        r.cell(c -> {
+            c.width(20);
+            c.value("From bottom to top (45)");
+            c.style(st -> st.rotation(45));
+        });
+
+        r.cell(c -> {
+            c.width(20);
+            c.value("Normal (0)");
+        });
+
+        r.cell(c -> {
+            c.width(20);
+            c.value("From top to bottom (135)");
+            c.style(st -> st.rotation(135));
+        });
+
+        r.cell(c -> {
+            c.width(20);
+            c.value("From top to bottom (180)");
+            c.style(st -> st.rotation(180));
+        });
+    });
+});
+----
+
 _Result_
 
 image:rotation.png[]
@@ -990,7 +1590,8 @@ By default the text is not wrapped. This mean that the new lines characters pres
 You can update this by writing `wrap text` line in the style definition closure.
 
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 sheet('Sample') {
     row {
@@ -1020,6 +1621,27 @@ sheet('Sample') {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Sample", s-> {
+    s.row(r -> {
+        r.cell(c -> {
+            c.height(100);
+            c.width(auto);
+            c.value("\nThis text will be wrapped.\nTo the next line.\n\nAnd another as well.");
+            c.style(st -> {
+                st.wrap(text);
+            });
+        });
+        r.cell(c -> {
+            c.width(auto);
+            c.value("\nThis text will not be wrapped.\nNot even to to the next line.\n\nEven another one.");
+        });
+    });
+}
+----
+
 _Result_
 
 image:wrap.png[]
@@ -1030,7 +1652,8 @@ image:wrap.png[]
 You can externalize your styles configuration into class implementing `org.modelcatalogue.spreadsheet.builder.api.Stylesheet`
 interface to maximize code reuse or report customization.
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 class MyStyles implements Stylesheet {
 
@@ -1077,6 +1700,55 @@ builder.build(out) {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+// stylesheet class definition
+public class MyStyles implements Stylesheet {
+
+    public void declareStyles(CanDefineStyle stylable) {
+        stylable.style("h1", st -> {
+            st.foreground(whiteSmoke);
+            st.fill(solidForeground);
+            st.font(f -> {
+                f.size(22);
+            });
+        });
+        stylable.style("h2") {
+            st.base( "h");
+            st.font(f -> {
+                f.size(16);
+            });
+        });
+        stylable.style("red") {
+            st.font(f -> {
+                f.color(red);
+            });
+        });
+    }
+}
+// usage
+builder.build(out, w -> {
+    w.apply(MyStyles.class); // or w.apply(new MyStyles());
+    w.sheet("Sample", s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.value("Hello");
+                c.style("h1");
+            });
+            r.cell(c -> {
+                c.value("World");
+                c.style("h2");
+            });
+            r.cell(c -> {
+                c.value("!!!");
+                c.styles("h2", "red");
+            });
+        });
+    });
+});
+----
+
 _Result_
 
 image:stylesheets.png[]
@@ -1086,22 +1758,18 @@ image:stylesheets.png[]
 
 You can query the spreadsheet with similar syntax as you build it.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
-@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='{version}')
-// fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.10')
-@GrabExclude('org.codehaus.groovy:groovy-all')
-
-import org.modelcatalogue.spreadsheet.api.Cell
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-SpreadsheetQuery query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                      // <1>
+SpreadsheetCriteria query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                // <1>
 
-Collection<Cell>  cells = query.query {                                                 // <2>
+SpreadsheetCriteriaResult result = query.query {                                        // <2>
     sheet {                                                                             // <3>
         row {                                                                           // <4>
             cell {
@@ -1111,10 +1779,45 @@ Collection<Cell>  cells = query.query {                                         
     }
 }
 
-assert cells.size() == 1
-assert cells.first().value == 'B'
-
+assert result.cells.size() == 1
+assert result.cells.first().value == 'B'
 ----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult;
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
+
+public class CriteriaDemo {
+
+    public static void main(String[] args) throws Exception {
+        File file = new File("spreadsheet.xlsx");
+
+        SpreadsheetCriteria query = PoiSpreadsheetCriteria.FACTORY.forFile(file);       // <1>
+
+        SpreadsheetCriteriaResult result = query.query(w -> {                           // <2>
+            w.sheet(s -> {                                                              // <3>
+                s.row(r -> {                                                            // <4>
+                    r.cell(c -> {
+                        c.value("B");                                                   // <5>
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, result.getCells().size());
+        assertEquals("B", result.getCell().getValue());
+    }
+
+}
+----
+
 <1> Create new spreadsheet query for given file
 <2> Start a query
 <3> Query any sheet
@@ -1131,7 +1834,8 @@ The `Cell` objects provides getters counterparts to methods supported by query s
 easily navigate into all eight directions with methods like `getLeft()`, `getAboveLeft()` etc.  or access the whole
 row with `getRow()`. Rows can be also easily navigated with `getAbove()` and `getbellow` methods.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Cell a = query.find {
     sheet {
@@ -1147,22 +1851,49 @@ assert a.right.value == 'B'
 assert a.row.bellow.cells.first().value == a.bellow.value
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Cell a = query.find(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.value("A");
+            });
+        });
+    });
+});
+
+assert a.right.value == 'B'
+assert a.row.bellow.cells.first().value == a.bellow.value
+----
+
 == Sheets and Rows
 
 You can query only specific sheet or row
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Sheet content = query.query {
     sheet('Content')
 }.sheet
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Sheet content = query.query(w -> {
+    w.sheet("Content");
+}).getSheet();
+----
+
 _Result:_ Sheet `Content` if present.
 
 You can query sheet by its page setting
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Collection<Sheet> a5s = query.query {
     sheet {
@@ -1174,18 +1905,49 @@ Collection<Sheet> a5s = query.query {
 }.sheets
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Collection<Sheet> a5s = query.query(w -> {
+    w.sheet(s -> {
+        s.page(p -> {
+            p.paper(A5);
+            p.orientation(landscape);
+        });
+    });
+}).getSheets();
+----
+
+
 _Result:_ Every sheet having the page settings set to A5 paper and with landscape orientation.
 
 You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
  rows by it number. The number starts with one so it corresponds the one displayed in Excel.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Collection<Row> rows = query.query {
-    sheet(name({ name.startsWith('Con') })) {
+    sheet {
+        having {
+            it.name.startsWith('Con')
+        }
         row(1)
     }
 }.rows
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Collection<Row> rows = query.query(w -> {
+    w.sheet(s -> {
+        s.having(it -> {
+            it.getName().startsWith("Con");
+        });
+        s.row(1);
+    });
+}).getRows();
 ----
 
 _Result:_ Every first row of every sheet which name starts with `Con`.
@@ -1193,33 +1955,70 @@ _Result:_ Every first row of every sheet which name starts with `Con`.
 If you repeat the call to either `sheet` or `row` query method you it's understood as `and` condition but
  you can also create `or` condition by wrapping the calls with `or` method.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
- query.query {
+query.query {
     or {
-       sheet(name({ name.startsWith('Con') })) {
-         row(1)
-       }
-       sheet(name({ name.endsWith('Air') })) {
-         row(2)
-       }
+        sheet {
+            having {
+                it.name.startsWith('Con')
+            }
+            row(1)
+        }
+        sheet {
+            having {
+                it.name.endsWith('Air')
+            }
+            row(2)
+        }
     }
- }
+}
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    or(disj -> {
+        disj.sheet(s -> {
+            s.having(it -> {
+                it.getName().startsWith("Con");
+            });
+            s.row(1);
+        });
+        disj.sheet(s -> {
+            s.having(it -> {
+                it.getName().endsWith("Air");
+            });
+            s.row(2);
+        });
+    });
+});
 ----
 
 _Result:_ Every cell from every first row of every sheet which name starts with `Con` and every cell
 from every second row of sheet which name ends with `Air`. If the one sheet fits both criteria the cells are not returned
 twice.
 
-Also row method accepts predicate with two predefined `number` and `range`.
-
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
-        row (range(1,10)) { // body required when the predicate is used }
+        row(1,10)
     }
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(1,10);
+    });
+});
 ----
 
 _Result:_ Every cell from first ten rows of every sheet in the spreadsheet.
@@ -1227,21 +2026,44 @@ _Result:_ Every cell from first ten rows of every sheet in the spreadsheet.
 If you have a row containing headers to the following rows you can convert any of following rows to data row which
 provide convenient way how to retrieve cells using the label specified in the header
 
-[source,groovy]
+[source,indent=0,role="primary"]
+.Groovy
 ----
 Row manyRowsHeader = matcher.query {
     sheet('many rows') {
         row(1)
-}   }.row
+    }   
+}.row
 
 Row manyRowsDataRow= matcher.query {
     sheet('many rows') {
         row(2)
-}   }.row
+    }   
+}.row
 
 DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader)
 assert dataRow['One']
 assert dataRow['One'].value == 1
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Row manyRowsHeader = matcher.query(w -> {
+    w.sheet("many rows", s -> {
+        s.row(1);
+    });
+}).getRow();
+
+Row manyRowsDataRow= matcher.query(w -> {
+    w.sheet("many rows", s -> {
+        s.row(2);
+    });
+}).getRow();
+
+DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader);
+assertNotNull(dataRow.get("One"));
+assertEquals(1, dataRow.get("One"));
 ----
 
 == Cells
@@ -1249,7 +2071,8 @@ assert dataRow['One'].value == 1
 You can easily specify which cells you want to return from the query. For example by specifying desired value.
 You can also query for more specific type with `date`, `number`, `string`, `bool` methods.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1262,12 +2085,27 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.value("B");
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell from any sheet and row with value 'B'
 
 
 You can only return cells from specific column or column range specified by both number or string.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1278,6 +2116,19 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell("B");
+        });
+    });
+});
+----
+
+
 _Result:_ Every cell from column 'B' of any sheet and row
 
 
@@ -1285,7 +2136,8 @@ _Result:_ Every cell from column 'B' of any sheet and row
 
 You can query for merged cells only.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1299,13 +2151,29 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.colspan(5);
+                c.rowspan(2);
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell in the spreadsheet which are merged over five cells horizontally and two cells vertically.
 
 === Comments
 
 You can query for cells with given comment.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1318,11 +2186,26 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.comment("This is interesting");
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell in the spreadsheet which has a comment "This is interesting".
 
 Again you can use predicate closure to be more specific.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.query {
     sheet {
@@ -1335,11 +2218,26 @@ query.query {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.query(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.comment(it -> "Steve".equals(it.author));
+            });
+        });
+    });
+});
+----
+
 === Names
 
 You can query for specific named cell.
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.find {
     sheet {
@@ -1350,6 +2248,20 @@ query.find {
         }
     }
 }
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.find(w ->{
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.name("THE_CELL");
+            });
+        });
+    });
+});
 ----
 
 _Result:_ The cell with the named reference 'THE_CELL'.
@@ -1365,7 +2277,8 @@ You can query cells by style parameters such as foreground color or font height.
 except text wrapping, rich texts and alignment options. All font options are supported. See the guide above for reference.
 
 
-[source,groovy,subs='attributes']
+[source,indent=0,role="primary"]
+.Groovy
 ----
 query.find {
     sheet {
@@ -1384,14 +2297,50 @@ query.find {
 }
 ----
 
+[source,java,indent=0,role="secondary"]
+.Java
+----
+query.find(w -> {
+    w.sheet(s -> {
+        s.row(r -> {
+            r.cell(c -> {
+                c.style(st -> {
+                    st.foreground(red);
+                    st.font(f -> {
+                        f.make(bold);
+                        f.color(white);
+                    });
+                });
+            });
+        });
+    });
+});
+----
+
 _Result:_ Every cell from the spreadsheet which has red foreground and white font color with bold style.
 
 [WARNING]
 ====
-The color you usually see in the cell is `foreground!` not a `background` as you may think.
+The color you usually see in the cell is `foreground` not a `background` as you may think!
 ====
 
 = Changelog
+
+== 0.5.0
+Java-only API which can be used with Java 8.
+
+Builder and criteria definition chaining - methods returning self instead of `void`.
+
+=== Breaking Changes
+`PoiSpradsheetBuilder` will no longer allow to create cell names which are invalid by Excel. Use `PoiCellDefinition#fixName(String)`
+ manually to ensure no exception will be thrown.
+
+Colors made constants of `Color` and generally removed keywords getters from the interfaces but
+they are still available in Groovy as they are injected through extension class.
+
+Criteria will no longer accepts predicates in the same position as configuration but there is `having` method inside each
+criterion where can one write predicate for given surrounding element. Method shortcuts which helped created predicates
+has been removed.
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.

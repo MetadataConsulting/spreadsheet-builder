@@ -4,7 +4,7 @@ import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 
-public class SimplePageCriterion extends AbstractPageSettingsProvider implements PageCriterion {
+public class SimplePageCriterion implements PageCriterion {
 
     private final SimpleWorkbookCriterion workbookCriterion;
 
@@ -13,23 +13,35 @@ public class SimplePageCriterion extends AbstractPageSettingsProvider implements
     }
 
     @Override
-    public void orientation(final Keywords.Orientation orientation) {
+    public SimplePageCriterion orientation(final Keywords.Orientation orientation) {
         workbookCriterion.addCondition(new Predicate<Sheet>() {
             @Override
             public boolean test(Sheet o) {
                 return orientation.equals(o.getPage().getOrientation());
             }
         });
+        return this;
     }
 
     @Override
-    public void paper(final Keywords.Paper paper) {
+    public SimplePageCriterion paper(final Keywords.Paper paper) {
         workbookCriterion.addCondition(new Predicate<Sheet>() {
             @Override
             public boolean test(Sheet o) {
                 return paper.equals(o.getPage().getPaper());
             }
         });
+        return this;
     }
 
+    @Override
+    public PageCriterion having(final Predicate<Page> pagePredicate) {
+        workbookCriterion.addCondition(new Predicate<Sheet>() {
+            @Override
+            public boolean test(Sheet o) {
+                return pagePredicate.test(o.getPage());
+            }
+        });
+        return this;
+    }
 }

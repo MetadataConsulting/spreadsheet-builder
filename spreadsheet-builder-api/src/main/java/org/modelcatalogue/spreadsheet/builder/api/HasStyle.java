@@ -1,9 +1,7 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
+
+import org.modelcatalogue.spreadsheet.api.Configurer;
 
 public interface HasStyle {
 
@@ -13,7 +11,7 @@ public interface HasStyle {
      * @param name the name of the style
      * @param styleDefinition the definition of the style customizing the predefined style
      */
-    void style(String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
+    HasStyle style(String name, Configurer<CellStyleDefinition> styleDefinition);
 
     /**
      * Applies a customized named style to the current element.
@@ -21,13 +19,13 @@ public interface HasStyle {
      * @param names the names of the styles
      * @param styleDefinition the definition of the style customizing the predefined style
      */
-    void styles(Iterable<String> names, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
+    HasStyle styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);
 
     /**
      * Applies the style defined by the closure to the current element.
      * @param styleDefinition the definition of the style
      */
-    void style(@DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition);
+    HasStyle style(Configurer<CellStyleDefinition> styleDefinition);
 
     /**
      * Applies the named style to the current element.
@@ -36,7 +34,7 @@ public interface HasStyle {
      *
      * @param name the name of the style
      */
-    void style(String name);
+    HasStyle style(String name);
 
     /**
      * Applies the named style to the current element.
@@ -45,7 +43,7 @@ public interface HasStyle {
      *
      * @param names style names to be applied
      */
-    void styles(String... names);
+    HasStyle styles(String... names);
     /**
      * Applies the named style to the current element.
      *
@@ -53,5 +51,5 @@ public interface HasStyle {
      *
      * @param names style names to be applied
      */
-    void styles(Iterable<String> names);
+    HasStyle styles(Iterable<String> names);
 }

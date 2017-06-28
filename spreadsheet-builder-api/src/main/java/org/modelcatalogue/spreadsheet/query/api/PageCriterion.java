@@ -1,11 +1,12 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
 import org.modelcatalogue.spreadsheet.api.Keywords;
+import org.modelcatalogue.spreadsheet.api.Page;
 import org.modelcatalogue.spreadsheet.api.PageSettingsProvider;
 
 public interface PageCriterion extends PageSettingsProvider {
 
-    void orientation(Keywords.Orientation orientation);
-    void paper(Keywords.Paper paper);
-
+    PageCriterion orientation(Keywords.Orientation orientation);
+    PageCriterion paper(Keywords.Paper paper);
+    PageCriterion having(Predicate<Page> pagePredicate);
 }

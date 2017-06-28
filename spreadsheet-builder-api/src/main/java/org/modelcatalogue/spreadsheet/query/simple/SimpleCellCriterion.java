@@ -1,12 +1,8 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Comment;
+import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
@@ -14,160 +10,176 @@ import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import java.util.Calendar;
 import java.util.Date;
 
-final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellCriterion {
+final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> implements CellCriterion {
 
-    SimpleCellCriterion() {
-    }
+    SimpleCellCriterion() {}
 
     private SimpleCellCriterion(boolean disjoint) {
         super(disjoint);
     }
 
     @Override
-    public void date(final Date value) {
+    public SimpleCellCriterion date(final Date value) {
         addValueCondition(value, Date.class);
+        return this;
     }
 
     @Override
-    public void date(final Predicate<Date> predicate) {
+    public SimpleCellCriterion date(final Predicate<Date> predicate) {
         addValueCondition(predicate, Date.class);
+        return this;
     }
 
     @Override
-    public void number(Double value) {
+    public SimpleCellCriterion number(Double value) {
         addValueCondition(value, Double.class);
+        return this;
     }
 
     @Override
-    public void number(Predicate<Double> predicate) {
+    public SimpleCellCriterion number(Predicate<Double> predicate) {
         addValueCondition(predicate, Double.class);
+        return this;
     }
 
     @Override
-    public void string(String value) {
+    public SimpleCellCriterion string(String value) {
         addValueCondition(value, String.class);
+        return this;
     }
 
     @Override
-    public void string(Predicate<String> predicate) {
+    public SimpleCellCriterion string(Predicate<String> predicate) {
         addValueCondition(predicate, String.class);
+        return this;
     }
 
     @Override
-    public void value(Object value) {
+    public SimpleCellCriterion value(Object value) {
         if (value == null) {
             string("");
-            return;
+            return this;
         }
         if (value instanceof Date) {
             date((Date) value);
-            return;
+            return this;
         }
         if (value instanceof Calendar) {
             date(((Calendar) value).getTime());
-            return;
+            return this;
         }
         if (value instanceof Number) {
             number(((Number) value).doubleValue());
-            return;
+            return this;
         }
         if (value instanceof Boolean) {
             bool((Boolean) value);
         }
         string(value.toString());
+        return this;
     }
 
     @Override
-    public void name(final String name) {
+    public SimpleCellCriterion name(final String name) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return name.equals(o.getName());
             }
         });
+        return this;
     }
 
     @Override
-    public void comment(final String comment) {
+    public SimpleCellCriterion comment(final String comment) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return comment.equals(o.getComment().getText());
             }
         });
+        return this;
     }
 
     @Override
-    public void bool(Boolean value) {
+    public SimpleCellCriterion bool(Boolean value) {
         addValueCondition(value, Boolean.class);
+        return this;
     }
 
 
     @Override
-    public void style(@DelegatesTo(CellStyleCriterion.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.query.api.CellStyleCriterion") Closure styleCriterion) {
+    public SimpleCellCriterion style(Configurer<CellStyleCriterion> styleCriterion) {
         SimpleCellStyleCriterion criterion = new SimpleCellStyleCriterion(this);
-        DefaultGroovyMethods.with(criterion, styleCriterion);
+        Configurer.Runner.doConfigure(styleCriterion, criterion);
         // no need to add criteria, they are added by the style criterion itself
+        return this;
     }
 
     @Override
-    public void rowspan(final int span) {
+    public SimpleCellCriterion rowspan(final int span) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return span == o.getRowspan();
             }
         });
+        return this;
     }
 
     @Override
-    public void rowspan(final Predicate<Integer> predicate) {
+    public SimpleCellCriterion rowspan(final Predicate<Integer> predicate) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return predicate.test(o.getRowspan());
             }
         });
+        return this;
     }
 
     @Override
-    public void colspan(final int span) {
+    public SimpleCellCriterion colspan(final int span) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return span == o.getColspan();
             }
         });
+        return this;
     }
 
     @Override
-    public void colspan(final Predicate<Integer> predicate) {
+    public SimpleCellCriterion colspan(final Predicate<Integer> predicate) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return predicate.test(o.getColspan());
             }
         });
+        return this;
     }
 
     @Override
-    public void name(final Predicate<String> predicate) {
+    public SimpleCellCriterion name(final Predicate<String> predicate) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return predicate.test(o.getName());
             }
         });
+        return this;
     }
 
     @Override
-    public void comment(final Predicate<Comment> predicate) {
+    public SimpleCellCriterion comment(final Predicate<Comment> predicate) {
         addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
                 return predicate.test(o.getComment());
             }
         });
+        return this;
     }
 
     private <T> void addValueCondition(final T value, final Class<T> type) {
@@ -197,7 +209,18 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell> implements CellC
     }
 
     @Override
-    Predicate<Cell> newDisjointCriterionInstance() {
+    public SimpleCellCriterion or(Configurer<CellCriterion> sheetCriterion) {
+        return (SimpleCellCriterion) super.or(sheetCriterion);
+    }
+
+    @Override
+    public CellCriterion having(Predicate<Cell> cellPredicate) {
+        addCondition(cellPredicate);
+        return this;
+    }
+
+    @Override
+    CellCriterion newDisjointCriterionInstance() {
         return new SimpleCellCriterion(true);
     }
 }
