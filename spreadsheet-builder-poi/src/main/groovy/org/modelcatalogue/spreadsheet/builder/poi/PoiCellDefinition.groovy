@@ -25,6 +25,7 @@ import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
+import org.modelcatalogue.spreadsheet.builder.api.Resolvable
 
 class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
 

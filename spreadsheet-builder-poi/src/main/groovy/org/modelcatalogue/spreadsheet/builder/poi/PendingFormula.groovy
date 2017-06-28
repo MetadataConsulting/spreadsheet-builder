@@ -4,6 +4,7 @@ import groovy.transform.PackageScope
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFName
+import org.modelcatalogue.spreadsheet.builder.api.Resolvable
 
 /**
  * Pending formula is a formula definition which needs to be resolved at the end of the build where all named references

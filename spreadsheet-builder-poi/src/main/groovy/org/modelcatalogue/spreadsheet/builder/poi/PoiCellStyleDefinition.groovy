@@ -18,10 +18,11 @@ import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
 import org.modelcatalogue.spreadsheet.builder.api.FontDefinition
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.Keywords
+import org.modelcatalogue.spreadsheet.builder.api.Sealable
 
 import java.util.regex.Matcher
 
-class PoiCellStyleDefinition implements CellStyleDefinition {
+class PoiCellStyleDefinition implements CellStyleDefinition, Sealable {
 
     private final XSSFCellStyle style
     private final PoiWorkbookDefinition workbook

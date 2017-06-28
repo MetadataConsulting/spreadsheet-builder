@@ -1,124 +1,33 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
 import org.apache.poi.ss.util.WorkbookUtil
-import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.modelcatalogue.spreadsheet.api.Workbook
-import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition
-import org.modelcatalogue.spreadsheet.api.Configurer
-import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
+import org.modelcatalogue.spreadsheet.impl.AbstractWorkbookDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
-import org.modelcatalogue.spreadsheet.builder.api.Stylesheet
 import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition
 
-class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, SpreadsheetDefinition {
+class PoiWorkbookDefinition extends AbstractWorkbookDefinition<PoiCellStyleDefinition, PoiSheetDefinition, PoiWorkbookDefinition> implements WorkbookDefinition, Workbook, SpreadsheetDefinition {
 
     private final XSSFWorkbook workbook
-    private final Map<String, Configurer<CellStyleDefinition>> namedStylesDefinition = [:]
-    private final Map<String, PoiCellStyleDefinition> namedStyles = [:]
-    private final Map<String, PoiSheetDefinition> sheets = [:]
-    private final List<Resolvable> toBeResolved = []
 
     PoiWorkbookDefinition(XSSFWorkbook workbook) {
         this.workbook = workbook
     }
 
     @Override
-    PoiWorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
-        PoiSheetDefinition sheet = sheets[name]
-
-        if (!sheet) {
-            XSSFSheet xssfSheet = workbook.getSheet(WorkbookUtil.createSafeSheetName(name)) ?: workbook.createSheet(WorkbookUtil.createSafeSheetName(name))
-            sheet = new PoiSheetDefinition(this, xssfSheet)
-            sheets[name] = sheet
-        }
-
-        Configurer.Runner.doConfigure(sheetDefinition, sheet)
-
-        sheet.processAutoColumns()
-        sheet.processAutomaticFilter()
-        this
+    protected PoiSheetDefinition createSheet(String name) {
+        return new PoiSheetDefinition(this, workbook.getSheet(WorkbookUtil.createSafeSheetName(name)) ?: workbook.createSheet(WorkbookUtil.createSafeSheetName(name)))
     }
 
     @Override
-    PoiWorkbookDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
-        namedStylesDefinition[name] = styleDefinition
-        this
-    }
-
-    @Override
-    PoiWorkbookDefinition apply(Class<? extends Stylesheet> stylesheet) {
-        apply stylesheet.newInstance()
-        this
-    }
-
-    @Override
-    PoiWorkbookDefinition apply(Stylesheet stylesheet) {
-        stylesheet.declareStyles(this)
-        this
+    protected PoiCellStyleDefinition createCellStyle() {
+        return new PoiCellStyleDefinition(this)
     }
 
     XSSFWorkbook getWorkbook() {
         return workbook
-    }
-
-    protected PoiCellStyleDefinition getStyle(String name) {
-        PoiCellStyleDefinition style = namedStyles[name]
-
-        if (style) {
-            return style
-        }
-
-        style = new PoiCellStyleDefinition(this)
-        Configurer.Runner.doConfigure(getStyleDefinition(name), style)
-        style.seal()
-
-        namedStyles[name] = style
-
-        return style
-    }
-
-    protected PoiCellStyleDefinition getStyles(Iterable<String> names) {
-        String name = names.join('.')
-
-        PoiCellStyleDefinition style = namedStyles[name]
-
-        if (style) {
-            return style
-        }
-
-        style = new PoiCellStyleDefinition(this)
-        for (String n in names) {
-            Configurer.Runner.doConfigure(getStyleDefinition(n), style)
-        }
-        style.seal()
-
-        namedStyles[name] = style
-
-        return style
-    }
-
-    protected Configurer<CellStyleDefinition> getStyleDefinition(String name) {
-        Configurer<CellStyleDefinition> style = namedStylesDefinition[name]
-        if (!style) {
-            throw new IllegalArgumentException("Style '$name' not defined")
-        }
-        return style
-    }
-
-    protected void addPendingFormula(String formula, XSSFCell cell) {
-        toBeResolved << new PendingFormula(cell, formula)
-    }
-
-    protected void addPendingLink(String ref, XSSFCell cell) {
-        toBeResolved << new PendingLink(cell, ref)
-    }
-
-    protected void resolve() {
-        for (Resolvable resolvable in toBeResolved) {
-            resolvable.resolve()
-        }
     }
 
     List<PoiSheetDefinition> getSheets() {
@@ -144,6 +53,5 @@ class PoiWorkbookDefinition implements WorkbookDefinition, Workbook, Spreadsheet
         }
         return super.asType(type)
     }
-
 
 }

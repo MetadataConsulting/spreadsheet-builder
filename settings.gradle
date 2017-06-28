@@ -1,5 +1,6 @@
 include 'spreadsheet-builder-groovy',
         'spreadsheet-builder-api',
+        'spreadsheet-builder-ods',
         'spreadsheet-builder-poi',
         'spreadsheet-builder-tck-groovy',
         'spreadsheet-builder-test-java8'

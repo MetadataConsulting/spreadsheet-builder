@@ -8,11 +8,12 @@ import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Page
 import org.modelcatalogue.spreadsheet.api.Sheet
 import org.modelcatalogue.spreadsheet.api.Configurer
+import org.modelcatalogue.spreadsheet.impl.AbstractSheetDefinition
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
 
-class PoiSheetDefinition implements SheetDefinition, Sheet {
+class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinition, Sheet {
 
     private final XSSFSheet xssfSheet
     private final PoiWorkbookDefinition workbook
