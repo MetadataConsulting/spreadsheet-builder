@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.ods;
 
+import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 import org.modelcatalogue.spreadsheet.builder.api.*;
 import org.modelcatalogue.spreadsheet.impl.AbstractSheetDefinition;
@@ -33,6 +34,10 @@ class OdsSpreadsheetDefinition extends AbstractWorkbookDefinition implements Spr
 
     @Override
     protected AbstractSheetDefinition createSheet(String name) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Sheet sheet = spreadsheet.getSheet(name, false);
+        if (sheet == null) {
+            sheet = spreadsheet.addSheet(name);
+        }
+        return new OdsSheeetDefinition(this, sheet);
     }
 }

@@ -1,25 +1,33 @@
 package org.modelcatalogue.spreadsheet.impl;
 
 import org.modelcatalogue.spreadsheet.api.Configurer;
-import org.modelcatalogue.spreadsheet.builder.api.*;
+import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition;
+import org.modelcatalogue.spreadsheet.builder.api.Resolvable;
+import org.modelcatalogue.spreadsheet.builder.api.Sealable;
+import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition;
+import org.modelcatalogue.spreadsheet.builder.api.Stylesheet;
+import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-public abstract class AbstractWorkbookDefinition<CellStyleType extends CellStyleDefinition & Sealable, SheetType extends AbstractSheetDefinition, SelfType extends WorkbookDefinition> implements WorkbookDefinition {
+public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
 
     protected final Map<String, Configurer<CellStyleDefinition>> namedStylesDefinition = new LinkedHashMap<String, Configurer<CellStyleDefinition>>();
-    protected final Map<String, CellStyleType> namedStyles = new LinkedHashMap<String, CellStyleType>();
-    protected final Map<String, SheetType> sheets = new LinkedHashMap<String, SheetType>();
+    protected final Map<String, CellStyleDefinition> namedStyles = new LinkedHashMap<String, CellStyleDefinition>();
+    protected final Map<String, SheetDefinition> sheets = new LinkedHashMap<String, SheetDefinition>();
     protected final List<Resolvable> toBeResolved = new ArrayList<Resolvable>();
 
     @Override
-    public final SelfType style(String name, Configurer<CellStyleDefinition> styleDefinition) {
+    public final WorkbookDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
         namedStylesDefinition.put(name, styleDefinition);
-        return (SelfType) this;
+        return this;
     }
 
     @Override
-    public final SelfType apply(Class<? extends Stylesheet> stylesheet) {
+    public final WorkbookDefinition apply(Class<? extends Stylesheet> stylesheet) {
         try {
             apply(stylesheet.newInstance());
         } catch (InstantiationException e) {
@@ -27,13 +35,13 @@ public abstract class AbstractWorkbookDefinition<CellStyleType extends CellStyle
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return (SelfType) this;
+        return this;
     }
 
     @Override
-    public final SelfType apply(Stylesheet stylesheet) {
+    public final WorkbookDefinition apply(Stylesheet stylesheet) {
         stylesheet.declareStyles(this);
-        return (SelfType) this;
+        return this;
     }
 
     protected final void resolve() {
@@ -42,12 +50,12 @@ public abstract class AbstractWorkbookDefinition<CellStyleType extends CellStyle
         }
     }
 
-    protected abstract CellStyleType createCellStyle();
-    protected abstract SheetType createSheet(String name);
+    protected abstract CellStyleDefinition createCellStyle();
+    protected abstract SheetDefinition createSheet(String name);
 
     @Override
-    public final SelfType sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
-        SheetType sheet = sheets.get(name);
+    public final WorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
+        SheetDefinition sheet = sheets.get(name);
 
         if (sheet == null) {
             sheet = createSheet(name);
@@ -56,13 +64,16 @@ public abstract class AbstractWorkbookDefinition<CellStyleType extends CellStyle
 
         Configurer.Runner.doConfigure(sheetDefinition, sheet);
 
-        sheet.processAutoColumns();
-        sheet.processAutomaticFilter();
-        return (SelfType) this;
+
+        if (sheet instanceof Resolvable) {
+            ((Resolvable) sheet).resolve();
+        }
+
+        return this;
     }
 
-    protected final CellStyleType getStyle(String name) {
-        CellStyleType style = namedStyles.get(name);
+    protected final CellStyleDefinition getStyle(String name) {
+        CellStyleDefinition style = namedStyles.get(name);
 
         if (style != null) {
             return style;
@@ -70,17 +81,20 @@ public abstract class AbstractWorkbookDefinition<CellStyleType extends CellStyle
 
         style = createCellStyle();
         Configurer.Runner.doConfigure(getStyleDefinition(name), style);
-        style.seal();
+
+        if (style instanceof Sealable) {
+            ((Sealable) style).seal();
+        }
 
         namedStyles.put(name, style);
 
         return style;
     }
 
-    protected final CellStyleType getStyles(Iterable<String> names) {
+    protected final CellStyleDefinition getStyles(Iterable<String> names) {
         String name = join(names, ".");
 
-        CellStyleType style = namedStyles.get(name);
+        CellStyleDefinition style = namedStyles.get(name);
 
         if (style != null) {
             return style;
@@ -90,7 +104,10 @@ public abstract class AbstractWorkbookDefinition<CellStyleType extends CellStyle
         for (String n : names) {
             Configurer.Runner.doConfigure(getStyleDefinition(n), style);
         }
-        style.seal();
+
+        if (style instanceof Sealable) {
+            ((Sealable) style).seal();
+        }
 
         namedStyles.put(name, style);
 

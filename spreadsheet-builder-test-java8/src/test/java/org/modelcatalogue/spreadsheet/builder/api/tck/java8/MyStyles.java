@@ -6,7 +6,7 @@ import org.modelcatalogue.spreadsheet.builder.api.Stylesheet;
 import static org.modelcatalogue.spreadsheet.api.Keywords.*;
 import static org.modelcatalogue.spreadsheet.api.Color.*;
 
-class MyStyles implements Stylesheet {
+public class MyStyles implements Stylesheet {
 
     public void declareStyles(CanDefineStyle stylable) {
         stylable.style("h1", s -> {
