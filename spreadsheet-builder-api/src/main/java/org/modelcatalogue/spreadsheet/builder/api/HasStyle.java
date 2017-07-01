@@ -21,6 +21,8 @@ public interface HasStyle {
      */
     HasStyle styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);
 
+    HasStyle styles(Iterable<String> styles, Iterable<Configurer<CellStyleDefinition>> styleDefinitions);
+
     /**
      * Applies the style defined by the closure to the current element.
      * @param styleDefinition the definition of the style

@@ -245,6 +245,36 @@ class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
     }
 
     @Override
+    PoiCellDefinition styles(Iterable<String> names, Iterable<Configurer<CellStyleDefinition>> styleDefinition) {
+        if (!styleDefinition) {
+            if (!names) {
+                return this
+            }
+            if (!poiCellStyle) {
+                poiCellStyle = row.sheet.workbook.getStyles(new LinkedHashSet<String>((names + row.styles).toList()))
+                poiCellStyle.assignTo(this)
+                return this
+            }
+            if (poiCellStyle.sealed && row.styles) {
+                poiCellStyle = null
+                styles(new LinkedHashSet<String>(names.toList() + row.styles))
+                return this
+            }
+        }
+        if (!poiCellStyle) {
+            poiCellStyle = new PoiCellStyleDefinition(this)
+        }
+        poiCellStyle.checkSealed()
+        for (String name in names) {
+            Configurer.Runner.doConfigure(row.sheet.workbook.getStyleDefinition(name), poiCellStyle)
+        }
+        for (Configurer<CellStyleDefinition> configurer in styleDefinition) {
+            Configurer.Runner.doConfigure(configurer, poiCellStyle)
+        }
+        this
+    }
+
+    @Override
     PoiCellDefinition name(String name) {
         if (fixName(name) != name) {
             throw new IllegalArgumentException("Name ${name} is not valid Excel name! Suggestion: ${fixName(name)}")

@@ -23,7 +23,8 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return workbook;
     }
 
-    RowDefinition getRowByNumber(int rowNumberStartingOne) {
+    // TODO: change back to protected
+    public RowDefinition getRowByNumber(int rowNumberStartingOne) {
         return rows.get(rowNumberStartingOne);
     }
 
@@ -45,7 +46,8 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return row;
     }
 
-    protected abstract RowDefinition createRow(int zeroBasedRowNumber);
+    // TODO: change back to protected
+    public abstract RowDefinition createRow(int zeroBasedRowNumber);
 
     @Override
     public final SheetDefinition row(Configurer<RowDefinition> rowDefinition) {

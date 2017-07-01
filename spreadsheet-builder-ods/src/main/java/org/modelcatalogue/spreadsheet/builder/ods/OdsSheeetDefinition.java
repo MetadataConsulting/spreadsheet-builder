@@ -29,7 +29,7 @@ class OdsSheeetDefinition extends AbstractSheetDefinition {
 
 
     @Override
-    protected RowDefinition createRow(int zeroBasedRowNumber) {
+    public RowDefinition createRow(int zeroBasedRowNumber) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

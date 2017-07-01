@@ -75,6 +75,7 @@ public interface CellDefinition extends HasStyle {
 
     CellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition);
     CellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition styles(Iterable<String> styles, Iterable<Configurer<CellStyleDefinition>> styleDefinitions);
     CellDefinition style(Configurer<CellStyleDefinition> styleDefinition);
     CellDefinition style(String name);
     CellDefinition styles(String... names);
