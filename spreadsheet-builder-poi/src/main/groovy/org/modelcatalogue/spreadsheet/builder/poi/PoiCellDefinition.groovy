@@ -26,8 +26,15 @@ import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
 import org.modelcatalogue.spreadsheet.builder.api.Resolvable
+import org.modelcatalogue.spreadsheet.impl.HeightModifier
+import org.modelcatalogue.spreadsheet.impl.WidthModifier
 
 class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
+
+    private static final double WIDTH_POINTS_PER_CM = 4.6666666666666666666667
+    private static final double WIDTH_POINTS_PER_INCH = 12
+    private static final double HEIGHT_POINTS_PER_CM = 28
+    private static final double HEIGHT_POINTS_PER_INCH = 72
 
     private final PoiRowDefinition row
     private final XSSFCell xssfCell
@@ -328,13 +335,13 @@ class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
     @Override
     DimensionModifier width(double width) {
         row.sheet.sheet.setColumnWidth(xssfCell.columnIndex, (int)Math.round(width * 255D))
-        return new PoiWidthModifier(this, width)
+        return new WidthModifier(this, width, WIDTH_POINTS_PER_CM, WIDTH_POINTS_PER_INCH)
     }
 
     @Override
     DimensionModifier height(double height) {
         row.row.setHeightInPoints(height.floatValue())
-        return new PoiHeightModifier(this, height)
+        return new HeightModifier(this, height, HEIGHT_POINTS_PER_CM, HEIGHT_POINTS_PER_INCH)
     }
 
     @Override
