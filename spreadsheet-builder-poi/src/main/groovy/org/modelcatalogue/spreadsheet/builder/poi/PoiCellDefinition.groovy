@@ -6,10 +6,14 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.ss.util.CellReference
 import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor
 import org.apache.poi.xssf.usermodel.XSSFComment
+import org.apache.poi.xssf.usermodel.XSSFCreationHelper
+import org.apache.poi.xssf.usermodel.XSSFDrawing
 import org.apache.poi.xssf.usermodel.XSSFName
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
 import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.codehaus.groovy.runtime.StringGroovyMethods
 
 import org.modelcatalogue.spreadsheet.api.Cell as SpreadsheetCell
@@ -26,6 +30,7 @@ import org.modelcatalogue.spreadsheet.builder.api.ImageCreator
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.builder.api.LinkDefinition
 import org.modelcatalogue.spreadsheet.builder.api.Resolvable
+import org.modelcatalogue.spreadsheet.impl.DefaultCommentDefinition
 import org.modelcatalogue.spreadsheet.impl.HeightModifier
 import org.modelcatalogue.spreadsheet.impl.WidthModifier
 
@@ -172,9 +177,9 @@ class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
 
     @Override
     PoiCellDefinition comment(Configurer<CommentDefinition> commentDefinition) {
-        PoiCommentDefinition poiComment = new PoiCommentDefinition()
+        DefaultCommentDefinition poiComment = new DefaultCommentDefinition()
         Configurer.Runner.doConfigure(commentDefinition, poiComment)
-        poiComment.applyTo xssfCell
+        applyTo poiComment, xssfCell
         this
     }
 
@@ -182,9 +187,9 @@ class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
     Comment getComment() {
         XSSFComment comment = xssfCell.getCellComment()
         if (!comment) {
-            return new PoiCommentDefinition()
+            return new DefaultCommentDefinition()
         }
-        return new PoiCommentDefinition(author: comment.author, text: comment.string.string)
+        return new DefaultCommentDefinition(author: comment.author, text: comment.string.string)
     }
 
     @Override
@@ -659,5 +664,32 @@ class PoiCellDefinition implements CellDefinition, Resolvable, SpreadsheetCell {
             return cell as T
         }
         return super.asType(type)
+    }
+
+    private static void applyTo(DefaultCommentDefinition comment, XSSFCell cell) {
+        if (comment.getText() == null) {
+            throw new IllegalStateException("Comment text has not been set!");
+        }
+
+        XSSFWorkbook wb = cell.getRow().getSheet().getWorkbook();
+        XSSFCreationHelper factory = wb.getCreationHelper();
+
+        XSSFDrawing drawing = cell.getRow().getSheet().createDrawingPatriarch();
+
+        XSSFClientAnchor anchor = factory.createClientAnchor();
+        anchor.setCol1(cell.getColumnIndex());
+        anchor.setCol2((int) cell.getColumnIndex() + comment.width);
+        anchor.setRow1(cell.getRow().getRowNum());
+        anchor.setRow2((int) cell.getRow().getRowNum() + comment.height);
+
+        // Create the comment and set the text+author
+        XSSFComment xssfComment = drawing.createCellComment(anchor);
+        xssfComment.setString(comment.getText());
+        if (comment.getAuthor() != null) {
+            xssfComment.setAuthor(comment.getAuthor());
+        }
+
+        // Assign the comment to the cell
+        cell.setCellComment(xssfComment);
     }
 }

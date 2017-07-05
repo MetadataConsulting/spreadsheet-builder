@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements WorkbookDefinition, Workbook, SpreadsheetDefinition {
+public class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements WorkbookDefinition, Workbook, SpreadsheetDefinition {
 
     private final XSSFWorkbook workbook;
 
-    PoiWorkbookDefinition(XSSFWorkbook workbook) {
+    public PoiWorkbookDefinition(XSSFWorkbook workbook) {
         this.workbook = workbook;
     }
 
