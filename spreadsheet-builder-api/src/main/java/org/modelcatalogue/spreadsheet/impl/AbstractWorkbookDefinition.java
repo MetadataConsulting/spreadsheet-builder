@@ -114,7 +114,8 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         return style;
     }
 
-    protected final Configurer<CellStyleDefinition> getStyleDefinition(String name) {
+    // TODO: make protected again
+    public final Configurer<CellStyleDefinition> getStyleDefinition(String name) {
         Configurer<CellStyleDefinition> style = namedStylesDefinition.get(name);
         if (style == null) {
             throw new IllegalArgumentException("Style '" + name + "' is not defined");
