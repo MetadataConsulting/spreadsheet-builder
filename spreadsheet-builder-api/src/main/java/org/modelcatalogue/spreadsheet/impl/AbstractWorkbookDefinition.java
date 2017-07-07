@@ -44,7 +44,8 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         return this;
     }
 
-    protected final void resolve() {
+    // TODO: make package private again
+    public final void resolve() {
         for (Resolvable resolvable : toBeResolved) {
             resolvable.resolve();
         }
@@ -92,7 +93,7 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
     }
 
     protected final CellStyleDefinition getStyles(Iterable<String> names) {
-        String name = join(names, ".");
+        String name = Utils.join(names, ".");
 
         CellStyleDefinition style = namedStyles.get(name);
 
@@ -124,21 +125,4 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
     }
 
 
-    // from DGM
-    private static String join(Iterable<String> array, String separator) {
-        StringBuilder buffer = new StringBuilder();
-        boolean first = true;
-
-        if (separator == null) separator = "";
-
-        for (String value : array) {
-            if (first) {
-                first = false;
-            } else {
-                buffer.append(separator);
-            }
-            buffer.append(value);
-        }
-        return buffer.toString();
-    }
 }
