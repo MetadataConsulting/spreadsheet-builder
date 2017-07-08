@@ -141,7 +141,8 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
         }
     }
 
-    private PoiRowDefinition createRowWrapper(int oneBasedRowNumber) {
+    // TODO: make protected
+    public PoiRowDefinition createRowWrapper(int oneBasedRowNumber) {
         PoiRowDefinition newRow = new PoiRowDefinition(this, xssfSheet.getRow(oneBasedRowNumber - 1));
         rows.put(oneBasedRowNumber, newRow);
         return newRow;

@@ -188,7 +188,8 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     protected abstract void doCreateGroup(int startPosition, int endPosition, boolean collapsed);
 
-    protected CellDefinition getCellByNumber(int oneBasedColumnNumber) {
+    // TODO: make protected
+    public CellDefinition getCellByNumber(int oneBasedColumnNumber) {
         return cells.get(oneBasedColumnNumber);
     }
 

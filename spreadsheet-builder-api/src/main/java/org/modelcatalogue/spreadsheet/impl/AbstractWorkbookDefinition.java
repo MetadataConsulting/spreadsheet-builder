@@ -92,7 +92,8 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         return style;
     }
 
-    protected final CellStyleDefinition getStyles(Iterable<String> names) {
+    // TODO: make protected again
+    public final CellStyleDefinition getStyles(Iterable<String> names) {
         String name = Utils.join(names, ".");
 
         CellStyleDefinition style = namedStyles.get(name);

@@ -140,7 +140,8 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
 
     protected abstract void applyRowGroup(int startPosition, int endPosition, boolean collapsed);
 
-    protected final void addAutoColumn(int i) {
+    // TODO: make protected again
+    public final void addAutoColumn(int i) {
         autoColumns.add(i);
     }
 
