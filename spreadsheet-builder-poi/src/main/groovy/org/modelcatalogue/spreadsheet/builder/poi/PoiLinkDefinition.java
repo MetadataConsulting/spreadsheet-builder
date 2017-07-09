@@ -20,7 +20,7 @@ public class PoiLinkDefinition implements LinkDefinition {
 
     @Override
     public PoiCellDefinition name(String name) {
-        workbook.addPendingLink(name, cell.getCell());
+        workbook.addPendingLink(name, cell);
         return cell;
     }
 

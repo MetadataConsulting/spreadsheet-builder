@@ -1,8 +1,6 @@
-package org.modelcatalogue.spreadsheet.builder.poi;
+package org.modelcatalogue.spreadsheet.impl;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFName;
+import org.modelcatalogue.spreadsheet.builder.api.CellDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.Resolvable;
 
 import java.util.regex.Matcher;
@@ -12,16 +10,19 @@ import java.util.regex.Pattern;
  * Pending formula is a formula definition which needs to be resolved at the end of the build where all named references
  * are know.
  */
-class PendingFormula implements Resolvable {
-    PendingFormula(XSSFCell cell, String formula) {
+public abstract class AbstractPendingFormula implements Resolvable {
+
+    protected AbstractPendingFormula(CellDefinition cell, String formula) {
         this.cell = cell;
         this.formula = formula;
     }
 
-    public void resolve() {
-        cell.setCellFormula(expandNames(formula));
-        cell.setCellType(Cell.CELL_TYPE_FORMULA);
+    public final void resolve() {
+        String expandedFormula = expandNames(this.formula);
+        doResolve(expandedFormula);
     }
+
+    protected abstract void doResolve(String expandedFormula);
 
     private String expandNames(String withNames) {
         final Matcher matcher = Pattern.compile("#\\{(.+?)\\}").matcher(withNames);
@@ -37,20 +38,9 @@ class PendingFormula implements Resolvable {
         return withNames;
     }
 
-    private String findRefersToFormula(final String name) {
-        if (!name.equals(PoiCellDefinition.fixName(name))) {
-            throw new IllegalArgumentException("Name " + name + " is not valid Excel name! Suggestion: " + PoiCellDefinition.fixName(name));
-        }
+    protected abstract String findRefersToFormula(final String name);
 
-        XSSFName nameFound = cell.getSheet().getWorkbook().getName(name);
-        if (nameFound == null) {
-            throw new IllegalArgumentException("Named cell \'" + name + "\' cannot be found!");
-        }
-
-        return nameFound.getRefersToFormula();
-    }
-
-    public final XSSFCell getCell() {
+    public final CellDefinition getCell() {
         return cell;
     }
 
@@ -58,6 +48,6 @@ class PendingFormula implements Resolvable {
         return formula;
     }
 
-    private final XSSFCell cell;
+    private final CellDefinition cell;
     private final String formula;
 }

@@ -2,7 +2,6 @@ package org.modelcatalogue.spreadsheet.builder.poi;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.WorkbookUtil;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
@@ -84,12 +83,12 @@ public class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements
         return DefaultGroovyMethods.asType(this, type);
     }
 
-    protected void addPendingFormula(String formula, XSSFCell cell) {
-        toBeResolved.add(new PendingFormula(cell, formula));
+    protected void addPendingFormula(String formula, PoiCellDefinition cell) {
+        toBeResolved.add(new PoiPendingFormula(cell, formula));
     }
 
-    protected void addPendingLink(String ref, XSSFCell cell) {
-        toBeResolved.add(new PendingLink(cell, ref));
+    protected void addPendingLink(String ref, PoiCellDefinition cell) {
+        toBeResolved.add(new PoiPendingLink(cell, ref));
     }
 
 }

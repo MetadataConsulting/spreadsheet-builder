@@ -13,7 +13,6 @@ import org.modelcatalogue.spreadsheet.impl.Utils;
 import org.modelcatalogue.spreadsheet.impl.WidthModifier;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
     PoiCellDefinition(PoiRowDefinition row, XSSFCell xssfCell) {
@@ -147,7 +146,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
 
     @Override
     public PoiCellDefinition formula(String formula) {
-        row.getSheet().getWorkbook().addPendingFormula(formula, xssfCell);
+        row.getSheet().getWorkbook().addPendingFormula(formula, this);
         return this;
     }
 
@@ -294,8 +293,8 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
 
     @Override
     public PoiCellDefinition name(final String name) {
-        if (!fixName(name).equals(name)) {
-            throw new IllegalArgumentException("Name " + name + " is not valid Excel name! Suggestion: " + PoiCellDefinition.fixName(name));
+        if (!Utils.fixName(name).equals(name)) {
+            throw new IllegalArgumentException("Name " + name + " is not valid Excel name! Suggestion: " + Utils.fixName(name));
         }
 
         XSSFName theName = xssfCell.getRow().getSheet().getWorkbook().createName();
@@ -328,23 +327,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
         }
 
         return null;
-    }
-
-    protected static String fixName(String name) {
-        if (name == null || name.length() == 0) {
-            throw new IllegalArgumentException("Name cannot be null or empty!");
-        }
-
-        if (name.startsWith("c") || name.startsWith("C") || name.startsWith("r") || name.startsWith("R")) {
-            return "_" + name;
-        }
-
-        name = name.replaceAll( "[^.0-9a-zA-Z_]","_");
-        if (!Pattern.compile("^[abd-qs-zABD-QS-Z_].*").matcher(name).matches()){
-            return fixName("_" + name);
-        }
-
-        return name;
     }
 
     @Override

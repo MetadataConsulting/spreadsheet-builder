@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
+import org.modelcatalogue.spreadsheet.impl.Utils
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -8,7 +9,7 @@ class PoiCellSpec extends Specification {
     @Unroll
     def "normalize name #name to #result"() {
         expect:
-            PoiCellDefinition.fixName(name) == result
+            Utils.fixName(name) == result
 
         where:
             name        | result
