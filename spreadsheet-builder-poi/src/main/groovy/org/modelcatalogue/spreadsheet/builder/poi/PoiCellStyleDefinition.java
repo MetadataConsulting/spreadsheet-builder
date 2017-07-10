@@ -316,11 +316,11 @@ class PoiCellStyleDefinition implements CellStyleDefinition, Sealable {
         this.sealed = true;
     }
 
-    public void assignTo(PoiCellDefinition cell) {
+    void assignTo(PoiCellDefinition cell) {
         cell.getCell().setCellStyle(style);
     }
 
-    public void setBorderTo(CellRangeAddress address, PoiSheetDefinition sheet) {
+    void setBorderTo(CellRangeAddress address, PoiSheetDefinition sheet) {
         RegionUtil.setBorderBottom(style.getBorderBottom(), address, sheet.getSheet(), sheet.getSheet().getWorkbook());
         RegionUtil.setBorderLeft(style.getBorderLeft(), address, sheet.getSheet(), sheet.getSheet().getWorkbook());
         RegionUtil.setBorderRight(style.getBorderRight(), address, sheet.getSheet(), sheet.getSheet().getWorkbook());

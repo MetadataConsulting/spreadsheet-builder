@@ -1,11 +1,11 @@
-package org.modelcatalogue.spreadsheet.builder.poi;
+package org.modelcatalogue.spreadsheet.query.poi;
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder;
 import org.modelcatalogue.spreadsheet.api.*;
 
-public class PoiCellStyle implements CellStyle {
-    public PoiCellStyle(XSSFCellStyle style) {
+class PoiCellStyle implements CellStyle {
+    PoiCellStyle(XSSFCellStyle style) {
         this.style = style;
     }
 

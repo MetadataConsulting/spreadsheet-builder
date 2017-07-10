@@ -10,12 +10,13 @@ import org.modelcatalogue.spreadsheet.builder.api.FontDefinition;
 
 import java.util.EnumSet;
 
-public class PoiFontDefinition implements FontDefinition {
-    public PoiFontDefinition(XSSFWorkbook workbook) {
+class PoiFontDefinition implements FontDefinition {
+
+    PoiFontDefinition(XSSFWorkbook workbook) {
         font = workbook.createFont();
     }
 
-    public PoiFontDefinition(XSSFWorkbook workbook, XSSFCellStyle style) {
+    PoiFontDefinition(XSSFWorkbook workbook, XSSFCellStyle style) {
         font = workbook.createFont();
         style.setFont(font);
     }

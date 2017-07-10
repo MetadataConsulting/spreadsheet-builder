@@ -1,4 +1,4 @@
-package org.modelcatalogue.spreadsheet.builder.poi;
+package org.modelcatalogue.spreadsheet.query.poi;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -8,8 +8,8 @@ import org.modelcatalogue.spreadsheet.api.Color;
 /**
  * Represents the current border configuration of the cell style.
  */
-public class PoiBorder implements Border {
-    public PoiBorder(XSSFColor xssfColor, BorderStyle borderStyle) {
+class PoiBorder implements Border {
+    PoiBorder(XSSFColor xssfColor, BorderStyle borderStyle) {
 
         this.borderStyle = borderStyle;
         this.xssfColor = xssfColor;

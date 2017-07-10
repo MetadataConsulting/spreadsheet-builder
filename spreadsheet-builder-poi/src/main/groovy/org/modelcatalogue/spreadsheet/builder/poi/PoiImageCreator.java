@@ -10,8 +10,9 @@ import org.modelcatalogue.spreadsheet.builder.api.ImageCreator;
 import java.io.*;
 import java.net.URL;
 
-public class PoiImageCreator implements ImageCreator {
-    public PoiImageCreator(PoiCellDefinition poiCell, int type) {
+class PoiImageCreator implements ImageCreator {
+
+    PoiImageCreator(PoiCellDefinition poiCell, int type) {
         this.cell = poiCell;
         this.type = type;
     }

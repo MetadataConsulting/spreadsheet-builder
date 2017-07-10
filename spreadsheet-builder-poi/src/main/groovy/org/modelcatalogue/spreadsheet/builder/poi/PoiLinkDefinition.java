@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PoiLinkDefinition implements LinkDefinition {
-    public PoiLinkDefinition(PoiWorkbookDefinition workbook, PoiCellDefinition cell) {
+
+class PoiLinkDefinition implements LinkDefinition {
+
+    PoiLinkDefinition(PoiWorkbookDefinition workbook, PoiCellDefinition cell) {
         this.cell = cell;
         this.workbook = workbook;
     }

@@ -1,8 +1,7 @@
-package org.modelcatalogue.spreadsheet.builder.poi;
+package org.modelcatalogue.spreadsheet.query.poi;
 
 import org.apache.poi.ss.usermodel.FontUnderline;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.modelcatalogue.spreadsheet.api.Color;
 import org.modelcatalogue.spreadsheet.api.Font;
 import org.modelcatalogue.spreadsheet.api.FontStyle;

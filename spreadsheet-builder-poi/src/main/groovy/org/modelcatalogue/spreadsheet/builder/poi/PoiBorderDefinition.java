@@ -7,8 +7,8 @@ import org.modelcatalogue.spreadsheet.api.Color;
 import org.modelcatalogue.spreadsheet.api.Keywords;
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition;
 
-public class PoiBorderDefinition implements BorderDefinition {
-    public PoiBorderDefinition(XSSFCellStyle xssfCellStyle) {
+class PoiBorderDefinition implements BorderDefinition {
+    PoiBorderDefinition(XSSFCellStyle xssfCellStyle) {
         this.xssfCellStyle = xssfCellStyle;
     }
 
@@ -30,7 +30,7 @@ public class PoiBorderDefinition implements BorderDefinition {
         return this;
     }
 
-    protected void applyTo(Keywords.BorderSide location) {
+    void applyTo(Keywords.BorderSide location) {
         org.apache.poi.ss.usermodel.BorderStyle poiBorderStyle = getPoiBorderStyle();
         if (Keywords.BorderSideAndHorizontalAlignment.BOTTOM.equals(location)) {
             if (poiBorderStyle != null) {

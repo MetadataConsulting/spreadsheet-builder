@@ -1,8 +1,10 @@
-package org.modelcatalogue.spreadsheet.builder.poi;
+package org.modelcatalogue.spreadsheet.impl;
 
-class RichTextPart {
+import org.modelcatalogue.spreadsheet.builder.api.FontDefinition;
 
-    RichTextPart(String text, PoiFontDefinition font, int start, int end) {
+public final class RichTextPart {
+
+    public RichTextPart(String text, FontDefinition font, int start, int end) {
         this.text = text;
         this.font = font;
         this.start = start;
@@ -13,7 +15,7 @@ class RichTextPart {
         return text;
     }
 
-    public final PoiFontDefinition getFont() {
+    public final FontDefinition getFont() {
         return font;
     }
 
@@ -26,7 +28,7 @@ class RichTextPart {
     }
 
     private final String text;
-    private final PoiFontDefinition font;
+    private final FontDefinition font;
     private final int start;
     private final int end;
 }

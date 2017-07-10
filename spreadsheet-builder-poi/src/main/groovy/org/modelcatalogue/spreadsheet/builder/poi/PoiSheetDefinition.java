@@ -1,21 +1,13 @@
 package org.modelcatalogue.spreadsheet.builder.poi;
 
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
-import org.modelcatalogue.spreadsheet.api.Page;
-import org.modelcatalogue.spreadsheet.api.Sheet;
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition;
 import org.modelcatalogue.spreadsheet.impl.AbstractSheetDefinition;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinition, Sheet {
+class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinition {
 
     private final XSSFSheet xssfSheet;
 
@@ -58,62 +50,9 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
         return (PoiWorkbookDefinition) super.getWorkbook();
     }
 
-    public List<PoiRowDefinition> getRows() {
-        List<PoiRowDefinition> rows = new ArrayList<PoiRowDefinition>();
-        for (Row it : xssfSheet) {
-            PoiRowDefinition row = getRowByNumber(it.getRowNum() + 1);
-            if (row != null) {
-                rows.add(row);
-            }
-            rows.add(createRowWrapper(it.getRowNum() + 1));
-
-        }
-        return Collections.unmodifiableList(rows);
-    }
-
     // TODO: make protected again
     public PoiRowDefinition getRowByNumber(int rowNumberStartingOne) {
         return (PoiRowDefinition) this.rows.get(rowNumberStartingOne);
-    }
-
-    @Override
-    public Sheet getNext() {
-        int current = getWorkbook().getWorkbook().getSheetIndex(xssfSheet.getSheetName());
-
-        if (current == getWorkbook().getWorkbook().getNumberOfSheets() - 1) {
-            return null;
-        }
-        XSSFSheet next = getWorkbook().getWorkbook().getSheetAt(current + 1);
-
-        for (Sheet sheet : getWorkbook().getSheets()) {
-            if (sheet.getName().equals(next.getSheetName())) {
-                return sheet;
-            }
-        }
-
-
-        return new PoiSheetDefinition(getWorkbook(), next);
-    }
-
-    @Override
-    public Sheet getPrevious() {
-        int current = getWorkbook().getWorkbook().getSheetIndex(xssfSheet.getSheetName());
-
-        if (current == 0) {
-            return null;
-        }
-        XSSFSheet next = getWorkbook().getWorkbook().getSheetAt(current - 1);
-        for (Sheet sheet : getWorkbook().getSheets()) {
-            if (sheet.getName().equals(next.getSheetName())) {
-                return sheet;
-            }
-        }
-        return new PoiSheetDefinition(getWorkbook(), next);
-    }
-
-    @Override
-    public Page getPage() {
-        return new PoiPageSettingsProvider(this);
     }
 
     @Override
@@ -139,20 +78,6 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
         for (Integer index : autoColumns) {
             xssfSheet.autoSizeColumn(index);
         }
-    }
-
-    // TODO: make protected
-    public PoiRowDefinition createRowWrapper(int oneBasedRowNumber) {
-        PoiRowDefinition newRow = new PoiRowDefinition(this, xssfSheet.getRow(oneBasedRowNumber - 1));
-        rows.put(oneBasedRowNumber, newRow);
-        return newRow;
-    }
-
-    public <T> T asType(Class<T> type) {
-        if (type.isInstance(xssfSheet)) {
-            return type.cast(xssfSheet);
-        }
-        return DefaultGroovyMethods.asType(this, type);
     }
 
     protected void processAutomaticFilter() {

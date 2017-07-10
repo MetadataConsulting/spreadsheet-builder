@@ -1,20 +1,15 @@
 package org.modelcatalogue.spreadsheet.builder.poi;
 
-import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.*;
 import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.builder.api.*;
-import org.modelcatalogue.spreadsheet.impl.DefaultCommentDefinition;
-import org.modelcatalogue.spreadsheet.impl.HeightModifier;
-import org.modelcatalogue.spreadsheet.impl.Utils;
-import org.modelcatalogue.spreadsheet.impl.WidthModifier;
+import org.modelcatalogue.spreadsheet.impl.*;
 
 import java.util.*;
 
-class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
+class PoiCellDefinition implements CellDefinition, Resolvable {
     PoiCellDefinition(PoiRowDefinition row, XSSFCell xssfCell) {
         this.xssfCell = checkNotNull(xssfCell, "Cell");
         this.row = checkNotNull(row, "Row");
@@ -26,64 +21,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
         }
 
         return o;
-    }
-
-    @Override
-    public int getColumn() {
-        return xssfCell.getColumnIndex() + 1;
-    }
-
-    @Override
-    public String getColumnAsString() {
-        return Util.toColumn(getColumn());
-    }
-
-    @Override
-    public <T> T read(Class<T> type) {
-        if (CharSequence.class.isAssignableFrom(type)) {
-            return type.cast(xssfCell.getStringCellValue());
-        }
-
-
-        if (Date.class.isAssignableFrom(type)) {
-            return type.cast(xssfCell.getDateCellValue());
-        }
-
-
-        if (Boolean.class.isAssignableFrom(type)) {
-            return type.cast(xssfCell.getBooleanCellValue());
-        }
-
-
-        if (Number.class.isAssignableFrom(type)) {
-            Double val = xssfCell.getNumericCellValue();
-            return type.cast(val);
-        }
-
-        if (xssfCell.getRawValue() == null) {
-            return null;
-        }
-
-        throw new IllegalArgumentException("Cannot read value " + xssfCell.getRawValue() + " of cell as " + String.valueOf(type));
-    }
-
-    @Override
-    public Object getValue() {
-        switch (xssfCell.getCellType()) {
-            case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK:
-                return "";
-            case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN:
-                return xssfCell.getBooleanCellValue();
-            case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_ERROR:
-                return xssfCell.getErrorCellString();
-            case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA:
-                return xssfCell.getCellFormula();
-            case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC:
-                return xssfCell.getNumericCellValue();
-            case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING:
-                return xssfCell.getStringCellValue();
-        }
-        return xssfCell.getRawValue();
     }
 
     @Override
@@ -156,25 +93,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
         Configurer.Runner.doConfigure(commentDefinition, poiComment);
         applyTo(poiComment, xssfCell);
         return this;
-    }
-
-    @Override
-    public Comment getComment() {
-        XSSFComment comment = xssfCell.getCellComment();
-        if (comment == null) {
-            return new DefaultCommentDefinition();
-        }
-
-        DefaultCommentDefinition definition = new DefaultCommentDefinition();
-        definition.author(comment.getAuthor());
-        definition.text(comment.getString().getString());
-        return definition;
-    }
-
-    @Override
-    public CellStyle getStyle() {
-        XSSFCellStyle cellStyle = xssfCell.getCellStyle();
-        return cellStyle != null ? new PoiCellStyle(cellStyle) : null;
     }
 
     @Override
@@ -308,28 +226,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
     }
 
     @Override
-    public String getName() {
-        Workbook wb = xssfCell.getSheet().getWorkbook();
-
-        new CellReference(xssfCell).formatAsString();
-        List<String> possibleReferences = new ArrayList<String>(Arrays.asList(new CellReference(xssfCell).formatAsString(), generateRefersToFormula()));
-        for (int nn = 0; nn < wb.getNumberOfNames(); nn++) {
-            Name n = ((XSSFWorkbook) wb).getNameAt(nn);
-            for (String reference : possibleReferences) {
-                if (n.getSheetIndex() == -1 || n.getSheetIndex() == wb.getSheetIndex(xssfCell.getSheet())) {
-                    if (n.getRefersToFormula().equals(reference)) {
-                        return n.getNameName();
-                    }
-
-                }
-
-            }
-        }
-
-        return null;
-    }
-
-    @Override
     public LinkDefinition link(Keywords.To to) {
         return new PoiLinkDefinition(row.getSheet().getWorkbook(), this);
     }
@@ -418,7 +314,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
         return new PoiImageCreator(this, fileType);
     }
 
-    public int getColspan() {
+    int getColspan() {
         if (colspan >= 1) {
             return colspan;
         }
@@ -445,7 +341,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
         return colspan = 1;
     }
 
-    public int getRowspan() {
+    int getRowspan() {
         if (rowspan >= 1) {
             return rowspan;
         }
@@ -478,11 +374,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
     }
 
     @Override
-    public PoiRowDefinition getRow() {
-        return row;
-    }
-
-    @Override
     public void resolve() {
         if (richTextParts != null && richTextParts.size() > 0) {
             XSSFRichTextString text = xssfCell.getRichStringCellValue();
@@ -497,7 +388,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
 
             for (RichTextPart richTextPart : richTextParts) {
                 if (richTextPart.getText() != null && richTextPart.getText().length() > 0 && richTextPart.getFont() != null) {
-                    text.applyFont(richTextPart.getStart(), richTextPart.getEnd(), richTextPart.getFont().getFont());
+                    text.applyFont(richTextPart.getStart(), richTextPart.getEnd(), ((PoiFontDefinition)richTextPart.getFont()).getFont());
                 }
             }
 
@@ -517,189 +408,8 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
     }
 
     @Override
-    public Cell getAbove() {
-        PoiRowDefinition row = this.row.getAbove();
-        if (row == null) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn());
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn() - 1));
-    }
-
-    @Override
-    public Cell getBellow() {
-        PoiRowDefinition row = this.row.getBellow(getRowspan());
-        if (row == null) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn());
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn() - 1));
-    }
-
-    @Override
-    public Cell getLeft() {
-        if (getColumn() == 1) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn() - 1);
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn() - 2));
-    }
-
-    @Override
-    public Cell getRight() {
-        if (getColumn() + getColspan() > row.getRow().getLastCellNum()) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn() + getColspan());
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn() + getColspan() - 1));
-    }
-
-    @Override
-    public Cell getAboveLeft() {
-        PoiRowDefinition row = this.row.getAbove();
-        if (row == null) {
-            return null;
-        }
-
-        if (getColumn() == 1) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn() - 1);
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn() - 2));
-    }
-
-    @Override
-    public Cell getAboveRight() {
-        PoiRowDefinition row = this.row.getAbove();
-        if (row == null) {
-            return null;
-        }
-
-        if (getColumn() == row.getRow().getLastCellNum()) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn() + 1);
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn()));
-    }
-
-    @Override
-    public Cell getBellowLeft() {
-        PoiRowDefinition row = this.row.getBellow();
-        if (row == null) {
-            return null;
-        }
-
-        if (getColumn() == 1) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn() - 1);
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn() - 2));
-    }
-
-    @Override
-    public Cell getBellowRight() {
-        PoiRowDefinition row = this.row.getBellow();
-        if (row == null) {
-            return null;
-        }
-
-        if (getColumn() == row.getRow().getLastCellNum()) {
-            return null;
-        }
-
-        PoiCellDefinition existing = (PoiCellDefinition) row.getCellByNumber(getColumn() + 1);
-
-        if (existing != null) {
-            return existing;
-        }
-
-
-        return createCellIfExists(getCell(row.getRow(), getColumn()));
-    }
-
-    private static XSSFCell getCell(final XSSFRow row, final int column) {
-        XSSFCell cell = row.getCell(column);
-        if (cell != null) {
-            return cell;
-        }
-
-        if (row.getSheet().getNumMergedRegions() == 0) {
-            return null;
-        }
-
-        CellRangeAddress address = null;
-
-        for (CellRangeAddress candidate: row.getSheet().getMergedRegions()) {
-            if (candidate.isInRange(row.getRowNum(), column)) {
-                address = candidate;
-                break;
-            }
-        }
-
-        return row.getSheet().getRow(address.getFirstRow()).getCell(address.getFirstColumn());
-    }
-
-    private PoiCellDefinition createCellIfExists(XSSFCell cell) {
-        if (cell != null) {
-            final PoiRowDefinition number = row.getSheet().getRowByNumber(cell.getRowIndex() + 1);
-            return new PoiCellDefinition(number != null ? number : row.getSheet().createRowWrapper(cell.getRowIndex() + 1), cell);
-        }
-
-        return null;
-    }
-
-    @Override
     public String toString() {
-        return "Cell[" + row.getSheet().getName() + "!" + getColumnAsString() + String.valueOf(row.getNumber()) + "]=" + String.valueOf(getValue());
+        return "Cell[" + row.getSheet().getName() + "!" + xssfCell.getReference() + String.valueOf(row.getNumber()) + "]=" +xssfCell.toString();
     }
 
     private static void applyTo(DefaultCommentDefinition comment, XSSFCell cell) {
@@ -729,6 +439,10 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Cell {
 
         // Assign the comment to the cell
         cell.setCellComment(xssfComment);
+    }
+
+    PoiRowDefinition getRow() {
+        return row;
     }
 
     private static final double WIDTH_POINTS_PER_CM = 4.6666666666666666666667;

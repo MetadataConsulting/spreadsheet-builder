@@ -3,9 +3,9 @@ package org.modelcatalogue.spreadsheet.builder.poi;
 import org.modelcatalogue.spreadsheet.api.Keywords;
 import org.modelcatalogue.spreadsheet.builder.api.FitDimension;
 
-public class PoiFitDimension implements FitDimension {
+class PoiFitDimension implements FitDimension {
 
-    public PoiFitDimension(PoiPageSettingsProvider pageSettingsProvider, Keywords.Fit fit) {
+    PoiFitDimension(PoiPageSettingsProvider pageSettingsProvider, Keywords.Fit fit) {
         this.pageSettingsProvider = pageSettingsProvider;
         this.fit = fit;
     }

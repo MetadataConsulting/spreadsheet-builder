@@ -1,7 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.poi;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.modelcatalogue.spreadsheet.builder.poi.PoiWorkbookDefinition;
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaFactory;
 import org.modelcatalogue.spreadsheet.query.simple.SimpleSpreadsheetCriteria;
@@ -19,7 +18,7 @@ public enum PoiSpreadsheetCriteria implements SpreadsheetCriteriaFactory {
     @Override
     public SpreadsheetCriteria forStream(InputStream stream) {
         try {
-            return SimpleSpreadsheetCriteria.forWorkbook(new PoiWorkbookDefinition(new XSSFWorkbook(stream)));
+            return SimpleSpreadsheetCriteria.forWorkbook(new PoiWorkbook(new XSSFWorkbook(stream)));
         } catch (IOException e) {
             throw new RuntimeException("Exception creating new workbook: " + stream, e);
         }
