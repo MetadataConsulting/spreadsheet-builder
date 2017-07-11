@@ -71,12 +71,8 @@ class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements Workbo
         return DefaultGroovyMethods.asType(this, type);
     }
 
-    void addPendingFormula(String formula, PoiCellDefinition cell) {
-        toBeResolved.add(new PoiPendingFormula(cell, formula));
-    }
-
     void addPendingLink(String ref, PoiCellDefinition cell) {
-        toBeResolved.add(new PoiPendingLink(cell, ref));
+        addPendingLink(new PoiPendingLink(cell, ref));
     }
 
 }

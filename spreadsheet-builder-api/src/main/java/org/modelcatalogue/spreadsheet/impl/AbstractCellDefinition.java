@@ -109,7 +109,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
                 return this;
             }
 
-            if (cellStyle instanceof Sealable && ((Sealable) cellStyle).isSealed()) {
+            if (cellStyle.isSealed()) {
                 if (!row.getStyles().isEmpty()) {
                     cellStyle = null;
                     styles(allNames);
@@ -127,7 +127,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
             cellStyle = createCellStyle();
         }
 
-        if (cellStyle instanceof Sealable && ((Sealable) cellStyle).isSealed()) {
+        if (cellStyle.isSealed()) {
             throw new IllegalStateException("The cell style '" + Utils.join(names, ".") + "' is already sealed! You need to create new style. Use 'styles' method to combine multiple named styles! Create new named style if you're trying to update existing style with closure definition.");
         }
 
@@ -142,7 +142,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
         return this;
     }
 
-    protected abstract CellStyleDefinition createCellStyle();
+    protected abstract AbstractCellStyleDefinition createCellStyle();
 
     protected abstract void assignStyle(CellStyleDefinition cellStyle);
 
@@ -216,6 +216,6 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
     private final AbstractRowDefinition row;
     private int colspan = 1;
     private int rowspan = 1;
-    protected CellStyleDefinition cellStyle;
+    protected AbstractCellStyleDefinition cellStyle;
     protected List<RichTextPart> richTextParts = new ArrayList<RichTextPart>();
 }

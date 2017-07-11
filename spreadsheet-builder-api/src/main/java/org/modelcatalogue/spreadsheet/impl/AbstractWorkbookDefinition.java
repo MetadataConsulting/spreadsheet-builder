@@ -1,12 +1,7 @@
 package org.modelcatalogue.spreadsheet.impl;
 
 import org.modelcatalogue.spreadsheet.api.Configurer;
-import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition;
-import org.modelcatalogue.spreadsheet.builder.api.Resolvable;
-import org.modelcatalogue.spreadsheet.builder.api.Sealable;
-import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition;
-import org.modelcatalogue.spreadsheet.builder.api.Stylesheet;
-import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition;
+import org.modelcatalogue.spreadsheet.builder.api.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,10 +10,10 @@ import java.util.Map;
 
 public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
 
-    protected final Map<String, Configurer<CellStyleDefinition>> namedStylesDefinition = new LinkedHashMap<String, Configurer<CellStyleDefinition>>();
-    protected final Map<String, CellStyleDefinition> namedStyles = new LinkedHashMap<String, CellStyleDefinition>();
-    protected final Map<String, SheetDefinition> sheets = new LinkedHashMap<String, SheetDefinition>();
-    protected final List<Resolvable> toBeResolved = new ArrayList<Resolvable>();
+    private final Map<String, Configurer<CellStyleDefinition>> namedStylesDefinition = new LinkedHashMap<String, Configurer<CellStyleDefinition>>();
+    private final Map<String, AbstractCellStyleDefinition> namedStyles = new LinkedHashMap<String, AbstractCellStyleDefinition>();
+    private final Map<String, AbstractSheetDefinition> sheets = new LinkedHashMap<String, AbstractSheetDefinition>();
+    private final List<Resolvable> toBeResolved = new ArrayList<Resolvable>();
 
     @Override
     public final WorkbookDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
@@ -51,12 +46,12 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         }
     }
 
-    protected abstract CellStyleDefinition createCellStyle();
-    protected abstract SheetDefinition createSheet(String name);
+    protected abstract AbstractCellStyleDefinition createCellStyle();
+    protected abstract AbstractSheetDefinition createSheet(String name);
 
     @Override
     public final WorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
-        SheetDefinition sheet = sheets.get(name);
+        AbstractSheetDefinition sheet = sheets.get(name);
 
         if (sheet == null) {
             sheet = createSheet(name);
@@ -65,38 +60,15 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
 
         Configurer.Runner.doConfigure(sheetDefinition, sheet);
 
-
-        if (sheet instanceof Resolvable) {
-            ((Resolvable) sheet).resolve();
-        }
+        sheet.resolve();
 
         return this;
     }
 
-    protected final CellStyleDefinition getStyle(String name) {
-        CellStyleDefinition style = namedStyles.get(name);
-
-        if (style != null) {
-            return style;
-        }
-
-        style = createCellStyle();
-        Configurer.Runner.doConfigure(getStyleDefinition(name), style);
-
-        if (style instanceof Sealable) {
-            ((Sealable) style).seal();
-        }
-
-        namedStyles.put(name, style);
-
-        return style;
-    }
-
-    // TODO: make protected again
-    public final CellStyleDefinition getStyles(Iterable<String> names) {
+    final AbstractCellStyleDefinition getStyles(Iterable<String> names) {
         String name = Utils.join(names, ".");
 
-        CellStyleDefinition style = namedStyles.get(name);
+        AbstractCellStyleDefinition style = namedStyles.get(name);
 
         if (style != null) {
             return style;
@@ -107,17 +79,14 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
             Configurer.Runner.doConfigure(getStyleDefinition(n), style);
         }
 
-        if (style instanceof Sealable) {
-            ((Sealable) style).seal();
-        }
+        style.seal();
 
         namedStyles.put(name, style);
 
         return style;
     }
 
-    // TODO: make protected again
-    public final Configurer<CellStyleDefinition> getStyleDefinition(String name) {
+    final Configurer<CellStyleDefinition> getStyleDefinition(String name) {
         Configurer<CellStyleDefinition> style = namedStylesDefinition.get(name);
         if (style == null) {
             throw new IllegalArgumentException("Style '" + name + "' is not defined");
@@ -129,7 +98,7 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         toBeResolved.add(formula);
     }
 
-    void addPendingLink(AbstractPendingLink link) {
+    protected void addPendingLink(AbstractPendingLink link) {
         toBeResolved.add(link);
     }
 

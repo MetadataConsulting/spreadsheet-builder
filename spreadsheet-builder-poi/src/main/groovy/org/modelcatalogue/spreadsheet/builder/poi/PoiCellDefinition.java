@@ -65,7 +65,7 @@ class PoiCellDefinition extends AbstractCellDefinition {
     }
 
     @Override
-    protected CellStyleDefinition createCellStyle() {
+    protected AbstractCellStyleDefinition createCellStyle() {
         return new PoiCellStyleDefinition(this);
     }
 

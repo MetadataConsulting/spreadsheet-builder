@@ -1,8 +1,9 @@
 package org.modelcatalogue.spreadsheet.impl;
 
 import org.modelcatalogue.spreadsheet.api.Configurer;
-import org.modelcatalogue.spreadsheet.api.Spannable;
-import org.modelcatalogue.spreadsheet.builder.api.*;
+import org.modelcatalogue.spreadsheet.builder.api.CellDefinition;
+import org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition;
+import org.modelcatalogue.spreadsheet.builder.api.RowDefinition;
 
 import java.util.*;
 
@@ -15,14 +16,14 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     private final List<Integer> startPositions = new ArrayList<Integer>();
     private int nextColNumber = 0;
-    private final Map<Integer, CellDefinition> cells = new LinkedHashMap<Integer, CellDefinition>();
+    private final Map<Integer, AbstractCellDefinition> cells = new LinkedHashMap<Integer, AbstractCellDefinition>();
 
     protected AbstractRowDefinition(AbstractSheetDefinition sheet) {
         this.sheet = sheet;
     }
 
-    private CellDefinition findOrCreateCell(int zeroBasedCellNumber) {
-        CellDefinition cell = cells.get((zeroBasedCellNumber + 1));
+    private AbstractCellDefinition findOrCreateCell(int zeroBasedCellNumber) {
+        AbstractCellDefinition cell = cells.get((zeroBasedCellNumber + 1));
 
         if (cell != null) {
             return cell;
@@ -35,7 +36,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
         return cell;
     }
 
-    protected abstract CellDefinition createCell(int zeroBasedCellNumber);
+    protected abstract AbstractCellDefinition createCell(int zeroBasedCellNumber);
 
     @Override
     public final RowDefinition cell() {
@@ -45,7 +46,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     @Override
     public final RowDefinition cell(Object value) {
-        CellDefinition cell = findOrCreateCell(nextColNumber++);
+        AbstractCellDefinition cell = findOrCreateCell(nextColNumber++);
 
         if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
             cell.styles(styles, styleDefinitions);
@@ -53,15 +54,14 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
         cell.value(value);
 
-        if (cell instanceof Resolvable) {
-            ((Resolvable) cell).resolve();
-        }
+        cell.resolve();
+
         return this;
     }
 
     @Override
     public final RowDefinition cell(Configurer<CellDefinition> cellDefinition) {
-        CellDefinition poiCell = findOrCreateCell(nextColNumber);
+        AbstractCellDefinition poiCell = findOrCreateCell(nextColNumber);
 
         if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
             poiCell.styles(styles, styleDefinitions);
@@ -69,27 +69,20 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
         Configurer.Runner.doConfigure(cellDefinition, poiCell);
 
-        if (poiCell instanceof Spannable) {
-            nextColNumber += ((Spannable) poiCell).getColspan();
-        } else {
-            nextColNumber++;
-        }
+        nextColNumber += poiCell.getColspan();
 
         handleSpans(poiCell);
 
-        if (poiCell instanceof Resolvable) {
-            ((Resolvable) poiCell).resolve();
-        }
+        poiCell.resolve();
 
         return this;
     }
 
-    // TODO: change to abstract cell definition later on
-    protected abstract void handleSpans(CellDefinition poiCell);
+    protected abstract void handleSpans(AbstractCellDefinition poiCell);
 
     @Override
     public final RowDefinition cell(int column, Configurer<CellDefinition> cellDefinition) {
-        CellDefinition poiCell = findOrCreateCell(column - 1);
+        AbstractCellDefinition poiCell = findOrCreateCell(column - 1);
 
         if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
             poiCell.styles(styles, styleDefinitions);
@@ -97,17 +90,11 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
         Configurer.Runner.doConfigure(cellDefinition, poiCell);
 
-        if (poiCell instanceof Spannable) {
-            nextColNumber = column - 1 + ((Spannable) poiCell).getColspan();
-        } else {
-            nextColNumber = column;
-        }
+        nextColNumber = column - 1 + poiCell.getColspan();
 
         handleSpans(poiCell);
 
-        if (poiCell instanceof Resolvable) {
-            ((Resolvable) poiCell).resolve();
-        }
+        poiCell.resolve();
 
         return this;
     }
@@ -198,11 +185,6 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     protected abstract void doCreateGroup(int startPosition, int endPosition, boolean collapsed);
 
-    // TODO: make protected
-    public CellDefinition getCellByNumber(int oneBasedColumnNumber) {
-        return cells.get(oneBasedColumnNumber);
-    }
-
     @Override
     public String toString() {
         return "Row[" + sheet.getName() + "!" + getNumber() + "]";
@@ -210,7 +192,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     protected abstract int getNumber();
 
-    public List<String> getStyles() {
+    List<String> getStyles() {
         return Collections.unmodifiableList(styles);
     }
 }

@@ -3,6 +3,7 @@ package org.modelcatalogue.spreadsheet.builder.ods;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 import org.modelcatalogue.spreadsheet.builder.api.*;
+import org.modelcatalogue.spreadsheet.impl.AbstractCellStyleDefinition;
 import org.modelcatalogue.spreadsheet.impl.AbstractSheetDefinition;
 import org.modelcatalogue.spreadsheet.impl.AbstractWorkbookDefinition;
 
@@ -28,7 +29,7 @@ class OdsSpreadsheetDefinition extends AbstractWorkbookDefinition implements Spr
     }
 
     @Override
-    protected CellStyleDefinition createCellStyle() {
+    protected AbstractCellStyleDefinition createCellStyle() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

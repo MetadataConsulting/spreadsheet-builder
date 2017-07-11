@@ -3,6 +3,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition;
+import org.modelcatalogue.spreadsheet.impl.AbstractCellDefinition;
 import org.modelcatalogue.spreadsheet.impl.AbstractRowDefinition;
 
 class PoiRowDefinition extends AbstractRowDefinition implements RowDefinition {
@@ -15,7 +16,7 @@ class PoiRowDefinition extends AbstractRowDefinition implements RowDefinition {
     }
 
     @Override
-    protected CellDefinition createCell(int zeroBasedCellNumber) {
+    protected AbstractCellDefinition createCell(int zeroBasedCellNumber) {
         XSSFCell cell = xssfRow.getCell(zeroBasedCellNumber);
 
         if (cell == null) {
@@ -26,7 +27,7 @@ class PoiRowDefinition extends AbstractRowDefinition implements RowDefinition {
     }
 
     @Override
-    protected void handleSpans(CellDefinition cell) {
+    protected void handleSpans(AbstractCellDefinition cell) {
         if (cell instanceof PoiCellDefinition) {
             PoiCellDefinition poiCell = (PoiCellDefinition) cell;
             if (poiCell.getColspan() > 1 || poiCell.getRowspan() > 1) {

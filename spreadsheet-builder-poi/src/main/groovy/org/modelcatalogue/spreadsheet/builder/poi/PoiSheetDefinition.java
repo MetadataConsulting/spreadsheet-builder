@@ -16,8 +16,7 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
         this.xssfSheet = xssfSheet;
     }
 
-    // TODO: make protected again
-    @Override public PoiRowDefinition createRow(int zeroBasedRowNumber) {
+    @Override protected PoiRowDefinition createRow(int zeroBasedRowNumber) {
         XSSFRow row = xssfSheet.getRow(zeroBasedRowNumber);
 
         if (row == null) {
@@ -28,7 +27,7 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
     }
 
     @Override
-    protected PageDefinition createPageDefintion() {
+    protected PageDefinition createPageDefinition() {
         return new PoiPageSettingsProvider(this);
     }
 
@@ -48,11 +47,6 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
     @Override
     public PoiWorkbookDefinition getWorkbook() {
         return (PoiWorkbookDefinition) super.getWorkbook();
-    }
-
-    // TODO: make protected again
-    public PoiRowDefinition getRowByNumber(int rowNumberStartingOne) {
-        return (PoiRowDefinition) this.rows.get(rowNumberStartingOne);
     }
 
     @Override

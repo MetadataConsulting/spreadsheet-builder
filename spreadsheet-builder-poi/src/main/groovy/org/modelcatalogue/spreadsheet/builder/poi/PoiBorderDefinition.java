@@ -2,20 +2,14 @@ package org.modelcatalogue.spreadsheet.builder.poi;
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.modelcatalogue.spreadsheet.api.BorderStyle;
-import org.modelcatalogue.spreadsheet.api.Color;
 import org.modelcatalogue.spreadsheet.api.Keywords;
 import org.modelcatalogue.spreadsheet.builder.api.BorderDefinition;
+import org.modelcatalogue.spreadsheet.impl.AbstractBorderDefinition;
 
-class PoiBorderDefinition implements BorderDefinition {
+class PoiBorderDefinition extends AbstractBorderDefinition {
+
     PoiBorderDefinition(XSSFCellStyle xssfCellStyle) {
         this.xssfCellStyle = xssfCellStyle;
-    }
-
-    @Override
-    public BorderDefinition style(BorderStyle style) {
-        borderStyle = style;
-        return this;
     }
 
     @Override
@@ -24,13 +18,7 @@ class PoiBorderDefinition implements BorderDefinition {
         return this;
     }
 
-    @Override
-    public BorderDefinition color(Color colorPreset) {
-        color(colorPreset.getHex());
-        return this;
-    }
-
-    void applyTo(Keywords.BorderSide location) {
+    protected void applyTo(Keywords.BorderSide location) {
         org.apache.poi.ss.usermodel.BorderStyle poiBorderStyle = getPoiBorderStyle();
         if (Keywords.BorderSideAndHorizontalAlignment.BOTTOM.equals(location)) {
             if (poiBorderStyle != null) {
@@ -113,5 +101,4 @@ class PoiBorderDefinition implements BorderDefinition {
 
     private final XSSFCellStyle xssfCellStyle;
     private XSSFColor color;
-    private BorderStyle borderStyle;
 }

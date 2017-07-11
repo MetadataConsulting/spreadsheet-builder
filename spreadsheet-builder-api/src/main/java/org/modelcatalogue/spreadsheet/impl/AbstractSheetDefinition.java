@@ -12,7 +12,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
     private final List<Integer> startPositions = new ArrayList<Integer>();
     private int nextRowNumber = 0;
     protected final Set<Integer> autoColumns = new HashSet<Integer>();
-    protected final Map<Integer, RowDefinition> rows = new LinkedHashMap<Integer, RowDefinition>();
+    private final Map<Integer, AbstractRowDefinition> rows = new LinkedHashMap<Integer, AbstractRowDefinition>();
     protected boolean automaticFilter;
 
     protected AbstractSheetDefinition(AbstractWorkbookDefinition workbook) {
@@ -23,19 +23,14 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return workbook;
     }
 
-    // TODO: change back to protected
-    public RowDefinition getRowByNumber(int rowNumberStartingOne) {
-        return rows.get(rowNumberStartingOne);
-    }
-
     @Override
     public final SheetDefinition row() {
         findOrCreateRow(nextRowNumber++);
         return this;
     }
 
-    protected final RowDefinition findOrCreateRow(int zeroBasedRowNumber) {
-        RowDefinition row = rows.get(zeroBasedRowNumber + 1);
+    private RowDefinition findOrCreateRow(int zeroBasedRowNumber) {
+        AbstractRowDefinition row = rows.get(zeroBasedRowNumber + 1);
 
         if (row != null) {
             return row;
@@ -46,8 +41,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return row;
     }
 
-    // TODO: change back to protected
-    public abstract RowDefinition createRow(int zeroBasedRowNumber);
+    protected abstract AbstractRowDefinition createRow(int zeroBasedRowNumber);
 
     @Override
     public final SheetDefinition row(Configurer<RowDefinition> rowDefinition) {
@@ -117,14 +111,14 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
 
     @Override
     public final SheetDefinition page(Configurer<PageDefinition> pageDefinition) {
-        PageDefinition page = createPageDefintion();
+        PageDefinition page = createPageDefinition();
         Configurer.Runner.doConfigure(pageDefinition, page);
         return this;
     }
 
-    protected abstract PageDefinition createPageDefintion();
+    protected abstract PageDefinition createPageDefinition();
 
-    protected final void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {
+    private void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {
         startPositions.add(nextRowNumber);
 
         Configurer.Runner.doConfigure(insideGroupDefinition, this);

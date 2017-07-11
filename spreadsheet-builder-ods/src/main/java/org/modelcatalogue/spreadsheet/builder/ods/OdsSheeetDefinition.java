@@ -1,11 +1,9 @@
 package org.modelcatalogue.spreadsheet.builder.ods;
 
 import org.jopendocument.dom.spreadsheet.Sheet;
-import org.modelcatalogue.spreadsheet.api.Configurer;
-import org.modelcatalogue.spreadsheet.api.Keywords;
 import org.modelcatalogue.spreadsheet.builder.api.PageDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition;
-import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition;
+import org.modelcatalogue.spreadsheet.impl.AbstractRowDefinition;
 import org.modelcatalogue.spreadsheet.impl.AbstractSheetDefinition;
 
 class OdsSheeetDefinition extends AbstractSheetDefinition {
@@ -29,7 +27,7 @@ class OdsSheeetDefinition extends AbstractSheetDefinition {
 
 
     @Override
-    public RowDefinition createRow(int zeroBasedRowNumber) {
+    public AbstractRowDefinition createRow(int zeroBasedRowNumber) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -39,7 +37,7 @@ class OdsSheeetDefinition extends AbstractSheetDefinition {
     }
 
     @Override
-    protected PageDefinition createPageDefintion() {
+    protected PageDefinition createPageDefinition() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
