@@ -454,18 +454,6 @@ public class Java8BuilderTest {
                 });
             });
 
-            w.style("h1", s -> {
-                s.font(f -> {
-                    f.make(bold);
-                });
-            });
-
-            w.style("h2", s -> {
-                s.font(f -> {
-                    f.make(bold);
-                });
-            });
-
             w.style("borders", s -> {
                 s.font(f -> {
                     f.color(red);

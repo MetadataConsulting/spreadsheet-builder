@@ -48,7 +48,9 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     public final RowDefinition cell(Object value) {
         CellDefinition cell = findOrCreateCell(nextColNumber++);
 
-        cell.styles(styles, styleDefinitions);
+        if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
+            cell.styles(styles, styleDefinitions);
+        }
 
         cell.value(value);
 
@@ -62,7 +64,9 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     public final RowDefinition cell(Configurer<CellDefinition> cellDefinition) {
         CellDefinition poiCell = findOrCreateCell(nextColNumber);
 
-        poiCell.styles(styles, styleDefinitions);
+        if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
+            poiCell.styles(styles, styleDefinitions);
+        }
 
         Configurer.Runner.doConfigure(cellDefinition, poiCell);
 
@@ -88,7 +92,9 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     public final RowDefinition cell(int column, Configurer<CellDefinition> cellDefinition) {
         CellDefinition poiCell = findOrCreateCell(column - 1);
 
-        poiCell.styles(styles, styleDefinitions);
+        if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
+            poiCell.styles(styles, styleDefinitions);
+        }
 
         Configurer.Runner.doConfigure(cellDefinition, poiCell);
 

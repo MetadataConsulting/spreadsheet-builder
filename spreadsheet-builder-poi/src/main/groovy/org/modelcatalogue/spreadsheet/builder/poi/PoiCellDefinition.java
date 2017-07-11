@@ -98,12 +98,12 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
 
     @Override
     public PoiCellDefinition style(String name) {
-        return styles(name);
+        return styles(Collections.singleton(name), Collections.<Configurer<CellStyleDefinition>>emptyList());
     }
 
     @Override
     public PoiCellDefinition styles(String... names) {
-        return styles(Arrays.asList(names));
+        return styles(Arrays.asList(names), Collections.<Configurer<CellStyleDefinition>>emptyList());
     }
 
     @Override
@@ -145,10 +145,16 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
                 return this;
             }
 
-            if (poiCellStyle.isSealed() && !row.getStyles().isEmpty()) {
-                poiCellStyle = null;
-                styles(allNames);
-                return this;
+            if (poiCellStyle.isSealed()) {
+                if (!row.getStyles().isEmpty()) {
+                    poiCellStyle = null;
+                    styles(allNames);
+                    return this;
+                }
+            } else {
+                for (String name : names) {
+                    Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
+                }
             }
             return this;
         }
@@ -160,15 +166,13 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
         if (poiCellStyle.isSealed()) {
             throw new IllegalStateException("The cell style '" + Utils.join(names, ".") + "' is already sealed! You need to create new style. Use 'styles' method to combine multiple named styles! Create new named style if you're trying to update existing style with closure definition.");
         }
-        poiCellStyle.checkSealed();
+
         for (String name : names) {
             Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
         }
 
-        if (styleDefinition != null) {
-            for (Configurer<CellStyleDefinition> configurer : styleDefinition) {
-                Configurer.Runner.doConfigure(configurer, poiCellStyle);
-            }
+        for (Configurer<CellStyleDefinition> configurer : styleDefinition) {
+            Configurer.Runner.doConfigure(configurer, poiCellStyle);
         }
 
         return this;
@@ -280,58 +284,11 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
     }
 
     public int getColspan() {
-        if (colspan >= 1) {
-            return colspan;
-        }
-
-
-        if (row.getSheet().getSheet().getNumMergedRegions() == 0) {
-            return colspan = 1;
-        }
-
-        CellRangeAddress address = null;
-        for (CellRangeAddress candidate : row.getSheet().getSheet().getMergedRegions()) {
-            if (candidate.isInRange(getCell().getRowIndex(), getCell().getColumnIndex())) {
-                address = candidate;
-                break;
-            }
-        }
-
-        if (address != null) {
-            rowspan = address.getLastRow() - address.getFirstRow() + 1;
-            colspan = address.getLastColumn() - address.getFirstColumn() + 1;
-            return colspan;
-        }
-
-        return colspan = 1;
+        return colspan;
     }
 
     public int getRowspan() {
-        if (rowspan >= 1) {
-            return rowspan;
-        }
-
-
-        if (row.getSheet().getSheet().getNumMergedRegions() == 0) {
-            return rowspan = 1;
-        }
-
-        CellRangeAddress address = null;
-        for (CellRangeAddress candidate : row.getSheet().getSheet().getMergedRegions()) {
-            if (candidate.isInRange(getCell().getRowIndex(), getCell().getColumnIndex())) {
-                address = candidate;
-                break;
-            }
-        }
-
-
-        if (address != null) {
-            rowspan = address.getLastRow() - address.getFirstRow() + 1;
-            colspan = address.getLastColumn() - address.getFirstColumn() + 1;
-            return rowspan;
-        }
-
-        return rowspan = 1;
+        return rowspan;
     }
 
     protected XSSFCell getCell() {
@@ -427,8 +384,8 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
     private static final double HEIGHT_POINTS_PER_INCH = 72;
     private final PoiRowDefinition row;
     private final XSSFCell xssfCell;
-    private int colspan = 0;
-    private int rowspan = 0;
+    private int colspan = 1;
+    private int rowspan = 1;
     private PoiCellStyleDefinition poiCellStyle;
     private List<RichTextPart> richTextParts = new ArrayList<RichTextPart>();
 }
