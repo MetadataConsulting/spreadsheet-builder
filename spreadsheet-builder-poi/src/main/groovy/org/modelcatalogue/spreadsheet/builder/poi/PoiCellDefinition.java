@@ -9,10 +9,10 @@ import org.modelcatalogue.spreadsheet.impl.*;
 
 import java.util.*;
 
-class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
+class PoiCellDefinition extends AbstractCellDefinition {
     PoiCellDefinition(PoiRowDefinition row, XSSFCell xssfCell) {
+        super(row);
         this.xssfCell = checkNotNull(xssfCell, "Cell");
-        this.row = checkNotNull(row, "Row");
     }
 
     private static <T> T checkNotNull(T o, String what) {
@@ -60,134 +60,45 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
     }
 
     @Override
-    public PoiCellDefinition comment(final String commentText) {
-        comment(new Configurer<CommentDefinition>() {
-            @Override
-            public void configure(CommentDefinition commentDefinition) {
-                commentDefinition.text(commentText);
-            }
-        });
-        return this;
+    protected AbstractPendingFormula createPendingFormula(String formula) {
+        return new PoiPendingFormula(this, formula);
     }
 
     @Override
-    public PoiCellDefinition formula(String formula) {
-        row.getSheet().getWorkbook().addPendingFormula(formula, this);
-        return this;
+    protected CellStyleDefinition createCellStyle() {
+        return new PoiCellStyleDefinition(this);
     }
 
     @Override
-    public PoiCellDefinition comment(Configurer<CommentDefinition> commentDefinition) {
-        DefaultCommentDefinition poiComment = new DefaultCommentDefinition();
-        Configurer.Runner.doConfigure(commentDefinition, poiComment);
-        applyTo(poiComment, xssfCell);
-        return this;
-    }
-
-    @Override
-    public PoiCellDefinition colspan(int span) {
-        this.colspan = span;
-        return this;
-    }
-
-    @Override
-    public PoiCellDefinition rowspan(int span) {
-        this.rowspan = span;
-        return this;
-    }
-
-    @Override
-    public PoiCellDefinition style(String name) {
-        return styles(Collections.singleton(name), Collections.<Configurer<CellStyleDefinition>>emptyList());
-    }
-
-    @Override
-    public PoiCellDefinition styles(String... names) {
-        return styles(Arrays.asList(names), Collections.<Configurer<CellStyleDefinition>>emptyList());
-    }
-
-    @Override
-    public PoiCellDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
-        return styles(Collections.<String>emptyList(), Collections.singleton(styleDefinition));
-    }
-
-    @Override
-    public PoiCellDefinition styles(Iterable<String> names) {
-        return styles(names, Collections.<Configurer<CellStyleDefinition>>emptyList());
-    }
-
-    @Override
-    public PoiCellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
-        return styles(Collections.singleton(name), Collections.singleton(styleDefinition));
-    }
-
-    @Override
-    public PoiCellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
-        return styles(names, Collections.singleton(styleDefinition));
-    }
-
-    @Override
-    public PoiCellDefinition styles(Iterable<String> names, Iterable<Configurer<CellStyleDefinition>> styleDefinition) {
-        if (styleDefinition == null || !styleDefinition.iterator().hasNext()) {
-            if (names == null || !names.iterator().hasNext()) {
-                return this;
-            }
-
-            Set<String> allNames = new LinkedHashSet<String>();
-            for (String name: names) {
-                allNames.add(name);
-            }
-            allNames.addAll(row.getStyles());
-
-            if (poiCellStyle == null) {
-                poiCellStyle = (PoiCellStyleDefinition) row.getSheet().getWorkbook().getStyles(allNames);
-                poiCellStyle.assignTo(this);
-                return this;
-            }
-
-            if (poiCellStyle.isSealed()) {
-                if (!row.getStyles().isEmpty()) {
-                    poiCellStyle = null;
-                    styles(allNames);
-                    return this;
-                }
-            } else {
-                for (String name : names) {
-                    Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
-                }
-            }
-            return this;
+    protected void assignStyle(CellStyleDefinition cellStyle) {
+        if (cellStyle instanceof PoiCellStyleDefinition) {
+            PoiCellStyleDefinition style = (PoiCellStyleDefinition) cellStyle;
+            style.assignTo(this);
+        } else {
+            throw new IllegalArgumentException("Unsupported style: " + cellStyle);
         }
-
-        if (poiCellStyle == null) {
-            poiCellStyle = new PoiCellStyleDefinition(this);
-        }
-
-        if (poiCellStyle.isSealed()) {
-            throw new IllegalStateException("The cell style '" + Utils.join(names, ".") + "' is already sealed! You need to create new style. Use 'styles' method to combine multiple named styles! Create new named style if you're trying to update existing style with closure definition.");
-        }
-
-        for (String name : names) {
-            Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
-        }
-
-        for (Configurer<CellStyleDefinition> configurer : styleDefinition) {
-            Configurer.Runner.doConfigure(configurer, poiCellStyle);
-        }
-
-        return this;
     }
 
     @Override
-    public PoiCellDefinition name(final String name) {
-        if (!Utils.fixName(name).equals(name)) {
-            throw new IllegalArgumentException("Name " + name + " is not valid Excel name! Suggestion: " + Utils.fixName(name));
-        }
-
+    protected void doName(String name) {
         XSSFName theName = xssfCell.getRow().getSheet().getWorkbook().createName();
         theName.setNameName(name);
         theName.setRefersToFormula(generateRefersToFormula());
-        return this;
+    }
+
+    @Override
+    protected LinkDefinition createLinkDefinition() {
+        return new PoiLinkDefinition(this.getRow().getSheet().getWorkbook(), this);
+    }
+
+    @Override
+    protected FontDefinition createFontDefinition() {
+        return new PoiFontDefinition(this.getRow().getSheet().getWorkbook().getWorkbook());
+    }
+
+    @Override
+    protected void applyComment(DefaultCommentDefinition comment) {
+        applyTo(comment, xssfCell);
     }
 
     private String generateRefersToFormula() {
@@ -195,61 +106,23 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
     }
 
     @Override
-    public LinkDefinition link(Keywords.To to) {
-        return new PoiLinkDefinition(row.getSheet().getWorkbook(), this);
-    }
-
-    @Override
     public DimensionModifier width(double width) {
-        row.getSheet().getSheet().setColumnWidth(xssfCell.getColumnIndex(), (int) Math.round(width * 255D));
+        getRow().getSheet().getSheet().setColumnWidth(xssfCell.getColumnIndex(), (int) Math.round(width * 255D));
         return new WidthModifier(this, width, WIDTH_POINTS_PER_CM, WIDTH_POINTS_PER_INCH);
     }
 
     @Override
     public DimensionModifier height(double height) {
-        row.getRow().setHeightInPoints((float) height);
+        getRow().getRow().setHeightInPoints((float) height);
         return new HeightModifier(this, height, HEIGHT_POINTS_PER_CM, HEIGHT_POINTS_PER_INCH);
     }
 
     @Override
     public PoiCellDefinition width(Keywords.Auto auto) {
-        row.getSheet().addAutoColumn(xssfCell.getColumnIndex());
+        getRow().getSheet().addAutoColumn(xssfCell.getColumnIndex());
         return this;
     }
 
-    @Override
-    public PoiCellDefinition text(String run) {
-        text(run, null);
-        return this;
-    }
-
-    @Override
-    public PoiCellDefinition text(String run, Configurer<FontDefinition> fontConfiguration) {
-        if (run == null || run.length() == 0) {
-            return this;
-        }
-
-        int start = 0;
-        if (richTextParts != null && richTextParts.size() > 0) {
-            start = richTextParts.get(richTextParts.size() - 1).getEnd();
-        }
-
-        int end = start + run.length();
-
-        if (fontConfiguration == null) {
-            richTextParts.add(new RichTextPart(run, null, start, end));
-            return this;
-        }
-
-
-        PoiFontDefinition font = new PoiFontDefinition(xssfCell.getRow().getSheet().getWorkbook());
-        Configurer.Runner.doConfigure(fontConfiguration, font);
-
-        richTextParts.add(new RichTextPart(run, font, start, end));
-        return this;
-    }
-
-    @Override
     public ImageCreator png(Keywords.Image image) {
         return createImageConfigurer(Workbook.PICTURE_TYPE_PNG);
     }
@@ -283,14 +156,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
         return new PoiImageCreator(this, fileType);
     }
 
-    public int getColspan() {
-        return colspan;
-    }
-
-    public int getRowspan() {
-        return rowspan;
-    }
-
     protected XSSFCell getCell() {
         return xssfCell;
     }
@@ -317,10 +182,10 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
             xssfCell.setCellValue(text);
         }
 
-        if ((colspan > 1 || rowspan > 1) && poiCellStyle != null) {
-            poiCellStyle.setBorderTo(getCellRangeAddress(), row.getSheet());
+        if ((getColspan() > 1 || getRowspan() > 1) && cellStyle != null && cellStyle instanceof PoiCellStyleDefinition) {
+            ((PoiCellStyleDefinition) cellStyle).setBorderTo(getCellRangeAddress(), getRow().getSheet());
             // XXX: setting border messes up the style of the cell
-            poiCellStyle.assignTo(this);
+            ((PoiCellStyleDefinition) cellStyle).assignTo(this);
         }
 
     }
@@ -331,7 +196,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
 
     @Override
     public String toString() {
-        return "Cell[" + row.getSheet().getName() + "!" + xssfCell.getReference() + String.valueOf(row.getNumber()) + "]=" +xssfCell.toString();
+        return "Cell[" + getRow().getSheet().getName() + "!" + xssfCell.getReference() + String.valueOf(getRow().getNumber()) + "]=" +xssfCell.toString();
     }
 
     private static void applyTo(DefaultCommentDefinition comment, XSSFCell cell) {
@@ -374,18 +239,13 @@ class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
         cell.setCellComment(xssfComment);
     }
 
-    PoiRowDefinition getRow() {
-        return row;
+    public PoiRowDefinition getRow() {
+        return (PoiRowDefinition) super.getRow();
     }
 
     private static final double WIDTH_POINTS_PER_CM = 4.6666666666666666666667;
     private static final double WIDTH_POINTS_PER_INCH = 12;
     private static final double HEIGHT_POINTS_PER_CM = 28;
     private static final double HEIGHT_POINTS_PER_INCH = 72;
-    private final PoiRowDefinition row;
     private final XSSFCell xssfCell;
-    private int colspan = 1;
-    private int rowspan = 1;
-    private PoiCellStyleDefinition poiCellStyle;
-    private List<RichTextPart> richTextParts = new ArrayList<RichTextPart>();
 }

@@ -1,6 +1,5 @@
 package org.modelcatalogue.spreadsheet.impl;
 
-import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.api.Spannable;
 import org.modelcatalogue.spreadsheet.builder.api.*;
@@ -115,7 +114,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     @Override
     public final RowDefinition cell(String column, Configurer<CellDefinition> cellDefinition) {
-        cell(Cell.Util.parseColumn(column), cellDefinition);
+        cell(Utils.parseColumn(column), cellDefinition);
         return this;
     }
 

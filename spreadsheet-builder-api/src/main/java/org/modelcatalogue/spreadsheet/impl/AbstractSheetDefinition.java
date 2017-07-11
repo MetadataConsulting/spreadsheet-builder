@@ -19,7 +19,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         this.workbook = workbook;
     }
 
-    protected WorkbookDefinition getWorkbook() {
+    protected AbstractWorkbookDefinition getWorkbook() {
         return workbook;
     }
 
@@ -70,7 +70,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
 
     @Override
     public final SheetDefinition freeze(String column, int row) {
-        return freeze(Cell.Util.parseColumn(column), row);
+        return freeze(Utils.parseColumn(column), row);
     }
 
     @Override

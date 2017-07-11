@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.api
 
+import org.modelcatalogue.spreadsheet.impl.Utils
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -11,8 +12,8 @@ class CellUtilSpec extends Specification {
     @Unroll
     void "parse column #column to number #index"() {
         expect:
-        Cell.Util.parseColumn(column) == index
-        Cell.Util.toColumn(index) == column
+        Utils.parseColumn(column) == index
+            Utils.toColumn(index) == column
         where:
         column  | index
         'A'     | 1

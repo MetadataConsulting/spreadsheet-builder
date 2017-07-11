@@ -125,5 +125,13 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         return style;
     }
 
+    void addPendingFormula(AbstractPendingFormula formula) {
+        toBeResolved.add(formula);
+    }
+
+    void addPendingLink(AbstractPendingLink link) {
+        toBeResolved.add(link);
+    }
+
 
 }

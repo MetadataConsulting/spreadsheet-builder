@@ -7,6 +7,7 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.*;
 import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.impl.DefaultCommentDefinition;
+import org.modelcatalogue.spreadsheet.impl.Utils;
 
 import java.util.*;
 
@@ -32,7 +33,7 @@ class PoiCell implements Cell {
 
     @Override
     public String getColumnAsString() {
-        return Util.toColumn(getColumn());
+        return Utils.toColumn(getColumn());
     }
 
     @Override
