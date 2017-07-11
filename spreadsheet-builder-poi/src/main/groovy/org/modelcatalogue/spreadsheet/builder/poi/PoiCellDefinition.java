@@ -9,7 +9,7 @@ import org.modelcatalogue.spreadsheet.impl.*;
 
 import java.util.*;
 
-class PoiCellDefinition implements CellDefinition, Resolvable {
+class PoiCellDefinition implements CellDefinition, Resolvable, Spannable {
     PoiCellDefinition(PoiRowDefinition row, XSSFCell xssfCell) {
         this.xssfCell = checkNotNull(xssfCell, "Cell");
         this.row = checkNotNull(row, "Row");
@@ -60,17 +60,6 @@ class PoiCellDefinition implements CellDefinition, Resolvable {
     }
 
     @Override
-    public PoiCellDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
-        if (poiCellStyle == null) {
-            poiCellStyle = new PoiCellStyleDefinition(this);
-        }
-
-        poiCellStyle.checkSealed();
-        Configurer.Runner.doConfigure(styleDefinition, poiCellStyle);
-        return this;
-    }
-
-    @Override
     public PoiCellDefinition comment(final String commentText) {
         comment(new Configurer<CommentDefinition>() {
             @Override
@@ -109,59 +98,32 @@ class PoiCellDefinition implements CellDefinition, Resolvable {
 
     @Override
     public PoiCellDefinition style(String name) {
-        styles(name);
-        return this;
+        return styles(name);
     }
 
     @Override
     public PoiCellDefinition styles(String... names) {
-        styles(Arrays.asList(names));
-        return this;
+        return styles(Arrays.asList(names));
+    }
+
+    @Override
+    public PoiCellDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
+        return styles(Collections.<String>emptyList(), Collections.singleton(styleDefinition));
     }
 
     @Override
     public PoiCellDefinition styles(Iterable<String> names) {
-        Set<String> allNames = new LinkedHashSet<String>();
-        for (String name: names) {
-            allNames.add(name);
-        }
-        allNames.addAll(row.getStyles());
-
-        if (poiCellStyle == null) {
-            poiCellStyle = (PoiCellStyleDefinition) row.getSheet().getWorkbook().getStyles(allNames);
-            poiCellStyle.assignTo(this);
-            return this;
-        }
-
-        if (poiCellStyle.isSealed() && !row.getStyles().isEmpty()) {
-            poiCellStyle = null;
-            styles(allNames);
-            return this;
-        }
-
-        poiCellStyle.checkSealed();
-        for (String name : names) {
-            Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
-        }
-
-        return this;
+        return styles(names, Collections.<Configurer<CellStyleDefinition>>emptyList());
     }
 
     @Override
     public PoiCellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
-        style(row.getSheet().getWorkbook().getStyleDefinition(name));
-        style(styleDefinition);
-        return this;
+        return styles(Collections.singleton(name), Collections.singleton(styleDefinition));
     }
 
     @Override
     public PoiCellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
-        for (String name : names) {
-            Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
-        }
-
-        style(styleDefinition);
-        return this;
+        return styles(names, Collections.singleton(styleDefinition));
     }
 
     @Override
@@ -188,13 +150,16 @@ class PoiCellDefinition implements CellDefinition, Resolvable {
                 styles(allNames);
                 return this;
             }
-
+            return this;
         }
 
         if (poiCellStyle == null) {
             poiCellStyle = new PoiCellStyleDefinition(this);
         }
 
+        if (poiCellStyle.isSealed()) {
+            throw new IllegalStateException("The cell style '" + Utils.join(names, ".") + "' is already sealed! You need to create new style. Use 'styles' method to combine multiple named styles! Create new named style if you're trying to update existing style with closure definition.");
+        }
         poiCellStyle.checkSealed();
         for (String name : names) {
             Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), poiCellStyle);
@@ -314,7 +279,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable {
         return new PoiImageCreator(this, fileType);
     }
 
-    int getColspan() {
+    public int getColspan() {
         if (colspan >= 1) {
             return colspan;
         }
@@ -341,7 +306,7 @@ class PoiCellDefinition implements CellDefinition, Resolvable {
         return colspan = 1;
     }
 
-    int getRowspan() {
+    public int getRowspan() {
         if (rowspan >= 1) {
             return rowspan;
         }
@@ -417,21 +382,32 @@ class PoiCellDefinition implements CellDefinition, Resolvable {
             throw new IllegalStateException("Comment text has not been set!");
         }
 
+        XSSFComment xssfComment = cell.getCellComment();
 
-        XSSFWorkbook wb = cell.getRow().getSheet().getWorkbook();
-        XSSFCreationHelper factory = wb.getCreationHelper();
+        if (xssfComment == null) {
+            XSSFWorkbook wb = cell.getRow().getSheet().getWorkbook();
+            XSSFCreationHelper factory = wb.getCreationHelper();
 
-        XSSFDrawing drawing = cell.getRow().getSheet().createDrawingPatriarch();
+            XSSFDrawing drawing = cell.getRow().getSheet().createDrawingPatriarch();
 
-        XSSFClientAnchor anchor = factory.createClientAnchor();
-        anchor.setCol1(cell.getColumnIndex());
-        anchor.setCol2(cell.getColumnIndex() + comment.getWidth());
-        anchor.setRow1(cell.getRow().getRowNum());
-        anchor.setRow2(cell.getRow().getRowNum() + comment.getHeight());
+            XSSFClientAnchor anchor = factory.createClientAnchor();
+            anchor.setCol1(cell.getColumnIndex());
+            anchor.setCol2(cell.getColumnIndex() + comment.getWidth());
+            anchor.setRow1(cell.getRow().getRowNum());
+            anchor.setRow2(cell.getRow().getRowNum() + comment.getHeight());
 
-        // Create the comment and set the text+author
-        XSSFComment xssfComment = drawing.createCellComment(anchor);
-        xssfComment.setString(comment.getText());
+            // Create the comment and set the text+author
+            xssfComment = drawing.createCellComment(anchor);
+        }
+
+
+        XSSFRichTextString xssfCommentString = xssfComment.getString();
+        if (xssfCommentString == null) {
+            xssfComment.setString(comment.getText());
+        } else {
+            xssfCommentString.append(comment.getText());
+        }
+
         if (comment.getAuthor() != null) {
             xssfComment.setAuthor(comment.getAuthor());
         }

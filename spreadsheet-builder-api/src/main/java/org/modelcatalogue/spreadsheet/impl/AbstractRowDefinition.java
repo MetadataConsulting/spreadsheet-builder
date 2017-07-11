@@ -2,6 +2,7 @@ package org.modelcatalogue.spreadsheet.impl;
 
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.Spannable;
 import org.modelcatalogue.spreadsheet.builder.api.*;
 
 import java.util.*;
@@ -65,8 +66,10 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
         Configurer.Runner.doConfigure(cellDefinition, poiCell);
 
-        if (poiCell instanceof Cell) {
-            nextColNumber += ((Cell) poiCell).getColspan();
+        if (poiCell instanceof Spannable) {
+            nextColNumber += ((Spannable) poiCell).getColspan();
+        } else {
+            nextColNumber++;
         }
 
         handleSpans(poiCell);
@@ -89,8 +92,10 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
         Configurer.Runner.doConfigure(cellDefinition, poiCell);
 
-        if (poiCell instanceof Cell) {
-            nextColNumber = column - 1 + ((Cell) poiCell).getColspan();
+        if (poiCell instanceof Spannable) {
+            nextColNumber = column - 1 + ((Spannable) poiCell).getColspan();
+        } else {
+            nextColNumber = column;
         }
 
         handleSpans(poiCell);

@@ -1,15 +1,12 @@
 package org.modelcatalogue.spreadsheet.api;
 
-public interface Cell {
+public interface Cell extends Spannable {
 
     int getColumn();
     Object getValue();
     String getColumnAsString();
     <T> T read(Class<T> type);
     Row getRow();
-
-    int getRowspan();
-    int getColspan();
 
     String getName();
     Comment getComment();

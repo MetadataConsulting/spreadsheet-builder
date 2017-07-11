@@ -29,9 +29,12 @@ abstract class AbstractBuilderSpec extends Specification {
             Date today = new Date()
 
             buildSpreadsheet(builder, today) writeTo tmpFile
+            open tmpFile
+        then:
+            noExceptionThrown()
 
+        when:
             SpreadsheetCriteria matcher = createCriteriaFactory().forFile(tmpFile)
-
             SpreadsheetCriteriaResult allCells = matcher.all()
 
         then:
@@ -419,12 +422,6 @@ abstract class AbstractBuilderSpec extends Specification {
                         paper a5
                         orientation landscape
             }   }   }.size() == 1
-
-        when:
-            open tmpFile
-        then:
-            noExceptionThrown()
-
     }
 
     @CompileStatic
