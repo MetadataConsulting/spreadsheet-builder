@@ -1,7 +1,0 @@
-dependencies {
-    compile project(':spreadsheet-builder-api')
-
-    compile 'org.jopendocument:jOpenDocument:1.3'
-
-    testCompile project(':spreadsheet-builder-tck-groovy')
-}
