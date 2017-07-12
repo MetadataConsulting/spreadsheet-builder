@@ -48,6 +48,10 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
  */
 @CompileStatic class SpreadsheetBuilderExtensions {
 
+    static CellDefinition(CellDefinition self, CharSequence sequence) {
+        self.value(sequence.stripIndent().trim())
+    }
+
     static CanDefineStyle style(CanDefineStyle stylable, String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         stylable.style(name, styleDefinition as Configurer<CellStyleDefinition>)
     }

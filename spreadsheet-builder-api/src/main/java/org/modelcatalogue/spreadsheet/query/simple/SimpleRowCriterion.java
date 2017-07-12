@@ -3,6 +3,7 @@ package org.modelcatalogue.spreadsheet.query.simple;
 import org.modelcatalogue.spreadsheet.api.Cell;
 import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.api.Row;
+import org.modelcatalogue.spreadsheet.impl.Utils;
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
@@ -33,7 +34,7 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell, RowCriterion> imp
 
     @Override
     public RowCriterion cell(String from, String to) {
-        cell(Cell.Util.parseColumn(from), Cell.Util.parseColumn(to));
+        cell(Utils.parseColumn(from), Utils.parseColumn(to));
         return this;
     }
 
