@@ -92,7 +92,7 @@ class PoiBorderDefinition extends AbstractBorderDefinition {
             case DASH_DOT_DOT:
                 return org.apache.poi.ss.usermodel.BorderStyle.DASH_DOT_DOT;
             case MEDIUM_DASH_DOT_DOT:
-                return org.apache.poi.ss.usermodel.BorderStyle.MEDIUM_DASH_DOT_DOTC;
+                return org.apache.poi.ss.usermodel.BorderStyle.MEDIUM_DASH_DOT_DOT;
             case SLANTED_DASH_DOT:
                 return org.apache.poi.ss.usermodel.BorderStyle.SLANTED_DASH_DOT;
         }

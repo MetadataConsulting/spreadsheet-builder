@@ -324,6 +324,33 @@ _Result_
 
 image:locked.png[]
 
+=== Visibility
+
+You can hide sheet you don't want to display to the user. If you use `hideCompletely` the user will not be able
+to unhide the sheet from the Excel UI.
+
+[source,indent=0,role="primary"]
+.Groovy
+----
+sheet('Hidden') {
+    hide it
+}
+sheet('Very hidden') {
+    hideCompletely it
+}
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+w.sheet("Hidden", s ->
+    s.hide()
+);
+w.sheet("Very hidden", s ->
+    s.hideCompletely()
+);
+----
+
 === Automatic Filters
 
 You can create an automatic filter for all data in given sheet.
@@ -1890,7 +1917,32 @@ Sheet content = query.query(w -> {
 
 _Result:_ Sheet `Content` if present.
 
-You can query sheet by its page setting
+You can query by sheet visibility:
+
+[source,indent=0,role="primary"]
+.Groovy
+----
+Collection<Sheet> a5s = query.query {
+    sheet {
+        hide it
+    }
+}.sheets
+----
+
+[source,java,indent=0,role="secondary"]
+.Java
+----
+Collection<Sheet> a5s = query.query(w -> {
+    w.sheet(s -> {
+        s.hide();
+    });
+}).getSheets();
+----
+
+_Result:_ Every hidden sheet in the workbook.
+
+
+You can query sheet by its page setting:
 
 [source,indent=0,role="primary"]
 .Groovy
@@ -2330,6 +2382,8 @@ The color you usually see in the cell is `foreground` not a `background` as you 
 Java-only API which can be used with Java 8.
 
 Builder and criteria definition chaining - methods returning self instead of `void`.
+
+Added ability to hide sheets https://github.com/MetadataConsulting/spreadsheet-builder/issues/19[#19].
 
 === Breaking Changes
 `PoiSpradsheetBuilder` will no longer allow to create cell names which are invalid by Excel. Use `PoiCellDefinition#fixName(String)`

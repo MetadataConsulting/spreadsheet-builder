@@ -79,6 +79,30 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return this;
     }
 
+    @Override
+    public SheetDefinition hide() {
+        doHide();
+        return this;
+    }
+
+    protected abstract void doHide();
+
+    @Override
+    public SheetDefinition hideCompletely() {
+        doHideCompletely();
+        return this;
+    }
+
+    protected abstract void doHideCompletely();
+
+    @Override
+    public SheetDefinition show() {
+        doShow();
+        return this;
+    }
+
+    protected abstract void doShow();
+
     protected abstract void doLock();
 
     @Override

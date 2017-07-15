@@ -51,7 +51,7 @@ class PoiBorder implements Border {
                 return org.modelcatalogue.spreadsheet.api.BorderStyle.MEDIUM_DASH_DOT;
             case DASH_DOT_DOT:
                 return org.modelcatalogue.spreadsheet.api.BorderStyle.DASH_DOT_DOT;
-            case MEDIUM_DASH_DOT_DOTC:
+            case MEDIUM_DASH_DOT_DOT:
                 return org.modelcatalogue.spreadsheet.api.BorderStyle.MEDIUM_DASH_DOT_DOT;
             case SLANTED_DASH_DOT:
                 return org.modelcatalogue.spreadsheet.api.BorderStyle.SLANTED_DASH_DOT;

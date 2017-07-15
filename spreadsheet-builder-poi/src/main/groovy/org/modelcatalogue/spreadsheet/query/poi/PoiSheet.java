@@ -1,6 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.poi;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.SheetVisibility;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.modelcatalogue.spreadsheet.api.Page;
 import org.modelcatalogue.spreadsheet.api.Sheet;
@@ -94,6 +95,18 @@ class PoiSheet implements Sheet {
 
     PoiRow createRowWrapper(int oneBasedRowNumber) {
         return new PoiRow(this, xssfSheet.getRow(oneBasedRowNumber - 1));
+    }
+
+    public boolean isHidden() {
+        return xssfSheet.getWorkbook().getSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet)) == SheetVisibility.HIDDEN;
+    }
+
+    public boolean isVisible() {
+        return xssfSheet.getWorkbook().getSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet)) == SheetVisibility.VISIBLE;
+    }
+
+    public boolean isHiddenCompletely() {
+        return xssfSheet.getWorkbook().getSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet)) == SheetVisibility.VERY_HIDDEN;
     }
 
 }

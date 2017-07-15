@@ -119,29 +119,36 @@ final class SimpleSpreadsheetCriteriaResult extends AbstractSpreadsheetCriteriaR
         sheets_loop:
         for (Sheet sheet : workbook.getSheets()) {
             if (criterion.test(sheet)) {
-                for (Row row : sheet.getRows()) {
-                    if (criterion.getCriteria().isEmpty()) {
-                        sheets.add(sheet);
-                        if (sheets.size() >= currentMax) {
-                            return sheets;
-                        }
-                    } else {
-                        for (SimpleSheetCriterion sheetCriterion : criterion.getCriteria()) {
-                            if (sheetCriterion.test(row)) {
-                                if (sheetCriterion.getCriteria().isEmpty()) {
-                                    sheets.add(sheet);
-                                    if (sheets.size() >= currentMax) {
-                                        return sheets;
-                                    }
-                                } else {
-                                    for (Cell cell : row.getCells()) {
-                                        for (SimpleRowCriterion rowCriterion : sheetCriterion.getCriteria()) {
-                                            if (rowCriterion.test(cell)) {
-                                                sheets.add(sheet);
-                                                if (sheets.size() >= currentMax) {
-                                                    return sheets;
+                if (sheet.getRows().isEmpty()) {
+                    sheets.add(sheet);
+                    if (sheets.size() >= currentMax) {
+                        return sheets;
+                    }
+                } else {
+                    for (Row row : sheet.getRows()) {
+                        if (criterion.getCriteria().isEmpty()) {
+                            sheets.add(sheet);
+                            if (sheets.size() >= currentMax) {
+                                return sheets;
+                            }
+                        } else {
+                            for (SimpleSheetCriterion sheetCriterion : criterion.getCriteria()) {
+                                if (sheetCriterion.test(row)) {
+                                    if (sheetCriterion.getCriteria().isEmpty()) {
+                                        sheets.add(sheet);
+                                        if (sheets.size() >= currentMax) {
+                                            return sheets;
+                                        }
+                                    } else {
+                                        for (Cell cell : row.getCells()) {
+                                            for (SimpleRowCriterion rowCriterion : sheetCriterion.getCriteria()) {
+                                                if (rowCriterion.test(cell)) {
+                                                    sheets.add(sheet);
+                                                    if (sheets.size() >= currentMax) {
+                                                        return sheets;
+                                                    }
+                                                    continue sheets_loop;
                                                 }
-                                                continue sheets_loop;
                                             }
                                         }
                                     }

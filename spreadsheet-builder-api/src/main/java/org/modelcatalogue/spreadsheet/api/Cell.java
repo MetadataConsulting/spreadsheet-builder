@@ -21,10 +21,4 @@ public interface Cell extends Spannable {
     Cell getBellowLeft();
     Cell getBellowRight();
 
-    class Util {
-
-        private Util() {}
-
-    }
-
 }

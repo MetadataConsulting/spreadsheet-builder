@@ -64,7 +64,7 @@ public class Java8BuilderTest {
         SpreadsheetCriteriaResult allCells = matcher.all();
 
         assertEquals(80130, allCells.getCells().size());
-        assertEquals(19, allCells.getSheets().size());
+        assertEquals(21, allCells.getSheets().size());
         assertEquals(20065, allCells.getRows().size());
 
 
@@ -399,6 +399,16 @@ public class Java8BuilderTest {
                 });
             });
         }).getCells().size());
+        assertEquals(1, matcher.query(w -> {
+            w.sheet("Hidden", s -> {
+                s.hide();
+            });
+        }).getSheets().size());
+        assertEquals(1, matcher.query(w -> {
+            w.sheet("Very hidden", s -> {
+                s.hideCompletely();
+            });
+        }).getSheets().size());
 
         SpreadsheetDefinition definition = PoiSpreadsheetBuilder.INSTANCE.build(excel, w -> {
             w.sheet("Sample", s -> {
@@ -999,6 +1009,12 @@ public class Java8BuilderTest {
                                 c.value("bold and RED")
                             )
                     )
+            );
+            w.sheet("Hidden", s ->
+                    s.hide()
+            );
+            w.sheet("Very hidden", s ->
+                    s.hideCompletely()
             );
         });
     }

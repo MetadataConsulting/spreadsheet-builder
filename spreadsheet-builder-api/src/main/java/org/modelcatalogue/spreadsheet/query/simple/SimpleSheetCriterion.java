@@ -1,6 +1,7 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
 import org.modelcatalogue.spreadsheet.api.*;
+import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition;
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
@@ -91,5 +92,38 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     @Override
     SheetCriterion newDisjointCriterionInstance() {
         return new SimpleSheetCriterion(true, parent);
+    }
+
+    @Override
+    public SheetCriterion hide() {
+        parent.addCondition(new Predicate<Sheet>() {
+            @Override
+            public boolean test(Sheet o) {
+                return o.isHidden();
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public SheetCriterion hideCompletely() {
+        parent.addCondition(new Predicate<Sheet>() {
+            @Override
+            public boolean test(Sheet o) {
+                return o.isHiddenCompletely();
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public SheetCriterion show() {
+        parent.addCondition(new Predicate<Sheet>() {
+            @Override
+            public boolean test(Sheet o) {
+                return o.isVisible();
+            }
+        });
+        return this;
     }
 }

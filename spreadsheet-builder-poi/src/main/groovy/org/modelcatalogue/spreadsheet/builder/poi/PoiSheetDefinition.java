@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.builder.poi;
 
+import org.apache.poi.ss.usermodel.SheetVisibility;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -57,6 +58,25 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
     @Override
     protected void doLock() {
         xssfSheet.enableLocking();
+    }
+
+    @Override
+    protected void doHide() {
+        setVisibility(SheetVisibility.HIDDEN);
+    }
+
+    private void setVisibility(SheetVisibility visibility) {
+        xssfSheet.getWorkbook().setSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet), visibility);
+    }
+
+    @Override
+    protected void doHideCompletely() {
+        setVisibility(SheetVisibility.VERY_HIDDEN);
+    }
+
+    @Override
+    protected void doShow() {
+        setVisibility(SheetVisibility.VISIBLE);
     }
 
     @Override

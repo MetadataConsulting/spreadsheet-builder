@@ -46,7 +46,7 @@ abstract class AbstractBuilderSpec extends Specification {
             int rowsCount = allCells.rows.size()
         then:
             allCellSize == 80130
-            sheetCount == 19
+            sheetCount == 21
             rowsCount == 20065
 
         when:
@@ -422,6 +422,16 @@ abstract class AbstractBuilderSpec extends Specification {
                         paper a5
                         orientation landscape
             }   }   }.size() == 1
+            matcher.query {
+                sheet('Hidden') {
+                    hide it
+                }
+            }.sheets.size() == 1
+            matcher.query {
+                sheet('Very hidden') {
+                    hideCompletely it
+                }
+            }.sheets.size() == 1
     }
 
     @CompileStatic
@@ -1001,6 +1011,12 @@ abstract class AbstractBuilderSpec extends Specification {
                         value 'BOLD and RED'
                     }
                 }
+            }
+            sheet('Hidden') {
+                hide it
+            }
+            sheet('Very hidden') {
+                hideCompletely it
             }
         }
     }

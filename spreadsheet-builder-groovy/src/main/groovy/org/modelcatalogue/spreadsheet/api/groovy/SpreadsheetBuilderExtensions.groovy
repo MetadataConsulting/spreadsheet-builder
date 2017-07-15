@@ -186,6 +186,30 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         otherSelf.lock()
     }
 
+    static SheetDefinition show(SheetDefinition self, SheetDefinition otherSelf) {
+        otherSelf.show()
+    }
+
+    static SheetDefinition hide(SheetDefinition self, SheetDefinition otherSelf) {
+        otherSelf.hide()
+    }
+
+    static SheetDefinition hideCompletely(SheetDefinition self, SheetDefinition otherSelf) {
+        otherSelf.hideCompletely()
+    }
+
+    static SheetCriterion show(SheetCriterion self, SheetCriterion otherSelf) {
+        otherSelf.show()
+    }
+
+    static SheetCriterion hide(SheetCriterion self, SheetCriterion otherSelf) {
+        otherSelf.hide()
+    }
+
+    static SheetCriterion hideCompletely(SheetCriterion self, SheetCriterion otherSelf) {
+        otherSelf.hideCompletely()
+    }
+
     static SpreadsheetDefinition build(SpreadsheetBuilder builder, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
         builder.build(workbookDefinition as Configurer<WorkbookDefinition>)
     }

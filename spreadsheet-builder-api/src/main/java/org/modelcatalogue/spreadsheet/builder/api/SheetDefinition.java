@@ -43,6 +43,10 @@ public interface SheetDefinition {
 
     SheetDefinition lock();
 
+    SheetDefinition hide();
+    SheetDefinition hideCompletely();
+    SheetDefinition show();
+
     SheetDefinition password(String password);
 
     SheetDefinition filter(Keywords.Auto auto);

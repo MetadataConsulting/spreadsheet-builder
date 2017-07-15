@@ -14,4 +14,8 @@ public interface Sheet {
     Sheet getNext();
     Sheet getPrevious();
 
+    boolean isHidden();
+    boolean isVisible();
+    boolean isHiddenCompletely();
+
 }

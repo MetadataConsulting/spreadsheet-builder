@@ -1,7 +1,7 @@
 dependencies {
     compile project(':spreadsheet-builder-api')
 
-    compile 'org.apache.poi:poi-ooxml:3.13'
+    compile 'org.apache.poi:poi-ooxml:3.16'
     compile 'org.apache.poi:ooxml-schemas:1.1'
 
     testCompile project(':spreadsheet-builder-tck-groovy')

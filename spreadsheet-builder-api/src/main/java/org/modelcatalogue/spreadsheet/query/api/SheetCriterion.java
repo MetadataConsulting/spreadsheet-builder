@@ -14,4 +14,7 @@ public interface SheetCriterion extends Predicate<Row> {
     SheetCriterion page(Configurer<PageCriterion> pageCriterion);
     SheetCriterion or(Configurer<SheetCriterion> sheetCriterion);
     SheetCriterion having(Predicate<Sheet> sheetPredicate);
+    SheetCriterion hide();
+    SheetCriterion hideCompletely();
+    SheetCriterion show();
 }
