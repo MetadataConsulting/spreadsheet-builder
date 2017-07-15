@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0">
-<title>Groovy Spreadsheet Builder</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
+<meta name="generator" content="Asciidoctor 1.5.3">
+<title>Spreadsheet Builder</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-/* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";*/
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -57,7 +57,6 @@ a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
 img{-ms-interpolation-mode:bicubic}
-#map_canvas img,#map_canvas embed,#map_canvas object,.map_canvas img,.map_canvas embed,.map_canvas object{max-width:none!important}
 .left{float:left!important}
 .right{float:right!important}
 .text-left{text-align:left!important}
@@ -65,10 +64,12 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
-.antialiased,body{-webkit-font-smoothing:antialiased}
-img{display:inline-block;vertical-align:middle}
+body{-webkit-font-smoothing:antialiased}
+img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
 p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
 .subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
@@ -111,12 +112,14 @@ blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
 h1{font-size:2.75em}
 h2{font-size:2.3125em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
-h4{font-size:1.4375em}}table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
 table thead,table tfoot{background:#f7f8f7;font-weight:bold}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
@@ -124,7 +127,7 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 *:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.75em;line-height:1.4;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:-.15em .15em 0 .15em;padding:.2em .6em .2em .5em;vertical-align:middle;white-space:nowrap}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menu{color:rgba(0,0,0,.8)}
@@ -155,29 +158,33 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc ul.sectlevel0>li>a{font-style:italic}
 #toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
 #toc a{text-decoration:none}
 #toc a:active{text-decoration:underline}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media only screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
 #toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
-#toc.toc2 #toctitle{margin-top:0;font-size:1.2em}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
 #toc.toc2 ul ul{margin-left:0;padding-left:1em}
 #toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
 body.toc2.toc-right{padding-left:0;padding-right:15em}
-body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
 #toc.toc2{width:20em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
-body.toc2.toc-right{padding-left:0;padding-right:20em}}#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 #content #toc>:first-child{margin-top:0}
 #content #toc>:last-child{margin-bottom:0}
 #footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
 #footer-text{color:rgba(255,255,255,.8);line-height:1.44}
 .sect1{padding-bottom:.625em}
-@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}.sect1+.sect1{border-top:1px solid #efefed}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
 #content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
 #content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
 #content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
@@ -206,7 +213,9 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
 .literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
 .literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
-@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
 .listingblock pre.highlightjs{padding:0}
 .listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
 .listingblock pre.prettyprint{border-width:0}
@@ -216,7 +225,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
 .listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
 table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
-table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
 table.pyhltable td.code{padding-left:.75em;padding-right:0}
 pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
 pre.pygments .lineno{display:inline-block;margin-right:.25em}
@@ -237,13 +246,12 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
 .quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
 .quoteblock .attribution br,.verseblock .attribution br{display:none}
-.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.05em;color:rgba(0,0,0,.6)}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
 .quoteblock.abstract{margin:0 0 1.25em 0;display:block}
 .quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
 .quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
 table.tableblock{max-width:100%;border-collapse:separate}
 table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
-table.spread{width:100%}
 table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
 table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
 table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
@@ -274,8 +282,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -289,8 +297,8 @@ ol.upperroman{list-style-type:upper-roman}
 ol.lowergreek{list-style-type:lower-greek}
 .hdlist>table,.colist>table{border:0;background:none}
 .hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
-td.hdlist1{padding-right:.75em;font-weight:bold}
-td.hdlist1,td.hdlist2{vertical-align:top}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
 .literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
 .colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
 .colist>table tr>td:last-of-type{padding:.25em 0}
@@ -303,13 +311,14 @@ td.hdlist1,td.hdlist2{vertical-align:top}
 .image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
 .image.left{margin-right:.625em}
 .image.right{margin-left:.625em}
-a.image{text-decoration:none}
-span.footnote,span.footnoteref{vertical-align:super;font-size:.875em}
-span.footnote a,span.footnoteref a{text-decoration:none}
-span.footnote a:active,span.footnoteref a:active{text-decoration:underline}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
-#footnotes .footnote{padding:0 .375em;line-height:1.3;font-size:.875em;margin-left:1.2em;text-indent:-1.2em;margin-bottom:.2em}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
@@ -367,11 +376,10 @@ span.icon>.fa{cursor:default}
 pre .conum[data-value]{position:relative;top:-.125em}
 b.conum *{color:inherit!important}
 .conum:not([data-value]):empty{display:none}
-h1,h2{letter-spacing:-.01em}
-dt,th.tableblock,td.content{text-rendering:optimizeLegibility}
-p,td.content{letter-spacing:-.01em}
-p strong,td.content strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content{font-size:1.0625rem}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -380,11 +388,11 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
-pre,blockquote,tr,img{page-break-inside:avoid}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
 thead{display:table-header-group}
-img{max-width:100%!important}
+svg{max-width:100%}
 p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
 h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
 #toc,.sidebarblock,.exampleblock>.content{background:none!important}
@@ -408,11 +416,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
-<link rel="stylesheet" href="css/spreadsheet-builder.css?v=0.4.1" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css/spreadsheet-builder.css?v=1.0.RC1" />
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -423,13 +428,88 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     ga('send', 'pageview');
 
 </script>
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
 </head>
+
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Groovy Spreadsheet Builder</h1>
+<h1>Spreadsheet Builder</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel0">
+<li><a href="#_installation">Installation</a></li>
 <li><a href="#_writing_spreadsheets">Writing Spreadsheets</a>
 <ul class="sectlevel1">
 <li><a href="#_sheets_and_rows">Sheets and Rows</a>
@@ -437,6 +517,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_outlines">Outlines</a></li>
 <li><a href="#_freezing_columns_and_rows">Freezing columns and rows</a></li>
 <li><a href="#_protection">Protection</a></li>
+<li><a href="#_visibility">Visibility</a></li>
 <li><a href="#_automatic_filters">Automatic Filters</a></li>
 <li><a href="#_page_settings">Page Settings</a></li>
 </ul>
@@ -484,9 +565,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_changelog">Changelog</a>
 <ul class="sectlevel1">
-<li><a href="#_0_4_0">0.4.0</a>
+<li><a href="#_1_0">1.0</a>
 <ul class="sectlevel2">
 <li><a href="#_breaking_changes">Breaking Changes</a></li>
+</ul>
+</li>
+<li><a href="#_0_4_0">0.4.0</a>
+<ul class="sectlevel2">
+<li><a href="#_breaking_changes_2">Breaking Changes</a></li>
 </ul>
 </li>
 <li><a href="#_0_3_7">0.3.7</a></li>
@@ -497,7 +583,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_0_3_2">0.3.2</a></li>
 <li><a href="#_0_3_0">0.3.0</a>
 <ul class="sectlevel2">
-<li><a href="#_breaking_changes_2">Breaking Changes</a></li>
+<li><a href="#_breaking_changes_3">Breaking Changes</a></li>
 </ul>
 </li>
 <li><a href="#_0_2_0">0.2.0</a></li>
@@ -520,28 +606,42 @@ Documents (XSLX) focus not only on content side but also on easy styling.</p>
 </div>
 </div>
 </div>
+<h1 id="_installation" class="sect0">Installation</h1>
+<div class="paragraph">
+<p>Spreadsheet Builder API is available on Maven central and JCenter.</p>
+</div>
+<div class="listingblock primary">
+<div class="title">Gradle</div>
+<div class="content">
+<pre class="highlightjs highlight"><code>compile 'org.modelcatalogue:spreadsheet-builder-poi:{version}'</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Maven</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.modelcatalogue&lt;/groupId&gt;
+  &lt;artifactId&gt;spreadsheet-builder-poi&lt;/artifactId&gt;
+  &lt;version&gt;{version}&lt;/version&gt;
+  &lt;type&gt;pom&lt;/type&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
 <h1 id="_writing_spreadsheets" class="sect0">Writing Spreadsheets</h1>
 <div class="paragraph">
 <p>Following example creates the basic spreadsheet with two rows and three columns.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.4.1')
-// fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.10')
-@GrabExclude('org.codehaus.groovy:groovy-all')
-
-import org.modelcatalogue.spreadsheet.api.Cell
-import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
+<pre class="highlightjs highlight"><code>import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
 
 File file = new File('spreadsheet.xlsx')
 
-PoiSpreadsheetBuilder.INSTANCE.build {                                                  // <1>
-    sheet('Sample') {                                                                   // <2>
-        row {                                                                           // <3>
-            cell 'A'                                                                    // <4>
+PoiSpreadsheetBuilder.INSTANCE.build {                                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    sheet('Sample') {                                                                   <i class="conum" data-value="2"></i><b>(2)</b>
+        row {                                                                           <i class="conum" data-value="3"></i><b>(3)</b>
+            cell 'A'                                                                    <i class="conum" data-value="4"></i><b>(4)</b>
             cell 'B'
             cell 'C'
         }
@@ -551,7 +651,38 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
             cell 3
         }
     }
-} writeTo file                                                                          // <5></code></pre>
+} writeTo file                                                                          <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
+
+import static org.modelcatalogue.spreadsheet.api.Keywords.*;
+
+public class SpreadsheetWriter {
+
+    public static void main(String... args) {
+        File file = new File("spreadsheet.xlsx");
+
+        PoiSpreadsheetBuilder.INSTANCE.build(w -&gt; {                                     <i class="conum" data-value="1"></i><b>(1)</b>
+            w.sheet("Sample", s -&gt; {                                                    <i class="conum" data-value="2"></i><b>(2)</b>
+                s.row(r -&gt; {                                                            <i class="conum" data-value="3"></i><b>(3)</b>
+                    r.cell("A");                                                        <i class="conum" data-value="4"></i><b>(4)</b>
+                    r.cell("B");
+                    r.cell("C");
+                });
+                s.row(r -&gt; {
+                    r.cell(1);
+                    r.cell(2);
+                    r.cell(3);
+                });
+            });
+        }).writeTo(file);                                                               <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -611,12 +742,23 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
 after this row. The row number is the same as in the spreadsheet e.g. the index of the rows is <strong>starting with number 1</strong>.
 To skip a single row, just use <code>row()</code> without any parameters.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row 5, { cell 'Line 5' }
     row()
     row { cell 'Line 7' }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(5, r -&gt; r.cell("Line 5"));
+    s.row();
+    s.row(r -&gt; r.cell("Line 7"));
 }</code></pre>
 </div>
 </div>
@@ -624,16 +766,17 @@ To skip a single row, just use <code>row()</code> without any parameters.</p>
 <p><em>Result</em></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/specific_row.png" alt="specific_row"></span></p>
+<p><span class="image"><img src="images/specific_row.png" alt="specific row"></span></p>
 </div>
 <div class="sect2">
 <h3 id="_outlines">Outlines</h3>
 <div class="paragraph">
 <p>Rows and columns can be optionally grouped into expanded or collapsed groups for better readability.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell 'Heading 1'
         group {
@@ -665,11 +808,47 @@ To skip a single row, just use <code>row()</code> without any parameters.</p>
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell("Heading 1");
+        r.group(g -&gt; {
+            g.cell("Heading 2");
+            g.cell("Heading 3");
+            g.cell("Heading 4");
+
+            g.collapse(cps -&gt; {
+                cps.cell("Heading 5");
+                cps.cell("Heading 6");
+            });
+            g.cell("Heading 7");
+        });
+    });
+
+    // expanded group
+    s.group(g -&gt; {
+        g.row(r -&gt; r.cell("Heading 2"));
+        g.row(r -&gt; r.cell("Heading 3"));
+        g.row(r -&gt; r.cell("Heading 4"));
+
+        // collapsed group
+        g.collapse(cps -&gt; {
+            cps.row(r -&gt; r.cell("Heading 5"));
+            cps.row(r -&gt; r.cell("Heading 6"));
+        });
+
+        g.row(r -&gt; r.cell("Heading 7"));
+    }
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/outline_for_rows.png" alt="outline_for_rows"></span></p>
+<p><span class="image"><img src="images/outline_for_rows.png" alt="outline for rows"></span></p>
 </div>
 </div>
 <div class="sect2">
@@ -677,9 +856,10 @@ To skip a single row, just use <code>row()</code> without any parameters.</p>
 <div class="paragraph">
 <p>You can freeze some rows and or columns to prevent scrolling them.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     freeze 1, 1
 
     row {
@@ -702,11 +882,38 @@ To skip a single row, just use <code>row()</code> without any parameters.</p>
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.freeze(1, 1);
+
+    s.row(r -&gt; {
+        r.cell("-");
+        r.cell("A");
+        r.cell("B");
+        r.cell("C");
+        r.cell("D");
+        r.cell("E");
+        r.cell("F");
+    });
+
+    for (int i = 0; i &lt; 10 ; i++) {
+        s.row(r -&gt; {
+            r.cell("Row " + (i + 1));
+            for (int j = 0; j &lt; 6; j++) {
+                r.cell(10 * i + j);
+            }
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/frozen_cells.gif" alt="frozen_cells"></span></p>
+<p><span class="image"><img src="images/frozen_cells.gif" alt="frozen cells"></span></p>
 </div>
 </div>
 <div class="sect2">
@@ -715,9 +922,10 @@ To skip a single row, just use <code>row()</code> without any parameters.</p>
 <p>You can either lock the sheet or you can protect it with password. Then the users won&#8217;t be able to edit any cells
 or view any formulas. This can emphasize that user changes are not desired.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     lock it // 'it' represents the first argument of the closure
     row {
         cell {
@@ -734,6 +942,26 @@ sheet('Password Protected') {
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.lock();
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Locked");
+        });
+    });
+});
+
+w.sheet("Password Protected", s -&gt; {
+    s.password("p4$$w0rd");
+    s.row(r -&gt; {
+        r.cell("Protected by Password");
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -742,13 +970,43 @@ sheet('Password Protected') {
 </div>
 </div>
 <div class="sect2">
+<h3 id="_visibility">Visibility</h3>
+<div class="paragraph">
+<p>You can hide sheet you don&#8217;t want to display to the user. If you use <code>hideCompletely</code> the user will not be able
+to unhide the sheet from the Excel UI.</p>
+</div>
+<div class="listingblock primary">
+<div class="title">Groovy</div>
+<div class="content">
+<pre class="highlightjs highlight"><code>sheet('Hidden') {
+    hide it
+}
+sheet('Very hidden') {
+    hideCompletely it
+}</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Hidden", s -&gt;
+    s.hide()
+);
+w.sheet("Very hidden", s -&gt;
+    s.hideCompletely()
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_automatic_filters">Automatic Filters</h3>
 <div class="paragraph">
 <p>You can create an automatic filter for all data in given sheet.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Filtered') {
+<pre class="highlightjs highlight"><code>sheet('Filtered') {
     filter auto
     row {
         cell 'Name'
@@ -765,6 +1023,26 @@ sheet('Password Protected') {
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Filtered", s -&gt; {
+    s.filter(auto);
+    s.row(r -&gt; {
+        r.cell("Name");
+        r.cell("Profession");
+    });
+    s.row(r -&gt; {
+        r.cell("Donald");
+        r.cell("Sailor");
+    });
+    s.row(r -&gt; {
+        r.cell("Bob");
+        r.cell("Builder");
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -778,9 +1056,10 @@ sheet('Password Protected') {
 <p>You can define the paper size, orientation and on how many pages should the sheet be printed within the <code>page</code> closure
 of the sheet.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Custom Page') {
+<pre class="highlightjs highlight"><code>sheet('Custom Page') {
     page {
         paper a5
         fit width to 1
@@ -790,6 +1069,21 @@ of the sheet.</p>
         cell 'A5 Landcapse'
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Custom Page", s -&gt; {
+    s.page(p -&gt; {
+        p.paper(A5);
+        p.fit(width).to(1);
+        p.orientation(landscape);
+    });
+    s.row(r -&gt; {
+        r.cell("A5 Landcapse");
+    });
+});</code></pre>
 </div>
 </div>
 </div>
@@ -824,28 +1118,40 @@ name can be assigned later.</p>
 in the generated spreadsheet e.g. <code>C</code>. Otherwise the cells will be generated one after another. To create empty cell
 call the <code>cell</code> method without any parameters.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell 'First'
         cell()
         cell 'Third'
         cell(5) {
-            value 'Fifth'
-        }
-        cell('G') {
-            formula 'YEAR(TODAY())'
-        }
+ value 'Fifth' }
+        cell('G') { formula 'YEAR(TODAY())' }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell("First");
+        r.cell();
+        r.cell("Third");
+        r.cell(5, c -&gt; c.value("Fifth"));
+        r.cell("G", c -&gt; c.formula("YEAR(TODAY())"));
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/basic_cells.png" alt="basic_cells"></span></p>
+<p><span class="image"><img src="images/basic_cells.png" alt="basic cells"></span></p>
 </div>
 <div class="sect2">
 <h3 id="_type_handling">Type handling</h3>
@@ -874,9 +1180,10 @@ For <code>Boolean</code> the type of the cell is set automatically to <code>BOOL
 <div class="paragraph">
 <p>You can set <code>rowspan</code> and/or <code>colspan</code> of any cell to merge multiple cells together.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell {
             value "Columns"
@@ -899,6 +1206,32 @@ For <code>Boolean</code> the type of the cell is set automatically to <code>BOOL
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Columns");
+            c.colspan(2);
+        });
+    });
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Rows");
+            c.rowspan(3);
+        });
+        r.cell("Value 1");
+    });
+    s.row(r -&gt; {
+        r.cell("B", c -&gt; c.value("Value 2"));
+    }
+    s.row(r -&gt; {
+        r.cell("B", c -&gt; c.value("Value 3"));
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -911,11 +1244,20 @@ For <code>Boolean</code> the type of the cell is set automatically to <code>BOOL
 <div class="paragraph">
 <p>You can insert an image calling one of <code>png</code>, <code>jpeg</code>, <code>emf</code>, <code>wmf</code>, <code>pict</code>, <code>dib</code> method inside the cell definition.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell ('C') {
+<pre class="highlightjs highlight"><code>cell ('C') {
     png image from 'https://goo.gl/UcL1wy'
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">r.cell("C", c -&gt; {
+    c.png(image).from("https://goo.gl/UcL1wy");
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -949,9 +1291,10 @@ a file path otherwise. For advanced usage it can be also byte array or any <code
 <p>You can set comment of any cell using the <code>comment</code> method. Use the variant accepting closure If you want to specify
 the author of the comment as well. The author only appears in the status bar of the application.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell {
             value "Commented 1"
@@ -970,6 +1313,28 @@ the author of the comment as well. The author only appears in the status bar of 
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Commented 1");
+            c.comment("This is a comment 1");
+        });
+    });
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Commented 2");
+            c.comment(cmt -&gt; {
+                cmt.author("musketyr");
+                cmt.text("This is a comment 2");
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -985,9 +1350,10 @@ of the cell simply call the <code>name</code> method inside the cell definition.
 use names to create link
 to the particular cell.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell 'A'
         cell 'B'
@@ -1007,6 +1373,31 @@ to the particular cell.</p>
         }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell("A");
+        r.cell("B");
+        r.cell("A + B");
+    });
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value(10);
+            c.name("CellA");
+        });
+        r.cell(c -&gt; {
+            c.value(20);
+            c.name("CellB");
+        });
+        r.cell(c -&gt; {
+            c.formula("SUM(#{CellA},#{CellB})");
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1051,9 +1442,10 @@ to the particular cell.</p>
 </tr>
 </table>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell {
             value 'Hello World'
@@ -1091,6 +1483,49 @@ sheet('Links') {
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Hello World");
+            c.name("Salutation");
+        });
+    });
+});
+
+w.sheet("Links", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Document");
+            c.link(to).name("Salutation");
+            c.width(auto);
+        });
+        r.cell(c -&gt; {
+            c.value("File");
+            c.link(to).file("text.txt");
+        });
+        r.cell(c -&gt; {
+            c.value("URL");
+            c.link(to).url("https://www.example.com");
+        });
+        r.cell(c -&gt; {
+            c.value("Mail (plain)");
+            c.link(to).email("musketyr@example.com");
+        });
+        r.cell(c -&gt; {
+            c.value("Mail (with subject)");
+            Map&lt;String, String&gt; email = new LinkedHashMap&lt;&gt;();
+            email.put("subject", "Testing Excel Builder");
+            email.put("cc", "tester@example.com");
+            email.put("body", "It is really great tools");
+            c.link(to).email(email, "vladimir@orany.cz");
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -1116,9 +1551,10 @@ You can also set the column to accommodate the width automatically using the <co
 <div class="paragraph">
 <p>You can set the height of the cell in points, centimeters or inches. The height applies to whole row.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Dimensions') {
+<pre class="highlightjs highlight"><code>sheet('Dimensions') {
     row {
         cell {
             value 'cm'
@@ -1144,6 +1580,35 @@ You can also set the column to accommodate the width automatically using the <co
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Dimensions", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("cm");
+            c.height(1).cm();
+            c.width(1).cm();
+        });
+    });
+
+    s.row(r -&gt; {
+        r.cell("B", c -&gt; {
+            c.value("inches"
+            c.width(1).inch();
+            c.height(1).inch();
+        });
+    });
+    s.row(r -&gt; {
+        r.cell("C", c -&gt; {
+            c.value("points");
+            c.width(10);
+            c.height(50);
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -1160,15 +1625,16 @@ You can also set the column to accommodate the width automatically using the <co
 <p>Cell styles are defined either for a whole row or a particular cell. You can define a named style on the top level along
 with sheets and than refer to it from cell or row.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">style ('headers') {
+<pre class="highlightjs highlight"><code>style ('headers') {
     border(bottom) {
         style thick
         color black
     }
     font {
-        bold
+        make bold
     }
     background whiteSmoke
 }
@@ -1194,13 +1660,58 @@ sheet('Sample') {
             value "Groovy Spreadsheet Builder"
             style {
                 font {
-                    bold
+                    make bold
                 }
             }
         }
         cell "Helps building nice spreadsheet reports"
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.style ("headers", st -&gt; {
+    st.border(bottom, b -&gt; {
+        b.style(thick);
+        b.color(black);
+    });
+    st.font(f -&gt; {
+        f.make(bold);
+    });
+    st.background(whiteSmoke);
+});
+
+w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.style("headers");
+        r.cell(c -&gt; {
+            c.value("No.");
+            c.width(5);
+        });
+        r.cell(c -&gt; {
+            c.value("Name");
+            c.width(30);
+        });
+        r.cell(c -&gt; {
+            c.value("Description");
+            c.width(auto);
+        });
+    });
+    s.row(r -&gt; {
+        r.cell(c -&gt; 1
+        r.cell(c -&gt; {
+            c.value("Groovy Spreadsheet Builder");
+            c.style(st -&gt; {
+                st.font(f -&gt; {
+                    f.make(bold);
+                });
+            });
+        });
+        r.cell("Helps building nice spreadsheet reports");
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1226,9 +1737,10 @@ full description of horizontal alignment options.</p>
 See <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/VerticalAlignment.html">VerticalAlignment</a> for
 full description of vertical alignment options.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell {
             value 'Top Left'
@@ -1257,6 +1769,38 @@ full description of vertical alignment options.</p>
  }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.value("Top Left");
+            c.style(st -&gt; {
+                st.align(top, left);
+            });
+            c.width(20);
+            c.height(50);
+        });
+        r.cell(c -&gt; {
+            c.value("Top Center");
+            c.style(st -&gt; {
+                st.align(top, center);
+            });
+            c.width(20);
+        });
+        r.cell(c -&gt; {
+            c.value("Top Right");
+            c.style(st -&gt;{
+                st.align(top, right);
+            });
+            c.width(20);
+        });
+    });
+    // rest skipped
+ });</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -1271,15 +1815,28 @@ full description of vertical alignment options.</p>
 appearance. Color can be set as hexadecimal string starting with <code>#</code> or you can use one of predefined colors
 which are exactly the same as HTML predefined colors.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
+<pre class="highlightjs highlight"><code>cell {
     style {
         background '#FF8C00' // darkOrange
         foreground brown
         fill square
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">r.cell(c -&gt; {
+    c.style(st -&gt; {
+        st.background("#FF8C00"); // darkOrange
+        st.foreground(brown);
+        st.fill(square);
+    });
+});</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -1302,9 +1859,10 @@ which are exactly the same as HTML predefined colors.</p>
 and/or <code>right</code> keywords when calling the <code>border</code> method. See <a href="#_available_predefined_colors">Available predefined colors</a>.
 Colors can be defined as hexadecimal string as well.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
+<pre class="highlightjs highlight"><code>cell {
     style {
         border top, bottom, {
             style solid
@@ -1312,6 +1870,19 @@ Colors can be defined as hexadecimal string as well.</p>
         }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">r.cell(c -&gt; {
+    c.style(st -&gt; {
+        st.border(top, bottom, b -&gt; {
+            b.style(solid);
+            b.color(gray);
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -1327,9 +1898,10 @@ Colors can be defined as hexadecimal string as well.</p>
 <p>You can customize the font size, name and color of the text in the cell. You also can make it <code>bold</code>, <code>italic</code>, <code>underline</code> or
 <code>strikeout</code>. See <a href="#_available_predefined_colors">Available predefined colors</a>.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">row {
+<pre class="highlightjs highlight"><code>row {
     cell {
         width auto
         value 'Bold Red 22'
@@ -1372,6 +1944,52 @@ Colors can be defined as hexadecimal string as well.</p>
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">s.row(r -&gt; {
+    cell(c -&gt; {
+        c.width(auto);
+        c.value("Bold Red 22");
+        c.style(st -&gt; {
+            st.font(f -&gt; {
+                f.make(bold);
+                f.color(red);
+                f.size(22);
+            });
+        });
+    });
+    cell(c -&gt; {
+        c.width(auto);
+        c.value("Underline Courier New");
+        c.style(st -&gt; {
+            st.font(f -&gt; {
+                f.make(underline);
+                f.name("Courier New");
+            });
+        });
+    });
+    cell(c -&gt; {
+        c.width(auto);
+        c.value("Italic");
+        c.style(st -&gt; {
+            st.font(f -&gt; {
+                f.make(italic);
+            });
+        });
+    });
+    cell(c -&gt; {
+        c.width(auto);
+        c.value("Strikeout");
+        c.style(st -&gt; {
+            st.font(f -&gt; {
+                f.make(strikeout);
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -1386,9 +2004,10 @@ Colors can be defined as hexadecimal string as well.</p>
 use multiple calls to <code>text</code> method which takes optional closure to define the font for the current text run. The font
 definition is the same as <a href="#_fonts">above</a>.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
+<pre class="highlightjs highlight"><code>cell {
     text 'Little'
     text ' '
     text 'Red', {
@@ -1409,11 +2028,34 @@ definition is the same as <a href="#_fonts">above</a>.</p>
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">r.cell(c -&gt; {
+    c.text("Little");
+    c.text(" ");
+    c.text("Red", f -&gt; {
+        f.color(red);
+        f.size(22);
+    });
+    c.text(" ");
+    c.text("Riding", f -&gt; {
+        f.make(italic);
+        f.size(18);
+    });
+    c.text(" ");;
+    c.text("Hood", f -&gt; {
+        f.make(bold);
+        f.size(22);
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/rich_text.png" alt="rich_text"></span></p>
+<p><span class="image"><img src="images/rich_text.png" alt="rich text"></span></p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1434,7 +2076,7 @@ you are using at least version 3.13.</p>
 <div class="sect2">
 <h3 id="_data_formats">Data formats</h3>
 <div class="paragraph">
-<p>You can assing a data format using the <code>format</code> method. Detailed guide how the format works can be found in
+<p>You can assign a data format using the <code>format</code> method. Detailed guide how the format works can be found in
 <a href="https://support.microsoft.com/en-us/help/264372/how-to-control-and-understand-settings-in-the-format-cells-dialog-box-in-excel">How to control and understand settings in the Excel for Format Cells
 dialog box</a>. <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html">Apache POI Builtin Formats</a>
 are great way how to find some of the most common formats.</p>
@@ -1442,14 +2084,26 @@ are great way how to find some of the most common formats.</p>
 <div class="paragraph">
 <p>Following example will print current date as e.g. <code>31.12.15</code>.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">cell {
+<pre class="highlightjs highlight"><code>cell {
+    value new Date()
     style {
-        value new Date()
         format 'dd/mm/yy'
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">r.cell(c -&gt; {
+    c.value(new Date());
+    c.style(st -&gt; {
+        st.format("dd/mm/yy");
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1620,9 +2274,10 @@ The excerpt from the official documentation follows:</em></p>
 <div class="paragraph">
 <p>You can set the indentation in number of characters from the beginning of the cell.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     7.times { int i -&gt;
         row {
             cell {
@@ -1634,6 +2289,23 @@ The excerpt from the official documentation follows:</em></p>
         }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    for (int i = 0; i &lt; 7; i++) {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.value("x");
+                c.style(st -&gt; {
+                    st.indent(i);
+                });
+            });
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1649,9 +2321,10 @@ The excerpt from the official documentation follows:</em></p>
 <p>You can rotate the text in the cell using the <code>rotation</code> method. It accepts number from <code>0</code> to <code>180</code>.
 Numbers lower from <code>1</code> to <code>90</code> will produces text going <em>uphill</em> and from <code>91</code> to <code>180</code> text going <em>downhill</em></p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell {
             height 150
@@ -1686,6 +2359,44 @@ Numbers lower from <code>1</code> to <code>90</code> will produces text going <e
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s -&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.height(150);
+            c.width(20);
+            c.value("From bottom to top (90)");
+            c.style(st -&gt; st.rotation(90));
+        });
+
+        r.cell(c -&gt; {
+            c.width(20);
+            c.value("From bottom to top (45)");
+            c.style(st -&gt; st.rotation(45));
+        });
+
+        r.cell(c -&gt; {
+            c.width(20);
+            c.value("Normal (0)");
+        });
+
+        r.cell(c -&gt; {
+            c.width(20);
+            c.value("From top to bottom (135)");
+            c.style(st -&gt; st.rotation(135));
+        });
+
+        r.cell(c -&gt; {
+            c.width(20);
+            c.value("From top to bottom (180)");
+            c.style(st -&gt; st.rotation(180));
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -1699,9 +2410,10 @@ Numbers lower from <code>1</code> to <code>90</code> will produces text going <e
 <p>By default the text is not wrapped. This mean that the new lines characters present in the string are ignored.
 You can update this by writing <code>wrap text</code> line in the style definition closure.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">sheet('Sample') {
+<pre class="highlightjs highlight"><code>sheet('Sample') {
     row {
         cell {
             height 100
@@ -1729,6 +2441,27 @@ You can update this by writing <code>wrap text</code> line in the style definiti
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">w.sheet("Sample", s-&gt; {
+    s.row(r -&gt; {
+        r.cell(c -&gt; {
+            c.height(100);
+            c.width(auto);
+            c.value("\nThis text will be wrapped.\nTo the next line.\n\nAnd another as well.");
+            c.style(st -&gt; {
+                st.wrap(text);
+            });
+        });
+        r.cell(c -&gt; {
+            c.width(auto);
+            c.value("\nThis text will not be wrapped.\nNot even to to the next line.\n\nEven another one.");
+        });
+    });
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -1742,9 +2475,10 @@ You can update this by writing <code>wrap text</code> line in the style definiti
 <p>You can externalize your styles configuration into class implementing <code>org.modelcatalogue.spreadsheet.builder.api.Stylesheet</code>
 interface to maximize code reuse or report customization.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyStyles implements Stylesheet {
+<pre class="highlightjs highlight"><code>class MyStyles implements Stylesheet {
 
     void declareStyles(CanDefineStyle stylable) {
         stylable.style('h1') {
@@ -1789,6 +2523,55 @@ builder.build(out) {
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// stylesheet class definition
+public class MyStyles implements Stylesheet {
+
+    public void declareStyles(CanDefineStyle stylable) {
+        stylable.style("h1", st -&gt; {
+            st.foreground(whiteSmoke);
+            st.fill(solidForeground);
+            st.font(f -&gt; {
+                f.size(22);
+            });
+        });
+        stylable.style("h2") {
+            st.base( "h");
+            st.font(f -&gt; {
+                f.size(16);
+            });
+        });
+        stylable.style("red") {
+            st.font(f -&gt; {
+                f.color(red);
+            });
+        });
+    }
+}
+// usage
+builder.build(out, w -&gt; {
+    w.apply(MyStyles.class); // or w.apply(new MyStyles());
+    w.sheet("Sample", s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.value("Hello");
+                c.style("h1");
+            });
+            r.cell(c -&gt; {
+                c.value("World");
+                c.style("h2");
+            });
+            r.cell(c -&gt; {
+                c.value("!!!");
+                c.styles("h2", "red");
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result</em></p>
 </div>
@@ -1802,33 +2585,64 @@ builder.build(out) {
 <div class="paragraph">
 <p>You can query the spreadsheet with similar syntax as you build it.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='org.modelcatalogue', module='spreadsheet-builder-poi', version='0.4.1')
-// fixes bugs on Groovy 2.4.x
-@Grab(group='commons-codec', module='commons-codec', version='1.10')
-@GrabExclude('org.codehaus.groovy:groovy-all')
-
-import org.modelcatalogue.spreadsheet.api.Cell
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+<pre class="highlightjs highlight"><code>import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
-SpreadsheetQuery query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                      // <1>
+SpreadsheetCriteria query = PoiSpreadsheetCriteria.FACTORY.forFile(file)                <i class="conum" data-value="1"></i><b>(1)</b>
 
-Collection<Cell>  cells = query.query {                                                 // <2>
-    sheet {                                                                             // <3>
-        row {                                                                           // <4>
+SpreadsheetCriteriaResult result = query.query {                                        <i class="conum" data-value="2"></i><b>(2)</b>
+    sheet {                                                                             <i class="conum" data-value="3"></i><b>(3)</b>
+        row {                                                                           <i class="conum" data-value="4"></i><b>(4)</b>
             cell {
-                value 'B'                                                               // <5>
+                value 'B'                                                               <i class="conum" data-value="5"></i><b>(5)</b>
             }
         }
     }
 }
 
-assert cells.size() == 1
-assert cells.first().value == 'B'</code></pre>
+assert result.cells.size() == 1
+assert result.cells.first().value == 'B'</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult;
+import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
+
+public class CriteriaDemo {
+
+    public static void main(String[] args) throws Exception {
+        File file = new File("spreadsheet.xlsx");
+
+        SpreadsheetCriteria query = PoiSpreadsheetCriteria.FACTORY.forFile(file);       <i class="conum" data-value="1"></i><b>(1)</b>
+
+        SpreadsheetCriteriaResult result = query.query(w -&gt; {                           <i class="conum" data-value="2"></i><b>(2)</b>
+            w.sheet(s -&gt; {                                                              <i class="conum" data-value="3"></i><b>(3)</b>
+                s.row(r -&gt; {                                                            <i class="conum" data-value="4"></i><b>(4)</b>
+                    r.cell(c -&gt; {
+                        c.value("B");                                                   <i class="conum" data-value="5"></i><b>(5)</b>
+                    });
+                });
+            });
+        });
+
+        assertEquals(1, result.getCells().size());
+        assertEquals("B", result.getCell().getValue());
+    }
+
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1867,9 +2681,10 @@ assert cells.first().value == 'B'</code></pre>
 easily navigate into all eight directions with methods like <code>getLeft()</code>, <code>getAboveLeft()</code> etc.  or access the whole
 row with <code>getRow()</code>. Rows can be also easily navigated with <code>getAbove()</code> and <code>getbellow</code> methods.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Cell a = query.find {
+<pre class="highlightjs highlight"><code>Cell a = query.find {
     sheet {
         row {
             cell {
@@ -1883,6 +2698,23 @@ assert a.right.value == 'B'
 assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Cell a = query.find(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.value("A");
+            });
+        });
+    });
+});
+
+assert a.right.value == 'B'
+assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1891,22 +2723,58 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 <div class="paragraph">
 <p>You can query only specific sheet or row</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Sheet content = query.query {
+<pre class="highlightjs highlight"><code>Sheet content = query.query {
     sheet('Content')
 }.sheet</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Sheet content = query.query(w -&gt; {
+    w.sheet("Content");
+}).getSheet();</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><em>Result:</em> Sheet <code>Content</code> if present.</p>
 </div>
 <div class="paragraph">
-<p>You can query sheet by its page setting</p>
+<p>You can query by sheet visibility or lock state:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Collection<Sheet> a5s = query.query {
+<pre class="highlightjs highlight"><code>Collection&lt;Sheet&gt; a5s = query.query {
+    sheet {
+        state hidden
+    }
+}.sheets</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Collection&lt;Sheet&gt; a5s = query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.state(hidden);
+    });
+}).getSheets();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>Result:</em> Every hidden sheet in the workbook.</p>
+</div>
+<div class="paragraph">
+<p>You can query sheet by its page setting:</p>
+</div>
+<div class="listingblock primary">
+<div class="title">Groovy</div>
+<div class="content">
+<pre class="highlightjs highlight"><code>Collection&lt;Sheet&gt; a5s = query.query {
     sheet {
         page {
             paper a5
@@ -1916,6 +2784,19 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 }.sheets</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Collection&lt;Sheet&gt; a5s = query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.page(p -&gt; {
+            p.paper(A5);
+            p.orientation(landscape);
+        });
+    });
+}).getSheets();</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result:</em> Every sheet having the page settings set to A5 paper and with landscape orientation.</p>
 </div>
@@ -1923,13 +2804,30 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 <p>You can use predicates in many places in the Query API if the simple condition does not met your needs. You can address
  rows by it number. The number starts with one so it corresponds the one displayed in Excel.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Collection<Row> rows = query.query {
-    sheet(name({ name.startsWith('Con') })) {
+<pre class="highlightjs highlight"><code>Collection&lt;Row&gt; rows = query.query {
+    sheet {
+        having {
+            it.name.startsWith('Con')
+        }
         row(1)
     }
 }.rows</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Collection&lt;Row&gt; rows = query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.having(it -&gt; {
+            it.getName().startsWith("Con");
+        });
+        s.row(1);
+    });
+}).getRows();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1939,18 +2837,46 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 <p>If you repeat the call to either <code>sheet</code> or <code>row</code> query method you it&#8217;s understood as <code>and</code> condition but
  you can also create <code>or</code> condition by wrapping the calls with <code>or</code> method.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy"> query.query {
+<pre class="highlightjs highlight"><code>query.query {
     or {
-       sheet(name({ name.startsWith('Con') })) {
-         row(1)
-       }
-       sheet(name({ name.endsWith('Air') })) {
-         row(2)
-       }
+        sheet {
+            having {
+                it.name.startsWith('Con')
+            }
+            row(1)
+        }
+        sheet {
+            having {
+                it.name.endsWith('Air')
+            }
+            row(2)
+        }
     }
- }</code></pre>
+}</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    or(disj -&gt; {
+        disj.sheet(s -&gt; {
+            s.having(it -&gt; {
+                it.getName().startsWith("Con");
+            });
+            s.row(1);
+        });
+        disj.sheet(s -&gt; {
+            s.having(it -&gt; {
+                it.getName().endsWith("Air");
+            });
+            s.row(2);
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1958,16 +2884,24 @@ assert a.row.bellow.cells.first().value == a.bellow.value</code></pre>
 from every second row of sheet which name ends with <code>Air</code>. If the one sheet fits both criteria the cells are not returned
 twice.</p>
 </div>
-<div class="paragraph">
-<p>Also row method accepts predicate with two predefined <code>number</code> and <code>range</code>.</p>
-</div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code>query.query {
     sheet {
-        row (range(1,10)) { // body required when the predicate is used }
+        row(1,10)
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(1,10);
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1977,21 +2911,44 @@ twice.</p>
 <p>If you have a row containing headers to the following rows you can convert any of following rows to data row which
 provide convenient way how to retrieve cells using the label specified in the header</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Row manyRowsHeader = matcher.query {
+<pre class="highlightjs highlight"><code>Row manyRowsHeader = matcher.query {
     sheet('many rows') {
         row(1)
-}   }.row
+    }
+}.row
 
 Row manyRowsDataRow= matcher.query {
     sheet('many rows') {
         row(2)
-}   }.row
+    }
+}.row
 
 DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader)
 assert dataRow['One']
 assert dataRow['One'].value == 1</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Row manyRowsHeader = matcher.query(w -&gt; {
+    w.sheet("many rows", s -&gt; {
+        s.row(1);
+    });
+}).getRow();
+
+Row manyRowsDataRow= matcher.query(w -&gt; {
+    w.sheet("many rows", s -&gt; {
+        s.row(2);
+    });
+}).getRow();
+
+DataRow dataRow = DataRow.create(manyRowsDataRow, manyRowsHeader);
+assertNotNull(dataRow.get("One"));
+assertEquals(1, dataRow.get("One"));</code></pre>
 </div>
 </div>
 </div>
@@ -2003,9 +2960,10 @@ assert dataRow['One'].value == 1</code></pre>
 <p>You can easily specify which cells you want to return from the query. For example by specifying desired value.
 You can also query for more specific type with <code>date</code>, <code>number</code>, <code>string</code>, <code>bool</code> methods.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code>query.query {
     sheet {
         row {
             cell {
@@ -2016,21 +2974,48 @@ You can also query for more specific type with <code>date</code>, <code>number</
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.value("B");
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result:</em> Every cell from any sheet and row with value 'B'</p>
 </div>
 <div class="paragraph">
 <p>You can only return cells from specific column or column range specified by both number or string.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code>query.query {
     sheet {
         row {
             cell('B')
         }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell("B");
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2041,9 +3026,10 @@ You can also query for more specific type with <code>date</code>, <code>number</
 <div class="paragraph">
 <p>You can query for merged cells only.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code>query.query {
     sheet {
         row {
             cell {
@@ -2055,6 +3041,21 @@ You can also query for more specific type with <code>date</code>, <code>number</
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.colspan(5);
+                c.rowspan(2);
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result:</em> Every cell in the spreadsheet which are merged over five cells horizontally and two cells vertically.</p>
 </div>
@@ -2064,9 +3065,10 @@ You can also query for more specific type with <code>date</code>, <code>number</
 <div class="paragraph">
 <p>You can query for cells with given comment.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code>query.query {
     sheet {
         row {
             cell {
@@ -2077,15 +3079,30 @@ You can also query for more specific type with <code>date</code>, <code>number</
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.comment("This is interesting");
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><em>Result:</em> Every cell in the spreadsheet which has a comment "This is interesting".</p>
 </div>
 <div class="paragraph">
 <p>Again you can use predicate closure to be more specific.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.query {
+<pre class="highlightjs highlight"><code>query.query {
     sheet {
         row {
             cell {
@@ -2096,15 +3113,30 @@ You can also query for more specific type with <code>date</code>, <code>number</
 }</code></pre>
 </div>
 </div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.query(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.comment(it -&gt; "Steve".equals(it.author));
+            });
+        });
+    });
+});</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_names_2">Names</h3>
 <div class="paragraph">
 <p>You can query for specific named cell.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.find {
+<pre class="highlightjs highlight"><code>query.find {
     sheet {
         row {
             cell {
@@ -2113,6 +3145,20 @@ You can also query for more specific type with <code>date</code>, <code>number</
         }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.find(w -&gt;{
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.name("THE_CELL");
+            });
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2139,16 +3185,17 @@ You can also query for more specific type with <code>date</code>, <code>number</
 <p>You can query cells by style parameters such as foreground color or font height. All the options from the style builder is currently supported
 except text wrapping, rich texts and alignment options. All font options are supported. See the guide above for reference.</p>
 </div>
-<div class="listingblock">
+<div class="listingblock primary">
+<div class="title">Groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">query.find {
+<pre class="highlightjs highlight"><code>query.find {
     sheet {
         row {
             cell {
                 style {
                     foreground red
                     font {
-                        make bold
+                        style bold
                         color white
                     }
                 }
@@ -2156,6 +3203,26 @@ except text wrapping, rich texts and alignment options. All font options are sup
         }
     }
 }</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">Java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">query.find(w -&gt; {
+    w.sheet(s -&gt; {
+        s.row(r -&gt; {
+            r.cell(c -&gt; {
+                c.style(st -&gt; {
+                    st.foreground(red);
+                    st.font(f -&gt; {
+                        f.style(bold);
+                        f.color(white);
+                    });
+                });
+            });
+        });
+    });
+});</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2169,7 +3236,7 @@ except text wrapping, rich texts and alignment options. All font options are sup
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The color you usually see in the cell is <code>foreground!</code> not a <code>background</code> as you may think.</p>
+<p>The color you usually see in the cell is <code>foreground</code> not a <code>background</code> as you may think!</p>
 </div>
 </td>
 </tr>
@@ -2180,13 +3247,56 @@ except text wrapping, rich texts and alignment options. All font options are sup
 </div>
 <h1 id="_changelog" class="sect0">Changelog</h1>
 <div class="sect1">
+<h2 id="_1_0">1.0</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java-only API which can be used with Java 8.</p>
+</div>
+<div class="paragraph">
+<p>Builder and criteria definition chaining - methods returning self instead of <code>void</code>.</p>
+</div>
+<div class="paragraph">
+<p>Added ability to hide sheets <a href="https://github.com/MetadataConsulting/spreadsheet-builder/issues/19">#19</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_breaking_changes">Breaking Changes</h3>
+<div class="paragraph">
+<p><code>PoiSpradsheetBuilder</code> will no longer allow to create cell names which are invalid by Excel. Use <code>PoiCellDefinition#fixName(String)</code>
+ manually to ensure no exception will be thrown.</p>
+</div>
+<div class="paragraph">
+<p>Colors made constants of <code>Color</code> and generally removed keywords getters from the interfaces but
+they are still available in Groovy as they are injected through extension class.</p>
+</div>
+<div class="paragraph">
+<p>Criteria will no longer accepts predicates in the same position as configuration but there is <code>having</code> method inside each
+criterion where can one write predicate for given surrounding element. Method shortcuts which helped created predicates
+has been removed.</p>
+</div>
+<div class="paragraph">
+<p>Some methods has been renamed so it make sense to use them in both builder and query</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Font style is now set using method <code>style</code> instead of <code>make</code></p>
+</li>
+<li>
+<p>To lock the sheet use <code>state locked</code> instead of <code>lock it</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_0_4_0">0.4.0</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Ability to also retrieve sheet or rows from the criteria query.</p>
 </div>
 <div class="sect2">
-<h3 id="_breaking_changes">Breaking Changes</h3>
+<h3 id="_breaking_changes_2">Breaking Changes</h3>
 <div class="paragraph">
 <p>Criteria methods <code>query</code> and <code>all</code> no longer returns collections of cells but object of type <code>SpreadsheetCriteriaResult</code>.
 This object itself implements at least <code>Iterable&lt;Cell&gt;</code> interface allowing to use the results directly in the for loops
@@ -2249,7 +3359,7 @@ merged cells formatting.</p>
 <h2 id="_0_3_0">0.3.0</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_breaking_changes_2">Breaking Changes</h3>
+<h3 id="_breaking_changes_3">Breaking Changes</h3>
 <div class="paragraph">
 <p>No more single word mutating DSL statements such as <code>locked</code> or <code>bold</code> as they conflicts with newly introduced getters.
 Keywords which are already getters such as <code>black</code> for color of same name remain unaffected.</p>
@@ -2289,8 +3399,11 @@ to distinguish them from the ones returned from queries.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-04 18:32:40 CET
+Last updated 2017-07-15 06:00:16 +02:00
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>
