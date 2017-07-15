@@ -6,7 +6,7 @@ import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class AbstractCriterion<T, Criterion extends Predicate<T>> implements Predicate<T> {
+abstract class AbstractCriterion<T, C extends Predicate<T>> implements Predicate<T> {
 
     private final List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
     private final boolean disjoint;
@@ -27,10 +27,10 @@ abstract class AbstractCriterion<T, Criterion extends Predicate<T>> implements P
         return passesAllConditions(o);
     }
 
-    abstract Criterion newDisjointCriterionInstance();
+    abstract C newDisjointCriterionInstance();
 
-    public AbstractCriterion<T, Criterion> or(Configurer<Criterion> sheetCriterion) {
-        Criterion criterion = newDisjointCriterionInstance();
+    public AbstractCriterion<T, C> or(Configurer<C> sheetCriterion) {
+        C criterion = newDisjointCriterionInstance();
         Configurer.Runner.doConfigure(sheetCriterion, criterion);
         addCondition(criterion);
         return this;

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public final class Color {
 
+    //CHECKSTYLE:OFF
     public static final Color aliceBlue = new Color("#F0F8FF");
     public static final Color antiqueWhite = new Color("#FAEBD7");
     public static final Color aqua = new Color("#00FFFF");
@@ -145,6 +146,7 @@ public final class Color {
     public static final Color whiteSmoke = new Color("#F5F5F5");
     public static final Color yellow = new Color("#FFFF00");
     public static final Color yellowGreen = new Color("#9ACD32");
+    //CHECKSTYLE:ON
 
     private final String hex;
 

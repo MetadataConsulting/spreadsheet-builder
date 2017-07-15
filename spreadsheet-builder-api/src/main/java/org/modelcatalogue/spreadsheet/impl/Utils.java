@@ -8,7 +8,9 @@ public class Utils {
         StringBuilder buffer = new StringBuilder();
         boolean first = true;
 
-        if (separator == null) separator = "";
+        if (separator == null) {
+            separator = "";
+        }
 
         for (String value : array) {
             if (first) {
@@ -30,7 +32,7 @@ public class Utils {
             return "_" + name;
         }
 
-        name = name.replaceAll( "[^.0-9a-zA-Z_]","_");
+        name = name.replaceAll("[^.0-9a-zA-Z_]", "_");
         if (!Pattern.compile("^[abd-qs-zABD-QS-Z_].*").matcher(name).matches()){
             return fixName("_" + name);
         }

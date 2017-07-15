@@ -15,7 +15,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     private List<Configurer<CellStyleDefinition>> styleDefinitions = new ArrayList<Configurer<CellStyleDefinition>>();
 
     private final List<Integer> startPositions = new ArrayList<Integer>();
-    private int nextColNumber = 0;
+    private int nextColNumber;
     private final Map<Integer, AbstractCellDefinition> cells = new LinkedHashMap<Integer, AbstractCellDefinition>();
 
     protected AbstractRowDefinition(AbstractSheetDefinition sheet) {
@@ -23,7 +23,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     }
 
     private AbstractCellDefinition findOrCreateCell(int zeroBasedCellNumber) {
-        AbstractCellDefinition cell = cells.get((zeroBasedCellNumber + 1));
+        AbstractCellDefinition cell = cells.get(zeroBasedCellNumber + 1);
 
         if (cell != null) {
             return cell;

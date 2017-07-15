@@ -10,7 +10,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
     private final AbstractWorkbookDefinition workbook;
 
     private final List<Integer> startPositions = new ArrayList<Integer>();
-    private int nextRowNumber = 0;
+    private int nextRowNumber;
     protected final Set<Integer> autoColumns = new HashSet<Integer>();
     private final Map<Integer, AbstractRowDefinition> rows = new LinkedHashMap<Integer, AbstractRowDefinition>();
     protected boolean automaticFilter;

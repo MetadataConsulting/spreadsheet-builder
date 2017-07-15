@@ -1,8 +1,7 @@
 package org.modelcatalogue.spreadsheet.api;
 
 public final class Keywords {
-
-
+    //CHECKSTYLE:OFF
     public static final BorderStyle none = BorderStyle.NONE;
     public static final BorderStyle thin = BorderStyle.THIN;
     public static final BorderStyle medium = BorderStyle.MEDIUM;
@@ -159,7 +158,7 @@ public final class Keywords {
         VERY_HIDDEN
     }
 
-    //CHECKSTYLE:OFF
+
     public interface BorderSide {
         BorderSide LEFT = BorderSideAndHorizontalAlignment.LEFT;
         BorderSide RIGHT = BorderSideAndHorizontalAlignment.RIGHT;
