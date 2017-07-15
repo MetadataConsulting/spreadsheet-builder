@@ -14,6 +14,7 @@ import org.modelcatalogue.spreadsheet.api.FontStylesProvider
 import org.modelcatalogue.spreadsheet.api.ForegroundFill
 import org.modelcatalogue.spreadsheet.api.ForegroundFillProvider
 import org.modelcatalogue.spreadsheet.api.ColorProvider
+import org.modelcatalogue.spreadsheet.api.SheetStateProvider
 import org.modelcatalogue.spreadsheet.api.Keywords
 import org.modelcatalogue.spreadsheet.api.Keywords.VerticalAlignment
 import org.modelcatalogue.spreadsheet.api.PageSettingsProvider
@@ -182,32 +183,12 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         sheet.page(pageDefinition as Configurer<PageDefinition>)
     }
 
-    static SheetDefinition lock(SheetDefinition self, SheetDefinition otherSelf) {
-        otherSelf.lock()
+    static SheetDefinition state(SheetDefinition self, Keywords.SheetState state) {
+        self.state(state)
     }
 
-    static SheetDefinition show(SheetDefinition self, SheetDefinition otherSelf) {
-        otherSelf.show()
-    }
-
-    static SheetDefinition hide(SheetDefinition self, SheetDefinition otherSelf) {
-        otherSelf.hide()
-    }
-
-    static SheetDefinition hideCompletely(SheetDefinition self, SheetDefinition otherSelf) {
-        otherSelf.hideCompletely()
-    }
-
-    static SheetCriterion show(SheetCriterion self, SheetCriterion otherSelf) {
-        otherSelf.show()
-    }
-
-    static SheetCriterion hide(SheetCriterion self, SheetCriterion otherSelf) {
-        otherSelf.hide()
-    }
-
-    static SheetCriterion hideCompletely(SheetCriterion self, SheetCriterion otherSelf) {
-        otherSelf.hideCompletely()
+    static SheetCriterion state(SheetCriterion self, Keywords.SheetState state) {
+        self.state(state)
     }
 
     static SpreadsheetDefinition build(SpreadsheetBuilder builder, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
@@ -813,4 +794,8 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
     static Color getWhiteSmoke(ColorProvider colorProvider) { return Color.whiteSmoke }
     static Color getYellow(ColorProvider colorProvider) { return Color.yellow }
     static Color getYellowGreen(ColorProvider colorProvider) { return Color.yellowGreen }
+    static Keywords.SheetState getLocked(SheetStateProvider self) { return Keywords.SheetState.LOCKED }
+    static Keywords.SheetState getVisible(SheetStateProvider self) { return Keywords.SheetState.VISIBLE }
+    static Keywords.SheetState getHidden(SheetStateProvider self) { return Keywords.SheetState.HIDDEN }
+    static Keywords.SheetState getVeryHidden(SheetStateProvider self) { return Keywords.SheetState.VERY_HIDDEN }
 }

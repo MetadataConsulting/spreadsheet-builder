@@ -1917,14 +1917,14 @@ Sheet content = query.query(w -> {
 
 _Result:_ Sheet `Content` if present.
 
-You can query by sheet visibility:
+You can query by sheet visibility or lock state:
 
 [source,indent=0,role="primary"]
 .Groovy
 ----
 Collection<Sheet> a5s = query.query {
     sheet {
-        hide it
+        state hidden
     }
 }.sheets
 ----
@@ -1934,7 +1934,7 @@ Collection<Sheet> a5s = query.query {
 ----
 Collection<Sheet> a5s = query.query(w -> {
     w.sheet(s -> {
-        s.hide();
+        s.state(hidden);
     });
 }).getSheets();
 ----
@@ -2339,7 +2339,7 @@ query.find {
                 style {
                     foreground red
                     font {
-                        make bold
+                        style bold
                         color white
                     }
                 }
@@ -2359,7 +2359,7 @@ query.find(w -> {
                 c.style(st -> {
                     st.foreground(red);
                     st.font(f -> {
-                        f.make(bold);
+                        f.style(bold);
                         f.color(white);
                     });
                 });
@@ -2378,7 +2378,7 @@ The color you usually see in the cell is `foreground` not a `background` as you 
 
 = Changelog
 
-== 0.5.0
+== 1.0
 Java-only API which can be used with Java 8.
 
 Builder and criteria definition chaining - methods returning self instead of `void`.
@@ -2395,6 +2395,11 @@ they are still available in Groovy as they are injected through extension class.
 Criteria will no longer accepts predicates in the same position as configuration but there is `having` method inside each
 criterion where can one write predicate for given surrounding element. Method shortcuts which helped created predicates
 has been removed.
+
+Some methods has been renamed so it make sense to use them in both builder and query
+
+  * Font style is now set using method `style` instead of `make`
+  * To lock the sheet use `state locked` instead of `lock it`
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.

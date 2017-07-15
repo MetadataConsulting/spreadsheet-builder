@@ -70,9 +70,13 @@ public final class Keywords {
     public static final Keywords.Auto auto = Keywords.Auto.AUTO;
     public static final Keywords.To to = Keywords.To.TO;
     public static final Keywords.Image image = Keywords.Image.IMAGE;
-    public static PureHorizontalAlignment general = PureHorizontalAlignment.GENERAL;
-    public static PureHorizontalAlignment fill = PureHorizontalAlignment.FILL;
-    public static PureHorizontalAlignment centerSelection = PureHorizontalAlignment.CENTER_SELECTION;
+    public static final PureHorizontalAlignment general = PureHorizontalAlignment.GENERAL;
+    public static final PureHorizontalAlignment fill = PureHorizontalAlignment.FILL;
+    public static final PureHorizontalAlignment centerSelection = PureHorizontalAlignment.CENTER_SELECTION;
+    public static final Keywords.SheetState locked = SheetState.LOCKED;
+    public static final Keywords.SheetState visible = SheetState.VISIBLE;
+    public static final Keywords.SheetState hidden = SheetState.HIDDEN;
+    public static final Keywords.SheetState veryHidden = SheetState.VERY_HIDDEN;
 
 
     private Keywords() {}
@@ -146,6 +150,13 @@ public final class Keywords {
         GENERAL,
         FILL,
         CENTER_SELECTION
+    }
+
+    public enum SheetState {
+        LOCKED,
+        VISIBLE,
+        HIDDEN,
+        VERY_HIDDEN
     }
 
     //CHECKSTYLE:OFF

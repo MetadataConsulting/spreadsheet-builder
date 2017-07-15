@@ -73,36 +73,29 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return this;
     }
 
-    @Override
-    public final SheetDefinition lock() {
-        doLock();
-        return this;
-    }
 
     @Override
-    public SheetDefinition hide() {
-        doHide();
-        return this;
+    public SheetDefinition state(Keywords.SheetState state) {
+        switch (state) {
+            case LOCKED:
+                doLock();
+                return this;
+            case VISIBLE:
+                doShow();
+                return this;
+            case HIDDEN:
+                doHide();
+                return this;
+            case VERY_HIDDEN:
+                doHideCompletely();
+                return this;
+        }
+        throw new IllegalStateException("Unknown sheet state: " + state);
     }
 
     protected abstract void doHide();
-
-    @Override
-    public SheetDefinition hideCompletely() {
-        doHideCompletely();
-        return this;
-    }
-
     protected abstract void doHideCompletely();
-
-    @Override
-    public SheetDefinition show() {
-        doShow();
-        return this;
-    }
-
     protected abstract void doShow();
-
     protected abstract void doLock();
 
     @Override

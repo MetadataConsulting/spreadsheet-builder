@@ -117,7 +117,7 @@ final class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public SimpleFontCriterion make(final FontStyle first, final FontStyle... other) {
+    public SimpleFontCriterion style(final FontStyle first, final FontStyle... other) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {
@@ -146,7 +146,7 @@ final class SimpleFontCriterion implements FontCriterion {
     }
 
     @Override
-    public SimpleFontCriterion make(final Predicate<EnumSet<FontStyle>> predicate) {
+    public SimpleFontCriterion style(final Predicate<EnumSet<FontStyle>> predicate) {
         parent.addCondition(new Predicate<Cell>() {
             @Override
             public boolean test(Cell o) {

@@ -16,8 +16,8 @@ public interface FontCriterion extends FontStylesProvider, ColorProvider {
     FontCriterion name(String name);
     FontCriterion name(Predicate<String> predicate);
 
-    FontCriterion make(FontStyle first, FontStyle... other);
-    FontCriterion make(Predicate<EnumSet<FontStyle>> predicate);
+    FontCriterion style(FontStyle first, FontStyle... other);
+    FontCriterion style(Predicate<EnumSet<FontStyle>> predicate);
 
     FontCriterion having(Predicate<Font> fontPredicate);
 }

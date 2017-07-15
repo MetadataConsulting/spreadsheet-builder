@@ -214,7 +214,7 @@ public class Java8BuilderTest {
                     r.cell(c -> {
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(bold);
+                                f.style(bold);
                             });
                         });
                     });
@@ -399,14 +399,19 @@ public class Java8BuilderTest {
                 });
             });
         }).getCells().size());
+        assertEquals(19, matcher.query(w -> {
+            w.sheet(s -> {
+                s.state(visible);
+            });
+        }).getSheets().size());
         assertEquals(1, matcher.query(w -> {
             w.sheet("Hidden", s -> {
-                s.hide();
+                s.state(hidden);
             });
         }).getSheets().size());
         assertEquals(1, matcher.query(w -> {
             w.sheet("Very hidden", s -> {
-                s.hideCompletely();
+                s.state(veryHidden);
             });
         }).getSheets().size());
 
@@ -460,7 +465,7 @@ public class Java8BuilderTest {
             });
             w.style("bold", s -> {
                 s.font(f -> {
-                    f.make(bold);
+                    f.style(bold);
                 });
             });
 
@@ -544,7 +549,7 @@ public class Java8BuilderTest {
                         c.value("Bold Red 22");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(bold);
+                                f.style(bold);
                                 f.color(red);
                                 f.size(22);
                             });
@@ -555,7 +560,7 @@ public class Java8BuilderTest {
                         c.value("Underline Courier New");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(underline);
+                                f.style(underline);
                                 f.name("Courier New");
                             });
                         });
@@ -565,7 +570,7 @@ public class Java8BuilderTest {
                         c.value("Italic");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(italic);
+                                f.style(italic);
                             });
                         });
                     });
@@ -574,7 +579,7 @@ public class Java8BuilderTest {
                         c.value("Strikeout");
                         c.style(st -> {
                             st.font(f -> {
-                                f.make(strikeout);
+                                f.style(strikeout);
                             });
                         });
                     });
@@ -601,12 +606,12 @@ public class Java8BuilderTest {
                         });
                         c.text(" ");
                         c.text("Riding", f -> {
-                                f.make(italic);
+                                f.style(italic);
                                 f.size(18);
                         });
                         c.text(" ");
                         c.text("Hood", f -> {
-                                f.make(bold);
+                                f.style(bold);
                                 f.size(22);
                         });
 
@@ -620,7 +625,7 @@ public class Java8BuilderTest {
                         c.text("First Line");
                         c.text("\n");
                         c.text("Second Line", f -> {
-                                f.make(bold);
+                                f.style(bold);
                                 f.size(12);
                         });
                         c.text("\n");
@@ -638,7 +643,7 @@ public class Java8BuilderTest {
                         c.text("Next line after two spaces");
                         c.text("\n");
                         c.text("Last line", f -> {
-                                f.make(italic);
+                                f.style(italic);
                         });
                         c.text("\n");
                     });
@@ -650,7 +655,7 @@ public class Java8BuilderTest {
                         c.text("\n\n");
                         c.text("Enumerations", f -> {
                                 f.size(12);
-                                f.make(bold);
+                                f.style(bold);
                         });
                         c.text("\n");
 
@@ -1011,17 +1016,17 @@ public class Java8BuilderTest {
                     )
             );
             w.sheet("Hidden", s ->
-                    s.hide()
+                    s.state(hidden)
             );
             w.sheet("Very hidden", s ->
-                    s.hideCompletely()
+                    s.state(veryHidden)
             );
         });
     }
 
     private static void printMap(CellDefinition c, Map.Entry<String, String> entry) {
         c.text(entry.getKey(), f -> {
-                f.make(bold);
+                f.style(bold);
         });
         c.text(": ");
         c.text(entry.getValue());

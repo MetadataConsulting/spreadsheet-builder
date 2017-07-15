@@ -1,8 +1,9 @@
 package org.modelcatalogue.spreadsheet.builder.api;
 
 import org.modelcatalogue.spreadsheet.api.Configurer;
+import org.modelcatalogue.spreadsheet.api.SheetStateProvider;
 
-public interface WorkbookDefinition extends CanDefineStyle {
+public interface WorkbookDefinition extends CanDefineStyle, SheetStateProvider {
 
     WorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition);
 

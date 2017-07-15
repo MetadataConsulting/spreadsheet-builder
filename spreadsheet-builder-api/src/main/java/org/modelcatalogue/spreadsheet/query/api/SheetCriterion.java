@@ -1,5 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.api;
 
+import org.modelcatalogue.spreadsheet.api.Keywords;
 import org.modelcatalogue.spreadsheet.api.Row;
 import org.modelcatalogue.spreadsheet.api.Configurer;
 import org.modelcatalogue.spreadsheet.api.Sheet;
@@ -14,7 +15,5 @@ public interface SheetCriterion extends Predicate<Row> {
     SheetCriterion page(Configurer<PageCriterion> pageCriterion);
     SheetCriterion or(Configurer<SheetCriterion> sheetCriterion);
     SheetCriterion having(Predicate<Sheet> sheetPredicate);
-    SheetCriterion hide();
-    SheetCriterion hideCompletely();
-    SheetCriterion show();
+    SheetCriterion state(Keywords.SheetState state);
 }

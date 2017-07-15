@@ -41,11 +41,7 @@ public interface SheetDefinition {
     SheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition);
     SheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition);
 
-    SheetDefinition lock();
-
-    SheetDefinition hide();
-    SheetDefinition hideCompletely();
-    SheetDefinition show();
+    SheetDefinition state(Keywords.SheetState state);
 
     SheetDefinition password(String password);
 

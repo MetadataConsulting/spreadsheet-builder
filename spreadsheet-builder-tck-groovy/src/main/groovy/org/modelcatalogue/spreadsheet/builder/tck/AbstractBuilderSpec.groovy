@@ -205,7 +205,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         cell {
                             style {
                                 font {
-                                    make bold
+                                    style bold
                                 }
                             }
                         }
@@ -424,12 +424,12 @@ abstract class AbstractBuilderSpec extends Specification {
             }   }   }.size() == 1
             matcher.query {
                 sheet('Hidden') {
-                    hide it
+                    state hidden
                 }
             }.sheets.size() == 1
             matcher.query {
                 sheet('Very hidden') {
-                    hideCompletely it
+                    state veryHidden
                 }
             }.sheets.size() == 1
     }
@@ -444,19 +444,19 @@ abstract class AbstractBuilderSpec extends Specification {
             }
             style 'bold', {
                 font {
-                    make bold
+                    style bold
                 }
             }
 
             style 'h1', {
                 font {
-                    make bold
+                    style bold
                 }
             }
 
             style 'h2', {
                 font {
-                    make bold
+                    style bold
                 }
             }
 
@@ -541,7 +541,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         value 'Bold Red 22'
                         style {
                             font {
-                                make bold
+                                style bold
                                 color red
                                 size 22
                             }
@@ -552,7 +552,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         value 'Underline Courier New'
                         style {
                             font {
-                                make underline
+                                style underline
                                 name 'Courier New'
                             }
                         }
@@ -562,7 +562,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         value 'Italic'
                         style {
                             font {
-                                make italic
+                                style italic
                             }
                         }
                     }
@@ -571,7 +571,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         value 'Strikeout'
                         style {
                             font {
-                                make strikeout
+                                style strikeout
                             }
                         }
                     }
@@ -598,12 +598,12 @@ abstract class AbstractBuilderSpec extends Specification {
                         }
                         text ' '
                         text 'Riding', {
-                            make italic
+                            style italic
                             size 18
                         }
                         text ' '
                         text 'Hood', {
-                            make bold
+                            style bold
                             size 22
                         }
 
@@ -617,13 +617,13 @@ abstract class AbstractBuilderSpec extends Specification {
                         text 'First Line'
                         text '\n'
                         text 'Second Line', {
-                            make bold
+                            style bold
                             size 12
                         }
                         text '\n'
                         for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '': 'nothing']) {
                             text entry.key, {
-                                make bold
+                                style bold
                             }
                             text ': '
                             text entry.value
@@ -633,7 +633,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         text 'Next line after two spaces'
                         text '\n'
                         text 'Last line', {
-                            make italic
+                            style italic
                         }
                         text '\n'
                     }
@@ -645,7 +645,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         text '\n\n'
                         text 'Enumerations', {
                             size 12
-                            make bold
+                            style bold
                         }
                         text '\n'
 
@@ -654,7 +654,7 @@ abstract class AbstractBuilderSpec extends Specification {
                                 PARTIAL_WITHDRAWAL: 'OPTION 1: PARTIAL WITHDRAWAL: No further contact'
                         ]) {
                             text entry.key, {
-                                make bold
+                                style bold
                             }
                             text ': '
                             text entry.value
@@ -1013,10 +1013,10 @@ abstract class AbstractBuilderSpec extends Specification {
                 }
             }
             sheet('Hidden') {
-                hide it
+                state hidden
             }
             sheet('Very hidden') {
-                hideCompletely it
+                state veryHidden
             }
         }
     }

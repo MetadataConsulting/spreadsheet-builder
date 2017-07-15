@@ -46,7 +46,7 @@ class PoiFontDefinition implements FontDefinition {
     }
 
     @Override
-    public PoiFontDefinition make(FontStyle first, FontStyle... other) {
+    public PoiFontDefinition style(FontStyle first, FontStyle... other) {
         EnumSet enumSet = EnumSet.of(first, other);
         if (enumSet.contains(FontStyle.ITALIC)){
             font.setItalic(true);

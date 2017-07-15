@@ -97,6 +97,11 @@ class PoiSheet implements Sheet {
         return new PoiRow(this, xssfSheet.getRow(oneBasedRowNumber - 1));
     }
 
+    @Override
+    public boolean isLocked() {
+        return xssfSheet.isSheetLocked();
+    }
+
     public boolean isHidden() {
         return xssfSheet.getWorkbook().getSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet)) == SheetVisibility.HIDDEN;
     }
@@ -105,7 +110,7 @@ class PoiSheet implements Sheet {
         return xssfSheet.getWorkbook().getSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet)) == SheetVisibility.VISIBLE;
     }
 
-    public boolean isHiddenCompletely() {
+    public boolean isVeryHidden() {
         return xssfSheet.getWorkbook().getSheetVisibility(xssfSheet.getWorkbook().getSheetIndex(xssfSheet)) == SheetVisibility.VERY_HIDDEN;
     }
 

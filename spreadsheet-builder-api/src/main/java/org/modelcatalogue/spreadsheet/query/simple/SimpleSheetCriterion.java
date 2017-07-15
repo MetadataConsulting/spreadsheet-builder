@@ -1,7 +1,6 @@
 package org.modelcatalogue.spreadsheet.query.simple;
 
 import org.modelcatalogue.spreadsheet.api.*;
-import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition;
 import org.modelcatalogue.spreadsheet.query.api.PageCriterion;
 import org.modelcatalogue.spreadsheet.query.api.Predicate;
 import org.modelcatalogue.spreadsheet.query.api.RowCriterion;
@@ -95,35 +94,41 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public SheetCriterion hide() {
-        parent.addCondition(new Predicate<Sheet>() {
-            @Override
-            public boolean test(Sheet o) {
-                return o.isHidden();
-            }
-        });
-        return this;
-    }
-
-    @Override
-    public SheetCriterion hideCompletely() {
-        parent.addCondition(new Predicate<Sheet>() {
-            @Override
-            public boolean test(Sheet o) {
-                return o.isHiddenCompletely();
-            }
-        });
-        return this;
-    }
-
-    @Override
-    public SheetCriterion show() {
-        parent.addCondition(new Predicate<Sheet>() {
-            @Override
-            public boolean test(Sheet o) {
-                return o.isVisible();
-            }
-        });
-        return this;
+    public SheetCriterion state(Keywords.SheetState state) {
+        switch (state) {
+            case LOCKED:
+                parent.addCondition(new Predicate<Sheet>() {
+                    @Override
+                    public boolean test(Sheet o) {
+                        return o.isLocked();
+                    }
+                });
+                return this;
+            case VISIBLE:
+                parent.addCondition(new Predicate<Sheet>() {
+                    @Override
+                    public boolean test(Sheet o) {
+                        return o.isVisible();
+                    }
+                });
+                return this;
+            case HIDDEN:
+                parent.addCondition(new Predicate<Sheet>() {
+                    @Override
+                    public boolean test(Sheet o) {
+                        return o.isHidden();
+                    }
+                });
+                return this;
+            case VERY_HIDDEN:
+                parent.addCondition(new Predicate<Sheet>() {
+                    @Override
+                    public boolean test(Sheet o) {
+                        return o.isVeryHidden();
+                    }
+                });
+                return this;
+        }
+        throw new IllegalStateException("Unknown sheet state: " + state);
     }
 }

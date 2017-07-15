@@ -13,6 +13,6 @@ public interface FontDefinition extends FontStylesProvider, ColorProvider {
     FontDefinition size(int size);
     FontDefinition name(String name);
 
-    FontDefinition make(FontStyle first, FontStyle... other);
+    FontDefinition style(FontStyle first, FontStyle... other);
 
 }
