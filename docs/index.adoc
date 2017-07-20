@@ -10,13 +10,13 @@ Documents (XSLX) focus not only on content side but also on easy styling.
 
 Spreadsheet Builder API is available on Maven central and JCenter.
 
-[source,indent=0,role="primary"]
+[source,indent=0,role="primary",subs='attributes']
 .Gradle
 ----
 compile 'org.modelcatalogue:spreadsheet-builder-poi:{version}'
 ----
 
-[source,xml,indent=0,role="secondary"]
+[source,xml,indent=0,role="secondary",subs='verbatim,attributes']
 .Maven
 ----
 <dependency>
@@ -53,6 +53,12 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
     }
 } writeTo file                                                                          // <5>
 ----
+
+<1> Build new spreadsheet based on Apache POI
+<2> Create new sheet with the name `Sample`
+<3> Create new row
+<4> Create new cell
+<5> Write the spreadsheet to the file
 
 [source,java,indent=0,role="secondary"]
 .Java
@@ -1809,6 +1815,12 @@ SpreadsheetCriteriaResult result = query.query {                                
 assert result.cells.size() == 1
 assert result.cells.first().value == 'B'
 ----
+
+<1> Create new spreadsheet query for given file
+<2> Start a query
+<3> Query any sheet
+<4> Query any row
+<5> Query every cell containing value 'B'
 
 [source,java,indent=0,role="secondary"]
 .Java
