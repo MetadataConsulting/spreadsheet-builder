@@ -1,12 +1,12 @@
 package org.modelcatalogue.spreadsheet.builder.api.tck.java8;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.modelcatalogue.spreadsheet.api.*;
 import org.modelcatalogue.spreadsheet.builder.api.CellDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder;
-import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition;
 import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult;
@@ -32,7 +32,7 @@ public class Java8BuilderTest {
 
     @Test public void testBuilder() throws IOException {
         File excel = tmp.newFile();
-        PoiSpreadsheetBuilder.INSTANCE.build(w ->
+        PoiSpreadsheetBuilder.create(excel).build(w ->
             w.sheet("test", s ->
                 s.row(r ->
                     r.cell(c ->
@@ -40,7 +40,7 @@ public class Java8BuilderTest {
                     )
                 )
             )
-        ).writeTo(excel);
+        );
 
         assertEquals(1, PoiSpreadsheetCriteria.FACTORY.forFile(excel).query(w ->
             w.sheet("test", s ->
@@ -53,11 +53,11 @@ public class Java8BuilderTest {
         ).getCells().size());
     }
 
-    @Test public void testBuilderFull() throws IOException {
+    @Test public void testBuilderFull() throws IOException, InvalidFormatException {
         Date today = new Date();
         File excel = tmp.newFile();
 
-        buildSpreadsheet(PoiSpreadsheetBuilder.INSTANCE, today).writeTo(excel);
+        buildSpreadsheet(PoiSpreadsheetBuilder.create(excel), today);
 
         SpreadsheetCriteria matcher = PoiSpreadsheetCriteria.FACTORY.forFile(excel);
 
@@ -415,7 +415,9 @@ public class Java8BuilderTest {
             });
         }).getSheets().size());
 
-        SpreadsheetDefinition definition = PoiSpreadsheetBuilder.INSTANCE.build(excel, w -> {
+        File tmpFile = tmp.newFile();
+
+        PoiSpreadsheetBuilder.create(tmpFile, excel).build(w -> {
             w.sheet("Sample", s -> {
                 s.row(r -> {
                     r.cell(c -> {
@@ -427,10 +429,6 @@ public class Java8BuilderTest {
                 });
             });
         });
-
-
-        File tmpFile = tmp.newFile();
-        definition.writeTo(tmpFile);
 
         assertEquals(0, PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile).query(w -> {
             w.sheet("Sample", s -> {
@@ -456,8 +454,8 @@ public class Java8BuilderTest {
         }).getCells().size());
     }
 
-    private static SpreadsheetDefinition buildSpreadsheet(SpreadsheetBuilder builder, Date today) {
-        return builder.build(w -> {
+    private static void buildSpreadsheet(SpreadsheetBuilder builder, Date today) {
+        builder.build(w -> {
             w.style("red", s -> {
                 s.font( f -> {
                     f.color(red);

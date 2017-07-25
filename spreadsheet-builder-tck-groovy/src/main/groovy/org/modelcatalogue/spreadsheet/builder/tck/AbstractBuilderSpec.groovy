@@ -1,40 +1,30 @@
 package org.modelcatalogue.spreadsheet.builder.tck
 
 import groovy.transform.CompileStatic
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import org.modelcatalogue.spreadsheet.api.*
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaFactory
 import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
 import spock.lang.Specification
 
-import java.awt.*
-
 abstract class AbstractBuilderSpec extends Specification {
 
-    @Rule TemporaryFolder tmp
-
-    protected abstract SpreadsheetCriteriaFactory createCriteriaFactory()
+    protected abstract SpreadsheetCriteria createCriteria()
     protected abstract SpreadsheetBuilder createSpreadsheetBuilder()
 
     void 'create sample spreadsheet'() {
         when:
-            File tmpFile = tmp.newFile("sample${System.currentTimeMillis()}.xlsx")
-
             SpreadsheetBuilder builder = createSpreadsheetBuilder()
 
             Date today = new Date()
 
-            buildSpreadsheet(builder, today) writeTo tmpFile
-            open tmpFile
+            buildSpreadsheet(builder, today)
+            openSpreadsheet()
         then:
             noExceptionThrown()
 
         when:
-            SpreadsheetCriteria matcher = createCriteriaFactory().forFile(tmpFile)
+            SpreadsheetCriteria matcher = createCriteria()
             SpreadsheetCriteriaResult allCells = matcher.all()
 
         then:
@@ -333,42 +323,6 @@ abstract class AbstractBuilderSpec extends Specification {
             cellE.getBellow()
             cellE.getBellow().value == 'H'
             cellE.getBellow().getBellow().value == 'J'
-
-        when:
-            SpreadsheetDefinition definition = createSpreadsheetBuilder().build(tmpFile) {
-                sheet('Sample') {
-                    row {
-                        cell {
-                            value 'Ahoj'
-                        }
-                        cell {
-                            value 'Svete'
-                        }
-                    }
-                }
-            }
-
-            definition.writeTo tmpFile
-        then:
-            createCriteriaFactory().forFile(tmpFile).query {
-                sheet('Sample') {
-                    row {
-                        cell {
-                            value 'Hello'
-                        }
-                    }
-                }
-            }.size() == 0
-            createCriteriaFactory().forFile(tmpFile).query {
-                sheet('Sample') {
-                    row {
-                        cell {
-                            value 'Ahoj'
-                        }
-                    }
-                }
-            }.size() == 1
-
         when:
             Iterable<Cell> zeroCells = matcher.query({
                 sheet('Zero') {
@@ -434,8 +388,10 @@ abstract class AbstractBuilderSpec extends Specification {
             }.sheets.size() == 1
     }
 
+    protected void openSpreadsheet() {}
+
     @CompileStatic
-    private static SpreadsheetDefinition buildSpreadsheet(SpreadsheetBuilder builder, Date today) {
+    private static void buildSpreadsheet(SpreadsheetBuilder builder, Date today) {
         builder.build {
             style 'red', {
                 font {
@@ -1020,23 +976,5 @@ abstract class AbstractBuilderSpec extends Specification {
             }
         }
     }
-
-    /**
-     * Tries to open the file in Word. Only works locally on Mac at the moment. Ignored otherwise.
-     * Main purpose of this method is to quickly open the generated file for manual review.
-     * @param file file to be opened
-     */
-    private static void open(File file) {
-        try {
-            if (Desktop.desktopSupported && Desktop.desktop.isSupported(Desktop.Action.OPEN)) {
-                Desktop.desktop.open(file)
-                Thread.sleep(10000)
-            }
-        } catch(ignored) {
-            // CI
-        }
-    }
-
-
 
 }

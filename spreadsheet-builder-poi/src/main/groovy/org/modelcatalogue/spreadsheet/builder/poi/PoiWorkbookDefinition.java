@@ -4,13 +4,10 @@ import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
-import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition;
 import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition;
 import org.modelcatalogue.spreadsheet.impl.AbstractWorkbookDefinition;
 
-import java.io.*;
-
-class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements WorkbookDefinition, SpreadsheetDefinition {
+class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements WorkbookDefinition {
 
     private final XSSFWorkbook workbook;
 
@@ -33,36 +30,6 @@ class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements Workbo
         return workbook;
     }
 
-
-    @Override
-    public void writeTo(OutputStream outputStream) {
-        try {
-            workbook.write(outputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void writeTo(File file) {
-        OutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(file);
-            workbook.write(outputStream);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (IOException ignored) {
-                    // do nothing
-                }
-            }
-        }
-    }
 
     <T> T asType(Class<T> type) {
         if (type.isInstance(workbook)) {

@@ -31,7 +31,6 @@ import org.modelcatalogue.spreadsheet.builder.api.PageDefinition
 import org.modelcatalogue.spreadsheet.builder.api.RowDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SheetDefinition
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
-import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetDefinition
 import org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition
 import org.modelcatalogue.spreadsheet.query.api.BorderCriterion
 import org.modelcatalogue.spreadsheet.query.api.CellCriterion
@@ -191,14 +190,8 @@ import org.modelcatalogue.spreadsheet.query.api.WorkbookCriterion
         self.state(state)
     }
 
-    static SpreadsheetDefinition build(SpreadsheetBuilder builder, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
+    static void build(SpreadsheetBuilder builder, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
         builder.build(workbookDefinition as Configurer<WorkbookDefinition>)
-    }
-    static SpreadsheetDefinition build(SpreadsheetBuilder builder, InputStream template, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
-        builder.build(template, workbookDefinition as Configurer<WorkbookDefinition>)
-    }
-    static SpreadsheetDefinition build(SpreadsheetBuilder builder, File template, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
-        builder.build(template, workbookDefinition as Configurer<WorkbookDefinition>)
     }
 
     static WorkbookDefinition sheet(WorkbookDefinition workbook, String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "org.modelcatalogue.spreadsheet.builder.api.SheetDefinition") Closure sheetDefinition) {

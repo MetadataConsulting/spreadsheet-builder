@@ -1,20 +1,52 @@
 package org.modelcatalogue.spreadsheet.builder.poi
 
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import org.modelcatalogue.spreadsheet.builder.api.SpreadsheetBuilder
 import org.modelcatalogue.spreadsheet.builder.tck.AbstractBuilderSpec
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaFactory
+import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
 import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
+
+import java.awt.Desktop
 
 class PoiExcelBuilderSpec extends AbstractBuilderSpec {
 
+    @Rule TemporaryFolder tmp = new TemporaryFolder()
+
+    File tmpFile
+
+    void setup() {
+        tmpFile = tmp.newFile("sample${System.currentTimeMillis()}.xlsx")
+    }
+
     @Override
-    protected SpreadsheetCriteriaFactory createCriteriaFactory() {
-        return PoiSpreadsheetCriteria.FACTORY
+    protected SpreadsheetCriteria createCriteria() {
+        return PoiSpreadsheetCriteria.FACTORY.forFile(tmpFile)
     }
 
     @Override
     protected SpreadsheetBuilder createSpreadsheetBuilder() {
-        return PoiSpreadsheetBuilder.INSTANCE
+        return PoiSpreadsheetBuilder.create(tmpFile)
     }
 
+    @Override
+    protected void openSpreadsheet() {
+        open tmpFile
+    }
+
+    /**
+     * Tries to open the file in Word. Only works locally on Mac at the moment. Ignored otherwise.
+     * Main purpose of this method is to quickly open the generated file for manual review.
+     * @param file file to be opened
+     */
+    private static void open(File file) {
+        try {
+            if (Desktop.desktopSupported && Desktop.desktop.isSupported(Desktop.Action.OPEN)) {
+                Desktop.desktop.open(file)
+                Thread.sleep(10000)
+            }
+        } catch(ignored) {
+            // CI
+        }
+    }
 }

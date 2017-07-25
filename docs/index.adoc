@@ -38,7 +38,7 @@ import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
 
 File file = new File('spreadsheet.xlsx')
 
-PoiSpreadsheetBuilder.INSTANCE.build {                                                  // <1>
+PoiSpreadsheetBuilder.create(file).build {                                              // <1>
     sheet('Sample') {                                                                   // <2>
         row {                                                                           // <3>
             cell 'A'                                                                    // <4>
@@ -51,14 +51,13 @@ PoiSpreadsheetBuilder.INSTANCE.build {                                          
             cell 3
         }
     }
-} writeTo file                                                                          // <5>
+}
 ----
 
-<1> Build new spreadsheet based on Apache POI
+<1> Build new spreadsheet based on Apache POI which will be written into `file`
 <2> Create new sheet with the name `Sample`
 <3> Create new row
 <4> Create new cell
-<5> Write the spreadsheet to the file
 
 [source,java,indent=0,role="secondary"]
 .Java
@@ -72,7 +71,7 @@ public class SpreadsheetWriter {
     public static void main(String... args) {
         File file = new File("spreadsheet.xlsx");
 
-        PoiSpreadsheetBuilder.INSTANCE.build(w -> {                                     // <1>
+        PoiSpreadsheetBuilder.create(file).build(w -> {                                 // <1>
             w.sheet("Sample", s -> {                                                    // <2>
                 s.row(r -> {                                                            // <3>
                     r.cell("A");                                                        // <4>
@@ -85,17 +84,16 @@ public class SpreadsheetWriter {
                     r.cell(3);
                 });
             });
-        }).writeTo(file);                                                               // <5>
+        });
     }
 
 }
 ----
 
-<1> Build new spreadsheet based on Apache POI
+<1> Build new spreadsheet based on Apache POI which will be written into `file`
 <2> Create new sheet with the name `Sample`
 <3> Create new row
 <4> Create new cell
-<5> Write the spreadsheet to the file
 
 _Result_
 
@@ -2412,6 +2410,10 @@ Some methods has been renamed so it make sense to use them in both builder and q
 
   * Font style is now set using method `style` instead of `make`
   * To lock the sheet use `state locked` instead of `lock it`
+
+Builder and query API is completely decoupled from the way how the spreadsheet is persisted therefore
+`SpreadsheetDefinition` and `SpreadsheetCriteriaFactory` interfaces has been removed. This opens possibilities
+to create file-free implementation such as Google Sheets in future.
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.
