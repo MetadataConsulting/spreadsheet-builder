@@ -30,14 +30,6 @@ class PoiWorkbookDefinition extends AbstractWorkbookDefinition implements Workbo
         return workbook;
     }
 
-
-    <T> T asType(Class<T> type) {
-        if (type.isInstance(workbook)) {
-            return type.cast(workbook);
-        }
-        return DefaultGroovyMethods.asType(this, type);
-    }
-
     void addPendingLink(String ref, PoiCellDefinition cell) {
         addPendingLink(new PoiPendingLink(cell, ref));
     }

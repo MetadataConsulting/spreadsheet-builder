@@ -28,7 +28,7 @@ class PoiLinkDefinition implements LinkDefinition {
 
     @Override
     public PoiCellDefinition email(String email) {
-        XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().asType(XSSFWorkbook.class);
+        XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().getWorkbook();
         XSSFHyperlink link = workbook.getCreationHelper().createHyperlink(Hyperlink.LINK_EMAIL);
         link.setAddress("mailto:" + email);
         cell.getCell().setHyperlink(link);
@@ -38,7 +38,7 @@ class PoiLinkDefinition implements LinkDefinition {
     @Override
     public PoiCellDefinition email(final Map<String, ?> parameters, String email) {
         try {
-            XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().asType(XSSFWorkbook.class);
+            XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().getWorkbook();
             XSSFHyperlink link = workbook.getCreationHelper().createHyperlink(Hyperlink.LINK_EMAIL);
             List<String> params = new ArrayList<String>();
             for (Map.Entry<String, ?> parameter: parameters.entrySet()) {
@@ -58,7 +58,7 @@ class PoiLinkDefinition implements LinkDefinition {
 
     @Override
     public PoiCellDefinition url(String url) {
-        XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().asType(XSSFWorkbook.class);
+        XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().getWorkbook();
         XSSFHyperlink link = workbook.getCreationHelper().createHyperlink(Hyperlink.LINK_URL);
         link.setAddress(url);
         cell.getCell().setHyperlink(link);
@@ -67,7 +67,7 @@ class PoiLinkDefinition implements LinkDefinition {
 
     @Override
     public PoiCellDefinition file(String path) {
-        XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().asType(XSSFWorkbook.class);
+        XSSFWorkbook workbook = cell.getRow().getSheet().getWorkbook().getWorkbook();
         XSSFHyperlink link = workbook.getCreationHelper().createHyperlink(Hyperlink.LINK_FILE);
         link.setAddress(path);
         cell.getCell().setHyperlink(link);
