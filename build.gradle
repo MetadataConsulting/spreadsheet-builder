@@ -29,7 +29,7 @@ dependencies {
 
 }
 
-String currentVersion = '1.0.RC2'
+String currentVersion = '1.0'
 
 version = currentVersion
 
@@ -40,7 +40,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    group = 'org.modelcatalogue'
+    group = 'builders.dsl'
 
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
@@ -105,12 +105,12 @@ subprojects {
         def projectDescription = project.description
 
         pkg {
-            websiteUrl = 'http://metadataregistry.github.io/spreadsheet-builder/'
-            issueTrackerUrl = 'https://github.com/MetadataRegistry/spreadsheet-builder/issues'
-            vcsUrl = 'https://github.com/MetadataRegistry/spreadsheet-builder.git'
+            websiteUrl = 'http://spreadsheet.dsl.builders/'
+            issueTrackerUrl = 'https://github.com/dsl-builders/spreadsheet/issues'
+            vcsUrl = 'https://github.com/dsl-builders/spreadsheet.git'
 
-            repo = 'model-catalogue' // or your repo name
-            userOrg = 'metadata'
+            repo = 'maven' // or your repo name
+            userOrg = 'dsl-builders'
             name = projectName       // somehow project.* doesn't work in this closure
             desc = projectDescription
             licenses = ['Apache-2.0']
@@ -153,11 +153,11 @@ asciidoctor {
             icons: 'font',
             'toc': 'left',
             version: project.version,
-            'projectUrl': 'https://github.com/MetadataRegistry/spreadsheet-builder'
+            'projectUrl': 'https://github.com/dsl-builders/spreadsheet.git'
 }
 
 githubPages {
-    repoUri = 'https://github.com/MetadataRegistry/spreadsheet-builder.git'
+    repoUri = 'https://github.com/dsl-builders/spreadsheet.git'
 
     credentials {
         username = getPropertyOrUseDefault('githubToken', '')

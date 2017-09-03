@@ -13,14 +13,14 @@ Spreadsheet Builder API is available on Maven central and JCenter.
 [source,indent=0,role="primary",subs='attributes']
 .Gradle
 ----
-compile 'org.modelcatalogue:spreadsheet-builder-poi:{version}'
+compile 'builders.dsl:spreadsheet-builder-poi:{version}'
 ----
 
 [source,xml,indent=0,role="secondary",subs='verbatim,attributes']
 .Maven
 ----
 <dependency>
-  <groupId>org.modelcatalogue</groupId>
+  <groupId>builders.dsl</groupId>
   <artifactId>spreadsheet-builder-poi</artifactId>
   <version>{version}</version>
   <type>pom</type>
@@ -34,7 +34,7 @@ Following example creates the basic spreadsheet with two rows and three columns.
 [source,indent=0,role="primary"]
 .Groovy
 ----
-import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder
+import builders.dsl.spreadsheet.builder.poi.PoiSpreadsheetBuilder
 
 File file = new File('spreadsheet.xlsx')
 
@@ -62,9 +62,9 @@ PoiSpreadsheetBuilder.create(file).build {                                      
 [source,java,indent=0,role="secondary"]
 .Java
 ----
-import org.modelcatalogue.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
+import builders.dsl.spreadsheet.builder.poi.PoiSpreadsheetBuilder;
 
-import static org.modelcatalogue.spreadsheet.api.Keywords.*;
+import static builders.dsl.spreadsheet.api.Keywords.*;
 
 public class SpreadsheetWriter {
     
@@ -1680,7 +1680,7 @@ image:wrap.png[]
 
 === Reusing Styles
 
-You can externalize your styles configuration into class implementing `org.modelcatalogue.spreadsheet.builder.api.Stylesheet`
+You can externalize your styles configuration into class implementing `builders.dsl.spreadsheet.builder.api.Stylesheet`
 interface to maximize code reuse or report customization.
 
 [source,indent=0,role="primary"]
@@ -1792,9 +1792,9 @@ You can query the spreadsheet with similar syntax as you build it.
 [source,indent=0,role="primary"]
 .Groovy
 ----
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria
+import builders.dsl.spreadsheet.query.api.SpreadsheetCriteria
+import builders.dsl.spreadsheet.query.api.SpreadsheetCriteriaResult
+import builders.dsl.spreadsheet.query.poi.PoiSpreadsheetCriteria
 
 File file = new File('spreadsheet.xlsx')
 
@@ -1823,9 +1823,9 @@ assert result.cells.first().value == 'B'
 [source,java,indent=0,role="secondary"]
 .Java
 ----
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteria;
-import org.modelcatalogue.spreadsheet.query.api.SpreadsheetCriteriaResult;
-import org.modelcatalogue.spreadsheet.query.poi.PoiSpreadsheetCriteria;
+import builders.dsl.spreadsheet.query.api.SpreadsheetCriteria;
+import builders.dsl.spreadsheet.query.api.SpreadsheetCriteriaResult;
+import builders.dsl.spreadsheet.query.poi.PoiSpreadsheetCriteria;
 
 import java.io.File;
 
@@ -2396,6 +2396,9 @@ Builder and criteria definition chaining - methods returning self instead of `vo
 Added ability to hide sheets https://github.com/MetadataConsulting/spreadsheet-builder/issues/19[#19].
 
 === Breaking Changes
+
+Package migration from `org.modelcatalogue.spreadsheet` to `builders.dsl.spreadsheet`.
+
 `PoiSpradsheetBuilder` will no longer allow to create cell names which are invalid by Excel. Use `PoiCellDefinition#fixName(String)`
  manually to ensure no exception will be thrown.
 
@@ -2466,7 +2469,7 @@ font {
 ----
 
 The package and names for interfaces has been changed. Most of the previous
-API now resides in `org.modelcatalogue.spreadsheet.builder.api` package. The
+API now resides in `builders.dsl.spreadsheet.builder.api` package. The
 name of the interfaces used by builder closures got `*Definition` suffix (e.g. `SheetDefinition`)
 to distinguish them from the ones returned from queries.
 
