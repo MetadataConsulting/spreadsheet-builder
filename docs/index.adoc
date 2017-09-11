@@ -6,6 +6,10 @@ image::ribbon.png[link={projectUrl}]
 Spreadsheet builder provides convenient way how to read and create MS Excel OfficeOpenXML
 Documents (XSLX) focus not only on content side but also on easy styling.
 
+
+[NOTE]
+Newer version including Java 8 support available under new coordinates: http://spreadsheet.dsl.builders
+
 = Writing Spreadsheets
 
 Following example creates the basic spreadsheet with two rows and three columns.
@@ -1392,6 +1396,9 @@ The color you usually see in the cell is `foreground!` not a `background` as you
 ====
 
 = Changelog
+
+== 0.4.1
+Added `DataRow` for easier retrieval of row data.
 
 == 0.4.0
 Ability to also retrieve sheet or rows from the criteria query.
