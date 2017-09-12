@@ -51,19 +51,19 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
         self.value(sequence.stripIndent().trim())
     }
 
-    static CanDefineStyle style(CanDefineStyle stylable, String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    static CanDefineStyle style(CanDefineStyle stylable, String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         stylable.style(name, styleDefinition as Configurer<CellStyleDefinition>)
     }
 
-    static CellDefinition comment(CellDefinition cellDefinition, @DelegatesTo(CommentDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CommentDefinition") Closure commentDefinition) {
+    static CellDefinition comment(CellDefinition cellDefinition, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CommentDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CommentDefinition") Closure commentDefinition) {
         cellDefinition.comment(commentDefinition as Configurer<CommentDefinition>)
     }
 
-    static CellDefinition text(CellDefinition cellDefinition, String text, @DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
+    static CellDefinition text(CellDefinition cellDefinition, String text, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = FontDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
         cellDefinition.text(text, fontConfiguration as Configurer<FontDefinition>)
     }
 
-    static CellStyleDefinition font(CellStyleDefinition style, @DelegatesTo(FontDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
+    static CellStyleDefinition font(CellStyleDefinition style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = FontDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.FontDefinition") Closure fontConfiguration) {
         style.font(fontConfiguration as Configurer<FontDefinition>)
     }
 
@@ -71,7 +71,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * Configures all the borders of the cell.
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleDefinition border(CellStyleDefinition style, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+    static CellStyleDefinition border(CellStyleDefinition style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         style.border(borderConfiguration as Configurer<BorderDefinition>)
     }
 
@@ -80,7 +80,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param location border to be configured
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleDefinition border(CellStyleDefinition style, Keywords.BorderSide location, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+    static CellStyleDefinition border(CellStyleDefinition style, Keywords.BorderSide location, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         style.border(location, borderConfiguration as Configurer<BorderDefinition>)
     }
 
@@ -90,7 +90,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param second second border to be configured
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleDefinition border(CellStyleDefinition style, Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+    static CellStyleDefinition border(CellStyleDefinition style, Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         style.border(first, second, borderConfiguration as Configurer<BorderDefinition>)
     }
 
@@ -101,7 +101,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param third third border to be configured
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleDefinition border(CellStyleDefinition style, Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
+    static CellStyleDefinition border(CellStyleDefinition style, Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Closure borderConfiguration) {
         style.border(first, second, third, borderConfiguration as Configurer<BorderDefinition>)
     }
 
@@ -111,7 +111,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param name the name of the style
      * @param styleDefinition the definition of the style customizing the predefined style
      */
-    static HasStyle style(HasStyle stylable, String name, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    static HasStyle style(HasStyle stylable, String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         stylable.style(name, styleDefinition as Configurer<CellStyleDefinition>)
     }
 
@@ -121,7 +121,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param names the names of the styles
      * @param styleDefinition the definition of the style customizing the predefined style
      */
-    static HasStyle styles(HasStyle stylable, Iterable<String> names, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    static HasStyle styles(HasStyle stylable, Iterable<String> names, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         stylable.styles(names, styleDefinition as Configurer<CellStyleDefinition>)
     }
 
@@ -129,23 +129,23 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * Applies the style defined by the closure to the current element.
      * @param styleDefinition the definition of the style
      */
-    static HasStyle style(HasStyle stylable, @DelegatesTo(CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
+    static HasStyle style(HasStyle stylable, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Closure styleDefinition) {
         stylable.style(styleDefinition as Configurer<CellStyleDefinition>)
     }
 
-    static RowDefinition cell(RowDefinition row, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
+    static RowDefinition cell(RowDefinition row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         row.cell(cellDefinition as Configurer<CellDefinition>)
     }
-    static RowDefinition cell(RowDefinition row, int column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
+    static RowDefinition cell(RowDefinition row, int column, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         row.cell(column, cellDefinition as Configurer<CellDefinition>)
     }
-    static RowDefinition cell(RowDefinition row, String column, @DelegatesTo(CellDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
+    static RowDefinition cell(RowDefinition row, String column, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellDefinition") Closure cellDefinition) {
         row.cell(column, cellDefinition as Configurer<CellDefinition>)
     }
-    static RowDefinition group(RowDefinition row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
+    static RowDefinition group(RowDefinition row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
         row.group(insideGroupDefinition as Configurer<RowDefinition>)
     }
-    static RowDefinition collapse(RowDefinition row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
+    static RowDefinition collapse(RowDefinition row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure insideGroupDefinition) {
         row.collapse(insideGroupDefinition as Configurer<RowDefinition>)
     }
 
@@ -153,7 +153,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * Creates new row in the spreadsheet.
      * @param rowDefinition closure defining the content of the row
      */
-    static SheetDefinition row(SheetDefinition sheet, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
+    static SheetDefinition row(SheetDefinition sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
         sheet.row(rowDefinition as Configurer<RowDefinition>)
     }
 
@@ -162,14 +162,14 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param row row number (1 based - the same as is shown in the file)
      * @param rowDefinition closure defining the content of the row
      */
-    static SheetDefinition row(SheetDefinition sheet, int row, @DelegatesTo(RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
+    static SheetDefinition row(SheetDefinition sheet, int row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.RowDefinition") Closure rowDefinition) {
         sheet.row(row, rowDefinition as Configurer<RowDefinition>)
     }
 
-    static SheetDefinition group(SheetDefinition sheet, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
+    static SheetDefinition group(SheetDefinition sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SheetDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
         sheet.group(insideGroupDefinition as Configurer<SheetDefinition>)
     }
-    static SheetDefinition collapse(SheetDefinition sheet, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
+    static SheetDefinition collapse(SheetDefinition sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SheetDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.SheetDefinition") Closure insideGroupDefinition) {
         sheet.collapse(insideGroupDefinition as Configurer<SheetDefinition>)
     }
 
@@ -177,7 +177,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * Configures the basic page settings.
      * @param pageDefinition closure defining the page settings
      */
-    static SheetDefinition page(SheetDefinition sheet, @DelegatesTo(PageDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.PageDefinition") Closure pageDefinition) {
+    static SheetDefinition page(SheetDefinition sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = PageDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.PageDefinition") Closure pageDefinition) {
         sheet.page(pageDefinition as Configurer<PageDefinition>)
     }
 
@@ -189,23 +189,23 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
         self.state(state)
     }
 
-    static void build(SpreadsheetBuilder builder, @DelegatesTo(WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
+    static void build(SpreadsheetBuilder builder, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookDefinition.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.builder.api.WorkbookDefinition") Closure workbookDefinition) {
         builder.build(workbookDefinition as Configurer<WorkbookDefinition>)
     }
 
-    static WorkbookDefinition sheet(WorkbookDefinition workbook, String name, @DelegatesTo(SheetDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.SheetDefinition") Closure sheetDefinition) {
+    static WorkbookDefinition sheet(WorkbookDefinition workbook, String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SheetDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.SheetDefinition") Closure sheetDefinition) {
         workbook.sheet(name, sheetDefinition as Configurer<SheetDefinition>)
     }
 
-    static CellCriterion style(CellCriterion cell, @DelegatesTo(CellStyleCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.CellStyleCriterion") Closure styleCriterion) {
+    static CellCriterion style(CellCriterion cell, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.CellStyleCriterion") Closure styleCriterion) {
         cell.style(styleCriterion as Configurer<CellStyleCriterion>)
     }
-    static CellCriterion or(CellCriterion cell, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure sheetCriterion) {
+    static CellCriterion or(CellCriterion cell, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure sheetCriterion) {
         cell.or(sheetCriterion as Configurer<CellCriterion>)
     }
 
 
-    static CellStyleCriterion font(CellStyleCriterion style, @DelegatesTo(FontCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.FontCriterion") Closure fontCriterion) {
+    static CellStyleCriterion font(CellStyleCriterion style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = FontCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.FontCriterion") Closure fontCriterion) {
         style.font(fontCriterion as Configurer<FontCriterion>)
     }
 
@@ -213,7 +213,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * Configures all the borders of the cell.
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleCriterion border(CellStyleCriterion style, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    static CellStyleCriterion border(CellStyleCriterion style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
         style.border(borderConfiguration as Configurer<BorderCriterion>)
     }
 
@@ -222,7 +222,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param location border to be configured
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleCriterion border(CellStyleCriterion style, Keywords.BorderSide location, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    static CellStyleCriterion border(CellStyleCriterion style, Keywords.BorderSide location, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
         style.border(location, borderConfiguration as Configurer<BorderCriterion>)
     }
 
@@ -232,7 +232,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param second second border to be configured
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleCriterion border(CellStyleCriterion style, Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    static CellStyleCriterion border(CellStyleCriterion style, Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
         style.border(first, second, borderConfiguration as Configurer<BorderCriterion>)
     }
 
@@ -243,60 +243,60 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
      * @param third third border to be configured
      * @param borderConfiguration border configuration closure
      */
-    static CellStyleCriterion border(CellStyleCriterion style, Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
+    static CellStyleCriterion border(CellStyleCriterion style, Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.BorderCriterion") Closure borderConfiguration) {
         style.border(first, second, third, borderConfiguration as Configurer<BorderCriterion>)
     }
 
-    static RowCriterion cell(RowCriterion row, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+    static RowCriterion cell(RowCriterion row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         row.cell(cellCriterion as Configurer<CellCriterion>)
     }
-    static RowCriterion cell(RowCriterion row, int column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+    static RowCriterion cell(RowCriterion row, int column, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         row.cell(column, cellCriterion as Configurer<CellCriterion>)
     }
-    static RowCriterion cell(RowCriterion row, String column, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+    static RowCriterion cell(RowCriterion row, String column, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         row.cell(column, cellCriterion as Configurer<CellCriterion>)
     }
-    static RowCriterion cell(RowCriterion row, int from, int to, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+    static RowCriterion cell(RowCriterion row, int from, int to, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         row.cell(from, to, cellCriterion as Configurer<CellCriterion>)
     }
-    static RowCriterion cell(RowCriterion row, String from, String to, @DelegatesTo(CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
+    static RowCriterion cell(RowCriterion row, String from, String to, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.CellCriterion") Closure cellCriterion) {
         row.cell(from, to, cellCriterion as Configurer<CellCriterion>)
     }
 
-    static RowCriterion or(RowCriterion row, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
+    static RowCriterion or(RowCriterion row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
         row.or(rowCriterion as Configurer<RowCriterion>)
     }
 
-    static SheetCriterion row(SheetCriterion sheet, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
+    static SheetCriterion row(SheetCriterion sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
         sheet.row(rowCriterion as Configurer<RowCriterion>)
     }
-    static SheetCriterion row(SheetCriterion sheet, int row, @DelegatesTo(RowCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
+    static SheetCriterion row(SheetCriterion sheet, int row, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RowCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.RowCriterion") Closure rowCriterion) {
         sheet.row(row, rowCriterion as Configurer<RowCriterion>)
     }
-    static SheetCriterion page(SheetCriterion sheet, @DelegatesTo(PageCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.PageCriterion") Closure pageCriterion) {
+    static SheetCriterion page(SheetCriterion sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = PageCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.PageCriterion") Closure pageCriterion) {
         sheet.page(pageCriterion as Configurer<PageCriterion>)
     }
-    static SheetCriterion or(SheetCriterion sheet, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
+    static SheetCriterion or(SheetCriterion sheet, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SheetCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         sheet.or(sheetCriterion as Configurer<SheetCriterion>)
     }
 
-    static SpreadsheetCriteriaResult query(SpreadsheetCriteria criteria, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    static SpreadsheetCriteriaResult query(SpreadsheetCriteria criteria, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
         criteria.query(workbookCriterion as Configurer<WorkbookCriterion>)
     }
-    static Cell find(SpreadsheetCriteria criteria, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    static Cell find(SpreadsheetCriteria criteria, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
         criteria.find(workbookCriterion as Configurer<WorkbookCriterion>)
     }
-    static boolean exists(SpreadsheetCriteria criteria, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
+    static boolean exists(SpreadsheetCriteria criteria, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value = FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) throws FileNotFoundException {
         criteria.exists(workbookCriterion as Configurer<WorkbookCriterion>)
     }
 
-    static WorkbookCriterion sheet(WorkbookCriterion workbook, String name, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
+    static WorkbookCriterion sheet(WorkbookCriterion workbook, String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SheetCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         workbook.sheet(name, sheetCriterion as Configurer<SheetCriterion>)
     }
-    static WorkbookCriterion sheet(WorkbookCriterion workbook, @DelegatesTo(SheetCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
+    static WorkbookCriterion sheet(WorkbookCriterion workbook, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SheetCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.SheetCriterion") Closure sheetCriterion) {
         workbook.sheet(sheetCriterion as Configurer<SheetCriterion>)
     }
-    static WorkbookCriterion or(WorkbookCriterion workbook, @DelegatesTo(WorkbookCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) {
+    static WorkbookCriterion or(WorkbookCriterion workbook, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.query.api.WorkbookCriterion") Closure workbookCriterion) {
         workbook.or(workbookCriterion as Configurer<WorkbookCriterion>)
     }
 
