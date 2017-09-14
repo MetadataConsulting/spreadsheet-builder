@@ -1012,7 +1012,7 @@ sheet('Sample') {
         cell {
             value 'Top Left'
             style {
-                align top left
+                align top, left
             }
             width 20
             height 50
@@ -1020,14 +1020,14 @@ sheet('Sample') {
         cell {
             value 'Top Center'
             style {
-                align top center
+                align top, center
             }
             width 20
         }
         cell {
             value 'Top Right'
             style {
-                align top right
+                align top, right
             }
             width 20
         }
@@ -2398,6 +2398,11 @@ The color you usually see in the cell is `foreground` not a `background` as you 
 ====
 
 = Changelog
+
+== 1.0.1
+Better support in IntelliJ IDEA.
+
+Deprecated alignment definition without comma in Groovy such as `align center center` in favor of `align center, center`
 
 == 1.0
 Java-only API which can be used with Java 8.

@@ -47,7 +47,7 @@ import builders.dsl.spreadsheet.query.api.WorkbookCriterion
  */
 @CompileStatic class SpreadsheetBuilderExtensions {
 
-    static CellDefinition(CellDefinition self, CharSequence sequence) {
+    static CellDefinition value(CellDefinition self, CharSequence sequence) {
         self.value(sequence.stripIndent().trim())
     }
 

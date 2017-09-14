@@ -1,6 +1,10 @@
 package builders.dsl.spreadsheet.builder.api;
 
 import builders.dsl.spreadsheet.api.*;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.FromString;
 
 public interface CellStyleDefinition extends ForegroundFillProvider, BorderPositionProvider, ColorProvider {
 
@@ -14,7 +18,7 @@ public interface CellStyleDefinition extends ForegroundFillProvider, BorderPosit
 
     CellStyleDefinition fill(ForegroundFill fill);
 
-    CellStyleDefinition font(Configurer<FontDefinition> fontConfiguration);
+    CellStyleDefinition font(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = FontDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.FontDefinition") Configurer<FontDefinition> fontConfiguration);
 
     /**
      * Sets the indent of the cell in spaces.
@@ -43,14 +47,14 @@ public interface CellStyleDefinition extends ForegroundFillProvider, BorderPosit
      * Configures all the borders of the cell.
      * @param borderConfiguration border configuration
      */
-    CellStyleDefinition border(Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Configurer<BorderDefinition> borderConfiguration);
 
     /**
      * Configures one border of the cell.
      * @param location border to be configured
      * @param borderConfiguration border configuration
      */
-    CellStyleDefinition border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Keywords.BorderSide location, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Configurer<BorderDefinition> borderConfiguration);
 
     /**
      * Configures two borders of the cell.
@@ -58,7 +62,7 @@ public interface CellStyleDefinition extends ForegroundFillProvider, BorderPosit
      * @param second second border to be configured
      * @param borderConfiguration border configuration
      */
-    CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Configurer<BorderDefinition> borderConfiguration);
 
     /**
      * Configures three borders of the cell.
@@ -67,6 +71,6 @@ public interface CellStyleDefinition extends ForegroundFillProvider, BorderPosit
      * @param third third border to be configured
      * @param borderConfiguration border configuration
      */
-    CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderDefinition> borderConfiguration);
+    CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = BorderDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.BorderDefinition") Configurer<BorderDefinition> borderConfiguration);
 
 }

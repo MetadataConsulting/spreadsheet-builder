@@ -4,6 +4,8 @@ import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.builder.api.CellDefinition;
 import builders.dsl.spreadsheet.builder.api.CellStyleDefinition;
 import builders.dsl.spreadsheet.builder.api.RowDefinition;
+import groovy.lang.Closure;
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
 import java.util.*;
 
@@ -40,7 +42,7 @@ public abstract class AbstractRowDefinition implements RowDefinition {
 
     @Override
     public final RowDefinition cell() {
-        cell(null);
+        cell((Object)null);
         return this;
     }
 
@@ -76,6 +78,12 @@ public abstract class AbstractRowDefinition implements RowDefinition {
         poiCell.resolve();
 
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public RowDefinition cell(Closure cellDefinition) {
+        return cell(DefaultGroovyMethods.asType(cellDefinition, Configurer.class));
     }
 
     protected abstract void handleSpans(AbstractCellDefinition poiCell);

@@ -3,6 +3,7 @@ package builders.dsl.spreadsheet.api.groovy;
 import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.builder.api.CellStyleDefinition;
 
+@Deprecated
 class DefaultHorizontalAlignmentConfigurer implements HorizontalAlignmentConfigurer {
     DefaultHorizontalAlignmentConfigurer(CellStyleDefinition cellStyleDefinition, Keywords.VerticalAlignment verticalAlignment) {
         this.verticalAlignment = verticalAlignment;

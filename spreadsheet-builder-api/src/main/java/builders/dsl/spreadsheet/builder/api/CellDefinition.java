@@ -2,6 +2,10 @@ package builders.dsl.spreadsheet.builder.api;
 
 import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.api.Keywords;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.FromString;
 
 public interface CellDefinition extends HasStyle {
 
@@ -13,7 +17,7 @@ public interface CellDefinition extends HasStyle {
     CellDefinition name(String name);
     CellDefinition formula(String formula);
     CellDefinition comment(String comment);
-    CellDefinition comment(Configurer<CommentDefinition> commentDefinition);
+    CellDefinition comment(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CommentDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CommentDefinition") Configurer<CommentDefinition> commentDefinition);
 
     LinkDefinition link(Keywords.To to);
 
@@ -64,7 +68,7 @@ public interface CellDefinition extends HasStyle {
      *
      * @param text new text run
      */
-    CellDefinition text(String text, Configurer<FontDefinition> fontConfiguration);
+    CellDefinition text(String text, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = FontDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.FontDefinition") Configurer<FontDefinition> fontConfiguration);
 
     ImageCreator png(Keywords.Image image);
     ImageCreator jpeg(Keywords.Image image);
@@ -73,10 +77,10 @@ public interface CellDefinition extends HasStyle {
     ImageCreator wmf(Keywords.Image image);
     ImageCreator dib(Keywords.Image image);
 
-    CellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition);
-    CellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition style(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition styles(Iterable<String> names, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Configurer<CellStyleDefinition> styleDefinition);
     CellDefinition styles(Iterable<String> styles, Iterable<Configurer<CellStyleDefinition>> styleDefinitions);
-    CellDefinition style(Configurer<CellStyleDefinition> styleDefinition);
+    CellDefinition style(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellStyleDefinition.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.CellStyleDefinition") Configurer<CellStyleDefinition> styleDefinition);
     CellDefinition style(String name);
     CellDefinition styles(String... names);
     CellDefinition styles(Iterable<String> names);

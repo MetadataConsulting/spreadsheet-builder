@@ -431,7 +431,7 @@ abstract class AbstractBuilderSpec extends Specification {
             }
 
             style 'centered', {
-                align center center
+                align center, center
             }
 
             style 'redfg', {
@@ -581,7 +581,7 @@ abstract class AbstractBuilderSpec extends Specification {
                             size 12
                         }
                         text '\n'
-                        for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '': 'nothing']) {
+                        for (Map.Entry<String, String> entry in [foo: 'bar', boo: 'cow', empty: '', '': 'nothing'].entrySet()) {
                             text entry.key, {
                                 style bold
                             }
@@ -612,7 +612,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         for (Map.Entry<String, String> entry in [
                                 FULL_WITHDRAWAL   : 'OPTION 2: FULL WITHDRAWAL: No further use',
                                 PARTIAL_WITHDRAWAL: 'OPTION 1: PARTIAL WITHDRAWAL: No further contact'
-                        ]) {
+                        ].entrySet()) {
                             text entry.key, {
                                 style bold
                             }
@@ -677,7 +677,7 @@ abstract class AbstractBuilderSpec extends Specification {
 
                 row {
                     style {
-                        align center left
+                        align center, left
                         border {
                             color '#abcdef'
                             style dashDotDot
@@ -703,7 +703,7 @@ abstract class AbstractBuilderSpec extends Specification {
                     cell {
                         style {
                             format 'd.m.y'
-                            align center center
+                            align center, center
                         }
                         value today
                         comment 'This is a date!'
