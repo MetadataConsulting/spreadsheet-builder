@@ -142,7 +142,7 @@ asciidoctor {
 
     resources {
         from(sourceDir) {
-            include 'css/**', 'images/**'
+            include 'css/**', 'images/**', 'CNAME'
         }
     }
 

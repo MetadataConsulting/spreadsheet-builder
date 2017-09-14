@@ -13,7 +13,18 @@ Spreadsheet Builder API is available on JCenter.
 [source,indent=0,role="primary",subs='attributes']
 .Gradle
 ----
-compile 'builders.dsl:spreadsheet-builder-poi:{version}'
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'builders.dsl:spreadsheet-builder-poi:{version}'
+    // for groovy support
+    compile 'builders.dsl:spreadsheet-builder-groovy:{version}'
+}
+
 ----
 
 [source,xml,indent=0,role="secondary",subs='verbatim,attributes']
