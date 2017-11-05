@@ -112,7 +112,7 @@ image::basic_sample.png[]
 
 [TIP]
 ====
-You can pass an existing spreadsheet file as a template as the very first argument of the `build` method.
+You can pass an existing spreadsheet file as a template to `PoiSpreadsheetBuilder.create` method.
 ====
 
 == Sheets and Rows
