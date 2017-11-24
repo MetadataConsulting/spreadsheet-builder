@@ -10,6 +10,8 @@ import builders.dsl.spreadsheet.impl.AbstractSheetDefinition;
 
 class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinition {
 
+    private static final int WIDTH_ARROW_BUTTON = 2 * 255;
+
     private final XSSFSheet xssfSheet;
 
     PoiSheetDefinition(PoiWorkbookDefinition workbook, XSSFSheet xssfSheet) {
@@ -91,6 +93,9 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
     protected void processAutoColumns() {
         for (Integer index : autoColumns) {
             xssfSheet.autoSizeColumn(index);
+            if (automaticFilter) {
+                xssfSheet.setColumnWidth(index, xssfSheet.getColumnWidth(index) + WIDTH_ARROW_BUTTON);
+            }
         }
     }
 
