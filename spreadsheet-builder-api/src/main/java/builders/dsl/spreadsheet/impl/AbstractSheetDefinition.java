@@ -174,7 +174,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
 
     @Override
     public void resolve() {
-        processAutoColumns();
         processAutomaticFilter();
+        processAutoColumns();
     }
 }
