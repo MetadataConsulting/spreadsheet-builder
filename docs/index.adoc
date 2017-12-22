@@ -906,7 +906,7 @@ style ('headers') {
         color black
     }
     font {
-        make bold
+        style bold
     }
     background whiteSmoke
 }
@@ -932,7 +932,7 @@ sheet('Sample') {
             value "Groovy Spreadsheet Builder"
             style {
                 font {
-                    make bold
+                    style bold
                 }
             }
         }
@@ -950,7 +950,7 @@ w.style ("headers", st -> {
         b.color(black);
     });
     st.font(f -> {
-        f.make(bold);
+        f.style(bold);
     });
     st.background(whiteSmoke);
 });
@@ -977,7 +977,7 @@ w.sheet("Sample", s -> {
             c.value("Groovy Spreadsheet Builder");
             c.style(st -> {
                 st.font(f -> {
-                    f.make(bold);
+                    f.style(bold);
                 });
             });
         });
@@ -1159,7 +1159,7 @@ row {
         value 'Bold Red 22'
         style {
             font {
-                make bold
+                style bold
                 color red
                 size 22
             }
@@ -1170,7 +1170,7 @@ row {
         value 'Underline Courier New'
         style {
             font {
-                make underline
+                style underline
                 name 'Courier New'
             }
         }
@@ -1180,7 +1180,7 @@ row {
         value 'Italic'
         style {
             font {
-                make italic
+                style italic
             }
         }
     }
@@ -1189,7 +1189,7 @@ row {
         value 'Strikeout'
         style {
             font {
-                make strikeout
+                style strikeout
             }
         }
     }
@@ -1205,7 +1205,7 @@ s.row(r -> {
         c.value("Bold Red 22");
         c.style(st -> {
             st.font(f -> {
-                f.make(bold);
+                f.stylestyle(bold);
                 f.color(red);
                 f.size(22);
             });
@@ -1216,7 +1216,7 @@ s.row(r -> {
         c.value("Underline Courier New");
         c.style(st -> {
             st.font(f -> {
-                f.make(underline);
+                f.stylestyle(underline);
                 f.name("Courier New");
             });
         });
@@ -1226,7 +1226,7 @@ s.row(r -> {
         c.value("Italic");
         c.style(st -> {
             st.font(f -> {
-                f.make(italic);
+                f.stylestyle(italic);
             });
         });
     });
@@ -1235,7 +1235,7 @@ s.row(r -> {
         c.value("Strikeout");
         c.style(st -> {
             st.font(f -> {
-                f.make(strikeout);
+                f.style(strikeout);
             });
         });
     });
@@ -1264,12 +1264,12 @@ cell {
     }
     text ' '
     text 'Riding', {
-        make italic
+        style italic
         size 18
     }
     text ' '
     text 'Hood', {
-        make bold
+        style bold
         size 22
     }
 
@@ -1288,12 +1288,12 @@ r.cell(c -> {
     });
     c.text(" ");
     c.text("Riding", f -> {
-        f.make(italic);
+        f.style(italic);
         f.size(18);
     });
     c.text(" ");;
     c.text("Hood", f -> {
-        f.make(bold);
+        f.style(bold);
         f.size(22);
     });
 });
@@ -2398,6 +2398,10 @@ The color you usually see in the cell is `foreground` not a `background` as you 
 ====
 
 = Changelog
+
+== 1.0.3
+
+Fixed problem with automatic width of column with long text and automatic filter https://github.com/dsl-builders/spreadsheet/issues/2[#5]
 
 == 1.0.2
 
