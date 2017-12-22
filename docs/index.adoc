@@ -2399,6 +2399,10 @@ The color you usually see in the cell is `foreground` not a `background` as you 
 
 = Changelog
 
+== 1.0.2
+
+Fixed problem with automatic column widths when automatic filter is enabled https://github.com/dsl-builders/spreadsheet/issues/2[#2]
+
 == 1.0.1
 Better support in IntelliJ IDEA.
 
