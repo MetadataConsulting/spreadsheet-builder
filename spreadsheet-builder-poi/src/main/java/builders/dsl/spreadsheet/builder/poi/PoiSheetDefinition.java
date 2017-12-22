@@ -11,6 +11,7 @@ import builders.dsl.spreadsheet.impl.AbstractSheetDefinition;
 class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinition {
 
     private static final int WIDTH_ARROW_BUTTON = 2 * 255;
+    public static final int MAX_COLUMN_WIDTH = 255 * 256;
 
     private final XSSFSheet xssfSheet;
 
@@ -94,7 +95,7 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
         for (Integer index : autoColumns) {
             xssfSheet.autoSizeColumn(index);
             if (automaticFilter) {
-                xssfSheet.setColumnWidth(index, xssfSheet.getColumnWidth(index) + WIDTH_ARROW_BUTTON);
+                xssfSheet.setColumnWidth(index, Math.min(xssfSheet.getColumnWidth(index) + WIDTH_ARROW_BUTTON, MAX_COLUMN_WIDTH));
             }
         }
     }

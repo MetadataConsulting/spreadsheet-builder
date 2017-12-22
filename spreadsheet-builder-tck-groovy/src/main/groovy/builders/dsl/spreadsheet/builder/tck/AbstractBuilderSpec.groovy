@@ -661,6 +661,7 @@ abstract class AbstractBuilderSpec extends Specification {
                 }
             }
             sheet('One') {
+                filter auto
                 freeze 1, 1
                 row {
                     cell 'First Row'
@@ -687,7 +688,7 @@ abstract class AbstractBuilderSpec extends Specification {
                         }
                     }
                     cell {
-                        value 'Hello'
+                        value ('x' * 10000)
                         name 'Salutation'
                         width auto
                     }
