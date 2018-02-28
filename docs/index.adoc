@@ -2399,6 +2399,13 @@ The color you usually see in the cell is `foreground` not a `background` as you 
 
 = Changelog
 
+== 1.0.5
+Fixed problem with fetching cells `above` or `bellow` when cell list in the row.
+
+== 1.0.4
+
+Fixed problem with fetching cells `above` or `bellow` when cell list in the row is not initialized yet.
+
 == 1.0.3
 
 Fixed problem with automatic width of column with long text and automatic filter https://github.com/dsl-builders/spreadsheet/issues/2[#5]

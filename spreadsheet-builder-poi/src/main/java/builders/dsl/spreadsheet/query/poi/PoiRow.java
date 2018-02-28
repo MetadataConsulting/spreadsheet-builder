@@ -65,6 +65,9 @@ class PoiRow implements Row {
     }
 
     builders.dsl.spreadsheet.api.Cell getCellByNumber(int oneBasedColumnNumber) {
+        if (cells == null) {
+            getCells();
+        }
         return cells.get(oneBasedColumnNumber);
     }
 
