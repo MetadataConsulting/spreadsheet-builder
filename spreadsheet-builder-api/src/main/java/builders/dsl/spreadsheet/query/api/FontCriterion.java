@@ -3,6 +3,7 @@ package builders.dsl.spreadsheet.query.api;
 import builders.dsl.spreadsheet.api.*;
 
 import java.util.EnumSet;
+import java.util.function.Predicate;
 
 public interface FontCriterion extends FontStylesProvider, ColorProvider {
 

@@ -4,7 +4,7 @@ import builders.dsl.spreadsheet.api.Cell;
 import builders.dsl.spreadsheet.api.Row;
 import builders.dsl.spreadsheet.impl.Utils;
 import builders.dsl.spreadsheet.query.api.CellCriterion;
-import builders.dsl.spreadsheet.query.api.Predicate;
+import java.util.function.Predicate;
 import builders.dsl.spreadsheet.query.api.RowCriterion;
 
 import java.util.function.Consumer;
@@ -24,12 +24,7 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell, RowCriterion> imp
 
     @Override
     public RowCriterion cell(final int from, final int to) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getColumn() >= from && o.getColumn() <= to;
-            }
-        });
+        addCondition(o -> o.getColumn() >= from && o.getColumn() <= to);
         return this;
     }
 
@@ -55,23 +50,13 @@ final class SimpleRowCriterion extends AbstractCriterion<Cell, RowCriterion> imp
 
     @Override
     public SimpleRowCriterion cell(final int column) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getColumn() == column;
-            }
-        });
+        addCondition(o -> o.getColumn() == column);
         return this;
     }
 
     @Override
     public SimpleRowCriterion cell(final String column) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getColumnAsString().equals(column);
-            }
-        });
+        addCondition(o -> o.getColumnAsString().equals(column));
         return this;
     }
 

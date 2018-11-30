@@ -5,6 +5,8 @@ import builders.dsl.spreadsheet.api.BorderStyle;
 import builders.dsl.spreadsheet.api.BorderStyleProvider;
 import builders.dsl.spreadsheet.api.Color;
 
+import java.util.function.Predicate;
+
 public interface BorderCriterion extends BorderStyleProvider {
 
     BorderCriterion style(BorderStyle style);

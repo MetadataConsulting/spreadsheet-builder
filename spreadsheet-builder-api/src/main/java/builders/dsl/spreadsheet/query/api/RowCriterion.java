@@ -4,6 +4,7 @@ import builders.dsl.spreadsheet.api.Cell;
 import builders.dsl.spreadsheet.api.Row;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface RowCriterion extends Predicate<Cell> {
 

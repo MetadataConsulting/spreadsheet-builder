@@ -1,6 +1,6 @@
 package builders.dsl.spreadsheet.query.simple;
 
-import builders.dsl.spreadsheet.query.api.Predicate;
+import java.util.function.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 abstract class AbstractCriterion<T, C extends Predicate<T>> implements Predicate<T> {
 
-    private final List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
+    private final List<Predicate<T>> predicates = new ArrayList<>();
     private final boolean disjoint;
 
     AbstractCriterion() {

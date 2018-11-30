@@ -5,7 +5,6 @@ import builders.dsl.spreadsheet.api.Cell;
 import java.io.FileNotFoundException;
 import java.util.function.Consumer;
 
-
 /**
  * Cell matcher uses the builder like syntax to find cells within the workbook.
  * Not all the constructs are be supported at the moment.

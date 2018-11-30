@@ -3,6 +3,7 @@ package builders.dsl.spreadsheet.query.api;
 import builders.dsl.spreadsheet.api.*;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface CellStyleCriterion extends ForegroundFillProvider, BorderPositionProvider, ColorProvider {
 

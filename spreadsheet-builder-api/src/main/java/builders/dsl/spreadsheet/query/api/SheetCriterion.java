@@ -6,6 +6,7 @@ import builders.dsl.spreadsheet.api.Sheet;
 import builders.dsl.spreadsheet.api.SheetStateProvider;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface SheetCriterion extends Predicate<Row>, SheetStateProvider {
 

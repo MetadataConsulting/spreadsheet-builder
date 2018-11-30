@@ -5,6 +5,7 @@ import builders.dsl.spreadsheet.api.Comment;
 
 import java.util.Date;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface CellCriterion extends Predicate<Cell> {
 

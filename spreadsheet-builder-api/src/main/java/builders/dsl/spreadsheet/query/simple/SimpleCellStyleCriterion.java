@@ -4,7 +4,7 @@ import builders.dsl.spreadsheet.api.*;
 import builders.dsl.spreadsheet.query.api.BorderCriterion;
 import builders.dsl.spreadsheet.query.api.CellStyleCriterion;
 import builders.dsl.spreadsheet.query.api.FontCriterion;
-import builders.dsl.spreadsheet.query.api.Predicate;
+import java.util.function.Predicate;
 
 import java.util.function.Consumer;
 
@@ -18,155 +18,85 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
 
     @Override
     public SimpleCellStyleCriterion background(final String hexColor) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && new Color(hexColor).equals(o.getStyle().getBackground());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && new Color(hexColor).equals(o.getStyle().getBackground()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion background(final Color color) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && color.equals(o.getStyle().getBackground());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && color.equals(o.getStyle().getBackground()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion background(final Predicate<Color> predicate) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && predicate.test(o.getStyle().getBackground());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && predicate.test(o.getStyle().getBackground()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion foreground(final String hexColor) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && new Color(hexColor).equals(o.getStyle().getForeground());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && new Color(hexColor).equals(o.getStyle().getForeground()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion foreground(final Color color) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && color.equals(o.getStyle().getForeground());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && color.equals(o.getStyle().getForeground()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion foreground(final Predicate<Color> predicate) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && predicate.test(o.getStyle().getForeground());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && predicate.test(o.getStyle().getForeground()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion fill(final ForegroundFill fill) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && fill.equals(o.getStyle().getFill());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && fill.equals(o.getStyle().getFill()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion fill(final Predicate<ForegroundFill> predicate) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && predicate.test(o.getStyle().getFill());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && predicate.test(o.getStyle().getFill()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion indent(final int indent) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && indent == o.getStyle().getIndent();
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && indent == o.getStyle().getIndent());
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion indent(final Predicate<Integer> predicate) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && predicate.test(o.getStyle().getIndent());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && predicate.test(o.getStyle().getIndent()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion rotation(final int rotation) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && rotation == o.getStyle().getRotation();
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && rotation == o.getStyle().getRotation());
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion rotation(final Predicate<Integer> predicate) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && predicate.test(o.getStyle().getRotation());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && predicate.test(o.getStyle().getRotation()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion format(final String format) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && format.equals(o.getStyle().getFormat());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && format.equals(o.getStyle().getFormat()));
         return this;
     }
 
     @Override
     public SimpleCellStyleCriterion format(final Predicate<String> format) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && format.test(o.getStyle().getFormat());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && format.test(o.getStyle().getFormat()));
         return this;
     }
 
@@ -203,12 +133,7 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
 
     @Override
     public CellStyleCriterion having(final Predicate<CellStyle> cellStylePredicate) {
-        parent.addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return o.getStyle() != null && cellStylePredicate.test(o.getStyle());
-            }
-        });
+        parent.addCondition(o -> o.getStyle() != null && cellStylePredicate.test(o.getStyle()));
         return this;
     }
 

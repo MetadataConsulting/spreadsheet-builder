@@ -4,7 +4,7 @@ import builders.dsl.spreadsheet.api.Cell;
 import builders.dsl.spreadsheet.api.Comment;
 import builders.dsl.spreadsheet.query.api.CellCriterion;
 import builders.dsl.spreadsheet.query.api.CellStyleCriterion;
-import builders.dsl.spreadsheet.query.api.Predicate;
+import java.util.function.Predicate;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -81,23 +81,13 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> i
 
     @Override
     public SimpleCellCriterion name(final String name) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return name.equals(o.getName());
-            }
-        });
+        addCondition(o -> name.equals(o.getName()));
         return this;
     }
 
     @Override
     public SimpleCellCriterion comment(final String comment) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return comment.equals(o.getComment().getText());
-            }
-        });
+        addCondition(o -> comment.equals(o.getComment().getText()));
         return this;
     }
 
@@ -118,92 +108,56 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> i
 
     @Override
     public SimpleCellCriterion rowspan(final int span) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return span == o.getRowspan();
-            }
-        });
+        addCondition(o -> span == o.getRowspan());
         return this;
     }
 
     @Override
     public SimpleCellCriterion rowspan(final Predicate<Integer> predicate) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return predicate.test(o.getRowspan());
-            }
-        });
+        addCondition(o -> predicate.test(o.getRowspan()));
         return this;
     }
 
     @Override
     public SimpleCellCriterion colspan(final int span) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return span == o.getColspan();
-            }
-        });
+        addCondition(o -> span == o.getColspan());
         return this;
     }
 
     @Override
     public SimpleCellCriterion colspan(final Predicate<Integer> predicate) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return predicate.test(o.getColspan());
-            }
-        });
+        addCondition(o -> predicate.test(o.getColspan()));
         return this;
     }
 
     @Override
     public SimpleCellCriterion name(final Predicate<String> predicate) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return predicate.test(o.getName());
-            }
-        });
+        addCondition(o -> predicate.test(o.getName()));
         return this;
     }
 
     @Override
     public SimpleCellCriterion comment(final Predicate<Comment> predicate) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                return predicate.test(o.getComment());
-            }
-        });
+        addCondition(o -> predicate.test(o.getComment()));
         return this;
     }
 
     private <T> void addValueCondition(final T value, final Class<T> type) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                try {
-                    return value.equals(o.read(type));
-                } catch (Exception e) {
-                    return false;
-                }
+        addCondition(o -> {
+            try {
+                return value.equals(o.read(type));
+            } catch (Exception e) {
+                return false;
             }
         });
     }
 
     private <T> void addValueCondition(final Predicate<T> predicate, final Class<T> type) {
-        addCondition(new Predicate<Cell>() {
-            @Override
-            public boolean test(Cell o) {
-                try {
-                    return predicate.test(o.read(type));
-                } catch (Exception e) {
-                    return false;
-                }
+        addCondition(o -> {
+            try {
+                return predicate.test(o.read(type));
+            } catch (Exception e) {
+                return false;
             }
         });
     }

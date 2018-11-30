@@ -3,6 +3,7 @@ package builders.dsl.spreadsheet.query.api;
 import builders.dsl.spreadsheet.api.Sheet;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface WorkbookCriterion extends Predicate<Sheet> {
 

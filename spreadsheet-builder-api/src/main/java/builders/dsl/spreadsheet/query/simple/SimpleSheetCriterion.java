@@ -4,7 +4,7 @@ import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.api.Row;
 import builders.dsl.spreadsheet.api.Sheet;
 import builders.dsl.spreadsheet.query.api.PageCriterion;
-import builders.dsl.spreadsheet.query.api.Predicate;
+import java.util.function.Predicate;
 import builders.dsl.spreadsheet.query.api.RowCriterion;
 import builders.dsl.spreadsheet.query.api.SheetCriterion;
 
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> implements SheetCriterion {
 
-    private final Collection<SimpleRowCriterion> criteria = new ArrayList<SimpleRowCriterion>();
+    private final Collection<SimpleRowCriterion> criteria = new ArrayList<>();
     private final SimpleWorkbookCriterion parent;
 
     SimpleSheetCriterion(SimpleWorkbookCriterion parent) {
@@ -51,12 +51,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
 
     @Override
     public SimpleSheetCriterion row(final int row) {
-        addCondition(new Predicate<Row>() {
-            @Override
-            public boolean test(Row o) {
-                return o.getNumber() == row;
-            }
-        });
+        addCondition(o -> o.getNumber() == row);
         return this;
     }
 
@@ -73,12 +68,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
 
     @Override
     public SheetCriterion row(final int from, final int to) {
-        addCondition(new Predicate<Row>() {
-            @Override
-            public boolean test(Row o) {
-                return o.getNumber() >= from && o.getNumber() <= to;
-            }
-        });
+        addCondition(o -> o.getNumber() >= from && o.getNumber() <= to);
         return this;
     }
 
@@ -100,36 +90,16 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     public SheetCriterion state(Keywords.SheetState state) {
         switch (state) {
             case LOCKED:
-                parent.addCondition(new Predicate<Sheet>() {
-                    @Override
-                    public boolean test(Sheet o) {
-                        return o.isLocked();
-                    }
-                });
+                parent.addCondition(Sheet::isLocked);
                 return this;
             case VISIBLE:
-                parent.addCondition(new Predicate<Sheet>() {
-                    @Override
-                    public boolean test(Sheet o) {
-                        return o.isVisible();
-                    }
-                });
+                parent.addCondition(Sheet::isVisible);
                 return this;
             case HIDDEN:
-                parent.addCondition(new Predicate<Sheet>() {
-                    @Override
-                    public boolean test(Sheet o) {
-                        return o.isHidden();
-                    }
-                });
+                parent.addCondition(Sheet::isHidden);
                 return this;
             case VERY_HIDDEN:
-                parent.addCondition(new Predicate<Sheet>() {
-                    @Override
-                    public boolean test(Sheet o) {
-                        return o.isVeryHidden();
-                    }
-                });
+                parent.addCondition(Sheet::isVeryHidden);
                 return this;
         }
         throw new IllegalStateException("Unknown sheet state: " + state);
