@@ -1,6 +1,5 @@
 package builders.dsl.spreadsheet.builder.poi;
 
-import builders.dsl.spreadsheet.api.BorderStyle;
 import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.impl.AbstractBorderDefinition;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;

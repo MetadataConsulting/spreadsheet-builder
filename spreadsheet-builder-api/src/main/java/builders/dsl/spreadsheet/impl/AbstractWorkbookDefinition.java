@@ -1,22 +1,22 @@
 package builders.dsl.spreadsheet.impl;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.builder.api.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
 
-    private final Map<String, Configurer<CellStyleDefinition>> namedStylesDefinition = new LinkedHashMap<String, Configurer<CellStyleDefinition>>();
+    private final Map<String, Consumer<CellStyleDefinition>> namedStylesDefinition = new LinkedHashMap<String, Consumer<CellStyleDefinition>>();
     private final Map<String, AbstractCellStyleDefinition> namedStyles = new LinkedHashMap<String, AbstractCellStyleDefinition>();
     private final Map<String, AbstractSheetDefinition> sheets = new LinkedHashMap<String, AbstractSheetDefinition>();
     private final List<Resolvable> toBeResolved = new ArrayList<Resolvable>();
 
     @Override
-    public final WorkbookDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
+    public final WorkbookDefinition style(String name, Consumer<CellStyleDefinition> styleDefinition) {
         namedStylesDefinition.put(name, styleDefinition);
         return this;
     }
@@ -50,7 +50,7 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
     protected abstract AbstractSheetDefinition createSheet(String name);
 
     @Override
-    public final WorkbookDefinition sheet(String name, Configurer<SheetDefinition> sheetDefinition) {
+    public final WorkbookDefinition sheet(String name, Consumer<SheetDefinition> sheetDefinition) {
         AbstractSheetDefinition sheet = sheets.get(name);
 
         if (sheet == null) {
@@ -58,7 +58,7 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
             sheets.put(name, sheet);
         }
 
-        Configurer.Runner.doConfigure(sheetDefinition, sheet);
+        sheetDefinition.accept(sheet);
 
         sheet.resolve();
 
@@ -76,7 +76,7 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
 
         style = createCellStyle();
         for (String n : names) {
-            Configurer.Runner.doConfigure(getStyleDefinition(n), style);
+            getStyleDefinition(n).accept(style);
         }
 
         style.seal();
@@ -86,8 +86,8 @@ public abstract class AbstractWorkbookDefinition implements WorkbookDefinition {
         return style;
     }
 
-    final Configurer<CellStyleDefinition> getStyleDefinition(String name) {
-        Configurer<CellStyleDefinition> style = namedStylesDefinition.get(name);
+    final Consumer<CellStyleDefinition> getStyleDefinition(String name) {
+        Consumer<CellStyleDefinition> style = namedStylesDefinition.get(name);
         if (style == null) {
             throw new IllegalArgumentException("Style '" + name + "' is not defined");
         }

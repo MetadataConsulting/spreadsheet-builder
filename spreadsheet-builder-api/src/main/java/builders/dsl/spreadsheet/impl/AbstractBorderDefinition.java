@@ -1,8 +1,8 @@
 package builders.dsl.spreadsheet.impl;
 
 import builders.dsl.spreadsheet.api.BorderStyle;
-import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.api.Color;
+import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.builder.api.BorderDefinition;
 
 public abstract class AbstractBorderDefinition implements BorderDefinition {

@@ -5,10 +5,10 @@ import builders.dsl.spreadsheet.api.Workbook;
 import builders.dsl.spreadsheet.query.api.SpreadsheetCriteria;
 import builders.dsl.spreadsheet.query.api.SpreadsheetCriteriaResult;
 import builders.dsl.spreadsheet.query.api.WorkbookCriterion;
-import builders.dsl.spreadsheet.api.Configurer;
 
 import java.io.FileNotFoundException;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 public final class SimpleSpreadsheetCriteria implements SpreadsheetCriteria {
 
@@ -22,22 +22,22 @@ public final class SimpleSpreadsheetCriteria implements SpreadsheetCriteria {
         this.workbook = workbook;
     }
 
-    private SpreadsheetCriteriaResult queryInternal(final int max, Configurer<WorkbookCriterion>  workbookCriterion) {
+    private SpreadsheetCriteriaResult queryInternal(final int max, Consumer<WorkbookCriterion>  workbookCriterion) {
         return new SimpleSpreadsheetCriteriaResult(workbook, workbookCriterion, max);
     }
 
     @Override
     public SpreadsheetCriteriaResult all() {
-        return queryInternal(Integer.MAX_VALUE, Configurer.Noop.NOOP);
+        return queryInternal(Integer.MAX_VALUE, (w) -> {});
     }
 
     @Override
-    public SpreadsheetCriteriaResult query(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
+    public SpreadsheetCriteriaResult query(Consumer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
         return queryInternal(Integer.MAX_VALUE, workbookCriterion);
     }
 
     @Override
-    public Cell find(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
+    public Cell find(Consumer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
         SpreadsheetCriteriaResult cells = queryInternal(1, workbookCriterion);
         Iterator<Cell> cellIterator = cells.iterator();
         if (cellIterator.hasNext()) {
@@ -47,7 +47,7 @@ public final class SimpleSpreadsheetCriteria implements SpreadsheetCriteria {
     }
 
     @Override
-    public boolean exists(Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
+    public boolean exists(Consumer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException {
         return find(workbookCriterion) != null;
     }
 

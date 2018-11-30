@@ -1,6 +1,5 @@
 package builders.dsl.spreadsheet.impl;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.builder.api.PageDefinition;
 import builders.dsl.spreadsheet.builder.api.Resolvable;
@@ -8,6 +7,7 @@ import builders.dsl.spreadsheet.builder.api.RowDefinition;
 import builders.dsl.spreadsheet.builder.api.SheetDefinition;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class AbstractSheetDefinition implements SheetDefinition, Resolvable {
 
@@ -48,21 +48,21 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
     protected abstract AbstractRowDefinition createRow(int zeroBasedRowNumber);
 
     @Override
-    public final SheetDefinition row(Configurer<RowDefinition> rowDefinition) {
+    public final SheetDefinition row(Consumer<RowDefinition> rowDefinition) {
         RowDefinition row = findOrCreateRow(nextRowNumber++);
-        Configurer.Runner.doConfigure(rowDefinition, row);
+        rowDefinition.accept(row);
         return this;
     }
 
     @Override
-    public final SheetDefinition row(int oneBasedRowNumber, Configurer<RowDefinition> rowDefinition) {
+    public final SheetDefinition row(int oneBasedRowNumber, Consumer<RowDefinition> rowDefinition) {
         if (oneBasedRowNumber <= 0) {
             throw new IllegalArgumentException("Row index is based on 1. Got: " + oneBasedRowNumber);
         }
         nextRowNumber = oneBasedRowNumber;
 
         RowDefinition poiRow = findOrCreateRow(oneBasedRowNumber - 1);
-        Configurer.Runner.doConfigure(rowDefinition, poiRow);
+        rowDefinition.accept(poiRow);
         return this;
     }
 
@@ -112,13 +112,13 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
     protected abstract void doFreeze(int column, int row);
 
     @Override
-    public final SheetDefinition collapse(Configurer<SheetDefinition> insideGroupDefinition) {
+    public final SheetDefinition collapse(Consumer<SheetDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition);
         return this;
     }
 
     @Override
-    public final SheetDefinition group(Configurer<SheetDefinition> insideGroupDefinition) {
+    public final SheetDefinition group(Consumer<SheetDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition);
         return this;
     }
@@ -131,18 +131,18 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
     }
 
     @Override
-    public final SheetDefinition page(Configurer<PageDefinition> pageDefinition) {
+    public final SheetDefinition page(Consumer<PageDefinition> pageDefinition) {
         PageDefinition page = createPageDefinition();
-        Configurer.Runner.doConfigure(pageDefinition, page);
+        pageDefinition.accept(page);
         return this;
     }
 
     protected abstract PageDefinition createPageDefinition();
 
-    private void createGroup(boolean collapsed, Configurer<SheetDefinition> insideGroupDefinition) {
+    private void createGroup(boolean collapsed, Consumer<SheetDefinition> insideGroupDefinition) {
         startPositions.add(nextRowNumber);
 
-        Configurer.Runner.doConfigure(insideGroupDefinition, this);
+        insideGroupDefinition.accept(this);
 
         int startPosition = startPositions.remove(startPositions.size() - 1);
 

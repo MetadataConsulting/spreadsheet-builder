@@ -29,7 +29,7 @@ dependencies {
 
 }
 
-String currentVersion = '1.0.5'
+String currentVersion = '2.0.0'
 
 version = currentVersion
 
@@ -42,15 +42,15 @@ subprojects {
 
     group = 'builders.dsl'
 
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     repositories {
        jcenter()
     }
 
     dependencies {
-        testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+        testCompile "org.spockframework:spock-core:$spockVersion"
     }
 
     // don't forget to update version in CaseReportFormSerializer

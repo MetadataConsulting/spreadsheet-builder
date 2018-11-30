@@ -3,8 +3,10 @@ package builders.dsl.spreadsheet.query.simple;
 import builders.dsl.spreadsheet.api.*;
 import builders.dsl.spreadsheet.query.api.BorderCriterion;
 import builders.dsl.spreadsheet.query.api.CellStyleCriterion;
-import builders.dsl.spreadsheet.query.api.Predicate;
 import builders.dsl.spreadsheet.query.api.FontCriterion;
+import builders.dsl.spreadsheet.query.api.Predicate;
+
+import java.util.function.Consumer;
 
 final class SimpleCellStyleCriterion implements CellStyleCriterion {
 
@@ -169,32 +171,32 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
     }
 
     @Override
-    public SimpleCellStyleCriterion font(Configurer<FontCriterion> fontCriterion) {
+    public SimpleCellStyleCriterion font(Consumer<FontCriterion> fontCriterion) {
         SimpleFontCriterion simpleFontCriterion = new SimpleFontCriterion(parent);
-        Configurer.Runner.doConfigure(fontCriterion, simpleFontCriterion);
+        fontCriterion.accept(simpleFontCriterion);
         return this;
     }
 
     @Override
-    public SimpleCellStyleCriterion border(Configurer<BorderCriterion> borderConfiguration) {
+    public SimpleCellStyleCriterion border(Consumer<BorderCriterion> borderConfiguration) {
         border(Keywords.BorderSide.BORDER_SIDES, borderConfiguration);
         return this;
     }
 
     @Override
-    public SimpleCellStyleCriterion border(Keywords.BorderSide location, Configurer<BorderCriterion> borderConfiguration) {
+    public SimpleCellStyleCriterion border(Keywords.BorderSide location, Consumer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {location}, borderConfiguration);
         return this;
     }
 
     @Override
-    public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderCriterion> borderConfiguration) {
+    public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Consumer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second}, borderConfiguration);
         return this;
     }
 
     @Override
-    public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderCriterion> borderConfiguration) {
+    public SimpleCellStyleCriterion border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Consumer<BorderCriterion> borderConfiguration) {
         border(new Keywords.BorderSide[] {first, second, third}, borderConfiguration);
         return this;
     }
@@ -210,10 +212,10 @@ final class SimpleCellStyleCriterion implements CellStyleCriterion {
         return this;
     }
 
-    private void border(Keywords.BorderSide[] sides, Configurer<BorderCriterion> borderConfiguration) {
+    private void border(Keywords.BorderSide[] sides, Consumer<BorderCriterion> borderConfiguration) {
         for (Keywords.BorderSide side : sides) {
             SimpleBorderCriterion criterion = new SimpleBorderCriterion(parent, side);
-            Configurer.Runner.doConfigure(borderConfiguration, criterion);
+            borderConfiguration.accept(criterion);
         }
     }
 

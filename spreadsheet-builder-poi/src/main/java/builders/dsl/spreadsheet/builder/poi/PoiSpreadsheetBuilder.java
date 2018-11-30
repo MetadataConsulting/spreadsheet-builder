@@ -4,7 +4,7 @@ import builders.dsl.spreadsheet.builder.api.SpreadsheetBuilder;
 import builders.dsl.spreadsheet.builder.api.WorkbookDefinition;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import builders.dsl.spreadsheet.api.Configurer;
+import java.util.function.Consumer;
 
 import java.io.*;
 
@@ -43,9 +43,9 @@ public class PoiSpreadsheetBuilder implements SpreadsheetBuilder {
     }
 
     @Override
-    public void build(Configurer<WorkbookDefinition> workbookDefinition) {
+    public void build(Consumer<WorkbookDefinition> workbookDefinition) {
         PoiWorkbookDefinition poiWorkbook = new PoiWorkbookDefinition(workbook);
-        Configurer.Runner.doConfigure(workbookDefinition, poiWorkbook);
+        workbookDefinition.accept(poiWorkbook);
         poiWorkbook.resolve();
         writeTo(outputStream);
     }

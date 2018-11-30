@@ -1,13 +1,9 @@
 package builders.dsl.spreadsheet.query.api;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.api.Cell;
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import groovy.transform.stc.ClosureParams;
-import groovy.transform.stc.FromString;
 
 import java.io.FileNotFoundException;
+import java.util.function.Consumer;
 
 
 /**
@@ -18,8 +14,8 @@ import java.io.FileNotFoundException;
 public interface SpreadsheetCriteria {
 
     SpreadsheetCriteriaResult all();
-    SpreadsheetCriteriaResult query(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.WorkbookCriterion") Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
-    Cell find(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.WorkbookCriterion") Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
-    boolean exists(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkbookCriterion.class) @ClosureParams(value=FromString.class, options = "builders.dsl.spreadsheet.builder.api.WorkbookCriterion") Configurer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
+    SpreadsheetCriteriaResult query(Consumer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
+    Cell find(Consumer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
+    boolean exists(Consumer<WorkbookCriterion> workbookCriterion) throws FileNotFoundException;
 
 }

@@ -1,7 +1,7 @@
 package builders.dsl.spreadsheet.impl;
 
-import builders.dsl.spreadsheet.builder.api.Resolvable;
 import builders.dsl.spreadsheet.builder.api.CellDefinition;
+import builders.dsl.spreadsheet.builder.api.Resolvable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,13 +1,14 @@
 package builders.dsl.spreadsheet.impl;
 
-import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.api.Color;
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.api.ForegroundFill;
+import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.builder.api.BorderDefinition;
 import builders.dsl.spreadsheet.builder.api.CellStyleDefinition;
 import builders.dsl.spreadsheet.builder.api.FontDefinition;
 import builders.dsl.spreadsheet.builder.api.Sealable;
+
+import java.util.function.Consumer;
 
 public abstract class AbstractCellStyleDefinition implements CellStyleDefinition, Sealable {
 
@@ -22,7 +23,7 @@ public abstract class AbstractCellStyleDefinition implements CellStyleDefinition
     @Override
     public final CellStyleDefinition base(String stylename) {
         checkSealed();
-        Configurer.Runner.doConfigure(workbook.getStyleDefinition(stylename), this);
+        workbook.getStyleDefinition(stylename).accept(this);
         return this;
     }
 
@@ -79,13 +80,13 @@ public abstract class AbstractCellStyleDefinition implements CellStyleDefinition
     protected abstract void doFill(ForegroundFill fill);
 
     @Override
-    public final CellStyleDefinition font(Configurer<FontDefinition> fontConfiguration) {
+    public final CellStyleDefinition font(Consumer<FontDefinition> fontConfiguration) {
         checkSealed();
         if (font == null) {
             font = createFont();
         }
 
-        Configurer.Runner.doConfigure(fontConfiguration, font);
+        fontConfiguration.accept(font);
         return this;
     }
 
@@ -137,10 +138,10 @@ public abstract class AbstractCellStyleDefinition implements CellStyleDefinition
     protected abstract void doAlign(Keywords.VerticalAlignment verticalAlignment, Keywords.HorizontalAlignment horizontalAlignment);
 
     @Override
-    public final CellStyleDefinition border(Configurer<BorderDefinition> borderConfiguration) {
+    public final CellStyleDefinition border(Consumer<BorderDefinition> borderConfiguration) {
         checkSealed();
         AbstractBorderDefinition poiBorder = findOrCreateBorder();
-        Configurer.Runner.doConfigure(borderConfiguration, poiBorder);
+        borderConfiguration.accept(poiBorder);
 
         for (Keywords.BorderSide side: Keywords.BorderSide.BORDER_SIDES) {
             poiBorder.applyTo(side);
@@ -149,29 +150,29 @@ public abstract class AbstractCellStyleDefinition implements CellStyleDefinition
     }
 
     @Override
-    public final CellStyleDefinition border(Keywords.BorderSide location, Configurer<BorderDefinition> borderConfiguration) {
+    public final CellStyleDefinition border(Keywords.BorderSide location, Consumer<BorderDefinition> borderConfiguration) {
         checkSealed();
         AbstractBorderDefinition poiBorder = findOrCreateBorder();
-        Configurer.Runner.doConfigure(borderConfiguration, poiBorder);
+        borderConfiguration.accept(poiBorder);
         poiBorder.applyTo(location);
         return this;
     }
 
     @Override
-    public final CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Configurer<BorderDefinition> borderConfiguration) {
+    public final CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Consumer<BorderDefinition> borderConfiguration) {
         checkSealed();
         AbstractBorderDefinition poiBorder = findOrCreateBorder();
-        Configurer.Runner.doConfigure(borderConfiguration, poiBorder);
+        borderConfiguration.accept(poiBorder);
         poiBorder.applyTo(first);
         poiBorder.applyTo(second);
         return this;
     }
 
     @Override
-    public final CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Configurer<BorderDefinition> borderConfiguration) {
+    public final CellStyleDefinition border(Keywords.BorderSide first, Keywords.BorderSide second, Keywords.BorderSide third, Consumer<BorderDefinition> borderConfiguration) {
         checkSealed();
         AbstractBorderDefinition poiBorder = findOrCreateBorder();
-        Configurer.Runner.doConfigure(borderConfiguration, poiBorder);
+        borderConfiguration.accept(poiBorder);
         poiBorder.applyTo(first);
         poiBorder.applyTo(second);
         poiBorder.applyTo(third);

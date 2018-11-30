@@ -1,4 +1,5 @@
 dependencies {
     compile project(':spreadsheet-builder-api')
-    compile 'org.codehaus.groovy:groovy-all:2.4.13'
+    compile "space.jasan:groovy-closure-support:$closureSupportVersion"
+    compile "org.codehaus.groovy:groovy:$groovyVersion"
 }

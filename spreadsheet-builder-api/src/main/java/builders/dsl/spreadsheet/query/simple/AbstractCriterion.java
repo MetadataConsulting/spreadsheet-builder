@@ -1,10 +1,10 @@
 package builders.dsl.spreadsheet.query.simple;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.query.api.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 abstract class AbstractCriterion<T, C extends Predicate<T>> implements Predicate<T> {
 
@@ -29,9 +29,9 @@ abstract class AbstractCriterion<T, C extends Predicate<T>> implements Predicate
 
     abstract C newDisjointCriterionInstance();
 
-    public AbstractCriterion<T, C> or(Configurer<C> sheetCriterion) {
+    public AbstractCriterion<T, C> or(Consumer<C> sheetCriterion) {
         C criterion = newDisjointCriterionInstance();
-        Configurer.Runner.doConfigure(sheetCriterion, criterion);
+        sheetCriterion.accept(criterion);
         addCondition(criterion);
         return this;
     }

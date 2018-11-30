@@ -1,14 +1,14 @@
 package builders.dsl.spreadsheet.query.simple;
 
+import builders.dsl.spreadsheet.api.Cell;
 import builders.dsl.spreadsheet.api.Comment;
 import builders.dsl.spreadsheet.query.api.CellCriterion;
 import builders.dsl.spreadsheet.query.api.CellStyleCriterion;
-import builders.dsl.spreadsheet.api.Cell;
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.query.api.Predicate;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.Consumer;
 
 final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> implements CellCriterion {
 
@@ -109,9 +109,9 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> i
 
 
     @Override
-    public SimpleCellCriterion style(Configurer<CellStyleCriterion> styleCriterion) {
+    public SimpleCellCriterion style(Consumer<CellStyleCriterion> styleCriterion) {
         SimpleCellStyleCriterion criterion = new SimpleCellStyleCriterion(this);
-        Configurer.Runner.doConfigure(styleCriterion, criterion);
+        styleCriterion.accept(criterion);
         // no need to add criteria, they are added by the style criterion itself
         return this;
     }
@@ -209,7 +209,7 @@ final class SimpleCellCriterion extends AbstractCriterion<Cell, CellCriterion> i
     }
 
     @Override
-    public SimpleCellCriterion or(Configurer<CellCriterion> sheetCriterion) {
+    public SimpleCellCriterion or(Consumer<CellCriterion> sheetCriterion) {
         return (SimpleCellCriterion) super.or(sheetCriterion);
     }
 

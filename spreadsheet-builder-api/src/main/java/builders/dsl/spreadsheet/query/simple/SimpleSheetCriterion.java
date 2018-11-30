@@ -1,6 +1,5 @@
 package builders.dsl.spreadsheet.query.simple;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.api.Keywords;
 import builders.dsl.spreadsheet.api.Row;
 import builders.dsl.spreadsheet.api.Sheet;
@@ -12,6 +11,7 @@ import builders.dsl.spreadsheet.query.api.SheetCriterion;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Consumer;
 
 final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> implements SheetCriterion {
 
@@ -28,24 +28,24 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public SimpleSheetCriterion row(Configurer<RowCriterion> rowCriterion) {
+    public SimpleSheetCriterion row(Consumer<RowCriterion> rowCriterion) {
         SimpleRowCriterion criterion = new SimpleRowCriterion(this);
-        Configurer.Runner.doConfigure(rowCriterion, criterion);
+        rowCriterion.accept(criterion);
         criteria.add(criterion);
         return this;
     }
 
     @Override
-    public SimpleSheetCriterion row(int row, Configurer<RowCriterion> rowCriterion) {
+    public SimpleSheetCriterion row(int row, Consumer<RowCriterion> rowCriterion) {
         row(row);
         row(rowCriterion);
         return this;
     }
 
     @Override
-    public SimpleSheetCriterion page(Configurer<PageCriterion> pageCriterion) {
+    public SimpleSheetCriterion page(Consumer<PageCriterion> pageCriterion) {
         SimplePageCriterion criterion = new SimplePageCriterion(parent);
-        Configurer.Runner.doConfigure(pageCriterion, criterion);
+        pageCriterion.accept(criterion);
         return this;
     }
 
@@ -61,7 +61,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public SimpleSheetCriterion or(Configurer<SheetCriterion> sheetCriterion) {
+    public SimpleSheetCriterion or(Consumer<SheetCriterion> sheetCriterion) {
         return (SimpleSheetCriterion) super.or(sheetCriterion);
     }
 
@@ -83,7 +83,7 @@ final class SimpleSheetCriterion extends AbstractCriterion<Row, SheetCriterion> 
     }
 
     @Override
-    public SheetCriterion row(int from, int to, Configurer<RowCriterion> rowCriterion) {
+    public SheetCriterion row(int from, int to, Consumer<RowCriterion> rowCriterion) {
         return null;
     }
 

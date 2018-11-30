@@ -1,20 +1,18 @@
 package builders.dsl.spreadsheet.impl;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.builder.api.CellDefinition;
 import builders.dsl.spreadsheet.builder.api.CellStyleDefinition;
 import builders.dsl.spreadsheet.builder.api.RowDefinition;
-import groovy.lang.Closure;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class AbstractRowDefinition implements RowDefinition {
 
     protected final AbstractSheetDefinition sheet;
 
     private List<String> styles = new ArrayList<String>();
-    private List<Configurer<CellStyleDefinition>> styleDefinitions = new ArrayList<Configurer<CellStyleDefinition>>();
+    private List<Consumer<CellStyleDefinition>> styleDefinitions = new ArrayList<Consumer<CellStyleDefinition>>();
 
     private final List<Integer> startPositions = new ArrayList<Integer>();
     private int nextColNumber;
@@ -62,14 +60,14 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     }
 
     @Override
-    public final RowDefinition cell(Configurer<CellDefinition> cellDefinition) {
+    public final RowDefinition cell(Consumer<CellDefinition> cellDefinition) {
         AbstractCellDefinition poiCell = findOrCreateCell(nextColNumber);
 
         if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
             poiCell.styles(styles, styleDefinitions);
         }
 
-        Configurer.Runner.doConfigure(cellDefinition, poiCell);
+        cellDefinition.accept(poiCell);
 
         nextColNumber += poiCell.getColspan();
 
@@ -80,23 +78,17 @@ public abstract class AbstractRowDefinition implements RowDefinition {
         return this;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public RowDefinition cell(Closure cellDefinition) {
-        return cell(DefaultGroovyMethods.asType(cellDefinition, Configurer.class));
-    }
-
     protected abstract void handleSpans(AbstractCellDefinition poiCell);
 
     @Override
-    public final RowDefinition cell(int column, Configurer<CellDefinition> cellDefinition) {
+    public final RowDefinition cell(int column, Consumer<CellDefinition> cellDefinition) {
         AbstractCellDefinition poiCell = findOrCreateCell(column - 1);
 
         if (!styles.isEmpty() || !styleDefinitions.isEmpty()) {
             poiCell.styles(styles, styleDefinitions);
         }
 
-        Configurer.Runner.doConfigure(cellDefinition, poiCell);
+        cellDefinition.accept(poiCell);
 
         nextColNumber = column - 1 + poiCell.getColspan();
 
@@ -108,13 +100,13 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     }
 
     @Override
-    public final RowDefinition cell(String column, Configurer<CellDefinition> cellDefinition) {
+    public final RowDefinition cell(String column, Consumer<CellDefinition> cellDefinition) {
         cell(Utils.parseColumn(column), cellDefinition);
         return this;
     }
 
     @Override
-    public final RowDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
+    public final RowDefinition style(Consumer<CellStyleDefinition> styleDefinition) {
         styleDefinitions.add(styleDefinition);
         return this;
     }
@@ -126,23 +118,23 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     }
 
     @Override
-    public final RowDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
+    public final RowDefinition style(String name, Consumer<CellStyleDefinition> styleDefinition) {
         style(name);
         style(styleDefinition);
         return this;
     }
 
     @Override
-    public final RowDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
+    public final RowDefinition styles(Iterable<String> names, Consumer<CellStyleDefinition> styleDefinition) {
         styles(names);
         style(styleDefinition);
         return this;
     }
 
     @Override
-    public final RowDefinition styles(Iterable<String> styles, Iterable<Configurer<CellStyleDefinition>> styleDefinitions) {
+    public final RowDefinition styles(Iterable<String> styles, Iterable<Consumer<CellStyleDefinition>> styleDefinitions) {
         this.styles(styles);
-        for (Configurer<CellStyleDefinition> style : styleDefinitions) {
+        for (Consumer<CellStyleDefinition> style : styleDefinitions) {
             this.styleDefinitions.add(style);
         }
         return this;
@@ -167,21 +159,21 @@ public abstract class AbstractRowDefinition implements RowDefinition {
     }
 
     @Override
-    public final RowDefinition group(Configurer<RowDefinition> insideGroupDefinition) {
+    public final RowDefinition group(Consumer<RowDefinition> insideGroupDefinition) {
         createGroup(false, insideGroupDefinition);
         return this;
     }
 
     @Override
-    public final RowDefinition collapse(Configurer<RowDefinition> insideGroupDefinition) {
+    public final RowDefinition collapse(Consumer<RowDefinition> insideGroupDefinition) {
         createGroup(true, insideGroupDefinition);
         return this;
     }
 
 
-    private void createGroup(boolean collapsed, Configurer<RowDefinition> insideGroupDefinition) {
+    private void createGroup(boolean collapsed, Consumer<RowDefinition> insideGroupDefinition) {
         startPositions.add(nextColNumber);
-        Configurer.Runner.doConfigure(insideGroupDefinition, this);
+        insideGroupDefinition.accept(this);
 
         int startPosition = startPositions.remove(startPositions.size() - 1);
 

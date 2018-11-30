@@ -1,11 +1,11 @@
 package builders.dsl.spreadsheet.impl;
 
-import builders.dsl.spreadsheet.api.Configurer;
 import builders.dsl.spreadsheet.api.Keywords;
-import builders.dsl.spreadsheet.builder.api.*;
 import builders.dsl.spreadsheet.api.Spannable;
+import builders.dsl.spreadsheet.builder.api.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class AbstractCellDefinition implements CellDefinition, Resolvable, Spannable {
     
@@ -23,12 +23,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
 
     @Override
     public final CellDefinition comment(final String commentText) {
-        comment(new Configurer<CommentDefinition>() {
-            @Override
-            public void configure(CommentDefinition commentDefinition) {
-                commentDefinition.text(commentText);
-            }
-        });
+        comment(commentDefinition -> commentDefinition.text(commentText));
         return this;
     }
 
@@ -41,9 +36,9 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
     protected abstract AbstractPendingFormula createPendingFormula(String formula);
 
     @Override
-    public final CellDefinition comment(Configurer<CommentDefinition> commentDefinition) {
+    public final CellDefinition comment(Consumer<CommentDefinition> commentDefinition) {
         DefaultCommentDefinition poiComment = new DefaultCommentDefinition();
-        Configurer.Runner.doConfigure(commentDefinition, poiComment);
+        commentDefinition.accept(poiComment);
         applyComment(poiComment);
         return this;
     }
@@ -62,36 +57,36 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
 
     @Override
     public final CellDefinition style(String name) {
-        return styles(Collections.singleton(name), Collections.<Configurer<CellStyleDefinition>>emptyList());
+        return styles(Collections.singleton(name), Collections.<Consumer<CellStyleDefinition>>emptyList());
     }
 
     @Override
     public final CellDefinition styles(String... names) {
-        return styles(Arrays.asList(names), Collections.<Configurer<CellStyleDefinition>>emptyList());
+        return styles(Arrays.asList(names), Collections.<Consumer<CellStyleDefinition>>emptyList());
     }
 
     @Override
-    public final CellDefinition style(Configurer<CellStyleDefinition> styleDefinition) {
+    public final CellDefinition style(Consumer<CellStyleDefinition> styleDefinition) {
         return styles(Collections.<String>emptyList(), Collections.singleton(styleDefinition));
     }
 
     @Override
     public final CellDefinition styles(Iterable<String> names) {
-        return styles(names, Collections.<Configurer<CellStyleDefinition>>emptyList());
+        return styles(names, Collections.<Consumer<CellStyleDefinition>>emptyList());
     }
 
     @Override
-    public final CellDefinition style(String name, Configurer<CellStyleDefinition> styleDefinition) {
+    public final CellDefinition style(String name, Consumer<CellStyleDefinition> styleDefinition) {
         return styles(Collections.singleton(name), Collections.singleton(styleDefinition));
     }
 
     @Override
-    public final CellDefinition styles(Iterable<String> names, Configurer<CellStyleDefinition> styleDefinition) {
+    public final CellDefinition styles(Iterable<String> names, Consumer<CellStyleDefinition> styleDefinition) {
         return styles(names, Collections.singleton(styleDefinition));
     }
 
     @Override
-    public final CellDefinition styles(Iterable<String> names, Iterable<Configurer<CellStyleDefinition>> styleDefinition) {
+    public final CellDefinition styles(Iterable<String> names, Iterable<Consumer<CellStyleDefinition>> styleDefinition) {
         if (styleDefinition == null || !styleDefinition.iterator().hasNext()) {
             if (names == null || !names.iterator().hasNext()) {
                 return this;
@@ -117,7 +112,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
                 }
             } else {
                 for (String name : names) {
-                    Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), cellStyle);
+                    row.getSheet().getWorkbook().getStyleDefinition(name).accept(cellStyle);
                 }
             }
             return this;
@@ -132,11 +127,11 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
         }
 
         for (String name : names) {
-            Configurer.Runner.doConfigure(row.getSheet().getWorkbook().getStyleDefinition(name), cellStyle);
+            row.getSheet().getWorkbook().getStyleDefinition(name).accept(cellStyle);
         }
 
-        for (Configurer<CellStyleDefinition> configurer : styleDefinition) {
-            Configurer.Runner.doConfigure(configurer, cellStyle);
+        for (Consumer<CellStyleDefinition> configurer : styleDefinition) {
+            configurer.accept(cellStyle);
         }
 
         return this;
@@ -172,7 +167,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
     }
 
     @Override
-    public final CellDefinition text(String run, Configurer<FontDefinition> fontConfiguration) {
+    public final CellDefinition text(String run, Consumer<FontDefinition> fontConfiguration) {
         if (run == null || run.length() == 0) {
             return this;
         }
@@ -191,7 +186,7 @@ public abstract class AbstractCellDefinition implements CellDefinition, Resolvab
 
 
         FontDefinition font = createFontDefinition();
-        Configurer.Runner.doConfigure(fontConfiguration, font);
+        fontConfiguration.accept(font);
 
         richTextParts.add(new RichTextPart(run, font, start, end));
         return this;

@@ -456,7 +456,7 @@ public class Java8BuilderTest {
     private static void buildSpreadsheet(SpreadsheetBuilder builder, Date today) {
         builder.build(w -> {
             w.style("red", s -> {
-                s.font( f -> {
+                s.font(f -> {
                     f.color(red);
                 });
             });
@@ -510,15 +510,15 @@ public class Java8BuilderTest {
                             c.value("1");
                             c.styles("h1", "red");
                         });
-                        r.cell( c -> {
+                        r.cell(c -> {
                             c.value("2");
                             c.style("h2");
                         });
-                        r.cell( c -> {
+                        r.cell(c -> {
                             c.value("3");
                             c.style("h1");
                         });
-                        r.cell( c -> {
+                        r.cell(c -> {
                             c.value("4");
                             c.style("h2");
                         });
@@ -628,7 +628,7 @@ public class Java8BuilderTest {
                         c.text("\n");
 
                         Map<String, String> values = new LinkedHashMap<>();
-                        values.put("foo","bar");
+                        values.put("foo", "bar");
                         values.put("boo", "cow");
                         values.put("empty", "");
                         values.put("", "nothing");
@@ -773,7 +773,7 @@ public class Java8BuilderTest {
                         Map<String, String> email = new LinkedHashMap<>();
                         email.put("subject", "Testing Excel Builder");
                         email.put("body", "It is really great tools");
-                        c.link(Keywords.to).email(email,"vladimir@orany.cz");
+                        c.link(Keywords.to).email(email, "vladimir@orany.cz");
                     });
                 });
             });
@@ -965,7 +965,7 @@ public class Java8BuilderTest {
                     r.cell(c -> {
                         c.value("BLUE");
                         c.rowspan(3);
-                        c.styles ("centered", "bold");
+                        c.styles("centered", "bold");
                     });
                 });
             });
@@ -996,7 +996,7 @@ public class Java8BuilderTest {
             });
 
             w.sheet("Custom Page", s -> {
-                s.page( page -> {
+                s.page(page -> {
                     page.paper(Keywords.A5);
                     page.fit(Keywords.width).to(1);
                     page.orientation(Keywords.landscape);
